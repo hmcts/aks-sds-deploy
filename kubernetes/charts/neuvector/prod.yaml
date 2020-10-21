@@ -1,0 +1,34 @@
+---
+manager:
+  # If false, manager will not be installed
+  ingress:
+    enabled: true
+    host: neuvector-azure.et.dsd.io
+    path: "/"
+    annotations:
+      kubernetes.io/ingress.class: traefik-et
+      ingress.kubernetes.io/whitelist-x-forwarded-for: "true"
+      traefik.ingress.kubernetes.io/whitelist-source-range: "81.134.202.29/32, 51.145.6.230/32"
+controller:
+  pvc:
+    enabled: true
+    storageClass: azurefile
+  azureFileShare:
+    enabled: true
+    secretName: azure-storage-account-f7be36a2ace5711e9bd5162-secret
+    shareName: nv-data
+  # configmap:
+  #   enabled: true
+  #   data: 
+  #     eulainitcfg.yaml: |
+  #       license_key : 
+      #ldapinitcfg.yaml: |
+      #  ...
+      #oidcinitcfg.yaml: |
+      # ...
+      #samlinitcfg.yaml: |
+      # ...
+      #sysinitcfg.yaml: |
+      # ...
+      # userinitcfg.yaml: |
+      # ...

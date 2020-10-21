@@ -1,0 +1,62 @@
+parameters:
+  environment: ''
+  location: ''
+  serviceConnection: ''
+  gaServiceConnection: ''
+  stack: ''
+  project: ''
+  tfversion: ''
+
+steps:
+
+  - script: rm -fr .terraform/modules/genesis
+
+  - template: keyvault-read.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      environment: ${{ parameters.environment }}
+
+  - task: TerraformInstaller@0
+    displayName: 'Install Terraform ${{ parameters.tfversion }}'
+    inputs:
+      terraformVersion: ${{ parameters.tfversion }}
+
+  - task: TerraformCLI@0
+    displayName: terraform init
+    inputs:
+      command: init
+      terraformVersion: ${{ parameters.tfversion }}
+      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/aks/00-genesis'
+      backendType: azurerm
+      backendServiceArm: $(serviceconnection)
+      backendAzureRmResourceGroupName: 'azure-control-$(env)-rg'
+      backendAzureRmResourceGroupLocation: ${{ parameters.location }}
+      backendAzureRmStorageAccountName: $(controlStorageAccount)
+      backendAzureRmStorageAccountSku: Standard_LRS
+      backendAzureRmContainerName: subscription-tfstate
+      backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/$(env)/00-genesis/terraform-genesis.tfstate'
+
+  - task: TerraformCLI@0
+    displayName: terraform validate
+    inputs:
+      command: validate
+      terraformVersion: ${{ parameters.tfversion }}
+      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/aks/00-genesis'
+
+  - task: TerraformCLI@0
+    displayName: terraform plan
+    inputs:
+      command: plan
+      terraformVersion: ${{ parameters.tfversion }}
+      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/aks/00-genesis'
+      environmentServiceName: $(gaServiceConnection)
+      commandOptions: '-out=tfplan-${{ parameters.project }}-${{ parameters.stack }}-$(env) -var subscription_id=$(ARM_SUBSCRIPTION_ID) -var environment=$(env)'
+
+  - task: TerraformCLI@0
+    displayName: Terraform apply
+    inputs:
+      command: apply
+      terraformVersion: ${{ parameters.tfversion }}
+      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/aks/00-genesis'
+      environmentServiceName: $(gaServiceConnection)
+      commandOptions: '--auto-approve tfplan-${{ parameters.project }}-${{ parameters.stack }}-$(env)'

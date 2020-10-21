@@ -1,0 +1,17 @@
+workers: 1
+helm:
+  versions: v3
+git:
+  pollInterval: 1m
+  ssh:
+    secretName: flux-git-deploy
+configureRepositories:
+  enable: true
+  repositories:
+  - name: stable
+    url: https://kubernetes-charts.storage.googleapis.com
+  - name: hmctspublic
+    url: https://hmctspublic.azurecr.io/helm/v1/repo
+podAnnotations:
+  prometheus.io/port: "3030"
+  prometheus.io/scrape: "true"

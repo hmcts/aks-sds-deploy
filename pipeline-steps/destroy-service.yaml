@@ -1,0 +1,39 @@
+parameters:
+  environment: ''
+  location: ''
+  stack: ''
+  project: ''
+
+steps:
+  - template: keyvault-read.yaml
+    parameters:
+      serviceConnection: $(serviceConnection)
+      environment: ${{ parameters.environment }}
+
+  - task: TerraformCLI@0
+    displayName: terraform init
+    inputs:
+          command: init
+          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/aks/${{ parameters.stack }}'
+          backendType: azurerm
+          backendServiceArm: $(serviceconnection)
+          backendAzureRmResourceGroupName: 'azure-control-$(env)-rg'
+          backendAzureRmResourceGroupLocation: ${{ parameters.location }}
+          backendAzureRmStorageAccountName: $(controlStorageAccount)
+          backendAzureRmStorageAccountSku: Standard_LRS
+          backendAzureRmContainerName: subscription-tfstate
+          backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/$(env)/${{ parameters.stack }}/terraform.tfstate'
+
+  - task: TerraformCLI@0
+    displayName: terraform validate
+    inputs:
+          command: validate
+          workingDirectory: $(System.DefaultWorkingDirectory)/terraform/aks/${{ parameters.stack }}
+
+  - task: TerraformCLI@0
+    displayName: Terraform destroy
+    inputs:
+      command: destroy
+      workingDirectory: $(System.DefaultWorkingDirectory)/terraform/aks/${{ parameters.stack }}
+      environmentServiceName: $(serviceconnection)
+      commandOptions: '-var kubernetes_cluster_client_secret=$(ARM_CLIENT_SECRET) -var-file $(System.DefaultWorkingDirectory)/config/terraform/${{ parameters.project }}/vars/${{ parameters.stack }}/$(env).tfvars'

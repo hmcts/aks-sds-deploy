@@ -1,0 +1,20 @@
+registry:
+  acr:
+    enabled: true
+git:
+  url: git@github.com:hmcts/shared-services-flux.git
+  pollInterval: 1m
+  secretName: flux-git-deploy
+additionalArgs:
+  - --manifest-generation=true
+  - --sops=true
+syncGarbageCollection:
+  enabled: true
+podLabels:
+  aadpodidbinding: aks-pod-identity-mi
+extraEnvs:
+  - name: AZURE_AUTH_METHOD
+    value: msi
+annotations:
+  prometheus.io/port: "3030"
+  prometheus.io/scrape: "true"
