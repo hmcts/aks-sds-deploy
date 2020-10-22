@@ -12,6 +12,7 @@ parameters:
     - Deploy
     - DestroyAks00
     - DestroyAks01
+    - DeployAcr
 
   - name: location
     displayName: Location
@@ -218,5 +219,23 @@ stages:
               environment: ${{ parameters.env }}
               location: ${{ parameters.location }}
               stack: '04-aks01'
+              project: $(project)
+              tfversion: $(tfversion)
+
+
+  - stage: Aks01
+    displayName: 'Deploy Azure Container Registries'
+    condition: contains('${{ parameters.Run_Stage }}', 'DeployAcr')
+    variables:
+      armClientSecret: $[ stageDependencies.ReadKeyVault.ReadKeyVault.outputs['SetSubscriptionSP.ARM_CLIENT_SECRET'] ]
+      controlStorageAccount: $[ stageDependencies.ReadKeyVault.ReadKeyVault.outputs['SetControlVars.controlStorageAccount'] ]
+    jobs:
+      - job: DeployInfrastructure
+        steps:
+          - template: pipeline-steps/deploy-service.yaml
+            parameters:
+              environment: PROD
+              location: ${{ parameters.location }}
+              stack: '08-acr'
               project: $(project)
               tfversion: $(tfversion)
