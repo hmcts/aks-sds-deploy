@@ -18,3 +18,15 @@ data "azurerm_resource_group" "acr_rg" {
   local.acr[var.project].project,
   )
 }
+
+data "azurerm_key_vault" "hmcts_access_vault" {
+  provider            = azurerm.hmcts-control
+  name                = var.control_vault
+  resource_group_name = "azure-control-prod-rg"
+}
+
+data "azurerm_key_vault_secret" "kubernetes_cluster_client_id" {
+  provider     = azurerm.hmcts-control
+  name         = "sp-object-id"
+  key_vault_id = data.azurerm_key_vault.hmcts_access_vault.id
+}

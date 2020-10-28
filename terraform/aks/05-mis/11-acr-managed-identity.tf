@@ -10,7 +10,7 @@ resource "azurerm_role_assignment" "acrpull_role_MI" {
 resource "azurerm_role_assignment" "acrpull_role_aks_sp" {
   # AKS SP ACR Pull role
   role_definition_name             = "AcrPull"
-  principal_id                     = data.azurerm_client_config.current.client_id
+  principal_id                     = data.azurerm_key_vault_secret.kubernetes_cluster_client_id.value
   scope                            = "/subscriptions/${local.acr[var.project].subscription}/resourceGroups/${data.azurerm_resource_group.acr_rg.name}"
   #skip_service_principal_aad_check = true
 }
