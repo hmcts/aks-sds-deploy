@@ -3,7 +3,14 @@ variable "application_name" {
 }
 
 locals {
-  acr_project = "sds"
+  acr = {
+    ss = {
+      subscription = "fb084706-583f-4c9a-bdab-949aac66ba5c"
+      project      = "sds"
+      }
+    }
+
+
   criticality = {
     sbox     = "Low"
     aat      = "High"

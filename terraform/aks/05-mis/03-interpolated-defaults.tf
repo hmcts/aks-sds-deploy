@@ -15,6 +15,6 @@ data "azurerm_key_vault" "genesis_keyvault" {
 
 data "azurerm_resource_group" "acr_rg" {
   name = format("%s-acr-rg",
-  local.acr_project,
+  local.acr[var.project].project,
   )
 }
