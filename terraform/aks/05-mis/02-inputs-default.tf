@@ -3,6 +3,7 @@ variable "application_name" {
 }
 
 locals {
+  acr_project = "sds"
   criticality = {
     sbox     = "Low"
     aat      = "High"

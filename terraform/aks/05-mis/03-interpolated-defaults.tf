@@ -12,3 +12,9 @@ data "azurerm_key_vault" "genesis_keyvault" {
   name                = "${lower(replace(data.azurerm_subscription.current.display_name, "-", ""))}kv"
   resource_group_name = data.azurerm_resource_group.genesis_rg.name
 }
+
+data "azurerm_resource_group" "acr_rg" {
+  name = format("%s-acr-rg",
+  local.acr_project,
+  )
+}
