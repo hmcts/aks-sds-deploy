@@ -14,6 +14,7 @@ data "azurerm_key_vault" "genesis_keyvault" {
 }
 
 data "azurerm_resource_group" "acr_rg" {
+  provider          = azurerm.acr
   name = format("%s-acr-rg",
   local.acr[var.project].project,
   )
@@ -22,7 +23,7 @@ data "azurerm_resource_group" "acr_rg" {
 data "azurerm_key_vault" "hmcts_access_vault" {
   provider            = azurerm.hmcts-control
   name                = var.control_vault
-  resource_group_name = "azure-control-prod-rg"
+  resource_group_name = "azure-control-${var.environment}-rg"
 }
 
 data "azurerm_key_vault_secret" "kubernetes_cluster_client_id" {

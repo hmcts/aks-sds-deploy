@@ -5,7 +5,7 @@ variable "application_name" {
 locals {
   acr = {
     ss = {
-      subscription = "fb084706-583f-4c9a-bdab-949aac66ba5c"
+      subscription = "5ca62022-6aa2-4cee-aaa7-e7536c8d566c"
       project      = "sds"
       }
     }
