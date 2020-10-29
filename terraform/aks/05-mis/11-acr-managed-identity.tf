@@ -14,5 +14,4 @@ resource "azurerm_role_assignment" "acrpull_role_aks_sp" {
   role_definition_name             = "AcrPull"
   principal_id                     = data.azurerm_key_vault_secret.kubernetes_cluster_client_id.value
   scope                            = "/subscriptions/${local.acr[var.project].subscription}/resourceGroups/${data.azurerm_resource_group.acr_rg.name}"
-  #skip_service_principal_aad_check = true
 }
