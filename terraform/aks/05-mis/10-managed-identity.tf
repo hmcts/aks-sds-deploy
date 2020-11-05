@@ -2,7 +2,7 @@ resource "azurerm_user_assigned_identity" "sops-mi" {
   resource_group_name = data.azurerm_resource_group.genesis_rg.name
   location            = data.azurerm_resource_group.genesis_rg.location
 
-  name = "${var.application_name}-${var.environment}-mi-sops"
+  name = "aks-${var.environment}-mi"
   tags = local.common_tags
 }
 
