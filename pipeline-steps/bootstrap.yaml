@@ -20,7 +20,7 @@ steps:
       scriptLocation: inlineScript
       failOnStandardError: 'true'
       inlineScript: |   
-        echo "##vso[task.setvariable variable=AZURE_MI_ID]$(az identity show --resource-group genesis-rg --name flux-$(env)-mi-sops --query="clientId" -o tsv)"
+        echo "##vso[task.setvariable variable=AZURE_MI_ID]$(az identity show --resource-group genesis-rg --name aks-$(env)-mi --query="clientId" -o tsv)"
 
 - task: Bash@3
   displayName: 'Bootstrap Replacement'
