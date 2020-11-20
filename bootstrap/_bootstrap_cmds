@@ -17,7 +17,7 @@ HELM_OPERATOR_VER="1.1.0"
 
 ### Note Automation cluster Name lookup later
 # CLUSTER_NAME="00"
-flux_repo_list="k8s/environments/${ENVIRONMENT}/cluster-${CLUSTER_NAME}\,k8s/environments/${ENVIRONMENT}/cluster-${CLUSTER_NAME}-overlay\,k8s/environments/${ENVIRONMENT}/common\,k8s/common"
+flux_repo_list="k8s/environments/${ENVIRONMENT}/cluster-${CLUSTER_NAME}\,k8s/environments/${ENVIRONMENT}/cluster-${CLUSTER_NAME}-overlay\,k8s/environments/${ENVIRONMENT}/common\,k8s/environments/${ENVIRONMENT}/common-overlay\,k8s/common"
 
 
 
