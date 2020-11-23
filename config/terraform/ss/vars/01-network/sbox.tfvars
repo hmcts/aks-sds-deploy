@@ -12,7 +12,8 @@ private_dns_zones = [
   "privatelink.database.windows.net",
   "privatelink.blob.core.windows.net",
   "privatelink.vaultcore.azure.net",
-  "privatelink.datafactory.azure.net"
+  "privatelink.datafactory.azure.net",
+  "privatelink.postgres.database.azure.com"
 ]
 
 hub = "sbox"
