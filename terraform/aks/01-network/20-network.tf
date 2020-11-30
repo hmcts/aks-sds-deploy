@@ -17,7 +17,7 @@ module "network" {
   application_gateway_subnet_cidr_blocks                    = var.application_gateway_subnet_cidr_blocks
   iaas_subnet_cidr_blocks                                   = var.iaas_subnet_cidr_blocks
 
-  iaas_subnet_service_endpoints                             = var.iaas_subnet_service_endpoints
+  iaas_subnet_service_endpoints                             = flatten([var.iaas_subnet_service_endpoints])
   iaas_subnet_enforce_private_link_network_policies         = var.iaas_subnet_enforce_private_link_network_policies
 
   tags = local.common_tags
