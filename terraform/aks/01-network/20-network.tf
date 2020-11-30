@@ -1,5 +1,5 @@
 module "network" {
-  source = "git::https://github.com/hmcts/aks-module-network.git?ref=master"
+  source = "git::https://github.com/hmcts/aks-module-network.git?ref=service_endpoints"
 
   resource_group_name = local.network_resource_group_name
 
@@ -16,9 +16,6 @@ module "network" {
   aks_01_subnet_cidr_blocks                                   = var.aks_01_subnet_cidr_blocks #UK West # Currently both clusters in UK South
   application_gateway_subnet_cidr_blocks                      = var.application_gateway_subnet_cidr_blocks
   iaas_subnet_cidr_blocks                                     = var.iaas_subnet_cidr_blocks
-
-  iaas_subnet_service_endpoints                               = flatten([var.iaas_subnet_service_endpoints])
-  iaas_subnet_enforce_private_link_endpoint_network_policies  = var.iaas_subnet_enforce_private_link_endpoint_network_policies
 
   tags = local.common_tags
 }
