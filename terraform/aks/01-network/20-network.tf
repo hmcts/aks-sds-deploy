@@ -12,13 +12,13 @@ module "network" {
   project               = var.project
   service_shortname     = var.service_shortname
 
-  aks_00_subnet_cidr_blocks                                 = var.aks_00_subnet_cidr_blocks #UK South
-  aks_01_subnet_cidr_blocks                                 = var.aks_01_subnet_cidr_blocks #UK West # Currently both clusters in UK South
-  application_gateway_subnet_cidr_blocks                    = var.application_gateway_subnet_cidr_blocks
-  iaas_subnet_cidr_blocks                                   = var.iaas_subnet_cidr_blocks
+  aks_00_subnet_cidr_blocks                                   = var.aks_00_subnet_cidr_blocks #UK South
+  aks_01_subnet_cidr_blocks                                   = var.aks_01_subnet_cidr_blocks #UK West # Currently both clusters in UK South
+  application_gateway_subnet_cidr_blocks                      = var.application_gateway_subnet_cidr_blocks
+  iaas_subnet_cidr_blocks                                     = var.iaas_subnet_cidr_blocks
 
-  iaas_subnet_service_endpoints                             = flatten([var.iaas_subnet_service_endpoints])
-  iaas_subnet_enforce_private_link_network_policies         = var.iaas_subnet_enforce_private_link_network_policies
+  iaas_subnet_service_endpoints                               = flatten([var.iaas_subnet_service_endpoints])
+  iaas_subnet_enforce_private_link_endpoint_network_policies  = var.iaas_subnet_enforce_private_link_endpoint_network_policies
 
   tags = local.common_tags
 }
