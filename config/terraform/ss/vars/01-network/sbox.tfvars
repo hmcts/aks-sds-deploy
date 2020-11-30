@@ -7,8 +7,8 @@ iaas_subnet_cidr_blocks                = "10.140.32.0/25"
 application_gateway_subnet_cidr_blocks = "10.140.32.128/25"
 
 iaas_subnet_service_endpoints          = [
-  "Microsoft.Storage"
-  "Microsoft.KeyVault"
+  "Microsoft.Storage",
+  "Microsoft.KeyVault",
   "Microsoft.Sql"
 ]
 iaas_subnet_enforce_private_link_network_policies = true
