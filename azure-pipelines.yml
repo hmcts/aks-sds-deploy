@@ -51,6 +51,8 @@ variables:
   # same comment as above ^^
   - name: serviceConnection
     value: DTS-SHAREDSERVICES-${{ parameters.env }}
+  - name: TF_LOG
+    value: DEBUG
 
 stages:
   - stage: Genesis
