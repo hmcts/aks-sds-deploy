@@ -64,11 +64,11 @@ locals {
       name            = "hmcts-nonprod"
     }
     prod = {
-      subscription_id = "8999dec3-0104-4a27-94ee-6588559729d1"
+      subscription_id = "8999dec3-0104-4a27-94ee-6588559729d1"ß
       name            = "hmcts-prod"
     }
   }
-  resolved_subscription_id = "local.log_analytics_workspace[[for x in keys(local.log_analytics_env_mapping) : x if contains(local.log_analytics_env_mapping[x], var.environment)][0]].subscription_id"
+  resolved_subscription_id = "local.log_analytics_workspace[[for x in keys(local.log_analytics_env_mapping) : x if contains(local.log_analytics_env_mapping[x], "sbox")][0]].subscription_id"
   resolved_name = "local.log_analytics_workspace[[for x in keys(local.log_analytics_env_mapping) : x if contains(local.log_analytics_env_mapping[x], var.environment)][0]].name"
 
 
