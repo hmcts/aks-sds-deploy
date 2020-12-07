@@ -12,6 +12,7 @@ resource "azurerm_resource_group" "kubernetes_resource_group" {
 module "loganalytics" {
   source = "../../../modules/loganalytics"
   environment = var.environment
+
 }
 
 module "kubernetes" {

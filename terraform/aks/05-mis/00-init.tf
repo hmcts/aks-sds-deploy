@@ -32,3 +32,11 @@ provider "azurerm" {
   features {}
   alias = "acr"
 }
+
+
+provider "azurerm" {
+  subscription_id            = module.loganalytics.subscription_id
+  skip_provider_registration = "true"
+  features {}
+  alias = "log_analytics"
+}
