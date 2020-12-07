@@ -50,9 +50,7 @@ variables:
     value: ss
   # same comment as above ^^
   - name: serviceConnection
-    value: DTS-SHAREDSERVICES-${{ parameters.env }}
-  - name: TF_LOG
-    value: DEBUG
+    value: OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
 
 stages:
   - stage: Genesis
