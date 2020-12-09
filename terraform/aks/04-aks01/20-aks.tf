@@ -9,8 +9,14 @@ resource "azurerm_resource_group" "kubernetes_resource_group" {
   tags = local.common_tags
 }
 
+module "loganalytics" {
+  source = "../../../modules/loganalytics"
+  environment = var.environment
+
+}
+
 module "kubernetes" {
-  source = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=master"
+  source = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=features/dtspo-171"
 
   environment = var.environment
   location    = var.location
@@ -29,6 +35,8 @@ module "kubernetes" {
   cluster_number    = var.cluster_number
   service_shortname = var.service_shortname
   project           = var.project
+
+  log_workspace_id = module.loganalytics.workspace_id
 
   control_vault = var.control_vault
 
