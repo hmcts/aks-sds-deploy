@@ -14,9 +14,9 @@ data "azurerm_key_vault" "genesis_keyvault" {
 }
 
 data "azurerm_resource_group" "acr_rg" {
-  provider          = azurerm.acr
+  provider = azurerm.acr
   name = format("%s-acr-rg",
-  local.acr[var.project].project,
+    local.acr[var.project].project,
   )
 }
 
