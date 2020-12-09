@@ -10,14 +10,14 @@ resource "azurerm_role_assignment" "MI-Operator" {
   # DTS Bootstrap Principal_id
   principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id
   role_definition_name = "Managed Identity Operator"
-  scope                = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${data.azurerm_resource_group.genesis_rg.name}/providers/Microsoft.ManagedIdentity/userAssignedIdentities/${azurerm_user_assigned_identity.sops-mi.name}"
+  scope                = azurerm_user_assigned_identity.sops-mi.id
 }
 
 resource "azurerm_role_assignment" "Reader" {
   # DTS Bootstrap Principal_id
   principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id
   role_definition_name = "Reader"
-  scope                = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${data.azurerm_resource_group.genesis_rg.name}/providers/Microsoft.KeyVault/vaults/${data.azurerm_key_vault.genesis_keyvault.name}"
+  scope                = data.azurerm_key_vault.genesis_keyvault.id
 }
 
 resource "azurerm_key_vault_key" "sops-key" {

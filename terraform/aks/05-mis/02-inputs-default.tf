@@ -7,8 +7,8 @@ locals {
     ss = {
       subscription = "5ca62022-6aa2-4cee-aaa7-e7536c8d566c"
       project      = "sds"
-      }
     }
+  }
 
 
   criticality = {
@@ -46,4 +46,8 @@ locals {
     "environment"        = local.env_display_names[var.environment]
     "criticality"        = local.criticality[var.environment]
   }
+}
+
+variable "location" {
+  default = "UK South"
 }
