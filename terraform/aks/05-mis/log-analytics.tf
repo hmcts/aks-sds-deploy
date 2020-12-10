@@ -14,8 +14,6 @@ resource "azurerm_role_assignment" "log_analytics_role_aks_sp" {
   scope                            = module.loganalytics.workspace_id
 }
 
-
-
 module "loganalytics" {
   source = "../../../modules/loganalytics"
   environment = var.environment
