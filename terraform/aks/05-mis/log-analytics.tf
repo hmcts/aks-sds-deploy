@@ -1,5 +1,3 @@
-
-
 resource "azurerm_role_assignment" "log_analytics_role_MI" {
 
   provider = azurerm.log_analytics
@@ -25,4 +23,3 @@ module "loganalytics" {
 
 
 }
-
