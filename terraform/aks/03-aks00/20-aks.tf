@@ -16,7 +16,7 @@ module "loganalytics" {
 }
 
 module "kubernetes" {
-  source = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=features/dtspo-171"
+  source = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=master"
 
   environment = var.environment
   location    = var.location
