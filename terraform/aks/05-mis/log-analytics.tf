@@ -6,7 +6,6 @@ resource "azurerm_role_assignment" "log_analytics_role_MI" {
   scope                           = module.loganalytics.workspace_id
 }
 
-
 resource "azurerm_role_assignment" "log_analytics_role_aks_sp" {
   # AKS SP ACR Pull role
   provider = azurerm.log_analytics
