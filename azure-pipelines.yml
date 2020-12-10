@@ -93,20 +93,6 @@ stages:
               tfversion: $(tfversion)
               terraformServiceConnection: OPS-APPROVAL-GATE-MGMT-ENVS
 
-  - stage: Monitoring
-    displayName: 'Monitoring'
-    condition: contains('${{ parameters.Run_Stage }}', 'Deploy_Full')
-    dependsOn: Network
-    jobs:
-      - job: DeployInfrastructure
-        steps:
-          - template: pipeline-steps/deploy-service.yaml
-            parameters:
-              environment: ${{ parameters.env }}
-              location: ${{ parameters.location }}
-              stack: '02-monitoring'
-              project: $(project)
-              tfversion: $(tfversion)
 
   - stage: Managed_Identity
     displayName: 'Managed_Identity'
@@ -130,7 +116,6 @@ stages:
     condition: or(contains('${{ parameters.Run_Stage }}', 'Deploy_Full'), contains('${{ parameters.Run_Stage }}', 'DeployAks00'))
     dependsOn: 
       - Managed_Identity
-      - Monitoring
     jobs:
       - job: DeployInfrastructure
         steps:
@@ -151,7 +136,6 @@ stages:
       controlStorageAccount: $[ stageDependencies.ReadKeyVault.ReadKeyVault.outputs['SetControlVars.controlStorageAccount'] ]
     dependsOn: 
       - Managed_Identity
-      - Monitoring
     jobs:
       - job: DeployInfrastructure
         steps:
