@@ -10,13 +10,22 @@ resource "azurerm_resource_group" "kubernetes_resource_group" {
 }
 
 module "loganalytics" {
-  source = "../../../modules/loganalytics"
+  source      = "../../../modules/loganalytics"
   environment = var.environment
 
 }
 
+data "azurerm_resource_group" "genesis_rg" {
+  name = "genesis-rg"
+}
+
+data "azurerm_user_assigned_identity" "aks" {
+  name                = "aks-${var.environment}-mi"
+  resource_group_name = data.azurerm_resource_group.genesis_rg.name
+}
+
 module "kubernetes" {
-  source = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=master"
+  source = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=user-assigned-identity"
 
   environment = var.environment
   location    = var.location
@@ -47,5 +56,6 @@ module "kubernetes" {
   kubernetes_cluster_agent_vm_size   = var.kubernetes_cluster_agent_vm_size
   kubernetes_cluster_version         = var.kubernetes_cluster_version
 
-  tags = local.common_tags
+  tags                      = local.common_tags
+  user_assigned_identity_id = data.azurerm_user_assigned_identity.aks.id
 }
