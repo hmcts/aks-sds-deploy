@@ -33,7 +33,7 @@ parameters:
     - TEST
     - STG
     - PROD
-          
+
 name: HMCTS Shared Services AKS Azure Infrastructure Deployment Pipeline
 trigger:
 - none
@@ -42,7 +42,7 @@ variables:
   - name: gaServiceConnection
     value: OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
   - name: tfversion
-    value: 0.13.4
+    value: 0.14.3
   # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
   # but it might be better to template the pipeline more and have a different pipeline file
   # so that someone doesn't pick the wrong var in the dropdown
@@ -114,7 +114,7 @@ stages:
   - stage: Aks00
     displayName: 'Deploy AKS 00'
     condition: or(contains('${{ parameters.Run_Stage }}', 'Deploy_Full'), contains('${{ parameters.Run_Stage }}', 'DeployAks00'))
-    dependsOn: 
+    dependsOn:
       - Managed_Identity
     jobs:
       - job: DeployInfrastructure
@@ -134,7 +134,7 @@ stages:
     variables:
       armClientSecret: $[ stageDependencies.ReadKeyVault.ReadKeyVault.outputs['SetSubscriptionSP.ARM_CLIENT_SECRET'] ]
       controlStorageAccount: $[ stageDependencies.ReadKeyVault.ReadKeyVault.outputs['SetControlVars.controlStorageAccount'] ]
-    dependsOn: 
+    dependsOn:
       - Managed_Identity
     jobs:
       - job: DeployInfrastructure
