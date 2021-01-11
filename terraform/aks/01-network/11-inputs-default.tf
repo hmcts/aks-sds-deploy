@@ -41,7 +41,7 @@ locals {
       }
     }
     prod = {
-      subscription = "ea3a8c1e-af9d-4108-bc86-a7e2d267f49c"
+      subscription = "0978315c-75fe-4ada-9d11-1eb5e0e0b214"
       ukSouth = {
         name        = "hmcts-hub-prod-int"
         next_hop_ip = "10.11.8.36"
