@@ -24,7 +24,7 @@ parameters:
   - name: env
     displayName: Environment
     type: string
-    default: 'DEMO'
+    default: 'SBOX'
     values:
     - ITHC
     - DEV
