@@ -32,7 +32,7 @@ steps:
       backendAzureRmStorageAccountName: $(controlStorageAccount)
       backendAzureRmStorageAccountSku: Standard_LRS
       backendAzureRmContainerName: subscription-tfstate
-      backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/$(env)/05-mis/terraform-mi.tfstate'
+      backendAzureRmKey: '"${{ parameters.location }}"/${{ parameters.project }}/$(env)/05-mis/terraform-mi.tfstate'
 
   - task: TerraformCLI@0
     displayName: terraform validate
