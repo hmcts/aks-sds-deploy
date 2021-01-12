@@ -34,7 +34,7 @@ steps:
       backendAzureRmStorageAccountName: $(controlStorageAccount)
       backendAzureRmStorageAccountSku: Standard_LRS
       backendAzureRmContainerName: subscription-tfstate
-      backendAzureRmKey: '"${{ parameters.location }}"/${{ parameters.project }}/$(env)/00-genesis/terraform-genesis.tfstate'
+      backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/$(env)/00-genesis/terraform-genesis.tfstate'
 
   - task: TerraformCLI@0
     displayName: terraform validate
