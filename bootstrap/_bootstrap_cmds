@@ -11,7 +11,7 @@ SUBSCRIPTION_NAME="${5}"
 CLUSTER_NAME="${6}"
 tags="Environment=${ENVIRONMENT} Service=${SERVICE} Project=${PROJECT} Created_By="Bootstrap""
 ############################################################
-HELM_OPERATOR_VER="1.1.0"
+HELM_OPERATOR_VER="1.2.0"
 
 #flux_repo_list="k8s/${ENVIRONMENT}\,k8s/common"
 
@@ -98,7 +98,7 @@ function _rbac_apply_default {
     sed -e 's@${CLUSTER_READ_ONLY_GROUP}@'"$(az keyvault secret show --vault-name ${az_keyvault_name}  --name 'aks-user-rbac-group-id' --query 'value' -o tsv)"'@'  | \
         kubectl apply -f -
 
-} 
+}
 
 
 function _rbac_apply_dash {
@@ -111,7 +111,7 @@ function _rbac_apply_dash {
 
 function _sshkey_create {
     var_exist="$(az keyvault secret show --vault-name ${az_keyvault_name} --name 'flux-ssh-git-key-private' --query value -o tsv)"
-    if test -z "$var_exist" 
+    if test -z "$var_exist"
     then
             echo "SSHKey Setup"
             ssh-keygen -t rsa -f $AGENT_BUILDDIRECTORY/flux-ssh-git-key -q -P "" -C ""
@@ -134,7 +134,7 @@ function _sshkey_cleanup {
     if [ -f $AGENT_BUILDDIRECTORY/flux-ssh-git-key.pub ]; then
         echo "Deleting SSH Public Key"
         rm -f $AGENT_BUILDDIRECTORY/flux-ssh-git-key.pub
-    fi    
+    fi
 }
 
 ############################################################
@@ -157,7 +157,7 @@ function _flux_create_namespace {
         echo "already exists - continuing"
     else
         kubectl create ns admin
-fi   
+    fi
 }
 
 function _flux_ssh_git_key {
@@ -174,7 +174,7 @@ function _flux_install {
     --set git.path=${1}\
     --set git.label=${2} \
     --set helm.versions=${3} \
-    --namespace admin 
+    --namespace admin
 }
 
 function _flux_helm_operator_install {
@@ -186,6 +186,50 @@ function _flux_helm_operator_install {
 function _pod_identity_components {
     echo "Deploying AAD Pod Identity"
     kubectl apply -f ../kubernetes/charts/aad-pod-identities/deployment.yaml
+
+    #Install kustomize
+  curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+  TMP_DIR=$AGENT_BUILDDIRECTORY/aad-pod-identity
+  mkdir -p $TMP_DIR/{admin,kube-system}
+# -----------------------------------------------------------
+(
+cat <<EOF
+apiVersion: kustomize.config.k8s.io/v1beta1
+namespace: admin
+kind: Kustomization
+commonLabels:
+  k8s-app: aad-pod-id
+resources:
+  - https://raw.githubusercontent.com/Azure/aad-pod-identity/v1.7.1/deploy/infra/deployment-rbac.yaml
+  - https://raw.githubusercontent.com/hmcts/shared-services-flux/master/k8s/namespaces/admin/aad-pod-identity/mic-exception.yaml
+patchesStrategicMerge:
+  - https://raw.githubusercontent.com/hmcts/shared-services-flux/master/k8s/namespaces/admin/aad-pod-identity/patches/aad-pod-id.yaml
+EOF
+) > "${TMP_DIR}/admin/kustomization.yaml"
+
+(
+cat <<EOF
+apiVersion: kustomize.config.k8s.io/v1beta1
+namespace: kube-system
+kind: Kustomization
+resources:
+  - https://raw.githubusercontent.com/hmcts/shared-services-flux/master/k8s/namespaces/kube-system/aad-pod-identity/mic-exception.yaml
+EOF
+) > "${TMP_DIR}/kube-system/kustomization.yaml"
+
+(
+cat <<EOF
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+bases:
+ - kube-system
+ - admin
+EOF
+) > "${TMP_DIR}/kustomization.yaml"
+# -----------------------------------------------------------
+
+  ./kustomize build ${TMP_DIR} |  kubectl apply -f -
+
 }
 
 function _pod_identity_flux_sop_setup {
@@ -193,7 +237,7 @@ function _pod_identity_flux_sop_setup {
     cat ../kubernetes/charts/aad-pod-identities/aks-sops-role.yaml | \
     sed -e 's@MI_RESOURCE_ID@'"$(az identity show --resource-group 'genesis-rg' --name aks-${ENVIRONMENT}-mi --query 'id' | sed 's/"//g')"'@' | \
     sed -e 's@MI_CLIENTID@'"$(az identity show --resource-group 'genesis-rg' --name aks-${ENVIRONMENT}-mi --query 'clientId' | sed 's/"//g')"'@' | \
-    kubectl apply -f - 
+    kubectl apply -f -
 }
 
 function _error_exit {
