@@ -36,4 +36,4 @@ steps:
       command: destroy
       workingDirectory: $(System.DefaultWorkingDirectory)/terraform/aks/${{ parameters.stack }}
       environmentServiceName: $(serviceconnection)
-      commandOptions: '-var kubernetes_cluster_client_secret=$(ARM_CLIENT_SECRET) -var control_vault=$(controlKeyVault) -var environment=$(env) -var project=$(project) -var-file $(System.DefaultWorkingDirectory)/config/terraform/${{ parameters.project }}/vars/${{ parameters.stack }}/$(env).tfvars'
+      commandOptions: '-var control_vault=$(controlKeyVault) -var environment=$(env) -var project=$(project) -var-file $(System.DefaultWorkingDirectory)/config/terraform/${{ parameters.project }}/vars/${{ parameters.stack }}/$(env).tfvars'
