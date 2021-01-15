@@ -27,13 +27,6 @@ provider "azurerm" {
 }
 
 provider "azurerm" {
-  subscription_id            = local.acr[var.project].subscription
-  skip_provider_registration = "true"
-  features {}
-  alias = "acr"
-}
-
-provider "azurerm" {
   subscription_id            = local.log_analytics_subscription_id
   skip_provider_registration = "true"
   features {}

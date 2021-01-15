@@ -224,3 +224,4 @@ utils/regression_test.js
 *.pfx
 
 test.sh
+tfplan

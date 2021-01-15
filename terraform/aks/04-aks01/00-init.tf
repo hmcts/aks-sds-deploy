@@ -16,6 +16,31 @@ provider "azurerm" {
   features {}
 }
 
+locals {
+  acr = {
+    ss = {
+      subscription          = "5ca62022-6aa2-4cee-aaa7-e7536c8d566c"
+    }
+    global = {
+      subscription          = "8999dec3-0104-4a27-94ee-6588559729d1"
+    }
+  }
+}
+
+provider "azurerm" {
+  subscription_id            = local.acr[var.project].subscription
+  skip_provider_registration = "true"
+  features {}
+  alias = "acr"
+}
+
+provider "azurerm" {
+  subscription_id            = local.acr["global"].subscription
+  skip_provider_registration = "true"
+  features {}
+  alias = "global_acr"
+}
+
 provider "azurerm" {
   alias                      = "hmcts-control"
   skip_provider_registration = "true"
