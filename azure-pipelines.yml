@@ -42,7 +42,7 @@ variables:
   - name: gaServiceConnection
     value: OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
   - name: tfversion
-    value: 0.14.3
+    value: 0.14.4
   # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
   # but it might be better to template the pipeline more and have a different pipeline file
   # so that someone doesn't pick the wrong var in the dropdown
