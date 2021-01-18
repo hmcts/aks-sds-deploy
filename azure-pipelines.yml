@@ -35,8 +35,8 @@ parameters:
     - PROD
 
 name: HMCTS Shared Services AKS Azure Infrastructure Deployment Pipeline
-trigger:
-- none
+# TODO refactor pipeline to do plan by default, for now pls no trigger
+trigger: none
 
 variables:
   - name: gaServiceConnection

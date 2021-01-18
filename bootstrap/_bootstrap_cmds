@@ -80,18 +80,6 @@ function _az_aks_get_credentials {
 ############################################################
 # kubectl rbac
 
-function _rbac_fix_dashboard {
-    echo "Fixing Rbac issuse with Dashboard"
-    # https://github.com/kubernetes/dashboard/issues/4642
-    kubectl delete clusterrolebinding kubernetes-dashboard -n kube-system
-    kubectl create clusterrolebinding kubernetes-dashboard -n kube-system --clusterrole=cluster-admin --serviceaccount=kube-system:kubernetes-dashboard
-    if [[ $(kubectl get serviceaccount -n kube-system | grep tunnelfront) ]]; then
-    echo "Cluster Role Service Account already exists - continuing"
-    else
-        kubectl create clusterrolebinding kube-system --clusterrole=cluster-admin --serviceaccount=kube-system:tunnelfront
-    fi
-}
-
 function _rbac_apply_default {
     echo "Applying Default Rbac"
     cat ../kubernetes/rbac/default-rbac.yaml | \
@@ -99,12 +87,6 @@ function _rbac_apply_default {
         kubectl apply -f -
 
 }
-
-
-function _rbac_apply_dash {
-    kubectl apply -f ../kubernetes/rbac/dashboard-rbac.yaml
-}
-
 
 ############################################################
 # SSH Key Creation
@@ -185,12 +167,12 @@ function _flux_helm_operator_install {
 
 function _pod_identity_components {
     echo "Deploying AAD Pod Identity"
-    kubectl apply -f ../kubernetes/charts/aad-pod-identities/deployment.yaml
 
     #Install kustomize
   curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
   TMP_DIR=$AGENT_BUILDDIRECTORY/aad-pod-identity
-  mkdir -p $TMP_DIR/{admin,kube-system}
+  rm -rf ${TMP_DIR}
+  mkdir -p $TMP_DIR/admin
 # -----------------------------------------------------------
 (
 cat <<EOF
@@ -201,35 +183,20 @@ commonLabels:
   k8s-app: aad-pod-id
 resources:
   - https://raw.githubusercontent.com/Azure/aad-pod-identity/v1.7.1/deploy/infra/deployment-rbac.yaml
-  - https://raw.githubusercontent.com/hmcts/shared-services-flux/master/k8s/namespaces/admin/aad-pod-identity/mic-exception.yaml
 patchesStrategicMerge:
   - https://raw.githubusercontent.com/hmcts/shared-services-flux/master/k8s/namespaces/admin/aad-pod-identity/patches/aad-pod-id.yaml
 EOF
 ) > "${TMP_DIR}/admin/kustomization.yaml"
 
-(
-cat <<EOF
-apiVersion: kustomize.config.k8s.io/v1beta1
-namespace: kube-system
-kind: Kustomization
-resources:
-  - https://raw.githubusercontent.com/hmcts/shared-services-flux/master/k8s/namespaces/kube-system/aad-pod-identity/mic-exception.yaml
-EOF
-) > "${TMP_DIR}/kube-system/kustomization.yaml"
-
-(
-cat <<EOF
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-bases:
- - kube-system
- - admin
-EOF
-) > "${TMP_DIR}/kustomization.yaml"
 # -----------------------------------------------------------
 
-  ./kustomize build ${TMP_DIR} |  kubectl apply -f -
+  ./kustomize build ${TMP_DIR}/admin |  kubectl apply -f -
+  # workaround 'unable to recognize "STDIN": no matches for kind "AzurePodIdentityException" in version "aadpodidentity.k8s.io/v1"'
+  sleep 1
+  kubectl apply -f https://raw.githubusercontent.com/hmcts/shared-services-flux/master/k8s/namespaces/admin/aad-pod-identity/mic-exception.yaml
+  kubectl apply -f https://raw.githubusercontent.com/hmcts/shared-services-flux/master/k8s/namespaces/kube-system/aad-pod-identity/mic-exception.yaml
 
+  rm -rf ${TMP_DIR}
 }
 
 function _pod_identity_flux_sop_setup {
@@ -249,25 +216,24 @@ function _error_exit {
 
 
 function _kubectl_rbac {
-    _rbac_fix_dashboard
     _rbac_apply_default
-    _rbac_apply_dash
 }
 
 function _deploy_flux {
+    _flux_create_namespace
+    _pod_identity_components
+    _pod_identity_flux_sop_setup
+    # give a bit of time for identity to sync so that flux start's correctly first time
+    sleep 60
     _helm_add_repo
     echo "****  repo added ****"
     _helm_apply_crd ${HELM_OPERATOR_VER}
-    _flux_create_namespace
     _flux_ssh_git_key
     echo "****  ssh key added ****"
     _flux_install ${flux_repo_list} ${ENVIRONMENT} v3
     echo "****  flux is now installed ****"
     _flux_helm_operator_install
     echo "**** helm operator is now installed ****"
-     _pod_identity_components
-     echo "**** Installed AAD-Pod_Identity Components"
-     _pod_identity_flux_sop_setup
 }
 
 # #############################################################
