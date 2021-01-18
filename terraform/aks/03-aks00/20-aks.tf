@@ -46,7 +46,6 @@ module "kubernetes" {
   kubernetes_cluster_agent_min_count = var.kubernetes_cluster_agent_min_count
   kubernetes_cluster_agent_max_count = var.kubernetes_cluster_agent_max_count
   kubernetes_cluster_agent_vm_size   = var.kubernetes_cluster_agent_vm_size
-  kubernetes_cluster_agent_os_disk_size = "128"
   kubernetes_cluster_version         = var.kubernetes_cluster_version
 
   tags = local.common_tags
