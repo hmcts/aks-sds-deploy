@@ -10,7 +10,7 @@ steps:
 
   - template: keyvault-read.yaml
     parameters:
-      serviceConnection: $(serviceConnection)
+      serviceConnection: $(gaServiceConnection)
       environment: ${{ parameters.environment }}
 
   - task: TerraformInstaller@0
@@ -25,7 +25,7 @@ steps:
       terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/aks/${{ parameters.stack }}'
       backendType: azurerm
-      backendServiceArm: $(serviceconnection)
+      backendServiceArm: $(gaServiceConnection)
       backendAzureRmResourceGroupName: 'azure-control-$(env)-rg'
       backendAzureRmResourceGroupLocation: ${{ parameters.location }}
       backendAzureRmStorageAccountName: $(controlStorageAccount)
@@ -46,7 +46,7 @@ steps:
       command: plan
       terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: $(System.DefaultWorkingDirectory)/terraform/aks/${{ parameters.stack }}
-      environmentServiceName: $(serviceconnection)
+      environmentServiceName: $(gaServiceConnection)
       commandOptions: '-out=tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }} -var control_vault=$(controlKeyVault) -var environment=$(env) -var project=$(project) -var-file $(System.DefaultWorkingDirectory)/config/terraform/${{ parameters.project }}/vars/${{ parameters.stack }}/$(env).tfvars'
 
   - task: TerraformCLI@0
@@ -55,5 +55,5 @@ steps:
       command: apply
       terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: $(System.DefaultWorkingDirectory)/terraform/aks/${{ parameters.stack }}
-      environmentServiceName: $(serviceconnection)
+      environmentServiceName: $(gaServiceConnection)
       commandOptions: '--auto-approve tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }}'
