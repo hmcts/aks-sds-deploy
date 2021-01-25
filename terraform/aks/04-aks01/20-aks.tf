@@ -23,6 +23,8 @@ module "kubernetes" {
   providers = {
     azurerm               = azurerm
     azurerm.hmcts-control = azurerm.hmcts-control
+    azurerm.acr           = azurerm.acr
+    azurerm.global_acr    = azurerm.global_acr
   }
 
   resource_group_name = azurerm_resource_group.kubernetes_resource_group.name
@@ -45,6 +47,7 @@ module "kubernetes" {
   kubernetes_cluster_agent_max_count = var.kubernetes_cluster_agent_max_count
   kubernetes_cluster_agent_vm_size   = var.kubernetes_cluster_agent_vm_size
   kubernetes_cluster_version         = var.kubernetes_cluster_version
+  kubernetes_cluster_agent_os_disk_size = "128"
 
   tags = local.common_tags
 }

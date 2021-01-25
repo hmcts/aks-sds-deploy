@@ -26,6 +26,8 @@ provider "azurerm" {
   subscription_id = "04d27a32-7a07-48b3-95b8-3c8691e1a263"
 }
 
+// TODO delete after applying MI in all ENVs
+// working around 'Error: Provider configuration not present'
 provider "azurerm" {
   subscription_id            = local.acr[var.project].subscription
   skip_provider_registration = "true"

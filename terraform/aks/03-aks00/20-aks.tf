@@ -23,6 +23,8 @@ module "kubernetes" {
   providers = {
     azurerm               = azurerm
     azurerm.hmcts-control = azurerm.hmcts-control
+    azurerm.acr           = azurerm.acr
+    azurerm.global_acr    = azurerm.global_acr
   }
 
   resource_group_name = azurerm_resource_group.kubernetes_resource_group.name

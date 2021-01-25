@@ -13,13 +13,6 @@ data "azurerm_key_vault" "genesis_keyvault" {
   resource_group_name = data.azurerm_resource_group.genesis_rg.name
 }
 
-data "azurerm_resource_group" "acr_rg" {
-  provider = azurerm.acr
-  name = format("%s-acr-rg",
-    local.acr[var.project].project,
-  )
-}
-
 data "azurerm_key_vault" "hmcts_access_vault" {
   provider            = azurerm.hmcts-control
   name                = var.control_vault
