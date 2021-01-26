@@ -39,8 +39,6 @@ name: HMCTS Shared Services AKS Azure Infrastructure Deployment Pipeline
 trigger: none
 
 variables:
-  - name: gaServiceConnection
-    value: OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
   - name: tfversion
     value: 0.14.4
   # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
@@ -50,7 +48,7 @@ variables:
     value: ss
   # same comment as above ^^
   - name: serviceConnection
-    value: DTS-SHAREDSERVICES-${{ parameters.env }}
+    value: OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
 
 stages:
   - stage: Genesis
@@ -61,7 +59,6 @@ stages:
         steps:
           - template: pipeline-steps/genesis.yaml
             parameters:
-              gaServiceConnection: ${{ variables.gaServiceConnection }}
               environment: ${{ parameters.env }}
               location: ${{ parameters.location }}
               stack: '00-genesis'
@@ -103,7 +100,6 @@ stages:
         steps:
           - template: pipeline-steps/managed_identity.yaml
             parameters:
-              gaServiceConnection: ${{ variables.gaServiceConnection }}
               serviceConnection: $(serviceConnection)
               environment: ${{ parameters.env }}
               location: ${{ parameters.location }}

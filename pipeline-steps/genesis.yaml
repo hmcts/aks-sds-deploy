@@ -2,7 +2,6 @@ parameters:
   environment: ''
   location: ''
   serviceConnection: ''
-  gaServiceConnection: ''
   stack: ''
   project: ''
   tfversion: ''
@@ -49,7 +48,7 @@ steps:
       command: plan
       terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/aks/00-genesis'
-      environmentServiceName: $(gaServiceConnection)
+      environmentServiceName: $(serviceConnection)
       commandOptions: '-out=tfplan-${{ parameters.project }}-${{ parameters.stack }}-$(env) -var subscription_id=$(ARM_SUBSCRIPTION_ID) -var environment=$(env)'
 
   - task: TerraformCLI@0
@@ -58,5 +57,5 @@ steps:
       command: apply
       terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/aks/00-genesis'
-      environmentServiceName: $(gaServiceConnection)
+      environmentServiceName: $(serviceConnection)
       commandOptions: '--auto-approve tfplan-${{ parameters.project }}-${{ parameters.stack }}-$(env)'

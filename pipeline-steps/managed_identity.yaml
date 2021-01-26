@@ -2,7 +2,6 @@ parameters:
   environment: ''
   location: ''
   serviceConnection: ''
-  gaServiceConnection: ''
   stack: ''
   project: ''
   tfversion: ''
@@ -26,7 +25,7 @@ steps:
       terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/aks/05-mis'
       backendType: azurerm
-      backendServiceArm: $(gaServiceConnection)
+      backendServiceArm: $(serviceConnection)
       backendAzureRmResourceGroupName: 'azure-control-$(env)-rg'
       backendAzureRmResourceGroupLocation: ${{ parameters.location }}
       backendAzureRmStorageAccountName: $(controlStorageAccount)
@@ -47,7 +46,7 @@ steps:
       command: plan
       terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: $(System.DefaultWorkingDirectory)/terraform/aks/05-mis
-      environmentServiceName: $(gaServiceConnection)
+      environmentServiceName: $(serviceConnection)
       commandOptions: '-out=tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }} -var subscription_id=$(ARM_SUBSCRIPTION_ID) -var control_vault=$(controlKeyVault) -var environment=$(env) -var project=$(project)'
 
   - task: TerraformCLI@0
@@ -56,5 +55,5 @@ steps:
       command: apply
       terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: $(System.DefaultWorkingDirectory)/terraform/aks/05-mis
-      environmentServiceName: $(gaServiceConnection)
+      environmentServiceName: $(serviceConnection)
       commandOptions: '--auto-approve tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }}'
