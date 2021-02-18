@@ -154,7 +154,7 @@ function _flux_install {
     echo "helm install"
     helm upgrade -i flux fluxcd/flux -f ../kubernetes/charts/fluxcd/${PROJECT}-values.yaml \
     --set git.path=${1}\
-    --set git.label=${2} \
+    --set git.label=${2}-${CLUSTER_NAME} \
     --set helm.versions=${3} \
     --namespace admin
 }
