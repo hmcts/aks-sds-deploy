@@ -32,11 +32,5 @@ additional_routes = [
     address_prefix         = "192.168.0.0/16"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.10.200.36"
-  },
-  {
-    name                   = "mi_data_sftp_1"
-    address_prefix         = "1.1.1.1/32"
-    next_hop_type          = "Internet"
-    next_hop_in_ip_address = ""
   }
 ]
