@@ -88,3 +88,7 @@ locals {
     "criticality"        = local.criticality[var.environment]
   }
 }
+
+variable "additional_routes" {
+  default = []
+}
