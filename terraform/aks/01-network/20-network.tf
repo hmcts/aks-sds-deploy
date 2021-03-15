@@ -4,6 +4,7 @@ module "network" {
   resource_group_name = local.network_resource_group_name
 
   route_next_hop_in_ip_address = local.hub[var.hub].ukSouth.next_hop_ip
+  additional_routes            = var.additional_routes
   environment                  = var.environment
 
   network_address_space = var.network_address_space
