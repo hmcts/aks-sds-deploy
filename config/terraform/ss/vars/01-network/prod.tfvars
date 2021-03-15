@@ -12,3 +12,36 @@ private_dns_zones = [
 ]
 
 hub = "prod"
+
+additional_routes = [
+  {
+    name                   = "10_0_0_0"
+    address_prefix         = "10.0.0.0/8"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.8.36"
+  },
+  {
+    name                   = "172_16_0_0"
+    address_prefix         = "172.16.0.0/12"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.8.36"
+  },
+  {
+    name                   = "192_168_0_0"
+    address_prefix         = "192.168.0.0/16"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.8.36"
+  },
+  {
+    name                   = "mi_data_sftp_0"
+    address_prefix         = "10.24.254.129/32"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.8.36"
+  },
+  {
+    name                   = "mi_data_sftp_1"
+    address_prefix         = "10.24.254.130/32"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.8.36"
+  }
+]
