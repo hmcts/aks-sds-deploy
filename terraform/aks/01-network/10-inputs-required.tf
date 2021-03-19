@@ -43,6 +43,9 @@ variable "iaas_subnet_cidr_blocks" {
 variable "application_gateway_subnet_cidr_blocks" {
 }
 
+variable "vh_private_endpoint_subnet_cidr_blocks" {
+}
+
 # Remote State
 //variable "hmcts_access_vault" {
 //}
