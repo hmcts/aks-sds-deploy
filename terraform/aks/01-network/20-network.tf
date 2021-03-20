@@ -17,7 +17,7 @@ module "network" {
   aks_01_subnet_cidr_blocks              = var.aks_01_subnet_cidr_blocks #UK West # Currently both clusters in UK South
   application_gateway_subnet_cidr_blocks = var.application_gateway_subnet_cidr_blocks
   iaas_subnet_cidr_blocks                = var.iaas_subnet_cidr_blocks
-  vh_private_endpoint_subnet_cidr_blocks = var.vh_private_endpoint_subnet_cidr_blocks
+  additional_subnets = var.additional_subnets
 
   tags = local.common_tags
 }
