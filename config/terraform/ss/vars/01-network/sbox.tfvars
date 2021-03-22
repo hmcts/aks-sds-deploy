@@ -6,6 +6,13 @@ aks_01_subnet_cidr_blocks              = "10.140.16.0/20"
 iaas_subnet_cidr_blocks                = "10.140.32.0/25"
 application_gateway_subnet_cidr_blocks = "10.140.32.128/25"
 
+additional_subnets = [
+  {
+    name = "vh_private_endpoints"
+    address_prefix = "10.140.33.0/25"
+  },
+]
+
 private_dns_subscription = "1497c3d7-ab6d-4bb7-8a10-b51d03189ee3"
 private_dns_zones = [
   "sandbox.platform.hmcts.net",

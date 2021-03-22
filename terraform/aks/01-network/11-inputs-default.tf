@@ -92,3 +92,7 @@ locals {
 variable "additional_routes" {
   default = []
 }
+
+variable "additional_subnets" {
+  default = []
+}
