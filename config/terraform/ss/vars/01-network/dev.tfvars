@@ -10,6 +10,7 @@ additional_subnets = [
   {
     name = "vh_private_endpoints"
     address_prefix = "10.145.33.0/25"
+    additional_subnets_priv_link_pol = false
   },
 ]
 
