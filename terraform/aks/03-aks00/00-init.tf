@@ -19,10 +19,10 @@ provider "azurerm" {
 locals {
   acr = {
     ss = {
-      subscription          = "5ca62022-6aa2-4cee-aaa7-e7536c8d566c"
+      subscription = "5ca62022-6aa2-4cee-aaa7-e7536c8d566c"
     }
     global = {
-      subscription          = "8999dec3-0104-4a27-94ee-6588559729d1"
+      subscription = "8999dec3-0104-4a27-94ee-6588559729d1"
     }
   }
 }
