@@ -52,11 +52,9 @@ module "kubernetes" {
 
   additional_node_pools = {
     name                  = "msnode"
-    kubernetes_cluster_id = data.azurerm_subnet.aks.id
     min_count             = var.kubernetes_cluster_agent_min_count
     max_count             = var.kubernetes_cluster_agent_max_count
     os_type               = "Windows"
-    os_disk_type          = "Ephemeral"
     node_taints           = ["kubernetes.io/os=windows:NoSchedule"]
   }
 
