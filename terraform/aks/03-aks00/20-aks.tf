@@ -51,12 +51,14 @@ module "kubernetes" {
   tags = local.common_tags
 
   additional_node_pools = {
-    name        = "msnode"
-    vm_size     = "Standard_DS3_v2"
-    min_count   = var.kubernetes_cluster_agent_min_count
-    max_count   = var.kubernetes_cluster_agent_max_count
-    os_type     = "Windows"
-    node_taints = ["kubernetes.io/os=windows:NoSchedule"]
+
+    name                = "msnode"
+    vm_size             = "Standard_DS3_v2"
+    min_count           = var.kubernetes_cluster_agent_min_count
+    max_count           = var.kubernetes_cluster_agent_max_count
+    os_type             = "Windows"
+    node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
+    enable_auto_scaling = true
   }
 
 }
