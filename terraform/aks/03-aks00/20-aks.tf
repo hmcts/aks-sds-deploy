@@ -47,6 +47,7 @@ module "kubernetes" {
   kubernetes_cluster_agent_max_count = var.kubernetes_cluster_agent_max_count
   kubernetes_cluster_agent_vm_size   = var.kubernetes_cluster_agent_vm_size
   kubernetes_cluster_version         = var.kubernetes_cluster_version
+  additional_node_pools              = var.additional_node_pools
 
   tags = local.common_tags
 }
