@@ -68,7 +68,7 @@ module "kubernetes" {
     os_type             = "Windows"
     node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
     enable_auto_scaling = true
-  }
+  },
   ]
 }
 
