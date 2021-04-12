@@ -54,8 +54,8 @@ module "kubernetes" {
     {
     name                = "msnode1"
     vm_size             = "Standard_DS3_v2"
-    min_count           = var.additional_node_pools_agent_min_count
-    max_count           = var.additional_node_pools_agent_max_count
+    min_count           = 2
+    max_count           = 5
     os_type             = "Windows"
     node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
     enable_auto_scaling = true
@@ -63,8 +63,8 @@ module "kubernetes" {
   {
     name                = "msnode2"
     vm_size             = "Standard_DS3_v2"
-    min_count           = var.additional_node_pools_agent_min_count
-    max_count           = var.additional_node_pools_agent_max_count
+    min_count           = 2
+    max_count           = 5
     os_type             = "Windows"
     node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
     enable_auto_scaling = true
