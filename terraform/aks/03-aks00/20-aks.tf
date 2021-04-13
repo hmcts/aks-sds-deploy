@@ -52,7 +52,7 @@ module "kubernetes" {
 
   additional_node_pools = [
     {
-      name                = "msnode1"
+      name                = "mswin1"
       vm_size             = "Standard_DS3_v2"
       min_count           = 2
       max_count           = 5
@@ -61,7 +61,7 @@ module "kubernetes" {
       enable_auto_scaling = true
     },
     {
-      name                = "msnode2"
+      name                = "mswin2"
       vm_size             = "Standard_DS3_v2"
       min_count           = 2
       max_count           = 5
