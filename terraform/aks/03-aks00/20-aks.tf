@@ -49,4 +49,16 @@ module "kubernetes" {
   kubernetes_cluster_version         = var.kubernetes_cluster_version
 
   tags = local.common_tags
+
+  additional_node_pools = [
+    {
+      name                = "msnode"
+      vm_size             = var.kubernetes_cluster_agent_vm_size
+      min_count           = 2
+      max_count           = 5
+      os_type             = "Windows"
+      node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
+      enable_auto_scaling = true
+    }
+  ]
 }
