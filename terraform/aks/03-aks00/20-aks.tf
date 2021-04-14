@@ -53,7 +53,7 @@ module "kubernetes" {
   additional_node_pools = [
     {
       name                = "msnode"
-      vm_size             = "Standard_DS3_v2"
+      vm_size             = var.kubernetes_cluster_agent_vm_size
       min_count           = 2
       max_count           = 5
       os_type             = "Windows"
@@ -62,4 +62,3 @@ module "kubernetes" {
     }
   ]
 }
-
