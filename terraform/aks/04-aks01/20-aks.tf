@@ -15,7 +15,7 @@ module "loganalytics" {
 }
 
 module "kubernetes" {
-  source = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=windows-nodepool"
+  source = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=master"
 
   environment = var.environment
   location    = var.location
