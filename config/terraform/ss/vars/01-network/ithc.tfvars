@@ -43,12 +43,12 @@ additional_routes = [
     name                   = "mi_data_sftp_0"
     address_prefix         = "10.24.254.129/32"
     next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "10.11.72.36"
+    next_hop_in_ip_address = "10.49.72.36"
   },
   {
     name                   = "mi_data_sftp_1"
     address_prefix         = "10.24.254.130/32"
     next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "10.11.72.36"
+    next_hop_in_ip_address = "10.49.72.36"
   }
 ]
