@@ -49,6 +49,8 @@ variables:
   # same comment as above ^^
   - name: serviceConnection
     value: OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
+  - name: tfInitSub
+    value: "04d27a32-7a07-48b3-95b8-3c8691e1a263"
 
 stages:
   - stage: Genesis
@@ -64,6 +66,7 @@ stages:
               stack: '00-genesis'
               project: $(project)
               tfversion: $(tfversion)
+              tfInitSub: ${{ variables.tfInitSub }}
 
   - stage: Network
     displayName: 'Network'
@@ -78,6 +81,7 @@ stages:
               stack: '07-network-rg'
               project: $(project)
               tfversion: $(tfversion)
+              tfInitSub: ${{ variables.tfInitSub }}
       - job: DeployInfrastructure
         dependsOn: NetworkRg
         steps:
@@ -89,6 +93,7 @@ stages:
               project: $(project)
               tfversion: $(tfversion)
               terraformServiceConnection: OPS-APPROVAL-GATE-MGMT-ENVS
+              tfInitSub: ${{ variables.tfInitSub }}
 
 
   - stage: Managed_Identity
@@ -106,6 +111,7 @@ stages:
               stack: managed-identity
               project: $(project)
               tfversion: $(tfversion)
+              tfInitSub: ${{ variables.tfInitSub }}
 
   - stage: Aks00
     displayName: 'Deploy AKS 00'
@@ -122,6 +128,7 @@ stages:
               stack: '03-aks00'
               project: $(project)
               tfversion: $(tfversion)
+              tfInitSub: ${{ variables.tfInitSub }}
 
 
   - stage: Aks01
@@ -142,6 +149,7 @@ stages:
               stack: '04-aks01'
               project: $(project)
               tfversion: $(tfversion)
+              tfInitSub: ${{ variables.tfInitSub }}
 
   - stage: BootStrapCluster00
     displayName: 'BootStrap Cluster 00'
@@ -172,6 +180,7 @@ stages:
               clusterName: '01'
               project: $(project)
               serviceConnection: $(serviceConnection)
+              
 
   - stage: DestroyAks00
     displayName: 'Destroy AKS 00 Infrastructure'
@@ -186,6 +195,7 @@ stages:
               stack: '03-aks00'
               project: $(project)
               tfversion: $(tfversion)
+              tfInitSub: ${{ variables.tfInitSub }}
 
   - stage: DestroyAks01
     displayName: 'Destroy AKS 01 Infrastructure'
@@ -200,3 +210,4 @@ stages:
               stack: '04-aks01'
               project: $(project)
               tfversion: $(tfversion)
+              tfInitSub: ${{ variables.tfInitSub }}

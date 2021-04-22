@@ -3,6 +3,7 @@ parameters:
   location: ''
   stack: ''
   project: ''
+  tfInitSub: ''
 
 steps:
   - template: keyvault-read.yaml
@@ -23,6 +24,7 @@ steps:
           backendAzureRmStorageAccountSku: Standard_LRS
           backendAzureRmContainerName: subscription-tfstate
           backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/$(env)/${{ parameters.stack }}/terraform.tfstate'
+          commandOptions: '-backend-config=subscription_id=${{ parameters.tfInitSub }}'
 
   - task: TerraformCLI@0
     displayName: terraform validate
