@@ -1,2 +1,4 @@
 variable "environment" {}
-variable "developers_group" {}
+variable "developers_group" {
+    default = "DTS SDS Developers"
+}
