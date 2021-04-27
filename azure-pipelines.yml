@@ -40,7 +40,7 @@ trigger: none
 
 variables:
   - name: tfversion
-    value: 0.15.0
+    value: 0.15.1
   # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
   # but it might be better to template the pipeline more and have a different pipeline file
   # so that someone doesn't pick the wrong var in the dropdown
