@@ -225,5 +225,5 @@ utils/regression_test.js
 
 test.sh
 tfplan
-*/.terraform
-*/.terraform.*
+.terraform
+.terraform.lock.hcl
