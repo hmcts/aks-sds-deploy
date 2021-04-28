@@ -1,5 +1,7 @@
 locals {
 
+  developers_group = "DTS SDS Developers"
+
   criticality = {
     sbox     = "Low"
     aat      = "High"
