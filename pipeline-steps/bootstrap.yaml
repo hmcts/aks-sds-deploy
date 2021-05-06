@@ -40,7 +40,7 @@ steps:
     addSpnToEnvironment: true
     scriptType: shell
     failOnStandardError: 'false'
-    scriptPath: bootstrap/bootstrap.sh
+    scriptPath: bootstrap/scripts/bootstrap.sh
     arguments: ${{ parameters.project }} aks $(env) $(controlKeyVault) $(serviceConnection) ${{ parameters.clusterName }} deploy '
 
 
