@@ -60,7 +60,7 @@ EOF
 
 function pod_identity_flux_sop_setup {
     echo "SOPS MI Role"
-    cat ../../kubernetes/charts/aad-pod-identities/aks-sops-role.yaml | \
+    cat ../kubernetes/charts/aad-pod-identities/aks-sops-role.yaml | \
     sed -e 's@MI_RESOURCE_ID@'"$(az identity show --resource-group 'genesis-rg' --name aks-${ENVIRONMENT}-mi --query 'id' | sed 's/"//g')"'@' | \
     sed -e 's@MI_CLIENTID@'"$(az identity show --resource-group 'genesis-rg' --name aks-${ENVIRONMENT}-mi --query 'clientId' | sed 's/"//g')"'@' | \
     kubectl apply -f -
@@ -90,7 +90,7 @@ function flux_ssh_git_key {
 
 function flux_install {
     echo "helm install"
-    helm upgrade -i flux fluxcd/flux -f ../../kubernetes/charts/fluxcd/${PROJECT}-values.yaml \
+    helm upgrade -i flux fluxcd/flux -f ../kubernetes/charts/fluxcd/${PROJECT}-values.yaml \
     --set git.path=${1}\
     --set git.label=${2}-${CLUSTER_NAME} \
     --set helm.versions=${3} \
@@ -99,7 +99,7 @@ function flux_install {
 
 function flux_helm_operator_install {
     echo "helm install helm operator"
-    helm upgrade -i helm-operator fluxcd/helm-operator --wait -f ../../kubernetes/charts/fluxcd/helm-operator-values.yaml \
+    helm upgrade -i helm-operator fluxcd/helm-operator --wait -f ../kubernetes/charts/fluxcd/helm-operator-values.yaml \
     --namespace admin
 }
 
