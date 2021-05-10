@@ -14,11 +14,11 @@ Terraform code to deploy Shared Services AKS Cluster and underlying infrastructu
         d) Updates private DNS
         
     3) AKS00
-        a) Builds AKS clusters with default linux node pool
+        a) Builds AKS cluster with default linux node pool
         b) Adds additional windows node pool
 
     3) AKS01
-        a) Builds AKS clusters with default linux node pool
+        a) Builds AKS cluster with default linux node pool
         b) Adds additional windows node pool
         
     4) Bootstrap
