@@ -15,7 +15,7 @@ steps:
     displayName: terraform init
     inputs:
           command: init
-          workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/aks/${{ parameters.stack }}'
+          workingDirectory: '$(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}'
           backendType: azurerm
           backendServiceArm: $(serviceconnection)
           backendAzureRmResourceGroupName: 'azure-control-$(env)-rg'
@@ -30,12 +30,12 @@ steps:
     displayName: terraform validate
     inputs:
           command: validate
-          workingDirectory: $(System.DefaultWorkingDirectory)/terraform/aks/${{ parameters.stack }}
+          workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
 
   - task: TerraformCLI@0
     displayName: Terraform destroy
     inputs:
       command: destroy
-      workingDirectory: $(System.DefaultWorkingDirectory)/terraform/aks/${{ parameters.stack }}
+      workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
       environmentServiceName: $(serviceconnection)
-      commandOptions: '-var control_vault=$(controlKeyVault) -var environment=$(env) -var project=$(project) -var-file $(System.DefaultWorkingDirectory)/config/terraform/${{ parameters.project }}/vars/${{ parameters.stack }}/$(env).tfvars'
+      commandOptions: '-var control_vault=$(controlKeyVault) -var environment=$(env) -var project=$(project) -var-file $(System.DefaultWorkingDirectory)/environments/${{ parameters.stack }}/$(env).tfvars'
