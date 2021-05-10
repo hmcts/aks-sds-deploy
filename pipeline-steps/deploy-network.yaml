@@ -50,7 +50,7 @@ steps:
       terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: $(System.DefaultWorkingDirectory)/terraform/aks/${{ parameters.stack }}
       environmentServiceName: ${{ parameters.terraformServiceConnection }}
-      commandOptions: '-out=tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }} -var subscription_id=$(ARM_SUBSCRIPTION_ID) -var control_vault=$(controlKeyVault) -var environment=$(env) -var project=$(project) -var-file $(System.DefaultWorkingDirectory)/config/terraform/application/vars/${{ parameters.stack }}/$(env).tfvars'
+      commandOptions: '-out=tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }} -var subscription_id=$(ARM_SUBSCRIPTION_ID) -var control_vault=$(controlKeyVault) -var environment=$(env) -var project=$(project) -var-file $(System.DefaultWorkingDirectory)/config/terraform/${{ parameters.project }}/vars/${{ parameters.stack }}/$(env).tfvars'
 
   - task: TerraformCLI@0
     displayName: Terraform apply
