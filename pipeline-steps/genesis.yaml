@@ -26,7 +26,7 @@ steps:
     inputs:
       command: init
       terraformVersion: ${{ parameters.tfversion }}
-      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/aks/00-genesis'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/components/00-genesis'
       backendType: azurerm
       backendServiceArm: $(serviceconnection)
       backendAzureRmResourceGroupName: 'azure-control-$(env)-rg'
@@ -42,14 +42,14 @@ steps:
     inputs:
       command: validate
       terraformVersion: ${{ parameters.tfversion }}
-      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/aks/00-genesis'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/components/00-genesis'
 
   - task: TerraformCLI@0
     displayName: terraform plan
     inputs:
       command: plan
       terraformVersion: ${{ parameters.tfversion }}
-      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/aks/00-genesis'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/components/00-genesis'
       environmentServiceName: $(serviceConnection)
       commandOptions: '-out=tfplan-${{ parameters.project }}-${{ parameters.stack }}-$(env) -var subscription_id=$(ARM_SUBSCRIPTION_ID) -var environment=$(env)'
 
@@ -58,6 +58,6 @@ steps:
     inputs:
       command: apply
       terraformVersion: ${{ parameters.tfversion }}
-      workingDirectory: '$(System.DefaultWorkingDirectory)/terraform/aks/00-genesis'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/components/00-genesis'
       environmentServiceName: $(serviceConnection)
       commandOptions: '--auto-approve tfplan-${{ parameters.project }}-${{ parameters.stack }}-$(env)'
