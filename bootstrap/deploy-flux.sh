@@ -90,7 +90,7 @@ function flux_ssh_git_key {
 
 function flux_install {
     echo "helm install"
-    helm upgrade -i flux fluxcd/flux -f ../kubernetes/charts/fluxcd/${PROJECT}-values.yaml \
+    helm upgrade -i flux fluxcd/flux -f ../kubernetes/charts/fluxcd/flux-values.yaml \
     --set git.path=${1}\
     --set git.label=${2}-${CLUSTER_NAME} \
     --set helm.versions=${3} \
