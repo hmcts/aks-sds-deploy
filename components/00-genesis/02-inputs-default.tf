@@ -16,6 +16,7 @@ locals {
 
   env_display_names = {
     sbox     = "Sandbox"
+    ptlsbox  = "Sandbox"
     aat      = "Staging"
     stg      = "Staging"
     prod     = "Production"
