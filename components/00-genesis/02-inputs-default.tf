@@ -4,6 +4,7 @@ locals {
 
   criticality = {
     sbox     = "Low"
+    ptlsbox  = "Low"
     aat      = "High"
     stg      = "High"
     prod     = "High"
