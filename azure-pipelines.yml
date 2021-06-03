@@ -69,32 +69,32 @@ stages:
               tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
 
-  # - stage: Network
-  #   displayName: 'Network'
-  #   condition: contains('${{ parameters.Run_Stage }}', 'Deploy_Full')
-  #   jobs:
-  #     - job: NetworkRg
-  #       steps:
-  #         - template: pipeline-steps/deploy-service.yaml
-  #           parameters:
-  #             environment: ${{ parameters.env }}
-  #             location: ${{ parameters.location }}
-  #             stack: '07-network-rg'
-  #             project: $(project)
-  #             tfversion: $(tfversion)
-  #             tfInitSub: ${{ variables.tfInitSub }}
-  #     - job: DeployInfrastructure
-  #       dependsOn: NetworkRg
-  #       steps:
-  #         - template: pipeline-steps/deploy-network.yaml
-  #           parameters:
-  #             environment: ${{ parameters.env }}
-  #             location: ${{ parameters.location }}
-  #             stack: '01-network'
-  #             project: $(project)
-  #             tfversion: $(tfversion)
-  #             terraformServiceConnection: OPS-APPROVAL-GATE-MGMT-ENVS
-  #             tfInitSub: ${{ variables.tfInitSub }}
+  - stage: Network
+    displayName: 'Network'
+    condition: contains('${{ parameters.Run_Stage }}', 'Deploy_Full')
+    jobs:
+      - job: NetworkRg
+        steps:
+          - template: pipeline-steps/deploy-service.yaml
+            parameters:
+              environment: ${{ parameters.env }}
+              location: ${{ parameters.location }}
+              stack: '07-network-rg'
+              project: $(project)
+              tfversion: $(tfversion)
+              tfInitSub: ${{ variables.tfInitSub }}
+      - job: DeployInfrastructure
+        dependsOn: NetworkRg
+        steps:
+          - template: pipeline-steps/deploy-network.yaml
+            parameters:
+              environment: ${{ parameters.env }}
+              location: ${{ parameters.location }}
+              stack: '01-network'
+              project: $(project)
+              tfversion: $(tfversion)
+              terraformServiceConnection: OPS-APPROVAL-GATE-MGMT-ENVS
+              tfInitSub: ${{ variables.tfInitSub }}
 
 
   # - stage: Managed_Identity
