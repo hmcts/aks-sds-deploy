@@ -55,6 +55,7 @@ locals {
 
   criticality = {
     sbox     = "Low"
+    ptlsbox  = "Low"
     aat      = "High"
     stg      = "High"
     prod     = "High"
@@ -67,6 +68,7 @@ locals {
 
   env_display_names = {
     sbox     = "Sandbox"
+    ptlsbox  = "Sandbox"
     aat      = "Staging"
     stg      = "Staging"
     prod     = "Production"
