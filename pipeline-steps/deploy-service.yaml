@@ -71,6 +71,7 @@ steps:
   - script: |
       echo "Setting clusterNumbers variable to $clusters"
       echo "##vso[task.setvariable variable=clusterNumbers;isOutput=true]$clusters"
+      env
     name: setClusterNumbers
     env:
       clusters: $(TF_OUT_CLUSTERS)
