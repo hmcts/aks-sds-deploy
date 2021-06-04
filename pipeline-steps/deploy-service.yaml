@@ -63,7 +63,7 @@ steps:
   - task: TerraformCLI@0
     displayName: 'terraform output'
     inputs:
-        command: output
+        command: output clusters
 
   - script: |
       echo "clusters: $clusters"
