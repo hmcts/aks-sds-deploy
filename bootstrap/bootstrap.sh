@@ -27,6 +27,8 @@ then
     usage
 fi
 
+echo "Params: $@"
+
 for cluster in ${6}; do 
   set -- "${@:1:5}" "$cluster" "${@:7}"
   echo "Starting Deployment"
