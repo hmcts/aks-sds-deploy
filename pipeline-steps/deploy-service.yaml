@@ -74,3 +74,4 @@ steps:
 
   - bash: |
       echo 'clusters is $(TF_OUT_CLUSTERS)'
+      env
