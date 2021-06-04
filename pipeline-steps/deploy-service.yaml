@@ -69,15 +69,8 @@ steps:
       environmentServiceName: $(serviceConnection)
 
   - script: |
-      echo "clusters: $clusters"
-      clusternumbers=$(terraform output clusters)
+      echo "Setting clusterNumbers variable to $clusters"
       echo "##vso[task.setvariable variable=clusterNumbers;isOutput=true]$clusters"
-      echo "##vso[task.setvariable variable=clusterNumbers;isOutput=true]$clusternumbers"
     name: setClusterNumbers
     env:
       clusters: $(TF_OUT_CLUSTERS)
-
-  - bash: |
-      echo 'clusters is $(TF_OUT_CLUSTERS)'
-      terraform output clusters
-      env
