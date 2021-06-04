@@ -97,22 +97,22 @@ stages:
               tfInitSub: ${{ variables.tfInitSub }}
 
 
-  # - stage: Managed_Identity
-  #   displayName: 'Managed_Identity'
-  #   condition: contains('${{ parameters.Run_Stage }}', 'Deploy_Full')
-  #   dependsOn: Network
-  #   jobs:
-  #     - job: Managed_Identity
-  #       steps:
-  #         - template: pipeline-steps/managed_identity.yaml
-  #           parameters:
-  #             serviceConnection: $(serviceConnection)
-  #             environment: ${{ parameters.env }}
-  #             location: ${{ parameters.location }}
-  #             stack: managed-identity
-  #             project: $(project)
-  #             tfversion: $(tfversion)
-  #             tfInitSub: ${{ variables.tfInitSub }}
+  - stage: Managed_Identity
+    displayName: 'Managed_Identity'
+    condition: contains('${{ parameters.Run_Stage }}', 'Deploy_Full')
+    dependsOn: Network
+    jobs:
+      - job: Managed_Identity
+        steps:
+          - template: pipeline-steps/managed_identity.yaml
+            parameters:
+              serviceConnection: $(serviceConnection)
+              environment: ${{ parameters.env }}
+              location: ${{ parameters.location }}
+              stack: managed-identity
+              project: $(project)
+              tfversion: $(tfversion)
+              tfInitSub: ${{ variables.tfInitSub }}
 
   # - stage: Aks
   #   displayName: 'Deploy AKS 00'
