@@ -1,5 +1,5 @@
 resource "azurerm_resource_group" "kubernetes_resource_group" {
-  count    = 2
+  count    = var.cluster_count
   location = var.location
 
   name = format("%s-%s-%s-rg",
@@ -11,12 +11,12 @@ resource "azurerm_resource_group" "kubernetes_resource_group" {
 }
 
 module "loganalytics" {
-  source      = "git::https://github.com/hmcts/terraform-module-log-analytics-workspace-id.git?ref=master"
+  source      = "git::https://github.com/hmcts/terraform-module-log-analytics-workspace-id.git?ref=DTSPO-1032_add_ptl_envs"
   environment = var.environment
 }
 
 module "kubernetes" {
-  count       = 2
+  count       = var.cluster_count
   source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-1032_multi_cluster"
   environment = var.environment
   location    = var.location
