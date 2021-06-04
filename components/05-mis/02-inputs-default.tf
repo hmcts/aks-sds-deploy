@@ -14,9 +14,11 @@ locals {
 
   criticality = {
     sbox     = "Low"
+    ptlsbox  = "Low"
     aat      = "High"
     stg      = "High"
     prod     = "High"
+    ptl      = "High"
     ithc     = "Medium"
     test     = "Medium"
     perftest = "Medium"
@@ -27,9 +29,11 @@ locals {
 
   env_display_names = {
     sbox     = "Sandbox"
+    ptlsbox  = "Sandbox"
     aat      = "Staging"
     stg      = "Staging"
     prod     = "Production"
+    ptl      = "Production"
     ithc     = "ITHC"
     test     = "Test"
     perftest = "Test"
@@ -69,7 +73,7 @@ locals {
     }
   }
   log_analytics_subscription_id = local.log_analytics_workspace[[for x in keys(local.log_analytics_env_mapping) : x if contains(local.log_analytics_env_mapping[x], var.environment)][0]].subscription_id
-  resolved_name = local.log_analytics_workspace[[for x in keys(local.log_analytics_env_mapping) : x if contains(local.log_analytics_env_mapping[x], var.environment)][0]].name
+  resolved_name                 = local.log_analytics_workspace[[for x in keys(local.log_analytics_env_mapping) : x if contains(local.log_analytics_env_mapping[x], var.environment)][0]].name
 
 }
 
