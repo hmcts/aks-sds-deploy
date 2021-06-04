@@ -52,10 +52,7 @@ module "kubernetes" {
 
   tags = local.common_tags
 
-  # cluster_count = "2"
-
-
-  additional_node_pools = [
+  additional_node_pools = var.environment == "ptlsbox" ? [] : [
     {
       name                = "msnode"
       vm_size             = var.kubernetes_cluster_agent_vm_size
