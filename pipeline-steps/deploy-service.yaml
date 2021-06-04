@@ -63,7 +63,10 @@ steps:
   - task: TerraformCLI@0
     displayName: Terraform output
     inputs:
-        command: output
+      command: output
+      terraformVersion: ${{ parameters.tfversion }}
+      workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
+      environmentServiceName: $(serviceConnection)
 
   - script: |
       echo "clusters: $clusters"
