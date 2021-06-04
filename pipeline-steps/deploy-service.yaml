@@ -71,3 +71,6 @@ steps:
     name: setClusterNumbers
     env:
       clusters: $(TF_OUT_CLUSTERS)
+
+  - bash: |
+      echo 'clusters is $(TF_OUT_CLUSTERS)'
