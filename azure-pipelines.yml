@@ -114,22 +114,22 @@ stages:
               tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
 
-  # - stage: Aks
-  #   displayName: 'Deploy AKS 00'
-  #   condition: or(contains('${{ parameters.Run_Stage }}', 'Deploy_Full'), contains('${{ parameters.Run_Stage }}', 'DeployAks00'))
-  #   dependsOn:
-  #     - Managed_Identity
-  #   jobs:
-  #     - job: DeployInfrastructure
-  #       steps:
-  #         - template: pipeline-steps/deploy-service.yaml
-  #           parameters:
-  #             environment: ${{ parameters.env }}
-  #             location: ${{ parameters.location }}
-  #             stack: 'aks'
-  #             project: $(project)
-  #             tfversion: $(tfversion)
-  #             tfInitSub: ${{ variables.tfInitSub }}
+  - stage: Aks
+    displayName: 'Deploy AKS 00'
+    condition: or(contains('${{ parameters.Run_Stage }}', 'Deploy_Full'), contains('${{ parameters.Run_Stage }}', 'DeployAks00'))
+    dependsOn:
+      - Managed_Identity
+    jobs:
+      - job: DeployInfrastructure
+        steps:
+          - template: pipeline-steps/deploy-service.yaml
+            parameters:
+              environment: ${{ parameters.env }}
+              location: ${{ parameters.location }}
+              stack: 'aks'
+              project: $(project)
+              tfversion: $(tfversion)
+              tfInitSub: ${{ variables.tfInitSub }}
 
 
   # - stage: Aks01
