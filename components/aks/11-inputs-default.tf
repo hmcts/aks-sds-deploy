@@ -11,9 +11,11 @@ variable "service_shortname" {
 locals {
   criticality = {
     sbox     = "Low"
+    ptlsbox  = "Low"
     aat      = "High"
     stg      = "High"
     prod     = "High"
+    ptl      = "High"
     ithc     = "Medium"
     test     = "Medium"
     perftest = "Medium"
@@ -23,8 +25,10 @@ locals {
 
   env_display_names = {
     sbox     = "Sandbox"
+    ptlsbox  = "Sandbox"
     aat      = "Staging"
     stg      = "Staging"
+    ptl      = "Production"
     prod     = "Production"
     ithc     = "ITHC"
     test     = "Test"

@@ -1,5 +1,5 @@
 resource "azurerm_resource_group" "kubernetes_resource_group" {
-  count = 2
+  count    = 2
   location = var.location
 
   name = format("%s-%s-%s-rg",
@@ -18,7 +18,7 @@ module "loganalytics" {
 module "kubernetes" {
   count = 2
   # source = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-1032_multi_cluster"
-  source = "../../../../tf_modules/aks-module-kubernetes"
+  source      = "../../../../tf_modules/aks-module-kubernetes"
   environment = var.environment
   location    = var.location
 
