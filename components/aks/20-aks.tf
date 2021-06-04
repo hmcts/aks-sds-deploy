@@ -52,7 +52,7 @@ module "kubernetes" {
 
   tags = local.common_tags
 
-  additional_node_pools = var.environment == "ptlsbox" ? [] : [
+  additional_node_pools = contains(["ptlsbox", "ptl"], var.environment) ? [] : [
     {
       name                = "msnode"
       vm_size             = var.kubernetes_cluster_agent_vm_size
