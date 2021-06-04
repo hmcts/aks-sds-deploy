@@ -36,7 +36,7 @@ steps:
       commandOptions: '-backend-config=subscription_id=${{ parameters.tfInitSub }}'
 
   - task: TerraformCLI@0
-    displayName: terraform validate
+    displayName: Terraform validate
     inputs:
       command: validate
       terraformVersion: ${{ parameters.tfversion }}
@@ -61,7 +61,7 @@ steps:
       commandOptions: '--auto-approve tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }}'
 
   - task: TerraformCLI@0
-    displayName: 'terraform output'
+    displayName: Terraform output
     inputs:
         command: output
 
