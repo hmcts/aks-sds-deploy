@@ -59,3 +59,15 @@ steps:
       workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
       environmentServiceName: $(serviceConnection)
       commandOptions: '--auto-approve tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }}'
+
+  - task: TerraformCLI@0
+    displayName: 'terraform output'
+    inputs:
+        command: output
+
+  - script: |
+      echo "clusters: $clusters"
+      echo "##vso[task.setvariable variable=clusterNumbers;isOutput=true]$clusters"
+    name: setClusterNumbers
+    env:
+      clusters: $(TF_OUT_CLUSTERS)
