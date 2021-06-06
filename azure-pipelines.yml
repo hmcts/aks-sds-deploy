@@ -159,7 +159,7 @@ stages:
     jobs:
       - job: BootStrap
         variables:
-          clusters: stageDependencies.Aks.DeployInfrastructure.outputs['setClusterNumbers.clusterNumbers']
+          clusters: $[ stageDependencies.Aks.DeployInfrastructure.outputs['setClusterNumbers.clusterNumbers'] ]
         steps:
           - template: pipeline-steps/bootstrap.yaml
             parameters:
