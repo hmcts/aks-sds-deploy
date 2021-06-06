@@ -158,13 +158,15 @@ stages:
     dependsOn: Aks
     jobs:
       - job: BootStrap
+        variables:
+          clusters: stageDependencies.Aks.DeployInfrastructure.outputs['setClusterNumbers.clusterNumbers']
         steps:
           - template: pipeline-steps/bootstrap.yaml
             parameters:
               environment: ${{ parameters.env }}
-              command: $(command)
+              # command: $(command)
               clusterName: '00'
-              project: $(project)
+              # project: $(project)
               serviceConnection: $(serviceConnection)
 
   # - stage: BootStrapCluster01

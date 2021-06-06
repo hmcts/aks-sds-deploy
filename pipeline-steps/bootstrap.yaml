@@ -41,6 +41,4 @@ steps:
     scriptType: shell
     failOnStandardError: 'false'
     scriptPath: bootstrap/bootstrap.sh
-    arguments: "${{ parameters.project }} aks $(env) $(controlKeyVault) $(serviceConnection) \"stageDependencies.Aks.DeployInfrastructure.outputs['setClusterNumbers.clusterNumbers']\"  deploy" 
-
-
+    arguments: $(project) aks $(env) $(controlKeyVault) $(serviceConnection) "$(clusters)" deploy 
