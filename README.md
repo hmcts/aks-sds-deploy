@@ -26,4 +26,6 @@ Terraform code to deploy Shared Services AKS Cluster and underlying infrastructu
         b) Implements RBAC
         c) Install flux and helm operator
         
-        
+ ## Tagging
+ Tagging is implemented using the [terraform-module-common-tags](https://github.com/hmcts/terraform-module-common-tags) module to tag
+ resources.
