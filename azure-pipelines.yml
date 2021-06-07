@@ -5,13 +5,13 @@ parameters:
     default: 'Deploy_Full'
     values:
     - Deploy_Full
-    - DeployAks00
-    - DeployAks01
-    - BootstrapAks00
-    - BootstrapAks01
-    - Deploy
-    - DestroyAks00
-    - DestroyAks01
+    - DeployAks
+    # - DeployAks01
+    - BootstrapAks
+    # - BootstrapAks01
+    # - Deploy
+    - DestroyAks
+    # - DestroyAks01
 
   - name: location
     displayName: Location
@@ -29,7 +29,7 @@ parameters:
     # - ITHC
     # - DEV
     # - DEMO
-    # - SBOX
+    - SBOX
     - PTLSBOX
     # - TEST
     # - STG
@@ -83,6 +83,7 @@ stages:
               project: $(project)
               tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
+
       - job: DeployInfrastructure
         dependsOn: NetworkRg
         steps:
@@ -95,7 +96,6 @@ stages:
               tfversion: $(tfversion)
               terraformServiceConnection: OPS-APPROVAL-GATE-MGMT-ENVS
               tfInitSub: ${{ variables.tfInitSub }}
-
 
   - stage: Managed_Identity
     displayName: 'Managed_Identity'
@@ -115,8 +115,8 @@ stages:
               tfInitSub: ${{ variables.tfInitSub }}
 
   - stage: Aks
-    displayName: 'Deploy AKS 00'
-    condition: or(contains('${{ parameters.Run_Stage }}', 'Deploy_Full'), contains('${{ parameters.Run_Stage }}', 'DeployAks00'))
+    displayName: 'Deploy AKS clusters'
+    condition: or(contains('${{ parameters.Run_Stage }}', 'Deploy_Full'), contains('${{ parameters.Run_Stage }}', 'DeployAks'))
     dependsOn:
       - Managed_Identity
     jobs:
@@ -154,7 +154,7 @@ stages:
 
   - stage: BootStrapClusters
     displayName: 'BootStrap Clusters'
-    condition: or(contains('${{ parameters.Run_Stage }}', 'Deploy_Full'), contains('${{ parameters.Run_Stage }}', 'DeployAks00'), contains('${{ parameters.Run_Stage }}', 'BootstrapAks'))
+    condition: or(contains('${{ parameters.Run_Stage }}', 'Deploy_Full'), contains('${{ parameters.Run_Stage }}', 'DeployAks'), contains('${{ parameters.Run_Stage }}', 'BootstrapAks'))
     dependsOn: Aks
     jobs:
       - job: BootStrap
@@ -164,9 +164,6 @@ stages:
           - template: pipeline-steps/bootstrap.yaml
             parameters:
               environment: ${{ parameters.env }}
-              # command: $(command)
-              clusterName: '00'
-              # project: $(project)
               serviceConnection: $(serviceConnection)
 
   # - stage: BootStrapCluster01
@@ -183,22 +180,21 @@ stages:
   #             clusterName: '01'
   #             project: $(project)
   #             serviceConnection: $(serviceConnection)
-              
 
-  # - stage: DestroyAks00
-  #   displayName: 'Destroy AKS 00 Infrastructure'
-  #   condition: contains('${{ parameters.Run_Stage }}', 'DestroyAks00')
-  #   jobs:
-  #     - job: DestroyInfrastructure
-  #       steps:
-  #         - template: pipeline-steps/destroy-service.yaml
-  #           parameters:
-  #             environment: ${{ parameters.env }}
-  #             location: ${{ parameters.location }}
-  #             stack: '03-aks00'
-  #             project: $(project)
-  #             tfversion: $(tfversion)
-  #             tfInitSub: ${{ variables.tfInitSub }}
+  - stage: DestroyAks
+    displayName: 'Destroy AKS Infrastructure'
+    condition: contains('${{ parameters.Run_Stage }}', 'DestroyAks')
+    jobs:
+      - job: DestroyInfrastructure
+        steps:
+          - template: pipeline-steps/destroy-service.yaml
+            parameters:
+              environment: ${{ parameters.env }}
+              location: ${{ parameters.location }}
+              stack: 'aks'
+              project: $(project)
+              tfversion: $(tfversion)
+              tfInitSub: ${{ variables.tfInitSub }}
 
   # - stage: DestroyAks01
   #   displayName: 'Destroy AKS 01 Infrastructure'

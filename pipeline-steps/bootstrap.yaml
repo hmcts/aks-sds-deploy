@@ -33,12 +33,12 @@ steps:
             sed -i 's|MI_CLIENTID|$(AZURE_MI_ID)|g' 'aks-sops-role.yaml'
             cat aks-sops-role.yaml
 
-- task: AzureCLI@1
-  displayName: 'Bootstrap'
-  inputs:
-    azureSubscription: $(serviceConnection)
-    addSpnToEnvironment: true
-    scriptType: shell
-    failOnStandardError: 'false'
-    scriptPath: bootstrap/bootstrap.sh
-    arguments: $(project) aks $(env) $(controlKeyVault) $(serviceConnection) "$(clusters)" deploy 
+# - task: AzureCLI@1
+#   displayName: 'Bootstrap'
+#   inputs:
+#     azureSubscription: $(serviceConnection)
+#     addSpnToEnvironment: true
+#     scriptType: shell
+#     failOnStandardError: 'false'
+#     scriptPath: bootstrap/bootstrap.sh
+#     arguments: $(project) aks $(env) $(controlKeyVault) $(serviceConnection) "$(clusters)" deploy 

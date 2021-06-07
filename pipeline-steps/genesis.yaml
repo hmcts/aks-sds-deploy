@@ -53,11 +53,11 @@ steps:
       environmentServiceName: $(serviceConnection)
       commandOptions: '-out=tfplan-${{ parameters.project }}-${{ parameters.stack }}-$(env) -var subscription_id=$(ARM_SUBSCRIPTION_ID) -var environment=$(env)'
 
-  - task: TerraformCLI@0
-    displayName: Terraform apply
-    inputs:
-      command: apply
-      terraformVersion: ${{ parameters.tfversion }}
-      workingDirectory: '$(System.DefaultWorkingDirectory)/components/00-genesis'
-      environmentServiceName: $(serviceConnection)
-      commandOptions: '--auto-approve tfplan-${{ parameters.project }}-${{ parameters.stack }}-$(env)'
+  # - task: TerraformCLI@0
+  #   displayName: Terraform apply
+  #   inputs:
+  #     command: apply
+  #     terraformVersion: ${{ parameters.tfversion }}
+  #     workingDirectory: '$(System.DefaultWorkingDirectory)/components/00-genesis'
+  #     environmentServiceName: $(serviceConnection)
+  #     commandOptions: '--auto-approve tfplan-${{ parameters.project }}-${{ parameters.stack }}-$(env)'
