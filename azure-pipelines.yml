@@ -51,6 +51,8 @@ variables:
     value: OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
   - name: tfInitSub
     value: "04d27a32-7a07-48b3-95b8-3c8691e1a263"
+  - name: product
+    value: 'sds-platform'
 
 stages:
   - stage: Genesis
@@ -68,6 +70,7 @@ stages:
               tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
               builtFrom: $(Build.Repository.Name)
+              product: ${{ variables.product }}
 
   - stage: Network
     displayName: 'Network'
@@ -83,6 +86,9 @@ stages:
               project: $(project)
               tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
+              builtFrom: $(Build.Repository.Name)
+              product: ${{ variables.product }}
+
       - job: DeployInfrastructure
         dependsOn: NetworkRg
         steps:
@@ -95,6 +101,8 @@ stages:
               tfversion: $(tfversion)
               terraformServiceConnection: OPS-APPROVAL-GATE-MGMT-ENVS
               tfInitSub: ${{ variables.tfInitSub }}
+              builtFrom: $(Build.Repository.Name)
+              product: ${{ variables.product }}
 
 
   - stage: Managed_Identity
@@ -130,7 +138,8 @@ stages:
               project: $(project)
               tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
-
+              builtFrom: $(Build.Repository.Name)
+              product: ${{ variables.product }}
 
   - stage: Aks01
     displayName: 'Deploy AKS 01'
@@ -151,6 +160,8 @@ stages:
               project: $(project)
               tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
+              builtFrom: $(Build.Repository.Name)
+              product: ${{ variables.product }}
 
   - stage: BootStrapCluster00
     displayName: 'BootStrap Cluster 00'
@@ -182,7 +193,6 @@ stages:
               project: $(project)
               serviceConnection: $(serviceConnection)
 
-
   - stage: DestroyAks00
     displayName: 'Destroy AKS 00 Infrastructure'
     condition: contains('${{ parameters.Run_Stage }}', 'DestroyAks00')
@@ -197,6 +207,8 @@ stages:
               project: $(project)
               tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
+              builtFrom: $(Build.Repository.Name)
+              product: ${{ variables.product }}
 
   - stage: DestroyAks01
     displayName: 'Destroy AKS 01 Infrastructure'
@@ -212,3 +224,5 @@ stages:
               project: $(project)
               tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
+              builtFrom: $(Build.Repository.Name)
+              product: ${{ variables.product }}
