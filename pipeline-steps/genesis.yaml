@@ -6,6 +6,7 @@ parameters:
   project: ''
   tfversion: ''
   tfInitSub: ''
+  builtFrom: ''
 
 steps:
 
@@ -35,7 +36,7 @@ steps:
       backendAzureRmStorageAccountSku: Standard_LRS
       backendAzureRmContainerName: subscription-tfstate
       backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/$(env)/00-genesis/terraform-genesis.tfstate'
-      commandOptions: '-backend-config=subscription_id=${{ parameters.tfInitSub }}'
+      commandOptions: '-backend-config=subscription_id=${{ parameters.tfInitSub }} -var builtFrom=${{ parameters.builtFrom }}'
 
   - task: TerraformCLI@0
     displayName: terraform validate
@@ -51,7 +52,7 @@ steps:
       terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: '$(System.DefaultWorkingDirectory)/components/00-genesis'
       environmentServiceName: $(serviceConnection)
-      commandOptions: '-out=tfplan-${{ parameters.project }}-${{ parameters.stack }}-$(env) -var subscription_id=$(ARM_SUBSCRIPTION_ID) -var environment=$(env)'
+      commandOptions: '-out=tfplan-${{ parameters.project }}-${{ parameters.stack }}-$(env) -var subscription_id=$(ARM_SUBSCRIPTION_ID) -var environment=$(env) -var builtFrom=${{ parameters.builtFrom }}'
 
   - task: TerraformCLI@0
     displayName: Terraform apply
