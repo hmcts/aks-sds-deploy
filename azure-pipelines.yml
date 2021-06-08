@@ -67,6 +67,7 @@ stages:
               project: $(project)
               tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
+              builtFrom: $(Build.Repository.Name)
 
   - stage: Network
     displayName: 'Network'
@@ -180,7 +181,7 @@ stages:
               clusterName: '01'
               project: $(project)
               serviceConnection: $(serviceConnection)
-              
+
 
   - stage: DestroyAks00
     displayName: 'Destroy AKS 00 Infrastructure'
