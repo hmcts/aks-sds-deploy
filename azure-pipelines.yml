@@ -15,8 +15,8 @@ parameters:
     default: 'All'
     values:
     - 'All'
-    - '00'
-    - '01'
+    - '0'
+    - '1'
 
   - name: location
     displayName: Location
