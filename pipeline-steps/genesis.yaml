@@ -7,6 +7,7 @@ parameters:
   tfversion: ''
   tfInitSub: ''
   builtFrom: ''
+  product: ''
 
 steps:
 
@@ -27,7 +28,7 @@ steps:
     inputs:
       command: init
       terraformVersion: ${{ parameters.tfversion }}
-      workingDirectory: '$(System.DefaultWorkingDirectory)/components/00-genesis'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}'
       backendType: azurerm
       backendServiceArm: $(serviceconnection)
       backendAzureRmResourceGroupName: 'azure-control-$(env)-rg'
@@ -35,30 +36,30 @@ steps:
       backendAzureRmStorageAccountName: $(controlStorageAccount)
       backendAzureRmStorageAccountSku: Standard_LRS
       backendAzureRmContainerName: subscription-tfstate
-      backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/$(env)/00-genesis/terraform-genesis.tfstate'
-      commandOptions: '-backend-config=subscription_id=${{ parameters.tfInitSub }} -var builtFrom=${{ parameters.builtFrom }}'
+      backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/$(env)/${{ parameters.stack }}/terraform-genesis.tfstate'
+      commandOptions: '-backend-config=subscription_id=${{ parameters.tfInitSub }} -var builtFrom=${{ parameters.builtFrom }} -var product=${{ parameters.product }}'
 
   - task: TerraformCLI@0
     displayName: terraform validate
     inputs:
       command: validate
       terraformVersion: ${{ parameters.tfversion }}
-      workingDirectory: '$(System.DefaultWorkingDirectory)/components/00-genesis'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}'
 
   - task: TerraformCLI@0
     displayName: terraform plan
     inputs:
       command: plan
       terraformVersion: ${{ parameters.tfversion }}
-      workingDirectory: '$(System.DefaultWorkingDirectory)/components/00-genesis'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}'
       environmentServiceName: $(serviceConnection)
-      commandOptions: '-out=tfplan-${{ parameters.project }}-${{ parameters.stack }}-$(env) -var subscription_id=$(ARM_SUBSCRIPTION_ID) -var environment=$(env) -var builtFrom=${{ parameters.builtFrom }}'
+      commandOptions: '-out=tfplan-${{ parameters.project }}-${{ parameters.stack }}-$(env) -var subscription_id=$(ARM_SUBSCRIPTION_ID) -var environment=$(env) -var builtFrom=${{ parameters.builtFrom }}  -var product=${{ parameters.product }}'
 
   - task: TerraformCLI@0
     displayName: Terraform apply
     inputs:
       command: apply
       terraformVersion: ${{ parameters.tfversion }}
-      workingDirectory: '$(System.DefaultWorkingDirectory)/components/00-genesis'
+      workingDirectory: '$(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}'
       environmentServiceName: $(serviceConnection)
       commandOptions: '--auto-approve tfplan-${{ parameters.project }}-${{ parameters.stack }}-$(env)'
