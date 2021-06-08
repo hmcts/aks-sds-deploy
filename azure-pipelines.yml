@@ -174,7 +174,5 @@ stages:
               tfInitSub: ${{ variables.tfInitSub }}
               ${{ if eq(parameters['cluster'], 'All') }}:
                 targetCommand: ""
-              ${{ if eq(parameters['cluster'], '00') }}:
-                targetCommand: "-target module.kubernetes[0]"
-              ${{ if eq(parameters['cluster'], '01') }}:
-                targetCommand: "-target module.kubernetes[1]"
+              ${{ if ne(parameters['cluster'], 'All') }}:
+                targetCommand: "-target module.kubernetes[${{parameters.cluster}}]"
