@@ -104,7 +104,6 @@ stages:
               builtFrom: $(Build.Repository.Name)
               product: ${{ variables.product }}
 
-
   - stage: Managed_Identity
     displayName: 'Managed_Identity'
     condition: contains('${{ parameters.Run_Stage }}', 'Deploy_Full')
@@ -117,10 +116,12 @@ stages:
               serviceConnection: $(serviceConnection)
               environment: ${{ parameters.env }}
               location: ${{ parameters.location }}
-              stack: managed-identity
+              stack: '05-mis'
               project: $(project)
               tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
+              builtFrom: $(Build.Repository.Name)
+              product: ${{ variables.product }}
 
   - stage: Aks00
     displayName: 'Deploy AKS 00'
