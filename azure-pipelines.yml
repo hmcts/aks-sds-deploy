@@ -6,12 +6,17 @@ parameters:
     values:
     - Deploy_Full
     - DeployAks
-    # - DeployAks01
     - BootstrapAks
-    # - BootstrapAks01
-    # - Deploy
     - DestroyAks
-    # - DestroyAks01
+
+  - name: cluster
+    displayName: Cluster
+    type: string
+    default: 'All'
+    values:
+    - 'All'
+    - '00'
+    - '01'
 
   - name: location
     displayName: Location
@@ -34,6 +39,7 @@ parameters:
     # - TEST
     # - STG
     # - PROD
+
 
 name: HMCTS Shared Services AKS Azure Infrastructure Deployment Pipeline
 # TODO refactor pipeline to do plan by default, for now pls no trigger
@@ -130,7 +136,12 @@ stages:
               project: $(project)
               tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
-
+              ${{ if eq(parameters['cluster'], 'All') }}:
+                target: ""
+              ${{ if eq(parameters['cluster'], '00') }}:
+                target: "-target 'module.kubernetes[0]'"
+              ${{ if eq(parameters['cluster'], '01') }}:
+                target: "-target 'module.kubernetes[1]'"
 
   # - stage: Aks01
   #   displayName: 'Deploy AKS 01'
@@ -195,6 +206,7 @@ stages:
               project: $(project)
               tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
+              cluster: ${{ parameters.cluster }}
 
   # - stage: DestroyAks01
   #   displayName: 'Destroy AKS 01 Infrastructure'
