@@ -143,6 +143,21 @@ stages:
               # ${{ if eq(parameters['cluster'], '01') }}:
               #   targetCommand: "-target module.kubernetes[1]"
 
+  # - stage: BootStrapClusters
+  #   displayName: 'BootStrap Clusters'
+  #   condition: or(contains('${{ parameters.Run_Stage }}', 'Deploy_Full'), contains('${{ parameters.Run_Stage }}', 'DeployAks'), contains('${{ parameters.Run_Stage }}', 'BootstrapAks'))
+  #   dependsOn: Aks
+  #   jobs:
+  #     - job: BootStrap
+  #       variables:
+  #         clusters: $[ stageDependencies.Aks.DeployInfrastructure.outputs['setClusterNumbers.clusterNumbers'] ]
+  #       steps:
+  #         - template: pipeline-steps/bootstrap.yaml
+  #           parameters:
+  #             environment: ${{ parameters.env }}
+  #             serviceConnection: $(serviceConnection)
+
+
   - stage: DestroyAks
     displayName: 'Destroy AKS Infrastructure'
     condition: contains('${{ parameters.Run_Stage }}', 'DestroyAks')

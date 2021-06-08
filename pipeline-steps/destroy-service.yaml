@@ -34,9 +34,19 @@ steps:
           workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
 
   - task: TerraformCLI@0
-    displayName: Terraform destroy
+    displayName: Terraform plan
     inputs:
-      command: destroy
+      command: plan
+      terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
-      environmentServiceName: $(serviceconnection)
-      commandOptions: '-var control_vault=$(controlKeyVault) -var environment=$(env) -var project=$(project) -var-file $(System.DefaultWorkingDirectory)/environments/${{ parameters.stack }}/$(env).tfvars ${{ parameters.targetCommand }}'
+      environmentServiceName: $(serviceConnection)
+      commandOptions: '-out=tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }} -var control_vault=$(controlKeyVault) -var environment=$(env) -var project=$(project) -var-file $(System.DefaultWorkingDirectory)/environments/${{ parameters.stack }}/$(env).tfvars ${{ parameters.targetCommand }} -destroy'
+
+
+  # - task: TerraformCLI@0
+  #   displayName: Terraform destroy
+  #   inputs:
+  #     command: destroy
+  #     workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
+  #     environmentServiceName: $(serviceconnection)
+  #     commandOptions: '-var control_vault=$(controlKeyVault) -var environment=$(env) -var project=$(project) -var-file $(System.DefaultWorkingDirectory)/environments/${{ parameters.stack }}/$(env).tfvars ${{ parameters.targetCommand }}'
