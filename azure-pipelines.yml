@@ -141,7 +141,6 @@ stages:
               builtFrom: $(Build.Repository.Name)
               product: ${{ variables.product }}
 
-
   - stage: Aks01
     displayName: 'Deploy AKS 01'
     condition: or(contains('${{ parameters.Run_Stage }}', 'Deploy_Full'), contains('${{ parameters.Run_Stage }}', 'DeployAks01'))
@@ -194,7 +193,6 @@ stages:
               project: $(project)
               serviceConnection: $(serviceConnection)
 
-
   - stage: DestroyAks00
     displayName: 'Destroy AKS 00 Infrastructure'
     condition: contains('${{ parameters.Run_Stage }}', 'DestroyAks00')
@@ -209,6 +207,8 @@ stages:
               project: $(project)
               tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
+              builtFrom: $(Build.Repository.Name)
+              product: ${{ variables.product }}
 
   - stage: DestroyAks01
     displayName: 'Destroy AKS 01 Infrastructure'
@@ -224,3 +224,5 @@ stages:
               project: $(project)
               tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
+              builtFrom: $(Build.Repository.Name)
+              product: ${{ variables.product }}

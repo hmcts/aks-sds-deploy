@@ -6,7 +6,7 @@ resource "azurerm_resource_group" "kubernetes_resource_group" {
     var.environment,
     var.cluster_number
   )
-  tags = local.common_tags
+  tags = module.ctags.common_tags
 }
 
 module "loganalytics" {
@@ -48,7 +48,7 @@ module "kubernetes" {
   kubernetes_cluster_agent_vm_size   = var.kubernetes_cluster_agent_vm_size
   kubernetes_cluster_version         = var.kubernetes_cluster_version
 
-  tags = local.common_tags
+  tags = module.ctags.common_tags
 
   additional_node_pools = [
     {
@@ -61,4 +61,11 @@ module "kubernetes" {
       enable_auto_scaling = true
     }
   ]
+}
+
+module "ctags" {
+  source      = "git::https://github.com/hmcts/terraform-module-common-tags.git?ref=master"
+  environment = var.environment
+  product     = var.product
+  builtFrom   = var.builtFrom
 }
