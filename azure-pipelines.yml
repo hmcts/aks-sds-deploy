@@ -137,60 +137,11 @@ stages:
               tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
               ${{ if eq(parameters['cluster'], 'All') }}:
-                target: ""
-              ${{ if eq(parameters['cluster'], '00') }}:
-                target: "-target 'module.kubernetes[0]'"
-              ${{ if eq(parameters['cluster'], '01') }}:
-                target: "-target 'module.kubernetes[1]'"
-
-  # - stage: Aks01
-  #   displayName: 'Deploy AKS 01'
-  #   condition: or(contains('${{ parameters.Run_Stage }}', 'Deploy_Full'), contains('${{ parameters.Run_Stage }}', 'DeployAks01'))
-  #   variables:
-  #     armClientSecret: $[ stageDependencies.ReadKeyVault.ReadKeyVault.outputs['SetSubscriptionSP.ARM_CLIENT_SECRET'] ]
-  #     controlStorageAccount: $[ stageDependencies.ReadKeyVault.ReadKeyVault.outputs['SetControlVars.controlStorageAccount'] ]
-  #   dependsOn:
-  #     - Managed_Identity
-  #   jobs:
-  #     - job: DeployInfrastructure
-  #       steps:
-  #         - template: pipeline-steps/deploy-service.yaml
-  #           parameters:
-  #             environment: ${{ parameters.env }}
-  #             location: ${{ parameters.location }}
-  #             stack: '04-aks01'
-  #             project: $(project)
-  #             tfversion: $(tfversion)
-  #             tfInitSub: ${{ variables.tfInitSub }}
-
-  # - stage: BootStrapClusters
-  #   displayName: 'BootStrap Clusters'
-  #   condition: or(contains('${{ parameters.Run_Stage }}', 'Deploy_Full'), contains('${{ parameters.Run_Stage }}', 'DeployAks'), contains('${{ parameters.Run_Stage }}', 'BootstrapAks'))
-  #   dependsOn: Aks
-  #   jobs:
-  #     - job: BootStrap
-  #       variables:
-  #         clusters: $[ stageDependencies.Aks.DeployInfrastructure.outputs['setClusterNumbers.clusterNumbers'] ]
-  #       steps:
-  #         - template: pipeline-steps/bootstrap.yaml
-  #           parameters:
-  #             environment: ${{ parameters.env }}
-  #             serviceConnection: $(serviceConnection)
-
-  # - stage: BootStrapCluster01
-  #   displayName: 'BootStrap Cluster 01'
-  #   condition: or(contains('${{ parameters.Run_Stage }}', 'Deploy_Full'), contains('${{ parameters.Run_Stage }}', 'DeployAks01'), contains('${{ parameters.Run_Stage }}', 'BootstrapAks01'))
-  #   dependsOn: Aks01
-  #   jobs:
-  #     - job: BootStrap
-  #       steps:
-  #         - template: pipeline-steps/bootstrap.yaml
-  #           parameters:
-  #             environment: ${{ parameters.env }}
-  #             command: $(command)
-  #             clusterName: '01'
-  #             project: $(project)
-  #             serviceConnection: $(serviceConnection)
+                targetCommand: ""
+              ${{ if ne(parameters['cluster'], 'All') }}:
+                targetCommand: "-target module.kubernetes[${{parameters.cluster}}]"
+              # ${{ if eq(parameters['cluster'], '01') }}:
+              #   targetCommand: "-target module.kubernetes[1]"
 
   - stage: DestroyAks
     displayName: 'Destroy AKS Infrastructure'
@@ -206,19 +157,9 @@ stages:
               project: $(project)
               tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
-              cluster: ${{ parameters.cluster }}
-
-  # - stage: DestroyAks01
-  #   displayName: 'Destroy AKS 01 Infrastructure'
-  #   condition: contains('${{ parameters.Run_Stage }}', 'DestroyAks01')
-  #   jobs:
-  #     - job: DestroyInfrastructure
-  #       steps:
-  #         - template: pipeline-steps/destroy-service.yaml
-  #           parameters:
-  #             environment: ${{ parameters.env }}
-  #             location: ${{ parameters.location }}
-  #             stack: '04-aks01'
-  #             project: $(project)
-  #             tfversion: $(tfversion)
-  #             tfInitSub: ${{ variables.tfInitSub }}
+              ${{ if eq(parameters['cluster'], 'All') }}:
+                targetCommand: ""
+              ${{ if eq(parameters['cluster'], '00') }}:
+                targetCommand: "-target module.kubernetes[0]"
+              ${{ if eq(parameters['cluster'], '01') }}:
+                targetCommand: "-target module.kubernetes[1]"

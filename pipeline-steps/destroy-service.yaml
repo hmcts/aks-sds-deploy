@@ -4,6 +4,7 @@ parameters:
   stack: ''
   project: ''
   tfInitSub: ''
+  targetCommand: ''
 
 steps:
   - template: keyvault-read.yaml
@@ -38,4 +39,4 @@ steps:
       command: destroy
       workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
       environmentServiceName: $(serviceconnection)
-      commandOptions: '-var control_vault=$(controlKeyVault) -var environment=$(env) -var project=$(project) -var-file $(System.DefaultWorkingDirectory)/environments/${{ parameters.stack }}/$(env).tfvars $(terraformTargets)'
+      commandOptions: '-var control_vault=$(controlKeyVault) -var environment=$(env) -var project=$(project) -var-file $(System.DefaultWorkingDirectory)/environments/${{ parameters.stack }}/$(env).tfvars ${{ parameters.targetCommand }}'

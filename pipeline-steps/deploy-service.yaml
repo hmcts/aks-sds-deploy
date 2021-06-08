@@ -6,6 +6,7 @@ parameters:
   tfversion: ''
   tfvars: ''
   tfInitSub: ''
+  targetCommand: ''
 
 steps:
 
@@ -49,7 +50,7 @@ steps:
       terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
       environmentServiceName: $(serviceConnection)
-      commandOptions: '-out=tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }} -var control_vault=$(controlKeyVault) -var environment=$(env) -var project=$(project) -var-file $(System.DefaultWorkingDirectory)/environments/${{ parameters.stack }}/$(env).tfvars'
+      commandOptions: '-out=tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }} -var control_vault=$(controlKeyVault) -var environment=$(env) -var project=$(project) -var-file $(System.DefaultWorkingDirectory)/environments/${{ parameters.stack }}/$(env).tfvars ${{ parameters.targetCommand }}'
 
   # - task: TerraformCLI@0
   #   displayName: Terraform apply
