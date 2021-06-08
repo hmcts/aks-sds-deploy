@@ -52,11 +52,7 @@ steps:
       terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: '$(System.DefaultWorkingDirectory)/components/00-genesis'
       environmentServiceName: $(serviceConnection)
-      commandOptions: >
-        -out=tfplan-${{ parameters.project }}-${{ parameters.stack }}-$(env)
-        -var subscription_id=$(ARM_SUBSCRIPTION_ID)
-        -var environment=$(env)
-        -var builtFrom=${{ parameters.builtFrom }}
+      commandOptions: '-out=tfplan-${{ parameters.project }}-${{ parameters.stack }}-$(env) -var subscription_id=$(ARM_SUBSCRIPTION_ID) -var environment=$(env) -var builtFrom=${{ parameters.builtFrom }}'
 
   - task: TerraformCLI@0
     displayName: Terraform apply
@@ -65,6 +61,4 @@ steps:
       terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: '$(System.DefaultWorkingDirectory)/components/00-genesis'
       environmentServiceName: $(serviceConnection)
-      commandOptions: >
-        --auto-approve tfplan-${{ parameters.project }}-${{ parameters.stack }}-$(env)
-        -var builtFrom=${{ parameters.builtFrom }}
+      commandOptions: '--auto-approve tfplan-${{ parameters.project }}-${{ parameters.stack }}-$(env) -var builtFrom=${{ parameters.builtFrom }}'
