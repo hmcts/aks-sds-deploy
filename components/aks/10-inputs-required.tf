@@ -3,6 +3,10 @@ variable "environment" {}
 
 variable "project" {}
 
+variable "builtFrom" {}
+
+variable "product" {}
+
 # Remote State
 variable "control_vault" {}
 
