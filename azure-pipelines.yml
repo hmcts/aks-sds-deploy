@@ -1,3 +1,7 @@
+name: HMCTS Shared Services AKS Azure Infrastructure Deployment Pipeline
+# TODO refactor pipeline to do plan by default, for now pls no trigger
+trigger: none
+
 parameters:
   - name: Run_Stage
     displayName: Stage to Run
@@ -40,11 +44,6 @@ parameters:
     # - TEST
     # - STG
     # - PROD
-
-
-name: HMCTS Shared Services AKS Azure Infrastructure Deployment Pipeline
-# TODO refactor pipeline to do plan by default, for now pls no trigger
-trigger: none
 
 variables:
   - name: tfversion
