@@ -7,7 +7,7 @@ resource "azurerm_resource_group" "kubernetes_resource_group" {
     var.environment,
     "0${count.index}"
   )
-  tags = local.common_tags
+  tags = module.ctags.common_tags
 }
 
 module "loganalytics" {
