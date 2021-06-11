@@ -1,4 +1,3 @@
-# cluster_number = "00"
 cluster_count              = 2
 kubernetes_cluster_version = "1.20.5"
 
