@@ -5,16 +5,18 @@ name: HMCTS Shared Services AKS Azure Infrastructure Deployment Pipeline
 trigger: none
 
 parameters:
-  - name: Run_Stage
-    displayName: Stage to Run
+  - name: Action
+    displayName: Action
     type: string
     default: 'Plan'
     values:
     - Plan
-    - Deploy_Full
-    - DeployAks
-    - BootstrapAks
-    - DestroyAks
+    - Apply
+    - Destroy
+    # - Deploy_Full
+    # - DeployAks
+    # - BootstrapAks
+    # - DestroyAks
 
   - name: cluster
     displayName: Cluster
@@ -62,13 +64,12 @@ variables:
     value: "04d27a32-7a07-48b3-95b8-3c8691e1a263"
   - name: product
     value: 'sds-platform'
-  - name: isPlan
-    value: ${{ eq( parameters.Run_Stage, 'Plan' ) }}
+  - name: action
+    value: ${{ parameters.Action }}
 
 stages:
   - stage: Genesis
     displayName: 'Genesis'
-    condition: contains('${{ parameters.Run_Stage }}', 'Deploy_Full')
     jobs:
       - job: Genesis
         steps:
@@ -85,7 +86,6 @@ stages:
 
   - stage: Network
     displayName: 'Network'
-    condition: contains('${{ parameters.Run_Stage }}', 'Deploy_Full')
     jobs:
       - job: NetworkRg
         steps:
@@ -117,7 +117,6 @@ stages:
 
   - stage: Managed_Identity
     displayName: 'Managed_Identity'
-    condition: contains('${{ parameters.Run_Stage }}', 'Deploy_Full')
     dependsOn: Network
     jobs:
       - job: Managed_Identity
@@ -136,7 +135,6 @@ stages:
 
   - stage: Aks
     displayName: 'Deploy AKS clusters'
-    condition: or(contains('${{ parameters.Run_Stage }}', 'Deploy_Full'), contains('${{ parameters.Run_Stage }}', 'DeployAks'))
     dependsOn:
       - Managed_Identity
     jobs:
@@ -161,7 +159,6 @@ stages:
 
   # - stage: BootStrapClusters
   #   displayName: 'BootStrap Clusters'
-  #   condition: or(contains('${{ parameters.Run_Stage }}', 'Deploy_Full'), contains('${{ parameters.Run_Stage }}', 'DeployAks'), contains('${{ parameters.Run_Stage }}', 'BootstrapAks'))
   #   dependsOn: Aks
   #   jobs:
   #     - job: BootStrap
@@ -176,7 +173,7 @@ stages:
 
   - stage: DestroyAks
     displayName: 'Destroy AKS Infrastructure'
-    condition: contains('${{ parameters.Run_Stage }}', 'DestroyAks')
+    condition: contains('${{ parameters.Action }}', 'DestroyAks')
     jobs:
       - job: DestroyInfrastructure
         steps:
