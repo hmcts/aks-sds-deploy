@@ -4,6 +4,7 @@ parameters:
     type: string
     default: 'Deploy_Full'
     values:
+    - Plan
     - Deploy_Full
     - DeployAks
     - BootstrapAks
@@ -60,6 +61,8 @@ variables:
     value: "04d27a32-7a07-48b3-95b8-3c8691e1a263"
   - name: product
     value: 'sds-platform'
+  - name: isPlan
+    value: $[ eq( ${{parameters.Run_Stage}}, 'Plan' )]
 
 stages:
   - stage: Genesis
