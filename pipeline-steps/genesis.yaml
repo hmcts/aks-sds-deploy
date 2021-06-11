@@ -57,7 +57,7 @@ steps:
 
   - task: TerraformCLI@0
     displayName: Terraform apply
-    condition: and(succeeded(), eq(variables['isPlan'], false))
+    condition: and(succeeded(), eq(variables['action'], 'Apply'))
     inputs:
       command: apply
       terraformVersion: ${{ parameters.tfversion }}

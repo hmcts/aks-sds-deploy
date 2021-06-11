@@ -35,7 +35,7 @@ steps:
 
 # - task: AzureCLI@1
 #   displayName: 'Bootstrap'
-#   condition: and(succeeded(), eq(variables['isPlan'], false))
+#   condition: and(succeeded(), eq(variables['action'], 'Apply'))
 #   inputs:
 #     azureSubscription: $(serviceConnection)
 #     addSpnToEnvironment: true

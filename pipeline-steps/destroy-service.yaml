@@ -47,7 +47,7 @@ steps:
 
   # - task: TerraformCLI@0
   #   displayName: Terraform destroy
-  #   condition: and(succeeded(), eq(variables['isPlan'], false))
+  #   condition: and(succeeded(), eq(variables['action'], 'Destroy'))
   #   inputs:
   #     command: destroy
   #     workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
