@@ -62,7 +62,7 @@ variables:
   - name: product
     value: 'sds-platform'
   - name: isPlan
-    value: ${{ eq( parameters['Run_Stage'], "Plan" ) }}
+    value: ${{ eq( ${{ parameters.Run_Stage }}, 'Plan' ) }}
 
 stages:
   - stage: Genesis
