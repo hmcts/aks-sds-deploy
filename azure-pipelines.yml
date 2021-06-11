@@ -1,5 +1,7 @@
 name: HMCTS Shared Services AKS Azure Infrastructure Deployment Pipeline
+
 # TODO refactor pipeline to do plan by default, for now pls no trigger
+
 trigger: none
 
 parameters:
