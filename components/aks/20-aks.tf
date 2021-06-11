@@ -50,7 +50,7 @@ module "kubernetes" {
   kubernetes_cluster_version            = var.kubernetes_cluster_version
   kubernetes_cluster_agent_os_disk_size = "128"
 
-  tags = local.common_tags
+  tags = module.ctags.common_tags
 
   additional_node_pools = contains(["ptlsbox", "ptl"], var.environment) ? [] : [
     {
@@ -63,4 +63,11 @@ module "kubernetes" {
       enable_auto_scaling = true
     }
   ]
+}
+
+module "ctags" {
+  source      = "git::https://github.com/hmcts/terraform-module-common-tags.git?ref=master"
+  environment = var.environment
+  product     = var.product
+  builtFrom   = var.builtFrom
 }
