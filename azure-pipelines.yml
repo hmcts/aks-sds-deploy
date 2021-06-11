@@ -6,7 +6,7 @@ parameters:
   - name: Run_Stage
     displayName: Stage to Run
     type: string
-    default: 'Deploy_Full'
+    default: 'Plan'
     values:
     - Plan
     - Deploy_Full
