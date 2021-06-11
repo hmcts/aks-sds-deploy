@@ -2,6 +2,10 @@ variable "application_name" {
   default = "flux"
 }
 
+variable "location" {
+  default = "UK South"
+}
+
 locals {
   // TODO delete after applying MI in all ENVs
   // working around 'Error: Provider configuration not present'
@@ -12,45 +16,7 @@ locals {
     }
   }
 
-  criticality = {
-    sbox     = "Low"
-    ptlsbox  = "Low"
-    aat      = "High"
-    stg      = "High"
-    prod     = "High"
-    ptl      = "High"
-    ithc     = "Medium"
-    test     = "Medium"
-    perftest = "Medium"
-    demo     = "Medium"
-    dev      = "Low"
-
-  }
-
-  env_display_names = {
-    sbox     = "Sandbox"
-    ptlsbox  = "Sandbox"
-    aat      = "Staging"
-    stg      = "Staging"
-    prod     = "Production"
-    ptl      = "Production"
-    ithc     = "ITHC"
-    test     = "Test"
-    perftest = "Test"
-    dev      = "Development"
-    demo     = "Demo"
-  }
-
-  common_tags = {
-    "managedBy"          = "SS DevOps"
-    "solutionOwner"      = "Shared Services"
-    "activityName"       = "AKS"
-    "dataClassification" = "Internal"
-    "automation"         = "AKS Build Infrastructure"
-    "costCentre"         = "ss-aks" // until we get a better one, this is the generic cft contingency one
-    "environment"        = local.env_display_names[var.environment]
-    "criticality"        = local.criticality[var.environment]
-  }
+  common_tags = module.ctags.common_tags
 
   log_analytics_env_mapping = {
     sandbox = ["sbox", "ptlsbox"]
@@ -77,6 +43,9 @@ locals {
 
 }
 
-variable "location" {
-  default = "UK South"
+module "ctags" {
+  source      = "git::https://github.com/hmcts/terraform-module-common-tags.git?ref=master"
+  environment = var.environment
+  product     = var.product
+  builtFrom   = var.builtFrom
 }

@@ -1,8 +1,6 @@
-data "azurerm_subscription" "current" {
-}
+data "azurerm_subscription" "current" {}
 
-data "azurerm_client_config" "current" {
-}
+data "azurerm_client_config" "current" {}
 
 locals {
   slug_location = lower(replace(var.location, " ", "."))
@@ -21,7 +19,6 @@ locals {
     var.project,
     var.environment
   )
-
 }
 
 

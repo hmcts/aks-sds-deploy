@@ -7,6 +7,8 @@ parameters:
   tfvars: ''
   tfInitSub: ''
   targetCommand: ''
+  builtFrom: ''
+  product: ''
 
 steps:
 
@@ -34,7 +36,7 @@ steps:
       backendAzureRmStorageAccountSku: Standard_LRS
       backendAzureRmContainerName: subscription-tfstate
       backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/$(env)/${{ parameters.stack }}/terraform.tfstate'
-      commandOptions: '-backend-config=subscription_id=${{ parameters.tfInitSub }}'
+      commandOptions: '-backend-config=subscription_id=${{ parameters.tfInitSub }} -var builtFrom=${{ parameters.builtFrom }} -var product=${{ parameters.product }}'
 
   - task: TerraformCLI@0
     displayName: Terraform validate
@@ -50,7 +52,7 @@ steps:
       terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
       environmentServiceName: $(serviceConnection)
-      commandOptions: '-out=tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }} -var control_vault=$(controlKeyVault) -var environment=$(env) -var project=$(project) -var-file $(System.DefaultWorkingDirectory)/environments/${{ parameters.stack }}/$(env).tfvars ${{ parameters.targetCommand }}'
+      commandOptions: '-out=tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }} -var control_vault=$(controlKeyVault) -var environment=$(env) -var project=$(project) -var builtFrom=${{ parameters.builtFrom }} -var product=${{ parameters.product }} -var-file $(System.DefaultWorkingDirectory)/environments/${{ parameters.stack }}/$(env).tfvars ${{ parameters.targetCommand }}'
 
   # - task: TerraformCLI@0
   #   displayName: Terraform apply

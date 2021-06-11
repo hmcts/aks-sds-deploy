@@ -58,6 +58,8 @@ variables:
     value: OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
   - name: tfInitSub
     value: "04d27a32-7a07-48b3-95b8-3c8691e1a263"
+  - name: product
+    value: 'sds-platform'
 
 stages:
   - stage: Genesis
@@ -74,6 +76,8 @@ stages:
               project: $(project)
               tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
+              builtFrom: $(Build.Repository.Name)
+              product: ${{ variables.product }}
 
   - stage: Network
     displayName: 'Network'
@@ -89,6 +93,8 @@ stages:
               project: $(project)
               tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
+              builtFrom: $(Build.Repository.Name)
+              product: ${{ variables.product }}
 
       - job: DeployInfrastructure
         dependsOn: NetworkRg
@@ -102,6 +108,8 @@ stages:
               tfversion: $(tfversion)
               terraformServiceConnection: OPS-APPROVAL-GATE-MGMT-ENVS
               tfInitSub: ${{ variables.tfInitSub }}
+              builtFrom: $(Build.Repository.Name)
+              product: ${{ variables.product }}
 
   - stage: Managed_Identity
     displayName: 'Managed_Identity'
@@ -115,10 +123,12 @@ stages:
               serviceConnection: $(serviceConnection)
               environment: ${{ parameters.env }}
               location: ${{ parameters.location }}
-              stack: managed-identity
+              stack: '05-mis'
               project: $(project)
               tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
+              builtFrom: $(Build.Repository.Name)
+              product: ${{ variables.product }}
 
   - stage: Aks
     displayName: 'Deploy AKS clusters'
@@ -136,6 +146,8 @@ stages:
               project: $(project)
               tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
+              builtFrom: $(Build.Repository.Name)
+              product: ${{ variables.product }}
               ${{ if eq(parameters['cluster'], 'All') }}:
                 targetCommand: ""
               ${{ if ne(parameters['cluster'], 'All') }}:
@@ -176,3 +188,5 @@ stages:
                 targetCommand: ""
               ${{ if ne(parameters['cluster'], 'All') }}:
                 targetCommand: "-target module.kubernetes[${{parameters.cluster}}]"
+              builtFrom: $(Build.Repository.Name)
+              product: ${{ variables.product }}

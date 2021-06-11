@@ -52,6 +52,7 @@ locals {
       }
     }
   }
+<<<<<<< HEAD
 
   criticality = {
     sbox     = "Low"
@@ -89,6 +90,8 @@ locals {
     "environment"        = local.env_display_names[var.environment]
     "criticality"        = local.criticality[var.environment]
   }
+=======
+>>>>>>> 1ca50730a5bbb4bd3e5110aaf2ea262a3d3b097c
 }
 
 variable "additional_routes" {

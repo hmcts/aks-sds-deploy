@@ -19,5 +19,12 @@ module "network" {
   iaas_subnet_cidr_blocks                = var.iaas_subnet_cidr_blocks
   additional_subnets                     = var.additional_subnets
 
-  tags = local.common_tags
+  tags = module.ctags.common_tags
+}
+
+module "ctags" {
+  source      = "git::https://github.com/hmcts/terraform-module-common-tags.git?ref=master"
+  environment = var.environment
+  product     = var.product
+  builtFrom   = var.builtFrom
 }

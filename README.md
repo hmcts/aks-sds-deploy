@@ -25,5 +25,3 @@ Terraform code to deploy Shared Services AKS Cluster and underlying infrastructu
         a) Creates sshkeys for flux if required
         b) Implements RBAC
         c) Install flux and helm operator
-        
-        
