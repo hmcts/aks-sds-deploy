@@ -40,13 +40,13 @@ parameters:
     type: string
     default: 'SBOX'
     values:
-    # - ITHC
-    # - DEV
-    # - DEMO
+    - ITHC
+    - DEV
+    - DEMO
     - SBOX
     - PTLSBOX
-    # - TEST
-    # - STG
+    - TEST
+    - STG
     # - PROD
 
 variables:
