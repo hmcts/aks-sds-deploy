@@ -1,4 +1,4 @@
-name: HMCTS Shared Services AKS Azure Infrastructure Deployment Pipeline
+name: ${{ parameters.Action }} - ${{ parameters.env }}.${{ parameters.cluster }}.${{ parameters.location }} 
 
 # TODO refactor pipeline to do plan by default, for now pls no trigger
 
