@@ -10,9 +10,6 @@ variable "product" {}
 # Remote State
 variable "control_vault" {}
 
-# Service
-# variable "cluster_number" {}
-
 # Kubernetes
 variable "kubernetes_cluster_ssh_key" {}
 
