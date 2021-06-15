@@ -43,7 +43,7 @@ parameters:
     - PTLSBOX
     - TEST
     - STG
-    # - PROD
+    - PROD
 
 variables:
   - name: tfversion
