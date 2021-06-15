@@ -13,10 +13,6 @@ parameters:
     - Plan
     - Apply
     - Destroy
-    # - Deploy_Full
-    # - DeployAks
-    # - BootstrapAks
-    # - DestroyAks
 
   - name: cluster
     displayName: Cluster
@@ -157,18 +153,18 @@ stages:
               # ${{ if eq(parameters['cluster'], '01') }}:
               #   targetCommand: "-target module.kubernetes[1]"
 
-  # - stage: BootStrapClusters
-  #   displayName: 'BootStrap Clusters'
-  #   dependsOn: Aks
-  #   jobs:
-  #     - job: BootStrap
-  #       variables:
-  #         clusters: $[ stageDependencies.Aks.DeployInfrastructure.outputs['setClusterNumbers.clusterNumbers'] ]
-  #       steps:
-  #         - template: pipeline-steps/bootstrap.yaml
-  #           parameters:
-  #             environment: ${{ parameters.env }}
-  #             serviceConnection: $(serviceConnection)
+  - stage: BootStrapClusters
+    displayName: 'BootStrap Clusters'
+    dependsOn: Aks
+    jobs:
+      - job: BootStrap
+        variables:
+          clusters: $[ stageDependencies.Aks.DeployInfrastructure.outputs['setClusterNumbers.clusterNumbers'] ]
+        steps:
+          - template: pipeline-steps/bootstrap.yaml
+            parameters:
+              environment: ${{ parameters.env }}
+              serviceConnection: $(serviceConnection)
 
 
   - stage: DestroyAks
