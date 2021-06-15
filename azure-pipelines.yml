@@ -170,7 +170,7 @@ stages:
 
   - stage: DestroyAks
     displayName: 'Destroy AKS Infrastructure'
-    condition: contains('${{ parameters.Action }}', 'DestroyAks')
+    condition: contains('${{ parameters.Action }}', 'Destroy')
     jobs:
       - job: DestroyInfrastructure
         steps:
