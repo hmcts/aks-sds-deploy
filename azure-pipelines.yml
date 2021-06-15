@@ -146,8 +146,6 @@ stages:
               tfInitSub: ${{ variables.tfInitSub }}
               builtFrom: $(Build.Repository.Name)
               product: ${{ variables.product }}
-              ${{ if eq(parameters['cluster'], 'All') }}:
-                targetCommand: ""
               ${{ if ne(parameters['cluster'], 'All') }}:
                 targetCommand: "-target module.kubernetes[${{parameters.cluster}}]"
 
@@ -182,8 +180,6 @@ stages:
               project: $(project)
               tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
-              ${{ if eq(parameters['cluster'], 'All') }}:
-                targetCommand: ""
               ${{ if ne(parameters['cluster'], 'All') }}:
                 targetCommand: "-target module.kubernetes[${{parameters.cluster}}]"
               builtFrom: $(Build.Repository.Name)
