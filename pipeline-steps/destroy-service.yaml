@@ -4,6 +4,7 @@ parameters:
   stack: ''
   project: ''
   tfInitSub: ''
+  targetCommand: ''
   builtFrom: ''
   product: ''
 
@@ -14,7 +15,7 @@ steps:
       environment: ${{ parameters.environment }}
 
   - task: TerraformCLI@0
-    displayName: terraform init
+    displayName: Terraform init
     inputs:
           command: init
           workingDirectory: '$(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}'
@@ -29,15 +30,16 @@ steps:
           commandOptions: '-backend-config=subscription_id=${{ parameters.tfInitSub }} -var builtFrom=${{ parameters.builtFrom }} -var product=${{ parameters.product }}'
 
   - task: TerraformCLI@0
-    displayName: terraform validate
+    displayName: Terraform validate
     inputs:
           command: validate
           workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
 
   - task: TerraformCLI@0
     displayName: Terraform destroy
+    condition: and(succeeded(), eq(variables['action'], 'Destroy'))
     inputs:
       command: destroy
       workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
       environmentServiceName: $(serviceconnection)
-      commandOptions: '-var control_vault=$(controlKeyVault) -var environment=$(env) -var project=$(project) -var builtFrom=${{ parameters.builtFrom }} -var product=${{ parameters.product }} -var-file $(System.DefaultWorkingDirectory)/environments/${{ parameters.stack }}/$(env).tfvars'
+      commandOptions: '-var control_vault=$(controlKeyVault) -var environment=$(env) -var builtFrom=${{ parameters.builtFrom }} -var product=${{ parameters.product }} -var project=$(project) -var-file $(System.DefaultWorkingDirectory)/environments/${{ parameters.stack }}/$(env).tfvars ${{ parameters.targetCommand }}'

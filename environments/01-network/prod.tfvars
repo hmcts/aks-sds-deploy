@@ -8,7 +8,7 @@ application_gateway_subnet_cidr_blocks = "10.144.32.128/25"
 
 additional_subnets = [
   {
-    name = "vh_private_endpoints"
+    name           = "vh_private_endpoints"
     address_prefix = "10.144.33.0/25"
   },
 ]

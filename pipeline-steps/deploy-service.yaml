@@ -6,6 +6,7 @@ parameters:
   tfversion: ''
   tfvars: ''
   tfInitSub: ''
+  targetCommand: ''
   builtFrom: ''
   product: ''
 
@@ -38,7 +39,7 @@ steps:
       commandOptions: '-backend-config=subscription_id=${{ parameters.tfInitSub }} -var builtFrom=${{ parameters.builtFrom }} -var product=${{ parameters.product }}'
 
   - task: TerraformCLI@0
-    displayName: terraform validate
+    displayName: Terraform validate
     inputs:
       command: validate
       terraformVersion: ${{ parameters.tfversion }}
@@ -51,13 +52,29 @@ steps:
       terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
       environmentServiceName: $(serviceConnection)
-      commandOptions: '-out=tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }} -var control_vault=$(controlKeyVault) -var environment=$(env) -var project=$(project)  -var builtFrom=${{ parameters.builtFrom }} -var product=${{ parameters.product }} -var-file $(System.DefaultWorkingDirectory)/environments/${{ parameters.stack }}/$(env).tfvars'
+      commandOptions: '-out=tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }} -var control_vault=$(controlKeyVault) -var environment=$(env) -var project=$(project) -var builtFrom=${{ parameters.builtFrom }} -var product=${{ parameters.product }} -var-file $(System.DefaultWorkingDirectory)/environments/${{ parameters.stack }}/$(env).tfvars ${{ parameters.targetCommand }}'
 
   - task: TerraformCLI@0
     displayName: Terraform apply
+    condition: and(succeeded(), eq(variables['Action'], 'Apply'))
     inputs:
       command: apply
       terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
       environmentServiceName: $(serviceConnection)
       commandOptions: '--auto-approve tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }}'
+
+  - task: TerraformCLI@0
+    displayName: Terraform output
+    inputs:
+      command: output
+      terraformVersion: ${{ parameters.tfversion }}
+      workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
+      environmentServiceName: $(serviceConnection)
+
+  - script: |
+      echo "Setting clusterNumbers variable to $clusters"
+      echo "##vso[task.setvariable variable=clusterNumbers;isOutput=true]$clusters"
+    name: setClusterNumbers
+    env:
+      clusters: $(TF_OUT_CLUSTERS)

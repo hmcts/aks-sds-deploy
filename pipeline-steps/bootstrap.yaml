@@ -35,12 +35,11 @@ steps:
 
 - task: AzureCLI@1
   displayName: 'Bootstrap'
+  condition: and(succeeded(), eq(variables['Action'], 'Apply'))
   inputs:
     azureSubscription: $(serviceConnection)
     addSpnToEnvironment: true
     scriptType: shell
     failOnStandardError: 'false'
     scriptPath: bootstrap/bootstrap.sh
-    arguments: ${{ parameters.project }} aks $(env) $(controlKeyVault) $(serviceConnection) ${{ parameters.clusterName }} deploy '
-
-
+    arguments: $(project) aks $(env) $(controlKeyVault) $(serviceConnection) "$(clusters)" deploy 

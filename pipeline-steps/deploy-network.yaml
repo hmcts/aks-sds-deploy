@@ -56,6 +56,7 @@ steps:
 
   - task: TerraformCLI@0
     displayName: Terraform apply
+    condition: and(succeeded(), eq(variables['Action'], 'Apply'))
     inputs:
       command: apply
       terraformVersion: ${{ parameters.tfversion }}

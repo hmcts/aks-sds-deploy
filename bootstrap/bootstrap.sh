@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-PARAM_LIST=( PROJECT SERVICE ENVIRONMENT KEYVAULT SUBSCRIPTION_NAME CLUSTER_NAME COMMAND )
+PARAM_LIST=( PROJECT SERVICE ENVIRONMENT KEYVAULT SUBSCRIPTION_NAME CLUSTER_NAMES COMMAND )
 ############################################################
 # Functions
 ############################################################
@@ -27,12 +27,16 @@ then
     usage
 fi
 
+echo "Params: $@"
 
-echo "Starting Deployment"
-./get-aks-credentials.sh "$@" || error_exit "ERROR: Unable to get AKS credentials"
-./create-sshkeys.sh "$@" || error_exit "ERROR: SSHKey Create Issues"
-./apply-default-rbac.sh "$@" || error_exit "ERROR: Unable to set k8s RBAC"
-./deploy-flux.sh "$@" || error_exit "ERROR: Unable to deploy Fluxcd"
-echo "Cleanup"
-./cleanup-sshkeys.sh "$@" || error_exit "ERROR: Unable to Cleanup"
-echo "Deployment Complete"
+for cluster in ${6}; do 
+  set -- "${@:1:5}" "$cluster" "${@:7}"
+  echo "Starting Deployment"
+  ./get-aks-credentials.sh "$@" || error_exit "ERROR: Unable to get AKS credentials"
+  ./create-sshkeys.sh "$@" || error_exit "ERROR: SSHKey Create Issues"
+  ./apply-default-rbac.sh "$@" || error_exit "ERROR: Unable to set k8s RBAC"
+  ./deploy-flux.sh "$@" || error_exit "ERROR: Unable to deploy Fluxcd"
+  echo "Cleanup"
+  ./cleanup-sshkeys.sh "$@" || error_exit "ERROR: Unable to Cleanup"
+  echo "Deployment Complete"
+done
