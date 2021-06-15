@@ -150,8 +150,6 @@ stages:
                 targetCommand: ""
               ${{ if ne(parameters['cluster'], 'All') }}:
                 targetCommand: "-target module.kubernetes[${{parameters.cluster}}]"
-              # ${{ if eq(parameters['cluster'], '01') }}:
-              #   targetCommand: "-target module.kubernetes[1]"
 
   - stage: BootStrapClusters
     displayName: 'BootStrap Clusters'
@@ -159,7 +157,10 @@ stages:
     jobs:
       - job: BootStrap
         variables:
-          clusters: $[ stageDependencies.Aks.DeployInfrastructure.outputs['setClusterNumbers.clusterNumbers'] ]
+          ${{ if eq(parameters['cluster'], 'All') }}:
+            clusters: $[ stageDependencies.Aks.DeployInfrastructure.outputs['setClusterNumbers.clusterNumbers'] ]
+          ${{ if ne(parameters['cluster'], 'All') }}:
+            clusters: ${{ parameters.cluster }}
         steps:
           - template: pipeline-steps/bootstrap.yaml
             parameters:
