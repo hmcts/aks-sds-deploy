@@ -13,6 +13,8 @@ variable "private_endpoint_private_dns_zones" {
     "privatelink.vaultcore.azure.net",
     "privatelink.datafactory.azure.net",
     "privatelink.postgres.database.azure.com",
+    "privatelink.dev.azuresynapse.net",
+    "privatelink.sql.azuresynapse.net",
   ]
 }
 
