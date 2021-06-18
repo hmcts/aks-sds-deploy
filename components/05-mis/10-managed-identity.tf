@@ -52,7 +52,7 @@ resource "azurerm_key_vault_access_policy" "sops-policy" {
 }
 
 resource "azurerm_role_assignment" "acme-vault-access" {
-  scope                = "${data.azurerm_subscription.current.id}/resourceGroups/${data.azurerm_resource_group.sds-platform-sbox-rg.name}/providers/Microsoft.KeyVault/vaults/${data.azurerm_key_vault.acmedtssdssbox_keyvault.name}"
+  scope                = data.azurerm_key_vault.acme.id
   role_definition_name = "Key Vault Secrets User"
   principal_id         = azurerm_user_assigned_identity.sops-mi.id
 }
