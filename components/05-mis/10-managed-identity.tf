@@ -51,7 +51,7 @@ resource "azurerm_key_vault_access_policy" "sops-policy" {
   ]
 }
 
-resource "azurerm_role_assignment" "aks-sbox-mi" {
+resource "azurerm_role_assignment" "acme-vault-access" {
   scope                = data.azurerm_subscription.current.id
   role_definition_name = "Key Vault Secrets User"
   principal_id         = data.azurerm_client_config.aks-sbox-mi.object_id
