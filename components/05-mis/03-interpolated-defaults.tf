@@ -6,7 +6,7 @@ data "azurerm_resource_group" "genesis_rg" {
   name = "genesis-rg"
 }
 
-data "azurerm_resource_group" "sds-platform-sbox-rg" {
+data "azurerm_resource_group" "platform-rg" {
   name = "sds-platform-sbox-rg"
 }
 
