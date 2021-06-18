@@ -6,6 +6,10 @@ data "azurerm_resource_group" "genesis_rg" {
   name = "genesis-rg"
 }
 
+data "azurerm_resource_group" "sds-platform-sbox-rg" {
+  name = "sds-platform-sbox-rg"
+}
+
 data "azurerm_key_vault" "genesis_keyvault" {
   name                = data.azurerm_subscription.current.display_name == "DTS-SHAREDSERVICESPTL-SBOX" ? "dtssdsptlsbox" : "${lower(replace(data.azurerm_subscription.current.display_name, "-", ""))}kv"
   resource_group_name = data.azurerm_resource_group.genesis_rg.name
@@ -21,4 +25,9 @@ data "azurerm_key_vault_secret" "kubernetes_cluster_client_id" {
   provider     = azurerm.hmcts-control
   name         = "sp-object-id"
   key_vault_id = data.azurerm_key_vault.hmcts_access_vault.id
+}
+
+data "azurerm_key_vault" "acmedtssdssbox_keyvault" {
+  name = "acmedtssdssbox"
+  resource_group_name = data.azurerm_resource_group.sds-platform-sbox-rg.name
 }
