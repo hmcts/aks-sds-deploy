@@ -51,8 +51,8 @@ resource "azurerm_key_vault_access_policy" "sops-policy" {
   ]
 }
 
-resource "azurerm_role_assignment" "aks-sbox-mi" {
-  scope                = data.azurerm_subscription.current.id
+resource "azurerm_role_assignment" "acme-vault-access" {
+  scope                = "${data.azurerm_subscription.current.id}/resourceGroups/sds-platform-sbox-rg/providers/Microsoft.KeyVault/vaults/acmedtssdssbox"
   role_definition_name = "Key Vault Secrets User"
-  principal_id         = data.azurerm_client_config.aks-sbox-mi.object_id
+  principal_id         = azurerm_user_assigned_identity.sops-mi.id
 }
