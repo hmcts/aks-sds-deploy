@@ -27,7 +27,7 @@ data "azurerm_key_vault_secret" "kubernetes_cluster_client_id" {
   key_vault_id = data.azurerm_key_vault.hmcts_access_vault.id
 }
 
-data "azurerm_key_vault" "acmedtssdssbox_keyvault" {
+data "azurerm_key_vault" "acme" {
   name = "acmedtssds${var.env}"
   resource_group_name = data.azurerm_resource_group.sds-platform-sbox-rg.name
 }
