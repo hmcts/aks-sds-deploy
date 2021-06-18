@@ -7,7 +7,7 @@ data "azurerm_resource_group" "genesis_rg" {
 }
 
 data "azurerm_resource_group" "platform-rg" {
-  name = "sds-platform-sbox-rg"
+  name = "sds-platform-${var.env}-rg"
 }
 
 data "azurerm_key_vault" "genesis_keyvault" {
