@@ -181,6 +181,6 @@ stages:
               tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
               ${{ if ne(parameters['cluster'], 'All') }}:
-                targetCommand: "-target azurerm_resource_group.kubernetes_resource_group[${{parameters.cluster}}] -target module.kubernetes[${{parameters.cluster}}]"
+                targetCommand: "-target module.kubernetes[${{parameters.cluster}}]"
               builtFrom: $(Build.Repository.Name)
               product: ${{ variables.product }}
