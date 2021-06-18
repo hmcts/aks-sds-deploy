@@ -26,15 +26,13 @@ function flux_create_namespace {
 function pod_identity_components {
     echo "Deploying AAD Pod Identity"
     TMP_DIR=$AGENT_BUILDDIRECTORY/aad-pod-identity
-    
+    mkdir -p $TMP_DIR/admin
+
     if [[ $(kustomize version) ]]; then
         echo "Kustomize installed"
     else
         #Install kustomize
         curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
-        
-        rm -rf ${TMP_DIR}
-        mkdir -p $TMP_DIR/admin
     fi 
     # -----------------------------------------------------------
 (
