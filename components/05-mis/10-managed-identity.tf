@@ -50,3 +50,9 @@ resource "azurerm_key_vault_access_policy" "sops-policy" {
     "list",
   ]
 }
+
+resource "azurerm_role_assignment" "acme-vault-access" {
+  scope                = data.azurerm_key_vault.acme.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = azurerm_user_assigned_identity.sops-mi.id
+}
