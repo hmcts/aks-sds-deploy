@@ -28,7 +28,7 @@ function pod_identity_components {
     TMP_DIR=$AGENT_BUILDDIRECTORY/aad-pod-identity
     mkdir -p $TMP_DIR/admin
 
-    if [[ $(kustomize version) ]]; then
+    if [ -f ./kustomize ]; then
         echo "Kustomize installed"
     else
         #Install kustomize
