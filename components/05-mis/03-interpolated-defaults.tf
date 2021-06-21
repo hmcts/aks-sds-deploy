@@ -7,7 +7,7 @@ data "azurerm_resource_group" "genesis_rg" {
 }
 
 data "azurerm_resource_group" "platform-rg" {
-  name = "sds-platform-${var.env}-rg"
+  name = "sds-platform-${var.environment}-rg"
 }
 
 data "azurerm_key_vault" "genesis_keyvault" {
@@ -28,6 +28,6 @@ data "azurerm_key_vault_secret" "kubernetes_cluster_client_id" {
 }
 
 data "azurerm_key_vault" "acme" {
-  name = "acmedtssds${var.env}"
+  name = "acmedtssds${var.environment}"
   resource_group_name = data.azurerm_resource_group.sds-platform-sbox-rg.name
 }
