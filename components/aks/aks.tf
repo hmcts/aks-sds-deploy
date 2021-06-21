@@ -17,7 +17,7 @@ module "loganalytics" {
 
 module "kubernetes" {
   count       = var.cluster_count
-  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-1032_multi_cluster"
+  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=master"
   environment = var.environment
   location    = var.location
 
