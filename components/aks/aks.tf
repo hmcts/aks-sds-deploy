@@ -42,8 +42,6 @@ module "kubernetes" {
 
   log_workspace_id = module.loganalytics.workspace_id
 
-  monitor_diagnostic_setting = var.monitor_diagnostic_setting
-
   control_vault = var.control_vault
 
   kubernetes_cluster_ssh_key = var.kubernetes_cluster_ssh_key
