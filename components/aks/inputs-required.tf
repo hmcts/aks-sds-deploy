@@ -26,3 +26,11 @@ variable "kubernetes_cluster_agent_vm_size" {
 variable "kubernetes_cluster_version" {}
 
 variable "cluster_count" {}
+
+variable "monitor_diagnostic_setting" {
+  default = false
+}
+
+variable "sku_tier" {
+  default = "Free"
+}
