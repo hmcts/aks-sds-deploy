@@ -69,6 +69,7 @@ module "kubernetes" {
       enable_auto_scaling = true
     }
   ]
+  depends_on = [azurerm_resource_group.disks_resource_group]
 }
 
 module "ctags" {
