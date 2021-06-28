@@ -182,6 +182,7 @@ ansible/components/**/roles/**
 ansible/services/**/roles/**
 
 .idea
+*.iml
 
 *.pyc
 *.egg
