@@ -43,6 +43,7 @@ parameters:
     - PTLSBOX
     - TEST
     - STG
+    - PTL
     - PROD
 
 variables:
