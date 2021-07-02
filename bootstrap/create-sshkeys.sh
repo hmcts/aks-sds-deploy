@@ -5,7 +5,7 @@ az_keyvault_name="${4}"
 AGENT_BUILDDIRECTORY=/tmp
 
 
-var_exist="$(az keyvault secret show --vault-name ${az_keyvault_name} --name 'flux-ssh-git-key-private' --query value -o tsv)"
+var_exist="$(az keyvault secret list --vault-name ${az_keyvault_name} --query "[?name=='flux-ssh-git-key-private'].name" -o tsv)"
 if test -z "$var_exist"
     then
             echo "SSHKey Setup"
