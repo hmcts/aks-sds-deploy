@@ -11,7 +11,7 @@ data "azurerm_resource_group" "platform-rg" {
 }
 
 data "azurerm_key_vault" "genesis_keyvault" {
-  name                = data.azurerm_subscription.current.display_name == "DTS-SHAREDSERVICESPTL-SBOX" ? "dtssdsptlsbox" : "${lower(replace(data.azurerm_subscription.current.display_name, "-", ""))}kv"
+  name                = contains(["ptlsbox", "ptl"], var.environment) ? "dtssds${replace(var.environment, "-", "")}" : "${lower(replace(data.azurerm_subscription.current.display_name, "-", ""))}kv"
   resource_group_name = data.azurerm_resource_group.genesis_rg.name
 }
 
