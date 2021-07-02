@@ -12,7 +12,6 @@ if test -z "$var_exist"
             ssh-keygen -t rsa -f $AGENT_BUILDDIRECTORY/flux-ssh-git-key -q -P "" -C ""
             az keyvault secret set --name flux-ssh-git-key-private --vault-name ${az_keyvault_name} --file $AGENT_BUILDDIRECTORY/flux-ssh-git-key
             az keyvault secret set --name flux-ssh-git-key-public --vault-name ${az_keyvault_name} --file $AGENT_BUILDDIRECTORY/flux-ssh-git-key.pub
-            rm -f $AGENT_BUILDDIRECTORY/flux-ssh-git-key*
     else
             echo "SSHKey Download"
             az keyvault secret download --name flux-ssh-git-key-private --vault-name ${az_keyvault_name} --file $AGENT_BUILDDIRECTORY/flux-ssh-git-key --encoding ascii
