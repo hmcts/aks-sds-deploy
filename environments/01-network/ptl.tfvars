@@ -11,8 +11,6 @@ private_dns_zones = [
   "dev.platform.hmcts.net",
   "demo.platform.hmcts.net",
   "test.platform.hmcts.net",
-  "sandbox.platform.hmcts.net",
-  "sbox.platform.hmcts.net",
   "ithc.platform.hmcts.net",
   "staging.platform.hmcts.net",
   "platform.hmcts.net"
