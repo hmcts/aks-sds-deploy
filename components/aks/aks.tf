@@ -88,7 +88,7 @@ data "azurerm_resource_group" "ss_sbox_acr" {
 }
 
 resource "azurerm_role_assignment" "sbox_registry_acrpull" {
-  count                = local.is_sbox ? var.cluster_count
+  count                = local.is_sbox ? var.cluster_count : 0
   provider             = azurerm.ss_sbox_acr
   role_definition_name = "AcrPull"
   principal_id         = module.kubernetes["${count.index}"].kubelet_object_id
