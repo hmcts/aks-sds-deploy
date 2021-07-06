@@ -54,6 +54,17 @@ locals {
       }
     }
   }
+
+  hub_to_env_mapping = {
+    sbox    = ["sbox", "ptlsbox"]
+    nonprod = ["demo", "dev", "aat", "test", "ithc", "ptl"]
+    prod    = ["prod", "stg", "ptl"]
+  }
+
+  regions = [
+    "ukSouth",
+    "ukWest"
+  ]
 }
 
 variable "additional_routes" {
