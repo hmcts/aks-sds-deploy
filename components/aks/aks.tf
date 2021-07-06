@@ -90,9 +90,8 @@ data "azurerm_resource_group" "ss_sbox_acr" {
 resource "azurerm_role_assignment" "sbox_registry_acrpull" {
   provider             = azurerm.ss_sbox_acr
   role_definition_name = "AcrPull"
-  principal_id         = module.kubernetes.kubelet_object_id
+  principal_id         = module.kubernetes[0].kubelet_object_id
   scope                = data.azurerm_resource_group.ss_sbox_acr[0].id
 
   count               = var.environment == "sbox" ? 1 : 0
-  depends_on          = [module.kubernetes]
 }
