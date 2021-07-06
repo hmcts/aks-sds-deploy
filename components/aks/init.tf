@@ -25,6 +25,9 @@ locals {
     global = {
       subscription = "8999dec3-0104-4a27-94ee-6588559729d1"
     }
+    ss_sbox = {
+      subscription = "a8140a9e-f1b0-481f-a4de-09e2ee23f7ab"
+    }
   }
 }
 
@@ -40,6 +43,13 @@ provider "azurerm" {
   skip_provider_registration = "true"
   features {}
   alias = "global_acr"
+}
+
+provider "azurerm" {
+  subscription_id            = local.acr["ss_sbox"].subscription
+  skip_provider_registration = "true"
+  features {}
+  alias = "ss_sbox_acr"
 }
 
 provider "azurerm" {

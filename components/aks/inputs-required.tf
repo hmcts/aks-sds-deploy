@@ -26,3 +26,7 @@ variable "kubernetes_cluster_agent_vm_size" {
 variable "kubernetes_cluster_version" {}
 
 variable "cluster_count" {}
+
+variable "sds_acr_enabled" {
+  default = true
+}
