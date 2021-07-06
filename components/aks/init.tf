@@ -29,6 +29,7 @@ locals {
       subscription = "a8140a9e-f1b0-481f-a4de-09e2ee23f7ab"
     }
   }
+  is_sbox = var.environment == "sbox" ? true : false
 }
 
 provider "azurerm" {
