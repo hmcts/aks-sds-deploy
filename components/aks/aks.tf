@@ -94,4 +94,5 @@ resource "azurerm_role_assignment" "sbox_registry_acrpull" {
   scope                = data.azurerm_resource_group.ss_sbox_acr[0].id
 
   count               = var.environment == "sbox" ? 1 : 0
+  depends_on          = [module.kubernetes]
 }
