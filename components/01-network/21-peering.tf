@@ -7,7 +7,7 @@ module "vnet_peer_hub_prod" {
 
   initiator_peer_name =  var.environment == "ptl" ? "${local.hub["prod"][each.key].peering_name}-prod" : local.hub["prod"][each.key].peering_name
 
-  target_peer_name = format("%s-%s",
+  target_peer_name = format("%s%s",
     var.project,
     var.environment
   )
@@ -32,7 +32,7 @@ module "vnet_peer_hub_nonprod" {
 
   initiator_peer_name =  var.environment == "ptl" ? "${local.hub["prod"][each.key].peering_name}-nonprod" : local.hub["prod"][each.key].peering_name
 
-  target_peer_name = format("%s-%s",
+  target_peer_name = format("%s%s",
     var.project,
     var.environment
   )
@@ -58,7 +58,7 @@ module "vnet_peer_hub_sbox" {
 
   initiator_peer_name =  var.environment == "ptl" ? "${local.hub["prod"][each.key].peering_name}-sbox" : local.hub["prod"][each.key].peering_name
 
-  target_peer_name = format("%s-%s",
+  target_peer_name = format("%s%s",
     var.project,
     var.environment
   )
@@ -84,7 +84,7 @@ module "vnet_peer_vpn" {
 
   initiator_peer_name = "vpn"
 
-  target_peer_name = format("%s-%s",
+  target_peer_name = format("%s%s",
     var.project,
     var.environment
   )
