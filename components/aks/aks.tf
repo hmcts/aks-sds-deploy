@@ -80,8 +80,8 @@ module "ctags" {
 }
 
 
-data "azurerm_resource_group" "ss_sbox_acr" {
-  provider = azurerm.ss_sbox_acr
+data "azurerm_resource_group" "sds_sbox_acr" {
+  provider = azurerm.sds_sbox_acr
   name     = "sds-acr-rg"
 
   count    = var.environment == "sbox" ? 1 : 0
@@ -89,8 +89,8 @@ data "azurerm_resource_group" "ss_sbox_acr" {
 
 resource "azurerm_role_assignment" "sbox_registry_acrpull" {
   count                = local.is_sbox ? var.cluster_count : 0
-  provider             = azurerm.ss_sbox_acr
+  provider             = azurerm.sds_sbox_acr
   role_definition_name = "AcrPull"
-  principal_id         = module.kubernetes["${count.index}"].kubelet_object_id
-  scope                = data.azurerm_resource_group.ss_sbox_acr[0].id
+  principal_id         = module.kubernetes[count.index].kubelet_object_id
+  scope                = data.azurerm_resource_group.sds_sbox_acr[0].id
 }
