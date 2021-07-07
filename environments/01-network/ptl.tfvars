@@ -8,6 +8,11 @@ application_gateway_subnet_cidr_blocks = "10.147.96.128/25"
 
 private_dns_subscription = "1baf5470-1c3e-40d3-a6f7-74bfbce4b348"
 private_dns_zones = [
+  "dev.platform.hmcts.net",
+  "demo.platform.hmcts.net",
+  "test.platform.hmcts.net",
+  "ithc.platform.hmcts.net",
+  "staging.platform.hmcts.net",
   "platform.hmcts.net"
 ]
 
