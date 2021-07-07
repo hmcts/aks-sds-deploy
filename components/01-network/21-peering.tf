@@ -20,7 +20,6 @@ module "vnet_peer_hub_prod" {
   target_vnet_subscription   = local.hub["prod"].subscription
 
   providers = {
-    azurerm           = azurerm
     azurerm.initiator = azurerm
     azurerm.target    = azurerm.hub-prod
   }
@@ -47,7 +46,6 @@ module "vnet_peer_hub_nonprod" {
   target_vnet_subscription   = local.hub["nonprod"].subscription
 
   providers = {
-    azurerm           = azurerm
     azurerm.initiator = azurerm
     azurerm.target    = azurerm.hub-nonprod
   }
@@ -74,7 +72,6 @@ module "vnet_peer_hub_sbox" {
   target_vnet_subscription   = local.hub["sbox"].subscription
 
   providers = {
-    azurerm           = azurerm
     azurerm.initiator = azurerm
     azurerm.target    = azurerm.hub-sbox
   }
@@ -101,7 +98,6 @@ module "vnet_peer_vpn" {
   target_vnet_subscription   = "ed302caf-ec27-4c64-a05e-85731c3ce90e"
 
   providers = {
-    azurerm           = azurerm
     azurerm.initiator = azurerm
     azurerm.target    = azurerm.vpn
   }
