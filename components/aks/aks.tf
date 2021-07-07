@@ -78,3 +78,19 @@ module "ctags" {
   product     = var.product
   builtFrom   = var.builtFrom
 }
+
+
+data "azurerm_resource_group" "sds_sbox_acr" {
+  provider = azurerm.sds_sbox_acr
+  name     = "sds-acr-rg"
+
+  count    = var.environment == "sbox" ? 1 : 0
+}
+
+resource "azurerm_role_assignment" "sbox_registry_acrpull" {
+  count                = local.is_sbox ? var.cluster_count : 0
+  provider             = azurerm.sds_sbox_acr
+  role_definition_name = "AcrPull"
+  principal_id         = module.kubernetes[count.index].kubelet_object_id
+  scope                = data.azurerm_resource_group.sds_sbox_acr[0].id
+}
