@@ -34,12 +34,12 @@ parameters:
   - name: env
     displayName: Environment
     type: string
-    default: 'SBOX'
+    default: 'PTLSBOX'
     values:
     - ITHC
     - DEV
     - DEMO
-    - SBOX
+    # - SBOX removing from pipeline temporarily to test state migration 
     - PTLSBOX
     - TEST
     - STG
