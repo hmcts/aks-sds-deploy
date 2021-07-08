@@ -36,16 +36,15 @@ parameters:
     type: string
     default: 'PTLSBOX'
     values:
-    # Removing from pipeline temporarily until state has been changed for all environments
-    # - ITHC
-    # - DEV
-    # - DEMO
-    # - SBOX
+    - ITHC
+    - DEV
+    - DEMO
+    - SBOX
     - PTLSBOX
-    # - TEST
-    # - STG
-    # - PTL
-    # - PROD
+    - TEST
+    - STG
+    - PTL
+    - PROD
 
 variables:
   - name: tfversion
