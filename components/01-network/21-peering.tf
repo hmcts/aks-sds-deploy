@@ -1,93 +1,104 @@
-// HUB UK South
+# HUB
 
-data "azurerm_virtual_network" "hub-south-vnet" {
-  provider            = azurerm.hub
-  name                = local.hub[var.hub].ukSouth.name
-  resource_group_name = local.hub[var.hub].ukSouth.name
+module "vnet_peer_hub_prod" {
+  source = "../../modules/vnet_peering"
+
+  for_each = toset([for r in local.regions : r if contains(local.hub_to_env_mapping["prod"], var.environment)])
+
+  initiator_peer_name =  var.environment == "ptl" ? "${local.hub["prod"][each.key].peering_name}-prod" : local.hub["prod"][each.key].peering_name
+
+  target_peer_name = format("%s%s",
+    var.project,
+    var.environment
+  )
+  initiator_vnet                = module.network.network_name
+  initiator_vnet_resource_group = module.network.network_resource_group
+  initiator_vnet_subscription   = var.subscription_id
+
+  target_vnet                = local.hub["prod"][each.key].name
+  target_vnet_resource_group = local.hub["prod"][each.key].name
+  target_vnet_subscription   = local.hub["prod"].subscription
+
+  providers = {
+    azurerm.initiator = azurerm
+    azurerm.target    = azurerm.hub-prod
+  }
 }
 
-resource "azurerm_virtual_network_peering" "hub-south-to-spoke" {
-  provider = azurerm.hub
+module "vnet_peer_hub_nonprod" {
+  source = "../../modules/vnet_peering"
 
-  name = format("%s%s",
+  for_each = toset([for r in local.regions : r if contains(local.hub_to_env_mapping["nonprod"], var.environment)])
+
+  initiator_peer_name =  var.environment == "ptl" ? "${local.hub["prod"][each.key].peering_name}-nonprod" : local.hub["prod"][each.key].peering_name
+
+  target_peer_name = format("%s%s",
     var.project,
     var.environment
   )
 
-  resource_group_name          = local.hub[var.hub].ukSouth.name
-  virtual_network_name         = local.hub[var.hub].ukSouth.name
-  remote_virtual_network_id    = module.network.network_id
-  allow_virtual_network_access = true
-  allow_forwarded_traffic      = true
+  initiator_vnet                = module.network.network_name
+  initiator_vnet_resource_group = module.network.network_resource_group
+  initiator_vnet_subscription   = var.subscription_id
+
+  target_vnet                = local.hub["nonprod"][each.key].name
+  target_vnet_resource_group = local.hub["nonprod"][each.key].name
+  target_vnet_subscription   = local.hub["nonprod"].subscription
+
+  providers = {
+    azurerm.initiator = azurerm
+    azurerm.target    = azurerm.hub-nonprod
+  }
 }
 
-resource "azurerm_virtual_network_peering" "spoke-to-hub-south" {
-  name                         = "hubUkS"
-  resource_group_name          = module.network.network_resource_group
-  virtual_network_name         = module.network.network_name
-  remote_virtual_network_id    = data.azurerm_virtual_network.hub-south-vnet.id
-  allow_virtual_network_access = true
-  allow_forwarded_traffic      = true
-}
+module "vnet_peer_hub_sbox" {
+  source = "../../modules/vnet_peering"
 
-// HUB UK West
+  for_each = toset([for r in local.regions : r if contains(local.hub_to_env_mapping["sbox"], var.environment)])
 
-data "azurerm_virtual_network" "hub-west-vnet" {
-  provider            = azurerm.hub
-  name                = local.hub[var.hub].ukWest.name
-  resource_group_name = local.hub[var.hub].ukWest.name
-}
+  initiator_peer_name =  var.environment == "ptl" ? "${local.hub["prod"][each.key].peering_name}-sbox" : local.hub["prod"][each.key].peering_name
 
-resource "azurerm_virtual_network_peering" "hub-west-to-spoke" {
-  provider = azurerm.hub
-
-  name = format("%s%s",
+  target_peer_name = format("%s%s",
     var.project,
     var.environment
   )
 
-  resource_group_name       = local.hub[var.hub].ukWest.name
-  virtual_network_name      = local.hub[var.hub].ukWest.name
-  remote_virtual_network_id = module.network.network_id
+  initiator_vnet                = module.network.network_name
+  initiator_vnet_resource_group = module.network.network_resource_group
+  initiator_vnet_subscription   = var.subscription_id
+
+  target_vnet                = local.hub["sbox"][each.key].name
+  target_vnet_resource_group = local.hub["sbox"][each.key].name
+  target_vnet_subscription   = local.hub["sbox"].subscription
+
+  providers = {
+    azurerm.initiator = azurerm
+    azurerm.target    = azurerm.hub-sbox
+  }
 }
 
-resource "azurerm_virtual_network_peering" "spoke-to-hub-west" {
-  name                         = "hubUkW"
-  resource_group_name          = module.network.network_resource_group
-  virtual_network_name         = module.network.network_name
-  remote_virtual_network_id    = data.azurerm_virtual_network.hub-west-vnet.id
-  allow_virtual_network_access = true
-  allow_forwarded_traffic      = true
-}
+# VPN
 
-// VPN
+module "vnet_peer_vpn" {
+  source = "../../modules/vnet_peering"
 
-data "azurerm_virtual_network" "vpn" {
-  provider            = azurerm.vpn
-  name                = "core-infra-vnet-mgmt"
-  resource_group_name = "rg-mgmt"
-}
+  initiator_peer_name = "vpn"
 
-resource "azurerm_virtual_network_peering" "vpn-to-spoke" {
-  provider = azurerm.vpn
-
-  name = format("%s%s",
+  target_peer_name = format("%s%s",
     var.project,
     var.environment
   )
 
-  resource_group_name          = data.azurerm_virtual_network.vpn.resource_group_name
-  virtual_network_name         = data.azurerm_virtual_network.vpn.name
-  remote_virtual_network_id    = module.network.network_id
-  allow_virtual_network_access = true
-  allow_forwarded_traffic      = true
-}
+  initiator_vnet                = module.network.network_name
+  initiator_vnet_resource_group = module.network.network_resource_group
+  initiator_vnet_subscription   = var.subscription_id
 
-resource "azurerm_virtual_network_peering" "spoke-to-vpn" {
-  name                         = "vpn"
-  resource_group_name          = module.network.network_resource_group
-  virtual_network_name         = module.network.network_name
-  remote_virtual_network_id    = data.azurerm_virtual_network.vpn.id
-  allow_virtual_network_access = true
-  allow_forwarded_traffic      = true
+  target_vnet                = data.azurerm_virtual_network.vpn.name
+  target_vnet_resource_group = data.azurerm_virtual_network.vpn.resource_group_name
+  target_vnet_subscription   = "ed302caf-ec27-4c64-a05e-85731c3ce90e"
+
+  providers = {
+    azurerm.initiator = azurerm
+    azurerm.target    = azurerm.vpn
+  }
 }
