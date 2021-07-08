@@ -36,13 +36,13 @@ parameters:
     type: string
     default: 'PTLSBOX'
     values:
-    - ITHC
-    - DEV
-    - DEMO
-    # - SBOX removing from pipeline temporarily to test state migration 
+    # - ITHC
+    # - DEV
+    # - DEMO
+    # - SBOX removing from pipeline temporarily until state has been changed for all environments
     - PTLSBOX
-    - TEST
-    - STG
+    # - TEST
+    # - STG
     - PTL
     - PROD
 
