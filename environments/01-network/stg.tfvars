@@ -1,15 +1,15 @@
 enable_debug = "true"
 
-network_address_space                  = "10.142.0.0/18"
-aks_00_subnet_cidr_blocks              = "10.142.0.0/20"
-aks_01_subnet_cidr_blocks              = "10.142.16.0/20"
-iaas_subnet_cidr_blocks                = "10.142.32.0/25"
-application_gateway_subnet_cidr_blocks = "10.142.32.128/25"
+network_address_space                  = "10.148.0.0/18"
+aks_00_subnet_cidr_blocks              = "10.148.0.0/20"
+aks_01_subnet_cidr_blocks              = "10.148.16.0/20"
+iaas_subnet_cidr_blocks                = "10.148.32.0/25"
+application_gateway_subnet_cidr_blocks = "10.148.32.128/25"
 
 additional_subnets = [
   {
     name           = "vh_private_endpoints"
-    address_prefix = "10.142.33.0/25"
+    address_prefix = "10.148.33.0/25"
   },
 ]
 
