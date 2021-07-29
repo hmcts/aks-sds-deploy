@@ -12,8 +12,8 @@ resource "azurerm_resource_group" "kubernetes_resource_group" {
 
 resource "azurerm_resource_group" "disks_resource_group" {
   location = var.location
-  name = "disks-${var.environment}-rg"
-  tags = module.ctags.common_tags
+  name     = "disks-${var.environment}-rg"
+  tags     = module.ctags.common_tags
 }
 
 module "loganalytics" {
@@ -43,6 +43,8 @@ module "kubernetes" {
   cluster_number    = "0${count.index}"
   service_shortname = var.service_shortname
   project           = var.project
+
+  ptl_cluster = var.ptl_cluster
 
   log_workspace_id = module.loganalytics.workspace_id
 
@@ -84,7 +86,7 @@ data "azurerm_resource_group" "sds_sbox_acr" {
   provider = azurerm.sds_sbox_acr
   name     = "sds-acr-rg"
 
-  count    = var.environment == "sbox" ? 1 : 0
+  count = var.environment == "sbox" ? 1 : 0
 }
 
 resource "azurerm_role_assignment" "sbox_registry_acrpull" {
