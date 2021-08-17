@@ -6,7 +6,7 @@ PROJECT="${1}"
 ENVIRONMENT="${3}"
 CLUSTER_NAME="${6}"
 ############################################################
-HELM_OPERATOR_VER="1.2.0"
+HELM_OPERATOR_VER="1.4.0"
 flux_repo_list="k8s/environments/${ENVIRONMENT}/cluster-${CLUSTER_NAME}\,k8s/environments/${ENVIRONMENT}/cluster-${CLUSTER_NAME}-overlay\,k8s/environments/${ENVIRONMENT}/common\,k8s/environments/${ENVIRONMENT}/common-overlay\,k8s/common"
 AGENT_BUILDDIRECTORY=/tmp
 
@@ -43,7 +43,7 @@ kind: Kustomization
 commonLabels:
   k8s-app: aad-pod-id
 resources:
-  - https://raw.githubusercontent.com/Azure/aad-pod-identity/v1.7.4/deploy/infra/deployment-rbac.yaml
+  - https://raw.githubusercontent.com/Azure/aad-pod-identity/v1.8.2/deploy/infra/deployment-rbac.yaml
 patchesStrategicMerge:
   - https://raw.githubusercontent.com/hmcts/shared-services-flux/master/k8s/namespaces/admin/aad-pod-identity/patches/aad-pod-id.yaml
 EOF
