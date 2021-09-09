@@ -21,5 +21,5 @@ variable "linux_node_pool" {
 
 variable "windows_node_pool" {
   description = "Map to override the windows node pool config"
-  
-  }
+
+}
