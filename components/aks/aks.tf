@@ -76,6 +76,7 @@ module "kubernetes" {
       min_count           = lookup(var.linux_node_pool, "min_nodes", 2)
       max_count           = lookup(var.linux_node_pool, "max_nodes", 4)
       os_type             = "Linux"
+      node_taints         = []
       enable_auto_scaling = true
     }
   ]
