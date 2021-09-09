@@ -8,4 +8,8 @@ variable "service_shortname" {
 
 variable "ptl_cluster" {
   default = false
-} 
+}
+
+variable "sku_tier" {
+  default = "Free"
+}
