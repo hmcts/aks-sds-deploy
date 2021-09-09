@@ -58,7 +58,8 @@ module "kubernetes" {
   kubernetes_cluster_version            = var.kubernetes_cluster_version
   kubernetes_cluster_agent_os_disk_size = "128"
 
-  tags = module.ctags.common_tags
+  tags     = module.ctags.common_tags
+  sku_tier = var.sku_tier
 
   additional_node_pools = contains(["ptlsbox", "ptl"], var.environment) ? [] : [
     {
