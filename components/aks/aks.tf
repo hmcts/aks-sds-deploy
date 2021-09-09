@@ -52,9 +52,9 @@ module "kubernetes" {
 
   kubernetes_cluster_ssh_key = var.kubernetes_cluster_ssh_key
 
-  kubernetes_cluster_agent_min_count    = var.kubernetes_cluster_agent_min_count
-  kubernetes_cluster_agent_max_count    = var.kubernetes_cluster_agent_max_count
-  kubernetes_cluster_agent_vm_size      = var.kubernetes_cluster_agent_vm_size
+  kubernetes_cluster_agent_min_count    = var.node_pools.system.min_nodes
+  kubernetes_cluster_agent_max_count    = var.node_pools.system.max_nodes
+  kubernetes_cluster_agent_vm_size      = var.node_pools.system.vm_size
   kubernetes_cluster_version            = var.kubernetes_cluster_version
   kubernetes_cluster_agent_os_disk_size = "128"
 
@@ -63,12 +63,21 @@ module "kubernetes" {
   additional_node_pools = contains(["ptlsbox", "ptl"], var.environment) ? [] : [
     {
       name                = "msnode"
-      vm_size             = var.kubernetes_cluster_agent_vm_size
-      min_count           = 2
-      max_count           = 5
+      vm_size             = var.node_pools.msnode.vm_size
+      min_count           = var.node_pools.msnode.min_count
+      max_count           = var.node_pools.msnode.max_count
       os_type             = "Windows"
       node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
       enable_auto_scaling = true
+    },
+    {
+      name                = "linux"
+      vm_size             = var.node_pools.linux.vm_size
+      min_count           = var.node_pools.linux.min_count
+      max_count           = var.node_pools.linux.max_count
+      os_type             = "Linux"
+      enable_auto_scaling = true
+      node_taints         = [""]
     }
   ]
   depends_on = [azurerm_resource_group.disks_resource_group]
