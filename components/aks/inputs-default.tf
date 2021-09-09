@@ -8,37 +8,18 @@ variable "service_shortname" {
 
 variable "ptl_cluster" {
   default = false
-} 
-
-variable "kubernetes_cluster_agent_min_count" {
-  default = 1
-}
-variable "kubernetes_cluster_agent_max_count" {
-  default = 3
-}
-variable "kubernetes_cluster_agent_vm_size" {
-  default = "Standard_DS3_v2"
 }
 
-variable "node_pools" {
-  default = {
+variable "system_node_pool" {
+  description = "Map to override the system node pool config"
+}
 
-    system = {
-      min_nodes = 1,
-      max_nodes = 3,
-      vm_size = "Standard_DS3_v2"
-    },
+variable "linux_node_pool" {
+  description = "Map to override the linux node pool config"
 
-    linux = {
-      min_nodes = 2,
-      max_nodes = 5,
-      vm_size = "Standard_DS3_v2"
-    },
+}
 
-    msnode = {
-      min_nodes = 2,
-      max_nodes = 5,
-      vm_size = "Standard_DS3_v2"
-    }
+variable "windows_node_pool" {
+  description = "Map to override the windows node pool config"
+  
   }
-}
