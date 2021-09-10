@@ -23,3 +23,7 @@ variable "windows_node_pool" {
   description = "Map to override the windows node pool config"
 
 }
+
+variable "sku_tier" {
+  default = "Free"
+}
