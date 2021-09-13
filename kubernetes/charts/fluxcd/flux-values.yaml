@@ -18,3 +18,10 @@ extraEnvs:
 annotations:
   prometheus.io/port: "3030"
   prometheus.io/scrape: "true"
+tolerations:
+  - key: "CriticalAddonsOnly"
+    operator: "Equal"
+    value: "true"
+    effect: "NoSchedule"
+nodeSelector:
+  agentpool: system
