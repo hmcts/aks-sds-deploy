@@ -25,3 +25,11 @@ tolerations:
     effect: "NoSchedule"
 nodeSelector:
   agentpool: system
+memcached:
+  tolerations:
+    - key: "CriticalAddonsOnly"
+      operator: "Equal"
+      value: "true"
+      effect: "NoSchedule"
+  nodeSelector:
+    agentpool: system
