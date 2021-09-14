@@ -72,6 +72,8 @@ module "kubernetes" {
       os_type             = "Linux"
       node_taints         = ["CriticalAddonsOnly=true:NoSchedule"]
       enable_auto_scaling = true
+      mode                = "System"
+
     },
     {
       name                = "msnode"
@@ -81,6 +83,7 @@ module "kubernetes" {
       os_type             = "Windows"
       node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
       enable_auto_scaling = true
+      mode                = "User"
     }
   ]
   depends_on = [azurerm_resource_group.disks_resource_group]
