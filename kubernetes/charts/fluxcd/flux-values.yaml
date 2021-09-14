@@ -23,13 +23,29 @@ tolerations:
     operator: "Equal"
     value: "true"
     effect: "NoSchedule"
-nodeSelector:
-  agentpool: system
+affinity:
+  nodeAffinity:
+    preferredDuringSchedulingIgnoredDuringExecution:
+    - weight: 1
+      preference:
+        matchExpressions:
+        - key: kubernetes.azure.com/mode
+          operator: In
+          values:
+          - system
 memcached:
   tolerations:
     - key: "CriticalAddonsOnly"
       operator: "Equal"
       value: "true"
       effect: "NoSchedule"
-  nodeSelector:
-    agentpool: system
+  affinity:
+    nodeAffinity:
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 1
+        preference:
+          matchExpressions:
+          - key: kubernetes.azure.com/mode
+            operator: In
+            values:
+            - system
