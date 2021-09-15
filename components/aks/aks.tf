@@ -63,15 +63,6 @@ module "kubernetes" {
 
   additional_node_pools = contains(["ptlsbox", "ptl"], var.environment) ? [] : [
     {
-      name                = "system"
-      vm_size             = lookup(var.system_node_pool, "vm_size", "Standard_DS3_v2")
-      min_count           = lookup(var.system_node_pool, "min_nodes", 1)
-      max_count           = lookup(var.system_node_pool, "max_nodes", 3)
-      os_type             = "Linux"
-      node_taints         = ["CriticalAddonsOnly=true:NoSchedule"]
-      enable_auto_scaling = true
-    },
-    {
       name                = "msnode"
       vm_size             = var.kubernetes_cluster_agent_vm_size
       min_count           = 2
