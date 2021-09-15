@@ -61,7 +61,9 @@ module "kubernetes" {
 
   tags     = module.ctags.common_tags
   sku_tier = var.sku_tier
-
+  
+  enable_user_system_nodepool_split = true
+  
   additional_node_pools = contains(["ptlsbox", "ptl"], var.environment) ? [] : [
     {
       name                = "linux"
