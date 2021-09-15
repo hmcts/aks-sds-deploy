@@ -43,7 +43,7 @@ kind: Kustomization
 commonLabels:
   k8s-app: aad-pod-id
 resources:
-  - https://raw.githubusercontent.com/Azure/aad-pod-identity/v1.8.3/deploy/infra/deployment-rbac.yaml
+  - https://raw.githubusercontent.com/Azure/aad-pod-identity/v1.8.4-rc.0/deploy/infra/deployment-rbac.yaml
 patchesStrategicMerge:
   - https://raw.githubusercontent.com/hmcts/shared-services-flux/master/k8s/namespaces/admin/aad-pod-identity/patches/aad-pod-id.yaml
 EOF
