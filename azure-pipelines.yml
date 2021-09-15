@@ -34,7 +34,7 @@ parameters:
   - name: env
     displayName: Environment
     type: string
-    default: 'PTLSBOX'
+    default: 'SBOX'
     values:
     - ITHC
     - DEV
