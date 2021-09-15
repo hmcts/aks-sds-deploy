@@ -77,9 +77,9 @@ module "kubernetes" {
     },
     {
       name                = "msnode"
-      vm_size             = var.kubernetes_cluster_agent_vm_size
-      min_count           = 2
-      max_count           = 5
+      vm_size             = lookup(var.windows_node_pool, "vm_size", "Standard_DS3_v2")
+      min_count           = lookup(var.windows_node_pool, "min_nodes", 2)
+      max_count           = lookup(var.windows_node_pool, "max_nodes", 4)
       os_type             = "Windows"
       node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
       enable_auto_scaling = true
