@@ -10,6 +10,10 @@ variable "ptl_cluster" {
   default = false
 }
 
+variable "sku_tier" {
+  default = "Free"
+}
+
 variable "system_node_pool" {
   description = "Map to override the system node pool config"
 }
@@ -22,8 +26,4 @@ variable "linux_node_pool" {
 variable "windows_node_pool" {
   description = "Map to override the windows node pool config"
 
-}
-
-variable "sku_tier" {
-  default = "Free"
 }

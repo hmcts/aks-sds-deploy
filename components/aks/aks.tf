@@ -55,14 +55,15 @@ module "kubernetes" {
   kubernetes_cluster_agent_min_count    = lookup(var.system_node_pool, "min_nodes", 1)
   kubernetes_cluster_agent_max_count    = lookup(var.system_node_pool, "max_nodes", 3)
   kubernetes_cluster_agent_vm_size      = lookup(var.system_node_pool, "vm_size", "Standard_DS3_v2")
+
   kubernetes_cluster_version            = var.kubernetes_cluster_version
   kubernetes_cluster_agent_os_disk_size = "128"
 
   tags     = module.ctags.common_tags
   sku_tier = var.sku_tier
-
+  
   enable_user_system_nodepool_split = true
-
+  
   additional_node_pools = contains(["ptlsbox", "ptl"], var.environment) ? [] : [
     {
       name                = "linux"
