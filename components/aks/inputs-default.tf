@@ -16,14 +16,15 @@ variable "sku_tier" {
 
 variable "system_node_pool" {
   description = "Map to override the system node pool config"
+  default     = {}
 }
 
 variable "linux_node_pool" {
   description = "Map to override the linux node pool config"
-
+  default     = {}
 }
 
 variable "windows_node_pool" {
   description = "Map to override the windows node pool config"
-
+  default     = {}
 }
