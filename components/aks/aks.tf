@@ -88,7 +88,7 @@ module "kubernetes" {
 
   enable_user_system_nodepool_split = true
 
-  additional_node_pools = !contains(["ptlsbox", "ptl"], var.environment) ? tolist([local.linux_node_pool]) : tolist([local.linux_node_pool, local.system_node_pool])
+  additional_node_pools = contains(["ptlsbox", "ptl"], var.environment) ? tolist([local.linux_node_pool]) : tolist([local.linux_node_pool, local.system_node_pool])
 
   depends_on = [azurerm_resource_group.disks_resource_group]
 }
