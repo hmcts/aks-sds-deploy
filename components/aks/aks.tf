@@ -21,6 +21,30 @@ module "loganalytics" {
   environment = var.environment
 }
 
+locals {
+  linux_node_pool = {
+      name                = "linux"
+      vm_size             = lookup(var.linux_node_pool, "vm_size", "Standard_DS3_v2")
+      min_count           = lookup(var.linux_node_pool, "min_nodes", 2)
+      max_count           = lookup(var.linux_node_pool, "max_nodes", 4)
+      os_type             = "Linux"
+      node_taints         = []
+      enable_auto_scaling = true
+      mode                = "User"
+    }
+  system_node_pool =  {
+      name                = "msnode"
+      vm_size             = lookup(var.windows_node_pool, "vm_size", "Standard_DS3_v2")
+      min_count           = lookup(var.windows_node_pool, "min_nodes", 2)
+      max_count           = lookup(var.windows_node_pool, "max_nodes", 4)
+      os_type             = "Windows"
+      node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
+      enable_auto_scaling = true
+      mode                = "User"
+    }
+}
+
+
 module "kubernetes" {
   count       = var.cluster_count
   source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=master"
@@ -64,28 +88,8 @@ module "kubernetes" {
 
   enable_user_system_nodepool_split = true
 
-  additional_node_pools = contains(["ptlsbox", "ptl"], var.environment) ? [] : [
-    {
-      name                = "linux"
-      vm_size             = lookup(var.linux_node_pool, "vm_size", "Standard_DS3_v2")
-      min_count           = lookup(var.linux_node_pool, "min_nodes", 2)
-      max_count           = lookup(var.linux_node_pool, "max_nodes", 4)
-      os_type             = "Linux"
-      node_taints         = []
-      enable_auto_scaling = true
-      mode                = "User"
-    },
-    {
-      name                = "msnode"
-      vm_size             = lookup(var.windows_node_pool, "vm_size", "Standard_DS3_v2")
-      min_count           = lookup(var.windows_node_pool, "min_nodes", 2)
-      max_count           = lookup(var.windows_node_pool, "max_nodes", 4)
-      os_type             = "Windows"
-      node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
-      enable_auto_scaling = true
-      mode                = "User"
-    }
-  ]
+  additional_node_pools = !contains(["ptlsbox", "ptl"], var.environment) ? tolist([local.linux_node_pool]) : tolist([local.linux_node_pool, local.system_node_pool])
+
   depends_on = [azurerm_resource_group.disks_resource_group]
 }
 
