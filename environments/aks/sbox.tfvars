@@ -16,3 +16,5 @@ windows_node_pool = {
   min_nodes = 2,
   max_nodes = 4
 }
+
+availability_zones = ["1", "2", "3"]
