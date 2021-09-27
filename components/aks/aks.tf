@@ -31,7 +31,7 @@ locals {
     node_taints         = []
     enable_auto_scaling = true
     mode                = "User"
-    availability_zones  = var.availability_zones
+    //availability_zones  = var.availability_zones
   }
   system_node_pool = {
     name                = "msnode"
