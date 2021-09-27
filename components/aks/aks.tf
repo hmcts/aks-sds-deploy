@@ -42,7 +42,7 @@ locals {
     node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
     enable_auto_scaling = true
     mode                = "User"
-    availability_zones  = var.availability_zones
+    //availability_zones  = var.availability_zones
   }
 }
 
@@ -92,8 +92,8 @@ module "kubernetes" {
 
   additional_node_pools = contains(["ptlsbox", "ptl"], var.environment) ? tolist([local.linux_node_pool]) : tolist([local.linux_node_pool, local.system_node_pool])
 
-  depends_on         = [azurerm_resource_group.disks_resource_group]
-  availability_zones = var.availability_zones
+  depends_on = [azurerm_resource_group.disks_resource_group]
+  //availability_zones = var.availability_zones
 }
 
 module "ctags" {
