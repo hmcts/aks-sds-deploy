@@ -27,6 +27,6 @@ variable "kubernetes_cluster_version" {}
 
 variable "cluster_count" {}
 
-//variable availability_zones {
-//  type = list
-//}
+variable availability_zones {
+  type = list
+}
