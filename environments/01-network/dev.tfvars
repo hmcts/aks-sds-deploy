@@ -19,6 +19,7 @@ private_dns_zones = [
   "platform.hmcts.net",
   "dom1.infra.int",
   "mailrelay.platform.hmcts.net",
+  "staging.platform.hmcts.net",
 ]
 
 hub = "nonprod"
