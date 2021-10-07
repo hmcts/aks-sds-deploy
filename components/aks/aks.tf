@@ -21,6 +21,32 @@ module "loganalytics" {
   environment = var.environment
 }
 
+locals {
+  linux_node_pool = {
+    name                = "linux"
+    vm_size             = lookup(var.linux_node_pool, "vm_size", "Standard_DS3_v2")
+    min_count           = lookup(var.linux_node_pool, "min_nodes", 2)
+    max_count           = lookup(var.linux_node_pool, "max_nodes", 4)
+    os_type             = "Linux"
+    node_taints         = []
+    enable_auto_scaling = true
+    mode                = "User"
+    availability_zones  = var.availability_zones
+  }
+  system_node_pool = {
+    name                = "msnode"
+    vm_size             = lookup(var.windows_node_pool, "vm_size", "Standard_DS3_v2")
+    min_count           = lookup(var.windows_node_pool, "min_nodes", 2)
+    max_count           = lookup(var.windows_node_pool, "max_nodes", 4)
+    os_type             = "Windows"
+    node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
+    enable_auto_scaling = true
+    mode                = "User"
+    availability_zones  = var.availability_zones
+  }
+}
+
+
 module "kubernetes" {
   count       = var.cluster_count
   source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=master"
@@ -52,27 +78,22 @@ module "kubernetes" {
 
   kubernetes_cluster_ssh_key = var.kubernetes_cluster_ssh_key
 
-  kubernetes_cluster_agent_min_count    = var.kubernetes_cluster_agent_min_count
-  kubernetes_cluster_agent_max_count    = var.kubernetes_cluster_agent_max_count
-  kubernetes_cluster_agent_vm_size      = var.kubernetes_cluster_agent_vm_size
+  kubernetes_cluster_agent_min_count = lookup(var.system_node_pool, "min_nodes", 2)
+  kubernetes_cluster_agent_max_count = lookup(var.system_node_pool, "max_nodes", 4)
+  kubernetes_cluster_agent_vm_size   = lookup(var.system_node_pool, "vm_size", "Standard_DS3_v2")
+
   kubernetes_cluster_version            = var.kubernetes_cluster_version
   kubernetes_cluster_agent_os_disk_size = "128"
 
   tags     = module.ctags.common_tags
   sku_tier = var.sku_tier
 
-  additional_node_pools = contains(["ptlsbox", "ptl"], var.environment) ? [] : [
-    {
-      name                = "msnode"
-      vm_size             = var.kubernetes_cluster_agent_vm_size
-      min_count           = 2
-      max_count           = 5
-      os_type             = "Windows"
-      node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
-      enable_auto_scaling = true
-    }
-  ]
-  depends_on = [azurerm_resource_group.disks_resource_group]
+  enable_user_system_nodepool_split = true
+
+  additional_node_pools = contains(["ptlsbox", "ptl"], var.environment) ? tolist([local.linux_node_pool]) : tolist([local.linux_node_pool, local.system_node_pool])
+
+  depends_on         = [azurerm_resource_group.disks_resource_group]
+  availability_zones = var.availability_zones
 }
 
 module "ctags" {
