@@ -16,6 +16,7 @@ additional_subnets = [
 private_dns_subscription = "1baf5470-1c3e-40d3-a6f7-74bfbce4b348"
 private_dns_zones = [
   "staging.platform.hmcts.net",
+  "dev.platform.hmcts.net",
 ]
 
 hub = "prod"

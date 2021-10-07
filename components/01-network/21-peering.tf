@@ -5,7 +5,7 @@ module "vnet_peer_hub_prod" {
 
   for_each = toset([for r in local.regions : r if contains(local.hub_to_env_mapping["prod"], var.environment)])
 
-  initiator_peer_name = var.environment == "ptl" ? "${local.hub["prod"][each.key].peering_name}-prod" : local.hub["prod"][each.key].peering_name
+  initiator_peer_name = (var.environment == "ptl") || (var.environment == "dev") ? "${local.hub["prod"][each.key].peering_name}-prod" : local.hub["prod"][each.key].peering_name
 
   target_peer_name = format("%s%s",
     var.project,

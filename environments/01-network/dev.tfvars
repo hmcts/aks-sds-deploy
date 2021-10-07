@@ -19,7 +19,16 @@ private_dns_zones = [
   "platform.hmcts.net",
   "dom1.infra.int",
   "mailrelay.platform.hmcts.net",
+  "staging.platform.hmcts.net",
 ]
 
 hub = "nonprod"
 
+additional_routes = [
+  {
+    name                   = "stg_aks_vnet"
+    address_prefix         = "10.148.0.0/18"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.8.36"
+  },
+]
