@@ -12,7 +12,7 @@ additional_subnets = [
     address_prefix = "10.140.33.0/25"
   },
   {
-    name           = "apim_private_endpoints"
+    name           = "api-management"
     address_prefix = "10.140.33.128/25"
   }
 ]
