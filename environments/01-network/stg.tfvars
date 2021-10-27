@@ -13,6 +13,7 @@ additional_subnets = [
   },
 ]
 
+
 private_dns_subscription = "1baf5470-1c3e-40d3-a6f7-74bfbce4b348"
 private_dns_zones = [
   "staging.platform.hmcts.net",
@@ -20,6 +21,21 @@ private_dns_zones = [
 ]
 
 hub = "prod"
+
+application_gateway_routes = [
+  {
+    name                   = "ss-dev-vnet"
+    address_prefix         = "10.145.0.0/18"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.8.36"
+  },
+  {
+    name                   = "ss-ptl-vnet"
+    address_prefix         = "10.147.64.0/18"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.8.36"
+  }
+]
 
 additional_routes = [
   {
