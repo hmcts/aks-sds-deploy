@@ -28,6 +28,9 @@ variable "iaas_subnet_cidr_blocks" {}
 
 variable "application_gateway_subnet_cidr_blocks" {}
 
+variable "application_gateway_routes" {
+  default = []
+}
 # Remote State
 # variable "hmcts_access_vault" {}
 # variable "remote_state_storage_account_name" {}
