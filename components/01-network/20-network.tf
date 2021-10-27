@@ -16,7 +16,7 @@ module "network" {
   aks_00_subnet_cidr_blocks              = var.aks_00_subnet_cidr_blocks #UK South
   aks_01_subnet_cidr_blocks              = var.aks_01_subnet_cidr_blocks #UK West # Currently both clusters in UK South
   application_gateway_subnet_cidr_blocks = var.application_gateway_subnet_cidr_blocks
-  application_gateway_routes             = try(var.application_gateway_routes, [])
+  application_gateway_routes             = var.application_gateway_routes
   iaas_subnet_cidr_blocks                = var.iaas_subnet_cidr_blocks
   additional_subnets                     = var.additional_subnets
 
