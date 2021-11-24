@@ -122,7 +122,7 @@ function flux_v2_ssh_git_key {
 
 function flux_v2_installation {
 
-    FLUX_CONFIG_URL=https://raw.githubusercontent.com/hmcts/shared-services-flux/DTSPO-5581_flux_v2_image_automation
+    FLUX_CONFIG_URL=https://raw.githubusercontent.com/hmcts/shared-services-flux/master
     
 
 # -----------------------------------------------------------
@@ -199,5 +199,3 @@ if [[ " ${FLUX_V2_CLUSTERS[*]} " =~ " ${ENVIRONMENT} " ]]; then
     flux_v2_ssh_git_key
     flux_v2_installation
 fi
-
-rm -rf kustomize
