@@ -2,7 +2,7 @@ registry:
   acr:
     enabled: true
 git:
-  url: git@github.com:hmcts/shared-services-flux.git
+  url: git@github.com:hmcts/sds-flux-config.git
   pollInterval: 1m
   secretName: flux-git-deploy
 additionalArgs:
