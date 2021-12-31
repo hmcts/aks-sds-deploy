@@ -44,7 +44,7 @@ commonLabels:
 resources:
   - https://raw.githubusercontent.com/Azure/aad-pod-identity/v1.8.4/deploy/infra/deployment-rbac.yaml
 patchesStrategicMerge:
-  - https://raw.githubusercontent.com/hmcts/shared-services-flux/master/k8s/namespaces/admin/aad-pod-identity/patches/aad-pod-id.yaml
+  - https://raw.githubusercontent.com/hmcts/sds-flux-config/master/k8s/namespaces/admin/aad-pod-identity/patches/aad-pod-id.yaml
 EOF
 ) > "${TMP_DIR}/admin/kustomization.yaml"
 
@@ -53,8 +53,8 @@ EOF
     ./kustomize build ${TMP_DIR}/admin |  kubectl apply -f -
     # workaround 'unable to recognize "STDIN": no matches for kind "AzurePodIdentityException" in version "aadpodidentity.k8s.io/v1"'
     sleep 1
-    kubectl apply -f https://raw.githubusercontent.com/hmcts/shared-services-flux/master/k8s/namespaces/admin/aad-pod-identity/mic-exception.yaml
-    kubectl apply -f https://raw.githubusercontent.com/hmcts/shared-services-flux/master/k8s/namespaces/kube-system/aad-pod-identity/mic-exception.yaml
+    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/k8s/namespaces/admin/aad-pod-identity/mic-exception.yaml
+    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/k8s/namespaces/kube-system/aad-pod-identity/mic-exception.yaml
 
     rm -rf ${TMP_DIR}
 }
@@ -122,7 +122,7 @@ function flux_v2_ssh_git_key {
 
 function flux_v2_installation {
 
-    FLUX_CONFIG_URL=https://raw.githubusercontent.com/hmcts/shared-services-flux/master
+    FLUX_CONFIG_URL=https://raw.githubusercontent.com/hmcts/sds-flux-config/master
     
 
 # -----------------------------------------------------------
