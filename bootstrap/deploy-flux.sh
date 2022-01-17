@@ -190,7 +190,7 @@ flux_helm_operator_install
 echo "**** helm operator is now installed ****"
 
 
-FLUX_V2_CLUSTERS=( 'ptl' 'sbox' )
+FLUX_V2_CLUSTERS=( 'ptl' 'sbox' 'dev' )
 
 if [[ " ${FLUX_V2_CLUSTERS[*]} " =~ " ${ENVIRONMENT} " ]]; then
     TMP_DIR=/tmp/flux/${ENVIRONMENT}/${CLUSTER_NAME}
