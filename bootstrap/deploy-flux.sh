@@ -174,11 +174,6 @@ EOF
 # End of functions
 ############################################################
 
-flux_create_namespace
-# give a bit of time for identity to sync so that flux start's correctly first time
-sleep 60
-
-
 FLUX_V2_CLUSTERS=( 'ptl' 'sbox' 'dev' )
 
 if [[ " ${FLUX_V2_CLUSTERS[*]} " =~ " ${ENVIRONMENT} " ]]; then
@@ -192,6 +187,9 @@ fi
 FLUX_V1_CLUSTERS=( 'dev' 'demo' 'ithc' 'stg' 'test' 'prod' 'ptlsbox' 'ptl')
 
 if [[ " ${FLUX_V1_CLUSTERS[*]} " =~ " ${ENVIRONMENT} " ]]; then
+    flux_create_namespace
+    # give a bit of time for identity to sync so that flux start's correctly first time
+    sleep 60
     helm_add_repo
     echo "****  repo added ****"
     helm_apply_crd ${HELM_OPERATOR_VER}
