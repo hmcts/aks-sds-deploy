@@ -180,7 +180,6 @@ sleep 60
 helm_add_repo
 echo "****  repo added ****"
 helm_apply_crd ${HELM_OPERATOR_VER}
-echo "****  ssh key added ****"
 flux_helm_operator_install
 echo "**** helm operator is now installed ****"
 
@@ -201,6 +200,7 @@ if [[ " ${FLUX_V2_CLUSTERS[*]} " =~ " ${ENVIRONMENT} " ]]; then
     pod_identity_components
     pod_identity_flux_sop_setup
     flux_ssh_git_key
+    echo "****  ssh key added ****"
     flux_install ${flux_repo_list} ${ENVIRONMENT} v3
     echo "****  flux is now installed ****"
 fi
