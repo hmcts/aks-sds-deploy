@@ -194,7 +194,7 @@ if [[ " ${FLUX_V2_CLUSTERS[*]} " =~ " ${ENVIRONMENT} " ]]; then
     flux_v2_installation
 fi
 
-FLUX_V1_CLUSTERS=( 'dev' 'demo' 'ithc' 'prod' 'ptlsbox' 'stg' 'test' )
+FLUX_V1_CLUSTERS=( 'dev' 'demo' 'ithc' 'stg' 'test' 'prod' 'ptlsbox' 'ptl')
 
 if [[ " ${FLUX_V1_CLUSTERS[*]} " =~ " ${ENVIRONMENT} " ]]; then
     pod_identity_components
