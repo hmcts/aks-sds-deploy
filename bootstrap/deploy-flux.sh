@@ -196,7 +196,7 @@ fi
 
 FLUX_V1_CLUSTERS=( 'dev' 'demo' 'ithc' 'prod' 'ptlsbox' 'stg' 'test' )
 
-if [[ " ${FLUX_V2_CLUSTERS[*]} " =~ " ${ENVIRONMENT} " ]]; then
+if [[ " ${FLUX_V1_CLUSTERS[*]} " =~ " ${ENVIRONMENT} " ]]; then
     pod_identity_components
     pod_identity_flux_sop_setup
     flux_ssh_git_key
