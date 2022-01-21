@@ -57,6 +57,7 @@ EOF
         kubectl -n flux-system wait --for condition=established --timeout=60s "customresourcedefinition.apiextensions.k8s.io/$crd"
     done
     
+    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/toffee/identity/toffee-azure-identity.yaml
     kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/k8s/namespaces/admin/aad-pod-identity/mic-exception.yaml
     kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/k8s/namespaces/kube-system/aad-pod-identity/mic-exception.yaml
 
