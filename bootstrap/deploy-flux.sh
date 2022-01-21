@@ -107,6 +107,13 @@ function flux_v2_pod_identity_sops_setup {
     sed -e 's@MI_RESOURCE_ID@'"$(az identity show --resource-group 'genesis-rg' --name aks-${ENVIRONMENT}-mi --query 'id' | sed 's/"//g')"'@' | \
     sed -e 's@MI_CLIENTID@'"$(az identity show --resource-group 'genesis-rg' --name aks-${ENVIRONMENT}-mi --query 'clientId' | sed 's/"//g')"'@' | \
     sed -e 's@admin@flux-system@' > ${TMP_DIR}/gotk/aks-sops-aadpodidentity.yaml
+
+    if [ -f ./kustomize ]; then
+        echo "Kustomize installed"
+    else
+        #Install kustomize
+        curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+    fi 
 }
 
 function flux_v2_ssh_git_key {
@@ -188,13 +195,13 @@ FLUX_V1_CLUSTERS=( 'dev' 'demo' 'ithc' 'stg' 'test' 'prod' 'ptlsbox' 'ptl')
 
 if [[ " ${FLUX_V1_CLUSTERS[*]} " =~ " ${ENVIRONMENT} " ]]; then
     flux_create_namespace
+    pod_identity_components
+    pod_identity_flux_sop_setup
     # give a bit of time for identity to sync so that flux start's correctly first time
     sleep 60
     helm_add_repo
     echo "****  repo added ****"
     helm_apply_crd ${HELM_OPERATOR_VER}
-    pod_identity_components
-    pod_identity_flux_sop_setup
     flux_ssh_git_key
     echo "****  ssh key added ****"
     flux_install ${flux_repo_list} ${ENVIRONMENT} v3
