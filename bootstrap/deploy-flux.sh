@@ -14,7 +14,7 @@ AGENT_BUILDDIRECTORY=/tmp
 # Functions
 ############################################################
 
-function flux_create_namespace {
+function create_admin_namespace {
     if [[ $(kubectl get ns | grep admin) ]]; then
         echo "already exists - continuing"
     else
@@ -51,8 +51,12 @@ EOF
 # -----------------------------------------------------------
 
     ./kustomize build ${TMP_DIR}/admin |  kubectl apply -f -
-    # workaround 'unable to recognize "STDIN": no matches for kind "AzurePodIdentityException" in version "aadpodidentity.k8s.io/v1"'
-    sleep 1
+    
+    CRDS="azureassignedidentities.aadpodidentity.k8s.io azureidentitybindings.aadpodidentity.k8s.io azureidentities.aadpodidentity.k8s.io azurepodidentityexceptions.aadpodidentity.k8s.io"
+    for crd in $(echo $CRDS); do
+        kubectl -n flux-system wait --for condition=established --timeout=60s "customresourcedefinition.apiextensions.k8s.io/$crd"
+    done
+    
     kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/k8s/namespaces/admin/aad-pod-identity/mic-exception.yaml
     kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/k8s/namespaces/kube-system/aad-pod-identity/mic-exception.yaml
 
@@ -113,18 +117,7 @@ function flux_v2_pod_identity_sops_setup {
     else
         #Install kustomize
         curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
-    fi
-
-# -----------------------------------------------------------
-
-    ./kustomize build ${TMP_DIR}/admin |  kubectl apply -f -
-    # workaround 'unable to recognize "STDIN": no matches for kind "AzurePodIdentity" in version "aadpodidentity.k8s.io/v1"'
-    sleep 1
-    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/toffee/identity/toffee-azure-identity.yaml
-    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/kube-system/aad-pod-identity/mic-exception.yaml
-    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/kube-system/aad-pod-identity/mic-exception.yaml
-
-    rm -rf ${TMP_DIR}
+    fi 
 }
 
 function flux_v2_ssh_git_key {
@@ -197,6 +190,7 @@ FLUX_V2_CLUSTERS=( 'ptl' 'sbox' 'dev' )
 if [[ " ${FLUX_V2_CLUSTERS[*]} " =~ " ${ENVIRONMENT} " ]]; then
     TMP_DIR=/tmp/flux/${ENVIRONMENT}/${CLUSTER_NAME}
     mkdir -p $TMP_DIR/{gotk,flux-config}
+    create_admin_namespace
     flux_v2_pod_identity_sops_setup
     flux_v2_ssh_git_key
     flux_v2_installation
@@ -205,7 +199,7 @@ fi
 FLUX_V1_CLUSTERS=( 'dev' 'demo' 'ithc' 'stg' 'test' 'prod' 'ptlsbox' 'ptl')
 
 if [[ " ${FLUX_V1_CLUSTERS[*]} " =~ " ${ENVIRONMENT} " ]]; then
-    flux_create_namespace
+    create_admin_namespace
     pod_identity_components
     pod_identity_flux_sop_setup
     # give a bit of time for identity to sync so that flux start's correctly first time
