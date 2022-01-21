@@ -118,10 +118,11 @@ function flux_v2_pod_identity_sops_setup {
 # -----------------------------------------------------------
 
     ./kustomize build ${TMP_DIR}/admin |  kubectl apply -f -
-    # workaround 'unable to recognize "STDIN": no matches for kind "AzurePodIdentityException" in version "aadpodidentity.k8s.io/v1"'
+    # workaround 'unable to recognize "STDIN": no matches for kind "AzurePodIdentity" in version "aadpodidentity.k8s.io/v1"'
     sleep 1
-    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/k8s/namespaces/admin/aad-pod-identity/mic-exception.yaml
-    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/k8s/namespaces/kube-system/aad-pod-identity/mic-exception.yaml
+    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/toffee/identity/toffee-azure-identity.yaml
+    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/kube-system/aad-pod-identity/mic-exception.yaml
+    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/kube-system/aad-pod-identity/mic-exception.yaml
 
     rm -rf ${TMP_DIR}
 }
