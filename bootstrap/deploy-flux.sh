@@ -113,7 +113,17 @@ function flux_v2_pod_identity_sops_setup {
     else
         #Install kustomize
         curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
-    fi 
+    fi
+
+# -----------------------------------------------------------
+
+    ./kustomize build ${TMP_DIR}/admin |  kubectl apply -f -
+    # workaround 'unable to recognize "STDIN": no matches for kind "AzurePodIdentityException" in version "aadpodidentity.k8s.io/v1"'
+    sleep 1
+    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/k8s/namespaces/admin/aad-pod-identity/mic-exception.yaml
+    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/k8s/namespaces/kube-system/aad-pod-identity/mic-exception.yaml
+
+    rm -rf ${TMP_DIR}
 }
 
 function flux_v2_ssh_git_key {
