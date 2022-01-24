@@ -60,7 +60,6 @@ EOF
     kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/k8s/namespaces/admin/aad-pod-identity/mic-exception.yaml
     kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/k8s/namespaces/kube-system/aad-pod-identity/mic-exception.yaml
 
-    rm -rf ${TMP_DIR}
 }
 
 function pod_identity_flux_sop_setup {
@@ -118,6 +117,8 @@ function flux_v2_pod_identity_sops_setup {
         #Install kustomize
         curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
     fi 
+
+    rm -rf ${TMP_DIR}
 }
 
 function flux_v2_ssh_git_key {
