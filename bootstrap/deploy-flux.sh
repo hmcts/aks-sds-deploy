@@ -191,6 +191,7 @@ if [[ " ${FLUX_V2_CLUSTERS[*]} " =~ " ${ENVIRONMENT} " ]]; then
     TMP_DIR=/tmp/flux/${ENVIRONMENT}/${CLUSTER_NAME}
     mkdir -p $TMP_DIR/{gotk,flux-config}
     create_admin_namespace
+    pod_identity_components
     flux_v2_pod_identity_sops_setup
     flux_v2_ssh_git_key
     flux_v2_installation
