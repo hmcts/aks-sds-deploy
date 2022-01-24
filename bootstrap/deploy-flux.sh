@@ -68,6 +68,8 @@ function pod_identity_flux_sop_setup {
     sed -e 's@MI_RESOURCE_ID@'"$(az identity show --resource-group 'genesis-rg' --name aks-${ENVIRONMENT}-mi --query 'id' | sed 's/"//g')"'@' | \
     sed -e 's@MI_CLIENTID@'"$(az identity show --resource-group 'genesis-rg' --name aks-${ENVIRONMENT}-mi --query 'clientId' | sed 's/"//g')"'@' | \
     kubectl apply -f -
+    
+    rm -rf ${TMP_DIR}
 }
 
 function helm_add_repo {
