@@ -24,8 +24,6 @@ function create_admin_namespace {
 
 function pod_identity_components {
     echo "Deploying AAD Pod Identity"
-    TMP_DIR=$AGENT_BUILDDIRECTORY/aad-pod-identity
-    mkdir -p $TMP_DIR/admin
 
     if [ -f ./kustomize ]; then
         echo "Kustomize installed"
@@ -201,6 +199,8 @@ fi
 FLUX_V1_CLUSTERS=( 'dev' 'demo' 'ithc' 'stg' 'test' 'prod' 'ptlsbox' 'ptl')
 
 if [[ " ${FLUX_V1_CLUSTERS[*]} " =~ " ${ENVIRONMENT} " ]]; then
+    TMP_DIR=$AGENT_BUILDDIRECTORY/aad-pod-identity
+    mkdir -p $TMP_DIR/admin
     create_admin_namespace
     pod_identity_components
     pod_identity_flux_sop_setup
