@@ -24,6 +24,7 @@ function create_admin_namespace {
 
 function pod_identity_components {
     echo "Deploying AAD Pod Identity"
+    mkdir -p $TMP_DIR/admin
 
     if [ -f ./kustomize ]; then
         echo "Kustomize installed"
