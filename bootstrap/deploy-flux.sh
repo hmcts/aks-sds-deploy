@@ -193,7 +193,6 @@ if [[ " ${FLUX_V2_CLUSTERS[*]} " =~ " ${ENVIRONMENT} " ]]; then
     mkdir -p $TMP_DIR/{gotk,flux-config}
     create_admin_namespace
     pod_identity_components
-    rm -rf ${TMP_DIR}
     flux_v2_pod_identity_sops_setup
     flux_v2_ssh_git_key
     flux_v2_installation
@@ -204,7 +203,6 @@ FLUX_V1_CLUSTERS=( 'dev' 'demo' 'ithc' 'stg' 'test' 'prod' 'ptlsbox' 'ptl')
 if [[ " ${FLUX_V1_CLUSTERS[*]} " =~ " ${ENVIRONMENT} " ]]; then
     create_admin_namespace
     pod_identity_components
-    rm -rf ${TMP_DIR}
     pod_identity_flux_sop_setup
     # give a bit of time for identity to sync so that flux start's correctly first time
     sleep 60
@@ -218,3 +216,5 @@ if [[ " ${FLUX_V1_CLUSTERS[*]} " =~ " ${ENVIRONMENT} " ]]; then
     flux_helm_operator_install
     echo "**** helm operator is now installed ****"
 fi
+
+rm -rf ${TMP_DIR}
