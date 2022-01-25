@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-set -e
+set -ex
 
 ############################################################
 PROJECT="${1}"
@@ -107,6 +107,7 @@ function flux_helm_operator_install {
 
 function flux_v2_pod_identity_sops_setup {
     echo "Creating Pod Identity"
+    TMP_DIR=/tmp/flux/${ENVIRONMENT}/${CLUSTER_NAME}
     cat ../kubernetes/charts/aad-pod-identities/aks-sops-role.yaml | \
     sed -e 's@MI_RESOURCE_ID@'"$(az identity show --resource-group 'genesis-rg' --name aks-${ENVIRONMENT}-mi --query 'id' | sed 's/"//g')"'@' | \
     sed -e 's@MI_CLIENTID@'"$(az identity show --resource-group 'genesis-rg' --name aks-${ENVIRONMENT}-mi --query 'clientId' | sed 's/"//g')"'@' | \
@@ -189,7 +190,6 @@ EOF
 FLUX_V2_CLUSTERS=( 'ptl' 'sbox' 'dev' )
 
 if [[ " ${FLUX_V2_CLUSTERS[*]} " =~ " ${ENVIRONMENT} " ]]; then
-    TMP_DIR=/tmp/flux/${ENVIRONMENT}/${CLUSTER_NAME}
     mkdir -p $TMP_DIR/{gotk,flux-config}
     create_admin_namespace
     pod_identity_components
