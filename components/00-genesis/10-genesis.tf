@@ -1,5 +1,5 @@
 module "genesis" {
-  source           = "git::https://github.com/hmcts/aks-module-genesis.git?ref=DTSPO-6478_public_ips"
+  source           = "git::https://github.com/hmcts/aks-module-genesis.git?ref=master"
   environment      = var.environment
   project          = var.project
   tags             = module.ctags.common_tags
