@@ -21,6 +21,7 @@ resource "azurerm_role_assignment" "Reader" {
 }
 
 resource "azurerm_role_assignment" "public_ip_write" {
+  count                = var.environment == "demo" ? 1 : 0
   principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id
   role_definition_name = "Network Contributor"
   scope                = data.azurerm_resource_group.genesis_rg.name
