@@ -53,7 +53,7 @@ steps:
       terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: '$(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}'
       environmentServiceName: $(serviceConnection)
-      commandOptions: '-out=tfplan-${{ parameters.project }}-${{ parameters.stack }}-$(env) -var subscription_id=$(ARM_SUBSCRIPTION_ID) -var environment=$(env) -var builtFrom=${{ parameters.builtFrom }}  -var product=${{ parameters.product }} -var-file $(System.DefaultWorkingDirectory)/environments/${{ parameters.stack }}/$(env).tfvars'
+      commandOptions: '-out=tfplan-${{ parameters.project }}-${{ parameters.stack }}-$(env) -var subscription_id=$(ARM_SUBSCRIPTION_ID) -var environment=$(env) -var builtFrom=${{ parameters.builtFrom }}  -var product=${{ parameters.product }} -var project=$(project) -var-file $(System.DefaultWorkingDirectory)/environments/${{ parameters.stack }}/$(env).tfvars'
 
   - task: TerraformCLI@0
     displayName: Terraform apply
