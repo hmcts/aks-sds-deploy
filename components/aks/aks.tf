@@ -110,7 +110,7 @@ data "azurerm_resource_group" "sds_sbox_acr" {
   provider = azurerm.sds_sbox_acr
   name     = "sds-acr-rg"
 
-  count = var.environment == "sbox" ? 1 : 0
+  count = var.environment == "dev" ? 1 : 0
 }
 
 resource "azurerm_role_assignment" "sbox_registry_acrpull" {
@@ -123,13 +123,14 @@ resource "azurerm_role_assignment" "sbox_registry_acrpull" {
 
 
 data "azurerm_resource_group" "mi_stg_rg" {
-  count    = var.environment == "dev" ? 1 : 0
   provider = azurerm.dts-ss-stg
   name     = "managed-identities-stg-rg"
+
+  count    = var.environment == "dev" ? 1 : 0
 }
 
 resource "azurerm_role_assignment" "dev_to_stg" {
-  count                = var.environment == "dev" ? var.cluster_count : 0
+  count                = local.is_dev ? var.cluster_count : 0
   provider             = azurerm.dts-ss-stg
   role_definition_name = "Managed Identity Operator"
   principal_id         = module.kubernetes[count.index].kubelet_object_id
