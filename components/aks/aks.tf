@@ -110,7 +110,7 @@ data "azurerm_resource_group" "sds_sbox_acr" {
   provider = azurerm.sds_sbox_acr
   name     = "sds-acr-rg"
 
-  count = var.environment == "dev" ? 1 : 0
+  count = local.is_sbox ? 1 : 0
 }
 
 resource "azurerm_role_assignment" "sbox_registry_acrpull" {
@@ -126,7 +126,7 @@ data "azurerm_resource_group" "mi_stg_rg" {
   provider = azurerm.dts-ss-stg
   name     = "managed-identities-stg-rg"
 
-  count    = var.environment == "dev" ? 1 : 0
+  count    = local.is_dev ? 1 : 0
 }
 
 resource "azurerm_role_assignment" "dev_to_stg" {
