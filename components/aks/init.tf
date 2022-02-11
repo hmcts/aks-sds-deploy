@@ -30,7 +30,7 @@ locals {
     }
   }
   is_sbox = var.environment == "sbox" ? true : false
-  is_dev  = var.environment == "dev" ? true : false
+  is_dev  = var.environment == "dev" || var.environment == "test"  ? true : false
 }
 
 provider "azurerm" {
