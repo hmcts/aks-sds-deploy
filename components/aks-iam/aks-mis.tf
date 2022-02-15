@@ -2,7 +2,7 @@ data "azurerm_resource_group" "mi_stg_rg" {
   provider = azurerm.dts-ss-stg
   name     = "managed-identities-stg-rg"
 
-  count    = local.is_dev ? 1 : 0
+  # count    = local.is_dev ? 1 : 0
 }
 
 resource "azurerm_role_assignment" "dev_to_stg" {
