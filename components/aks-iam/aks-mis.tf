@@ -10,7 +10,7 @@ resource "azurerm_role_assignment" "dev_to_stg" {
   provider             = azurerm.dts-ss-stg
   role_definition_name = "Managed Identity Operator"
   principal_id         = data.azurerm_kubernetes_cluster.kubernetes["${count.index}"].kubelet_identity[0].object_id
-  scope                = data.azurerm_resource_group.mi_stg_rg.id
+  scope                = data.azurerm_resource_group.mi_stg_rg[0].id
 }
 
 data "azurerm_kubernetes_cluster" "kubernetes" {
