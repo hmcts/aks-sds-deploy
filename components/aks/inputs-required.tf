@@ -30,3 +30,9 @@ variable "cluster_count" {}
 variable "availability_zones" {
   type = list(any)
 }
+
+variable "clusters" {
+  type        = list(string)
+  description = "List of clusters to manage e.g [\"00\", \"01\"] "
+  default     = []
+}
