@@ -123,7 +123,7 @@ resource "azurerm_role_assignment" "sbox_registry_acrpull" {
 
 
 data "azurerm_resource_group" "mi_stg_rg" {
-  count = local.is_dev ? 0 : 0
+  count = local.is_dev ? 1 : 0
 
   provider = azurerm.dts-ss-stg
   name     = "managed-identities-stg-rg"
