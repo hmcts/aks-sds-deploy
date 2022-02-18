@@ -123,16 +123,18 @@ resource "azurerm_role_assignment" "sbox_registry_acrpull" {
 
 
 data "azurerm_resource_group" "mi_stg_rg" {
+  count = local.is_dev ? 1 : 0
+
   provider = azurerm.dts-ss-stg
   name     = "managed-identities-stg-rg"
 
-  count    = local.is_dev ? 1 : 0
 }
 
 resource "azurerm_role_assignment" "dev_to_stg" {
-  count                = local.is_dev ? var.cluster_count : 0
+  for_each = local.is_dev ? toset(var.clusters) : toset([])
+
   provider             = azurerm.dts-ss-stg
   role_definition_name = "Managed Identity Operator"
-  principal_id         = module.kubernetes[count.index].kubelet_object_id
+  principal_id         = module.kubernetes[tonumber(each.key)].kubelet_object_id
   scope                = data.azurerm_resource_group.mi_stg_rg[0].id
 }
