@@ -58,18 +58,34 @@ resource "azurerm_role_assignment" "acme-vault-access" {
 }
 
 
-resource "azurerm_role_assignment" "external-dns-demo" {
-  count = var.environment == "demo" ? 1 : 0
+locals {
+  external_dns = {
+    # Resource Groups to add Reader permissions for external dns to
+    resource_groups = toset([
+      "/subscriptions/ed302caf-ec27-4c64-a05e-85731c3ce90e/resourceGroups/reformMgmtRG",
+      "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg"
+    ])
+    # Demo DNS zones to add "DNS Zone Contributor" premissions for external dns to
+    demo = toset([
+      "/subscriptions/ed302caf-ec27-4c64-a05e-85731c3ce90e/resourceGroups/reformMgmtRG/providers/Microsoft.Network/dnszones/demo.platform.hmcts.net",
+      "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg/providers/Microsoft.Network/privateDnsZones/demo.platform.hmcts.net"
+    ])
+  }
+}
 
-  scope                = "/subscriptions/ed302caf-ec27-4c64-a05e-85731c3ce90e/resourceGroups/reformMgmtRG/providers/Microsoft.Network/dnszones/demo.platform.hmcts.net"
+resource "azurerm_role_assignment" "externaldns-dns-zone-contributor" {
+  for_each = lookup(local.external_dns, var.environment, toset([]))
+
+  scope                = each.value
   role_definition_name = "DNS Zone Contributor"
   principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id
 }
 
-resource "azurerm_role_assignment" "external-dns-private-demo" {
-  count = var.environment == "demo" ? 1 : 0
+resource "azurerm_role_assignment" "externaldns-read-rg" {
+  # Only add the reader role if there are zones configured
+  for_each = lookup(local.external_dns, var.environment, null) != null ? local.external_dns.resource_groups : toset([])
 
-  scope                = "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg/providers/Microsoft.Network/privateDnsZones/demo.platform.hmcts.net"
-  role_definition_name = "DNS Zone Contributor"
+  scope                = each.value
+  role_definition_name = "Reader"
   principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id
 }
