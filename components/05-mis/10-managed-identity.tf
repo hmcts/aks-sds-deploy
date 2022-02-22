@@ -83,7 +83,7 @@ resource "azurerm_role_assignment" "externaldns-dns-zone-contributor" {
 
 resource "azurerm_role_assignment" "externaldns-read-rg" {
   # Only add the reader role if there are zones configured
-  for_each = lookup(local.external_dns, var.environment, null) != null ? local.external_dns.resource_groups : null
+  for_each = lookup(local.external_dns, var.environment, null) != null ? local.external_dns.resource_groups : toset([])
 
   scope                = each.value
   role_definition_name = "Reader"
