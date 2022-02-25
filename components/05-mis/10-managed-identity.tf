@@ -77,7 +77,7 @@ resource "azurerm_role_assignment" "externaldns-dns-zone-contributor" {
   for_each = lookup(local.external_dns, var.environment, toset([]))
 
   scope                = each.value
-  role_definition_name = "DNS Zone Contributor"
+  role_definition_name = contains(regex("^.*/Microsoft.Network/(.*)/.*$", each.value), "privateDnsZones") ? "Private DNS Zone Contributor" : "DNS Zone Contributor"
   principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id
 }
 
