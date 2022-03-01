@@ -185,7 +185,7 @@ EOF
 # End of functions
 ############################################################
 
-FLUX_V2_CLUSTERS=( 'ptl' 'sbox' 'dev' )
+FLUX_V2_CLUSTERS=( 'ptl' 'sbox' 'dev' 'stg' )
 
 if [[ " ${FLUX_V2_CLUSTERS[*]} " =~ " ${ENVIRONMENT} " ]]; then
     TMP_DIR=/tmp/flux/${ENVIRONMENT}/${CLUSTER_NAME}
