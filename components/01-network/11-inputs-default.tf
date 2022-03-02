@@ -15,7 +15,7 @@ variable "private_endpoint_private_dns_zones" {
     "privatelink.postgres.database.azure.com",
     "privatelink.dev.azuresynapse.net",
     "privatelink.sql.azuresynapse.net",
-    "privatelink.redis.windows.net",
+    "privatelink.redis.cache.windows.net",
     "privatelink.service.signalr.net",
   ]
 }
