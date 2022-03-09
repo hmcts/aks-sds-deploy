@@ -4,7 +4,7 @@ set -ex
 ENV=$3
 
 # Set Dynatrace VAULT_NAME & DYNATRACE_INSTANCE to Prod or non-prod values
-VAULT_NAME="ptl"
+VAULT_NAME="dtssharedservices${ENV}kv"
 if [ $ENV = "prod" ]; then
   DYNATRACE_INSTANCE="ebe20728"
 else
