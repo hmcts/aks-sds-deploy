@@ -4,12 +4,11 @@ set -ex
 ENV=$3
 
 # Set Dynatrace VAULT_NAME & DYNATRACE_INSTANCE to Prod or non-prod values
+VAULT_NAME="ptl"
 if [ $ENV = "prod" ]; then
-VAULT_NAME="ptl"
-DYNATRACE_INSTANCE="ebe20728"
+  DYNATRACE_INSTANCE="ebe20728"
 else
-VAULT_NAME="ptl"
-DYNATRACE_INSTANCE="yrk32651"
+  DYNATRACE_INSTANCE="yrk32651"
 fi
 
 DYNATRACE_CLUSTERROLE_BINDING=dynatrace-cluster-role-binding.yaml
@@ -23,11 +22,11 @@ error_exit()
 kubectl apply -f ${DYNATRACE_CLUSTERROLE_BINDING}
 
 if kubectl config current-context; then
- K8S_API_URL=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}')
- CLUSTER_NAME=$(kubectl config view --minify -o jsonpath='{.clusters[0].name}')
- BEARER_TOKEN=$(kubectl get secret "$(kubectl get sa dynatrace-monitoring \
-  -o jsonpath='{.secrets[0].name}' -n monitoring)" -o jsonpath='{.data.token}' \
-  -n monitoring | base64 --decode)
+  K8S_API_URL=$(kubectl config view --minify -o jsonpath='{.clusters[0].cluster.server}')
+  CLUSTER_NAME=$(kubectl config view --minify -o jsonpath='{.clusters[0].name}')
+  BEARER_TOKEN=$(kubectl get secret "$(kubectl get sa dynatrace-monitoring \
+    -o jsonpath='{.secrets[0].name}' -n monitoring)" -o jsonpath='{.data.token}' \
+    -n monitoring | base64 --decode)
 else
   error_exit "context not set!! Aborting."
 fi
