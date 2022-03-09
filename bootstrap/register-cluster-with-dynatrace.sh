@@ -3,7 +3,7 @@
 ENV=$3
 
 if [[ -z "$ENV" ]]; then
-    echo -e "Usage: $0 [environment] \n" 
+    echo -e "Environment not set" 
     exit 1
 fi
 
