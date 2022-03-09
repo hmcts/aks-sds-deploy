@@ -1,7 +1,13 @@
 #!/bin/bash
-set -ex
 
 ENV=$3
+
+if [[ -z "$ENV" ]]; then
+    echo -e "Usage: $0 [environment] \n" 
+    exit 1
+fi
+
+set -ex
 
 # Set Dynatrace VAULT_NAME & DYNATRACE_INSTANCE to Prod or non-prod values
 VAULT_NAME="dtssharedservices${ENV}kv"
