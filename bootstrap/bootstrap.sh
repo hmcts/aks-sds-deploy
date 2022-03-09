@@ -36,6 +36,7 @@ for cluster in ${6}; do
   ./create-sshkeys.sh "$@" || error_exit "ERROR: SSHKey Create Issues"
   ./apply-default-rbac.sh "$@" || error_exit "ERROR: Unable to set k8s RBAC"
   ./deploy-flux.sh "$@" || error_exit "ERROR: Unable to deploy Fluxcd"
+  [[ $3 =~ ^(stg|prod)$ ]] && (./register-cluster-with-dynatrace.sh "$@" || error_exit "ERROR: Unable to register cluster with Dynatrace")
   echo "Cleanup"
   ./cleanup-sshkeys.sh "$@" || error_exit "ERROR: Unable to Cleanup"
   echo "Deployment Complete"
