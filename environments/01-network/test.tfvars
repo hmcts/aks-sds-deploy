@@ -11,6 +11,10 @@ additional_subnets = [
     name           = "vh_private_endpoints"
     address_prefix = "10.141.33.0/25"
   },
+  {
+    name           = "redis",
+    address_prefix = "10.141.34.0/25"
+  },
 ]
 
 private_dns_subscription = "1baf5470-1c3e-40d3-a6f7-74bfbce4b348"
