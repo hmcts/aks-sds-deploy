@@ -20,7 +20,7 @@ additional_subnets = [
     address_prefix = "10.140.34.0/25"
   },
   {
-    name           = "private_endpoints"
+    name           = "private-endpoints"
     address_prefix = "10.140.34.128/25"
   }
 ]
