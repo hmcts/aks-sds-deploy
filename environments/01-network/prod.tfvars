@@ -12,6 +12,10 @@ additional_subnets = [
     address_prefix = "10.144.33.0/25"
   },
   {
+    name           = "api-management"
+    address_prefix = "10.144.33.128/25"
+  },
+  {
     name           = "redis",
     address_prefix = "10.144.34.0/25"
   },
