@@ -1,5 +1,5 @@
 module "network" {
-  source = "git::https://github.com/hmcts/aks-module-network.git?ref=dtspo7364"
+  source = "git::https://github.com/hmcts/aks-module-network.git?ref=master"
 
   resource_group_name = local.network_resource_group_name
 
