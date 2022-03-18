@@ -75,5 +75,20 @@ additional_routes = [
     address_prefix         = "10.24.254.130/32"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.8.36"
+  },
+  {
+    name                   = "pet_stg"
+    address_prefix         = "192.170.0.0/16"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.8.36"
+  }
+]
+
+redis_subnet_routes = [
+  {
+    name                   = "pet_stg"
+    address_prefix         = "192.170.0.0/16"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.8.36"
   }
 ]
