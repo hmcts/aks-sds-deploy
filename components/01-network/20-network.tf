@@ -1,5 +1,5 @@
 module "network" {
-  source = "git::https://github.com/hmcts/aks-module-network.git?ref=master"
+  source = "git::https://github.com/hmcts/aks-module-network.git?ref=dtspo7364"
 
   resource_group_name = local.network_resource_group_name
 
@@ -19,7 +19,6 @@ module "network" {
   application_gateway_routes             = var.application_gateway_routes
   iaas_subnet_cidr_blocks                = var.iaas_subnet_cidr_blocks
   additional_subnets                     = var.additional_subnets
-  redis_subnet_routes                    = var.redis_subnet_routes
   tags                                   = module.ctags.common_tags
 }
 

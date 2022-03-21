@@ -10,14 +10,24 @@ additional_subnets = [
   {
     name           = "vh_private_endpoints"
     address_prefix = "10.148.33.0/25"
+    routes         = []
   },
   {
     name           = "api-management"
     address_prefix = "10.148.33.128/25"
+    routes         = []
   },
   {
     name           = "redis",
     address_prefix = "10.148.34.0/25"
+    routes = [
+      {
+        name                   = "pet_stg"
+        address_prefix         = "192.170.0.0/16"
+        next_hop_type          = "VirtualAppliance"
+        next_hop_in_ip_address = "10.11.8.36"
+      },
+    ]
   },
 ]
 
@@ -76,15 +86,6 @@ additional_routes = [
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.8.36"
   },
-  {
-    name                   = "pet_stg"
-    address_prefix         = "192.170.0.0/16"
-    next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "10.11.8.36"
-  }
-]
-
-redis_subnet_routes = [
   {
     name                   = "pet_stg"
     address_prefix         = "192.170.0.0/16"

@@ -40,8 +40,3 @@ variable "application_gateway_routes" {
 #   type = map(string)
 #   default = {}
 # }
-
-
-variable "redis_subnet_routes" {
-  default = []
-}
