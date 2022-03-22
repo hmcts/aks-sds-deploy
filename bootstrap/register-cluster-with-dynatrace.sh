@@ -83,7 +83,9 @@ if [ "${status}" = "400" ]; then
   error_exit "Payload validation failed!! Aborting."
 else
   echo "Initiating Dynatrace registration.."
+  # `brew install curl` on macOS if you get errors with --fail-with-body, current version there is quite old
   curl --request POST \
+   --fail-with-body  \
    --url "https://$DYNATRACE_INSTANCE.live.dynatrace.com/api/config/v1/kubernetes/credentials" \
    --data "$(generate_kubernetes_credentials)" \
    --header 'Content-type: application/json' \
