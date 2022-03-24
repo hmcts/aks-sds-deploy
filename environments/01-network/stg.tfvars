@@ -19,6 +19,10 @@ additional_subnets = [
     name           = "redis",
     address_prefix = "10.148.34.0/25"
   },
+  {
+    name           = "private-endpoints"
+    address_prefix = "10.148.34.128/20"
+  },
 ]
 
 
