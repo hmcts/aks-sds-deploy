@@ -18,7 +18,11 @@ additional_subnets = [
   {
     name           = "redis",
     address_prefix = "10.51.98.0/25"
-  }
+  },
+  {
+    name           = "private-endpoints"
+    address_prefix = "10.51.98.128/22"
+  },
 ]
 
 private_dns_subscription = "1baf5470-1c3e-40d3-a6f7-74bfbce4b348"

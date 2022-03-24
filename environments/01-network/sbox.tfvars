@@ -21,8 +21,8 @@ additional_subnets = [
   },
   {
     name           = "private-endpoints"
-    address_prefix = "10.140.34.128/25"
-  }
+    address_prefix = "10.140.34.128/22"
+  },
 ]
 
 private_dns_subscription = "1497c3d7-ab6d-4bb7-8a10-b51d03189ee3"
