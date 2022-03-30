@@ -51,7 +51,7 @@ locals {
 
 module "kubernetes" {
   count       = var.cluster_count
-  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=master"
+  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-7029-upgrade-azurerm-provider"
   environment = var.environment
   location    = var.location
 
