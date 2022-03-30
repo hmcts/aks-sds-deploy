@@ -37,17 +37,17 @@ parameters:
   - name: env
     displayName: Environment
     type: string
-    default: "SBOX"
+    default: 'DEMO'
     values:
-      - ITHC
-      - DEV
-      - DEMO
-      - SBOX
-      - PTLSBOX
-      - TEST
-      - STG
-      - PTL
-      - PROD
+    - ITHC
+    - DEV
+    - DEMO
+#     - SBOX # Removing until https://github.com/hmcts/aks-sds-deploy/pull/159 is done
+    - PTLSBOX
+    - TEST
+    - STG
+    - PTL
+    - PROD
 
 variables:
   - name: tfversion
