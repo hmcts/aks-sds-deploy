@@ -37,12 +37,12 @@ parameters:
   - name: env
     displayName: Environment
     type: string
-    default: 'DEMO'
+    default: 'SBOX'
     values:
     - ITHC
     - DEV
     - DEMO
-#     - SBOX # Removing until https://github.com/hmcts/aks-sds-deploy/pull/159 is done
+    - SBOX
     - PTLSBOX
     - TEST
     - STG
