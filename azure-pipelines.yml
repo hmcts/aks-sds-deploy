@@ -37,12 +37,12 @@ parameters:
   - name: env
     displayName: Environment
     type: string
-    default: 'SBOX'
+    default: 'DEMO'
     values:
     - ITHC
     - DEV
     - DEMO
-    - SBOX
+#     - SBOX
     - PTLSBOX
     - TEST
     - STG
