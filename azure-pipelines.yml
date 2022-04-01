@@ -37,11 +37,11 @@ parameters:
   - name: env
     displayName: Environment
     type: string
-    default: 'ITHC'
+    default: 'TEST'
     values:
-    - ITHC
-    - DEV
-    - DEMO
+#     - ITHC
+#     - DEV
+#     - DEMO
 #     - SBOX # DTSPO-7029
     - PTLSBOX
     - TEST
