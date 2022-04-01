@@ -1,5 +1,4 @@
 resource "azurerm_resource_group" "kubernetes_resource_group" {
-  # count    = var.cluster_count
   for_each = toset(var.clusters)
   location = var.location
 
@@ -51,7 +50,6 @@ locals {
 
 
 module "kubernetes" {
-  # count       = var.cluster_count
   for_each    = toset(var.clusters)
   source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-7029-upgrade-azurerm-provider"
   environment = var.environment
