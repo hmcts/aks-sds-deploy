@@ -42,9 +42,9 @@ parameters:
       - ITHC
       - DEV
       - DEMO
-      - SBOX # DTSPO-7029
-    # - PTLSBOX
-    # - TEST
+      - SBOX
+      - PTLSBOX
+      - TEST
     # - STG
     # - PTL
     # - PROD
