@@ -37,7 +37,7 @@ parameters:
   - name: env
     displayName: Environment
     type: string
-    default: 'TEST'
+    default: 'PTL'
     values:
 #     - ITHC # DTSPO-7029
 #     - DEV # DTSPO-7029
