@@ -39,12 +39,12 @@ parameters:
     type: string
     default: 'TEST'
     values:
-#     - ITHC
-#     - DEV
-#     - DEMO
+#     - ITHC # DTSPO-7029
+#     - DEV # DTSPO-7029
+#     - DEMO # DTSPO-7029
 #     - SBOX # DTSPO-7029
-    - PTLSBOX
-    - TEST
+#     - PTLSBOX # DTSPO-7029
+#     - TEST # DTSPO-7029
     - STG
     - PTL
     - PROD
