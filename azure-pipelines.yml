@@ -45,9 +45,9 @@ parameters:
       - SBOX
       - PTLSBOX
       - TEST
-    # - STG
-    # - PTL
-    # - PROD
+      - STG
+      - PTL
+      - PROD
 
 variables:
   - name: tfversion
