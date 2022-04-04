@@ -1,11 +1,11 @@
 resource "azurerm_resource_group" "kubernetes_resource_group" {
-  count    = var.cluster_count
+  for_each = toset(var.clusters)
   location = var.location
 
   name = format("%s-%s-%s-rg",
     var.project,
     var.environment,
-    "0${count.index}"
+    each.value
   )
   tags = module.ctags.common_tags
 }
@@ -50,7 +50,7 @@ locals {
 
 
 module "kubernetes" {
-  count       = var.cluster_count
+  for_each    = toset(var.clusters)
   source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-7029-upgrade-azurerm-provider"
   environment = var.environment
   location    = var.location
@@ -62,13 +62,13 @@ module "kubernetes" {
     azurerm.global_acr    = azurerm.global_acr
   }
 
-  resource_group_name = azurerm_resource_group.kubernetes_resource_group[count.index].name
+  resource_group_name = azurerm_resource_group.kubernetes_resource_group[each.value].name
 
   network_name                = local.network_name
   network_shortname           = local.network_shortname
   network_resource_group_name = local.network_resource_group_name
 
-  cluster_number    = "0${count.index}"
+  cluster_number    = each.value
   service_shortname = var.service_shortname
   project           = var.project
 
@@ -114,10 +114,10 @@ data "azurerm_resource_group" "sds_sbox_acr" {
 }
 
 resource "azurerm_role_assignment" "sbox_registry_acrpull" {
-  count                = local.is_sbox ? var.cluster_count : 0
+  for_each = local.is_sbox ? toset(var.clusters) : toset([])
   provider             = azurerm.sds_sbox_acr
   role_definition_name = "AcrPull"
-  principal_id         = module.kubernetes[count.index].kubelet_object_id
+  principal_id         = module.kubernetes[each.value].kubelet_object_id
   scope                = data.azurerm_resource_group.sds_sbox_acr[0].id
 }
 
@@ -135,6 +135,7 @@ resource "azurerm_role_assignment" "dev_to_stg" {
 
   provider             = azurerm.dts-ss-stg
   role_definition_name = "Managed Identity Operator"
-  principal_id         = module.kubernetes[tonumber(each.key)].kubelet_object_id
+  principal_id         = module.kubernetes[each.key].kubelet_object_id
   scope                = data.azurerm_resource_group.mi_stg_rg[0].id
 }
+

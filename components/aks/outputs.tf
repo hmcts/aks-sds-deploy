@@ -1,4 +1,4 @@
 output "clusters" {
-  value     = join(" ", module.kubernetes[*].cluster)
+  value = join(" ", flatten([for cluster in module.kubernetes : cluster[*].cluster]))
   sensitive = false
 }
