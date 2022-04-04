@@ -115,7 +115,6 @@ data "azurerm_resource_group" "sds_sbox_acr" {
 
 resource "azurerm_role_assignment" "sbox_registry_acrpull" {
   for_each = local.is_sbox ? toset(var.clusters) : toset([])
-  # count                = local.is_sbox ? var.cluster_count : 0
   provider             = azurerm.sds_sbox_acr
   role_definition_name = "AcrPull"
   principal_id         = module.kubernetes[each.value].kubelet_object_id
