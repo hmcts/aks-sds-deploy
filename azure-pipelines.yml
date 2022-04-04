@@ -37,7 +37,7 @@ parameters:
   - name: env
     displayName: Environment
     type: string
-    default: 'PTL'
+    default: 'PROD'
     values:
 #     - ITHC # DTSPO-7029
 #     - DEV # DTSPO-7029
@@ -45,8 +45,8 @@ parameters:
 #     - SBOX # DTSPO-7029
 #     - PTLSBOX # DTSPO-7029
 #     - TEST # DTSPO-7029
-    - STG
-    - PTL
+#     - STG # DTSPO-7029
+#     - PTL # DTSPO-7029
     - PROD
 
 variables:
