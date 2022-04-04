@@ -37,17 +37,18 @@ parameters:
   - name: env
     displayName: Environment
     type: string
-    default: 'PTL'
+    default: ''
     values:
-#     - ITHC # DTSPO-7029
-#     - DEV # DTSPO-7029
-#     - DEMO # DTSPO-7029
-#     - SBOX # DTSPO-7029
-#     - PTLSBOX # DTSPO-7029
-#     - TEST # DTSPO-7029
-    - STG
-    - PTL
-    - PROD
+# DTSPO-7029
+#     - ITHC 
+#     - DEV
+#     - DEMO
+#     - SBOX
+#     - PTLSBOX
+#     - TEST
+#     - STG
+#     - PTL
+#     - PROD
 
 variables:
   - name: tfversion
