@@ -15,7 +15,6 @@ parameters:
     values:
       - Plan
       - Apply
-      - Destroy
 
   - name: cluster
     displayName: Cluster
