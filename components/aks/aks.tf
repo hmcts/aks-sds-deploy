@@ -51,7 +51,7 @@ locals {
 
 module "kubernetes" {
   for_each    = toset(var.clusters)
-  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-7031"
+  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-7029-upgrade-azurerm-provider"
   environment = var.environment
   location    = var.location
   kubelet_uami_enabled = true
@@ -122,11 +122,4 @@ resource "azurerm_role_assignment" "dev_to_stg" {
   role_definition_name = "Managed Identity Operator"
   principal_id         = module.kubernetes[each.key].kubelet_object_id
   scope                = data.azurerm_resource_group.mi_stg_rg[0].id
-}
-
-data "azurerm_resource_group" "sds_sbox_acr" {
-  provider = azurerm.sds_sbox_acr
-  name     = "sds-acr-rg"
-
-  count = local.is_sbox ? 1 : 0
 }
