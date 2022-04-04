@@ -124,3 +124,9 @@ resource "azurerm_role_assignment" "dev_to_stg" {
   scope                = data.azurerm_resource_group.mi_stg_rg[0].id
 }
 
+data "azurerm_resource_group" "sds_sbox_acr" {
+  provider = azurerm.sds_sbox_acr
+  name     = "sds-acr-rg"
+
+  count = local.is_sbox ? 1 : 0
+}
