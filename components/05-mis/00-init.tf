@@ -48,3 +48,10 @@ provider "azurerm" {
   features {}
   alias = "sds_sbox_acr"
 }
+
+provider "azurerm" {
+  subscription_id            = local.acr["global"].subscription
+  skip_provider_registration = "true"
+  features {}
+  alias = "global_acr"
+}
