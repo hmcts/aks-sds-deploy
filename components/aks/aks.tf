@@ -51,9 +51,10 @@ locals {
 
 module "kubernetes" {
   for_each    = toset(var.clusters)
-  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-7029-upgrade-azurerm-provider"
+  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-7031"
   environment = var.environment
   location    = var.location
+  kubelet_uami_enabled = true
 
   providers = {
     azurerm               = azurerm
@@ -103,22 +104,6 @@ module "ctags" {
   environment = var.environment
   product     = var.product
   builtFrom   = var.builtFrom
-}
-
-
-data "azurerm_resource_group" "sds_sbox_acr" {
-  provider = azurerm.sds_sbox_acr
-  name     = "sds-acr-rg"
-
-  count = local.is_sbox ? 1 : 0
-}
-
-resource "azurerm_role_assignment" "sbox_registry_acrpull" {
-  for_each = local.is_sbox ? toset(var.clusters) : toset([])
-  provider             = azurerm.sds_sbox_acr
-  role_definition_name = "AcrPull"
-  principal_id         = module.kubernetes[each.value].kubelet_object_id
-  scope                = data.azurerm_resource_group.sds_sbox_acr[0].id
 }
 
 
