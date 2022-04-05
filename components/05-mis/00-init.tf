@@ -41,3 +41,10 @@ provider "azurerm" {
   features {}
   alias = "log_analytics"
 }
+
+provider "azurerm" {
+  subscription_id            = local.acr["sds_sbox"].subscription
+  skip_provider_registration = "true"
+  features {}
+  alias = "sds_sbox_acr"
+}
