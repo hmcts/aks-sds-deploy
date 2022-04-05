@@ -1,5 +1,5 @@
 resource "azurerm_resource_group" "kubernetes_resource_group" {
-  for_each = toset(var.clusters)
+  for_each = toset([for k, v in var.clusters : k])
   location = var.location
 
   name = format("%s-%s-%s-rg",
@@ -50,7 +50,7 @@ locals {
 
 
 module "kubernetes" {
-  for_each    = toset(var.clusters)
+  for_each    = toset([for k, v in var.clusters : k])
   source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-7029-upgrade-azurerm-provider"
   environment = var.environment
   location    = var.location
@@ -84,7 +84,7 @@ module "kubernetes" {
   kubernetes_cluster_agent_max_count = lookup(var.system_node_pool, "max_nodes", 4)
   kubernetes_cluster_agent_vm_size   = lookup(var.system_node_pool, "vm_size", "Standard_DS3_v2")
 
-  kubernetes_cluster_version            = var.kubernetes_cluster_version
+  kubernetes_cluster_version            = var.clusters[each.value]["kubernetes_version"]
   kubernetes_cluster_agent_os_disk_size = "128"
 
   tags     = module.ctags.common_tags
@@ -114,7 +114,7 @@ data "azurerm_resource_group" "sds_sbox_acr" {
 }
 
 resource "azurerm_role_assignment" "sbox_registry_acrpull" {
-  for_each = local.is_sbox ? toset(var.clusters) : toset([])
+  for_each             = local.is_sbox ? toset([for k, v in var.clusters : k]) : toset([])
   provider             = azurerm.sds_sbox_acr
   role_definition_name = "AcrPull"
   principal_id         = module.kubernetes[each.value].kubelet_object_id
@@ -131,7 +131,7 @@ data "azurerm_resource_group" "mi_stg_rg" {
 }
 
 resource "azurerm_role_assignment" "dev_to_stg" {
-  for_each = local.is_dev ? toset(var.clusters) : toset([])
+  for_each = local.is_dev ? toset([for k, v in var.clusters : k]) : toset([])
 
   provider             = azurerm.dts-ss-stg
   role_definition_name = "Managed Identity Operator"

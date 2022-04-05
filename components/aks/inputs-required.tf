@@ -23,14 +23,21 @@ variable "kubernetes_cluster_agent_vm_size" {
   default = "Standard_DS3_v2"
 }
 
-variable "kubernetes_cluster_version" {}
-
 variable "availability_zones" {
   type = list(any)
 }
 
 variable "clusters" {
-  type        = list(string)
-  description = "List of clusters to manage e.g [\"00\", \"01\"] "
-  default     = []
+  type        = map(map(string))
+  description = <<-EOF
+Map of clusters to manage. Example:
+clusters = {
+  "00" = {
+    kubernetes_version = "1.22.6"
+  },
+  "01" = {
+    kubernetes_version = "1.22.6"
+  }
+}
+EOF
 }
