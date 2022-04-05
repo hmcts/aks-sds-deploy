@@ -7,10 +7,9 @@ resource "azurerm_user_assigned_identity" "Kubelet-MI" {
 }
 
 resource "azurerm_role_assignment" "sbox_registry_acrpull" {
-  name                 = "aks-kubelet-sbox-mi"
   for_each = local.is_sbox ? toset(var.clusters) : toset([])
   provider             = azurerm.sds_sbox_acr
   role_definition_name = "AcrPull"
-  principal_id         = data.azurerm_user_assigned_identity.Kubelet-MI.id
+  principal_id         = azurerm_user_assigned_identity.Kubelet-MI.principal_id
   scope                = data.azurerm_resource_group.sds_sbox_acr[0].id
 }
