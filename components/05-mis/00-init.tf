@@ -7,7 +7,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "3.0.2"
+      version = "2.77.0"
     }
   }
 }
@@ -40,18 +40,4 @@ provider "azurerm" {
   skip_provider_registration = "true"
   features {}
   alias = "log_analytics"
-}
-
-provider "azurerm" {
-  subscription_id            = local.acr["sds_sbox"].subscription
-  skip_provider_registration = "true"
-  features {}
-  alias = "sds_sbox_acr"
-}
-
-provider "azurerm" {
-  subscription_id            = local.acr["global"].subscription
-  skip_provider_registration = "true"
-  features {}
-  alias = "global_acr"
 }

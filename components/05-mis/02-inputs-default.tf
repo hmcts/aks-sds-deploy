@@ -17,9 +17,6 @@ locals {
     sds_sbox = {
       subscription = "a8140a9e-f1b0-481f-a4de-09e2ee23f7ab"
     }
-    global = {
-      subscription = "8999dec3-0104-4a27-94ee-6588559729d1"
-    }
   }
   is_sbox = var.environment == "sbox" ? true : false
 
