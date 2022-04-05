@@ -51,7 +51,7 @@ locals {
 
 module "kubernetes" {
   for_each    = toset(var.clusters)
-  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-7029-upgrade-azurerm-provider"
+  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-7031"
   environment = var.environment
   location    = var.location
   kubelet_uami_enabled = true
