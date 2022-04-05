@@ -1,8 +1,9 @@
-resource "azurerm_role_assignment" "Kubelet-MI" {
+resource "azurerm_user_assigned_identity" "Kubelet-MI" {
   name                 = "aks-kubelet-${var.environment}-mi"
-  principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id
-  role_definition_name = "Managed Identity Operator"
-  scope                = azurerm_user_assigned_identity.sops-mi.id
+
+  resource_group_name = data.azurerm_resource_group.genesis_rg.name
+  location            = data.azurerm_resource_group.genesis_rg.location
+  tags = local.common_tags
 }
 
 resource "azurerm_role_assignment" "sbox_registry_acrpull" {
@@ -10,6 +11,6 @@ resource "azurerm_role_assignment" "sbox_registry_acrpull" {
   for_each = local.is_sbox ? toset(var.clusters) : toset([])
   provider             = azurerm.sds_sbox_acr
   role_definition_name = "AcrPull"
-  principal_id         = data.azurerm_role_assignment.Kubelet-MI.id
+  principal_id         = data.azurerm_user_assigned_identity.Kubelet-MI.id
   scope                = data.azurerm_resource_group.sds_sbox_acr[0].id
 }
