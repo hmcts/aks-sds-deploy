@@ -15,7 +15,6 @@ parameters:
     values:
       - Plan
       - Apply
-      - Destroy
 
   - name: cluster
     displayName: Cluster
@@ -134,7 +133,7 @@ stages:
               product: ${{ variables.product }}
 
   - stage: Aks
-    displayName: "Deploy AKS clusters"
+    displayName: "AKS clusters"
     dependsOn:
       - Managed_Identity
     jobs:
