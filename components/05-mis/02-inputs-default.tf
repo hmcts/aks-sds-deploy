@@ -48,18 +48,6 @@ locals {
   log_analytics_subscription_id = local.log_analytics_workspace[[for x in keys(local.log_analytics_env_mapping) : x if contains(local.log_analytics_env_mapping[x], var.environment)][0]].subscription_id
   resolved_name                 = local.log_analytics_workspace[[for x in keys(local.log_analytics_env_mapping) : x if contains(local.log_analytics_env_mapping[x], var.environment)][0]].name
 
-  network_name = format("%s-%s-vnet",
-  var.project,
-  var.environment
-  )
-  network_shortname = format("%s_%s",
-  var.project,
-  var.service_shortname
-  )
-  network_resource_group_name = format("%s-%s-network-rg",
-  var.project,
-  var.environment
-  )
 }
 
 module "ctags" {
