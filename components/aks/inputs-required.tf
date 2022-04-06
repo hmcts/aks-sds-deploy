@@ -41,5 +41,3 @@ clusters = {
 }
 EOF
 }
-
-variable "client_id" {}
