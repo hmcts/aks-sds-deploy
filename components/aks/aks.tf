@@ -50,11 +50,11 @@ locals {
 
 
 module "kubernetes" {
-  for_each    = toset([for k, v in var.clusters : k])
-  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-7031"
-  environment = var.environment
-  location    = var.location
-  kubelet_uami_enabled = true
+  for_each             = toset([for k, v in var.clusters : k])
+  source               = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-7031"
+  environment          = var.environment
+  location             = var.location
+  kubelet_uami_enabled = false
 
 
   providers = {
