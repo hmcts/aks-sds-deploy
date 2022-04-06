@@ -55,7 +55,7 @@ module "kubernetes" {
   environment = var.environment
   location    = var.location
   kubelet_uami_enabled = true
-  client_id = azurerm_user_assigned_identity.sops-mi.client_id
+  object_id = azurerm_user_assigned_identity.Kubelet-MI.principal_id
 }
 
   providers = {
