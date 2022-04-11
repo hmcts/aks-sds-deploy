@@ -27,10 +27,6 @@ resource "azurerm_role_assignment" "uami_rg_identity_operator" {
   role_definition_name = "Managed Identity Operator"
 }
 
-data "azurerm_resource_group" "node_resource_group" {
-  name = azurerm_kubernetes_cluster.kubernetes_cluster.node_resource_group
-}
-
 resource "azurerm_role_assignment" "node_infrastructure_update_scale_set" {
   principal_id         = azurerm_kubernetes_cluster.kubernetes_cluster.kubelet_identity[0].object_id
   scope                = data.azurerm_resource_group.node_resource_group.id
