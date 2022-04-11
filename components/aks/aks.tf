@@ -54,7 +54,7 @@ module "kubernetes" {
   source               = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-7031"
   environment          = var.environment
   location             = var.location
-  kubelet_uami_enabled = false
+  kubelet_uami_enabled = true
 
 
   providers = {
