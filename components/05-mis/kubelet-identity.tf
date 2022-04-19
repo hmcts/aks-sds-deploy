@@ -11,6 +11,14 @@ data "azurerm_user_assigned_identity" "aks" {
   resource_group_name = data.azurerm_resource_group.genesis_rg.name
 }
 
+data "azurerm_resource_group" "node_resource_group" {
+  name = azurerm_kubernetes_cluster.kubernetes_cluster.node_resource_group
+}
+
+data "azurerm_resource_group" "managed-identity-operator" {
+  name = "managed-identities-${var.environment}-rg"
+}
+
 resource "azurerm_role_assignment" "sbox_registry_acrpull" {
   for_each = local.is_sbox ? toset(["sbox"]) : toset([])
   provider             = azurerm.sds_sbox_acr
@@ -20,19 +28,19 @@ resource "azurerm_role_assignment" "sbox_registry_acrpull" {
 }
 
 resource "azurerm_role_assignment" "genesis_managed_identity_operator" {
-  principal_id         = module.azurerm_kubernetes_cluster.kubernetes_cluster.kubelet_identity[0].object_id
+  principal_id         = module.kubernetes.kubelet_object_id
   scope                = data.azurerm_user_assigned_identity.aks.id
   role_definition_name = "Managed Identity Operator"
 }
 
 resource "azurerm_role_assignment" "uami_rg_identity_operator" {
-  principal_id         = module.azurerm_kubernetes_cluster.kubernetes_cluster.kubelet_identity[0].object_id
+  principal_id         = module.kubernetes.kubelet_object_id
   scope                = data.azurerm_resource_group.managed-identity-operator.id
   role_definition_name = "Managed Identity Operator"
 }
 
 resource "azurerm_role_assignment" "node_infrastructure_update_scale_set" {
-  principal_id         = module.azurerm_kubernetes_cluster.kubernetes_cluster.kubelet_identity[0].object_id
+  principal_id         = module.kubernetes.kubelet_object_id
   scope                = data.azurerm_resource_group.node_resource_group.id
   role_definition_name = "Virtual Machine Contributor"
 }
