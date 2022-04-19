@@ -16,19 +16,19 @@ resource "azurerm_role_assignment" "sbox_registry_acrpull" {
 
 
 resource "azurerm_role_assignment" "genesis_managed_identity_operator" {
-  principal_id         = data.azurerm_kubernetes_cluster.kubernetes_cluster.kubelet_identity[0].object_id
+  principal_id         = azurerm_kubernetes_cluster.kubernetes_cluster.kubelet_identity[0].object_id
   scope                = data.azurerm_user_assigned_identity.aks.id
   role_definition_name = "Managed Identity Operator"
 }
 
 resource "azurerm_role_assignment" "uami_rg_identity_operator" {
-  principal_id         = data.azurerm_kubernetes_cluster.kubernetes_cluster.kubelet_identity[0].object_id
+  principal_id         = azurerm_kubernetes_cluster.kubernetes_cluster.kubelet_identity[0].object_id
   scope                = data.azurerm_resource_group.managed-identity-operator.id
   role_definition_name = "Managed Identity Operator"
 }
 
 resource "azurerm_role_assignment" "node_infrastructure_update_scale_set" {
-  principal_id         = data.azurerm_kubernetes_cluster.kubernetes_cluster.kubelet_identity[0].object_id
+  principal_id         = azurerm_kubernetes_cluster.kubernetes_cluster.kubelet_identity[0].object_id
   scope                = data.azurerm_resource_group.node_resource_group.id
   role_definition_name = "Virtual Machine Contributor"
 }
