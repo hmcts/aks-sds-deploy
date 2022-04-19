@@ -50,13 +50,13 @@ locals {
 
 
 module "kubernetes" {
-  for_each             = toset([for k, v in var.clusters : k])
-  source               = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-7031_move_node_resources"
-  environment          = var.environment
-  location             = var.location
-  
-  kubelet_uami_enabled = true
-  kubelet_enabled = true
+  for_each    = toset([for k, v in var.clusters : k])
+  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-7031_move_node_resources"
+  environment = var.environment
+  location    = var.location
+
+  kubelet_uami_enabled     = true
+  kubelet_identity_enabled = true
 
   providers = {
     azurerm               = azurerm
