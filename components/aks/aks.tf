@@ -99,6 +99,7 @@ module "kubernetes" {
 
   depends_on         = [azurerm_resource_group.disks_resource_group]
   availability_zones = var.availability_zones
+
 }
 
 module "ctags" {
@@ -140,7 +141,7 @@ resource "azurerm_role_assignment" "uami_rg_identity_operator" {
 
 resource "azurerm_role_assignment" "node_infrastructure_update_scale_set" {
   principal_id         = module.kubernetes.kubelet_object_id
-  scope                = data.azurerm_resource_group.node_resource_group.id
+  scope                = module.kubernetes.node_resource_group
   role_definition_name = "Virtual Machine Contributor"
 }
 
@@ -150,9 +151,13 @@ data "azurerm_user_assigned_identity" "aks" {
 }
 
 data "azurerm_resource_group" "node_resource_group" {
-  name = azurerm_kubernetes_cluster.kubernetes_cluster.node_resource_group
+  name = module.kubernetes.node_resource_group
 }
 
 data "azurerm_resource_group" "managed-identity-operator" {
   name = "managed-identities-${var.environment}-rg"
+}
+
+data "azurerm_resource_group" "genesis_rg" {
+  name = "genesis-rg"
 }
