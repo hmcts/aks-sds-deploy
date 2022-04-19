@@ -143,3 +143,16 @@ resource "azurerm_role_assignment" "node_infrastructure_update_scale_set" {
   scope                = data.azurerm_resource_group.node_resource_group.id
   role_definition_name = "Virtual Machine Contributor"
 }
+
+data "azurerm_user_assigned_identity" "aks" {
+  name                = "aks-${var.environment}-mi"
+  resource_group_name = data.azurerm_resource_group.genesis_rg.name
+}
+
+data "azurerm_resource_group" "node_resource_group" {
+  name = azurerm_kubernetes_cluster.kubernetes_cluster.node_resource_group
+}
+
+data "azurerm_resource_group" "managed-identity-operator" {
+  name = "managed-identities-${var.environment}-rg"
+}
