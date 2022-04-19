@@ -54,6 +54,7 @@ module "kubernetes" {
   source               = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-7031_move_node_resources"
   environment          = var.environment
   location             = var.location
+  
   kubelet_uami_enabled = true
   kubelet_enabled = true
 
@@ -123,4 +124,22 @@ resource "azurerm_role_assignment" "dev_to_stg" {
   role_definition_name = "Managed Identity Operator"
   principal_id         = module.kubernetes[each.key].kubelet_object_id
   scope                = data.azurerm_resource_group.mi_stg_rg[0].id
+}
+
+resource "azurerm_role_assignment" "genesis_managed_identity_operator" {
+  principal_id         = module.kubernetes.kubelet_object_id
+  scope                = data.azurerm_user_assigned_identity.aks.id
+  role_definition_name = "Managed Identity Operator"
+}
+
+resource "azurerm_role_assignment" "uami_rg_identity_operator" {
+  principal_id         = module.kubernetes.kubelet_object_id
+  scope                = data.azurerm_resource_group.managed-identity-operator.id
+  role_definition_name = "Managed Identity Operator"
+}
+
+resource "azurerm_role_assignment" "node_infrastructure_update_scale_set" {
+  principal_id         = module.kubernetes.kubelet_object_id
+  scope                = data.azurerm_resource_group.node_resource_group.id
+  role_definition_name = "Virtual Machine Contributor"
 }

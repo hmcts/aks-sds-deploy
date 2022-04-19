@@ -26,21 +26,3 @@ resource "azurerm_role_assignment" "sbox_registry_acrpull" {
   principal_id         = azurerm_user_assigned_identity.kubelet_uami.principal_id
   scope                = data.azurerm_resource_group.sds_sbox_acr[0].id
 }
-
-resource "azurerm_role_assignment" "genesis_managed_identity_operator" {
-  principal_id         = module.kubernetes.kubelet_object_id
-  scope                = data.azurerm_user_assigned_identity.aks.id
-  role_definition_name = "Managed Identity Operator"
-}
-
-resource "azurerm_role_assignment" "uami_rg_identity_operator" {
-  principal_id         = module.kubernetes.kubelet_object_id
-  scope                = data.azurerm_resource_group.managed-identity-operator.id
-  role_definition_name = "Managed Identity Operator"
-}
-
-resource "azurerm_role_assignment" "node_infrastructure_update_scale_set" {
-  principal_id         = module.kubernetes.kubelet_object_id
-  scope                = data.azurerm_resource_group.node_resource_group.id
-  role_definition_name = "Virtual Machine Contributor"
-}
