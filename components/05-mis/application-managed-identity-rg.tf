@@ -5,7 +5,7 @@ resource "azurerm_resource_group" "application-mi" {
 }
 
 resource "azurerm_role_assignment" "uami_rg_identity_operator" {
-  principal_id         = module.kubernetes.kubelet_object_id
+  principal_id         = azurerm_user_assigned_identity.kubelet_uami.principal_id
   scope                = azurerm_resource_group.application-mi.id
   role_definition_name = "Managed Identity Operator"
 }
