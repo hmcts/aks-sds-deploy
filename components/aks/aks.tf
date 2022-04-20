@@ -55,8 +55,7 @@ module "kubernetes" {
   environment = var.environment
   location    = var.location
 
-  kubelet_uami_enabled     = true
-  kubelet_identity_enabled = true
+  kubelet_uami_enabled = true
 
   providers = {
     azurerm               = azurerm

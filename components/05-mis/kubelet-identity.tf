@@ -7,7 +7,7 @@ resource "azurerm_user_assigned_identity" "kubelet_uami" {
 }
 
 resource "azurerm_role_assignment" "sbox_registry_acrpull" {
-  for_each = local.is_sbox ? toset(["sbox"]) : toset([])
+  for_each             = local.is_sbox ? toset(["sbox"]) : toset([])
   provider             = azurerm.sds_sbox_acr
   role_definition_name = "AcrPull"
   principal_id         = azurerm_user_assigned_identity.kubelet_uami.principal_id
