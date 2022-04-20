@@ -126,37 +126,10 @@ resource "azurerm_role_assignment" "dev_to_stg" {
   scope                = data.azurerm_resource_group.mi_stg_rg[0].id
 }
 
-resource "azurerm_role_assignment" "genesis_managed_identity_operator" {
-  principal_id         = module.kubernetes.kubelet_object_id
-  scope                = data.azurerm_user_assigned_identity.aks.id
-  role_definition_name = "Managed Identity Operator"
-}
-
-resource "azurerm_role_assignment" "uami_rg_identity_operator" {
-  principal_id         = module.kubernetes.kubelet_object_id
-  scope                = data.azurerm_resource_group.managed-identity-operator.id
-  role_definition_name = "Managed Identity Operator"
-}
-
 resource "azurerm_role_assignment" "node_infrastructure_update_scale_set" {
-  principal_id         = module.kubernetes.kubelet_object_id
+  for_each = toset([for k, v in var.clusters : k])
+
+  principal_id         = module.kubernetes[each.key].kubelet_object_id
   scope                = module.kubernetes.node_resource_group
   role_definition_name = "Virtual Machine Contributor"
-}
-
-data "azurerm_user_assigned_identity" "aks" {
-  name                = "aks-${var.environment}-mi"
-  resource_group_name = data.azurerm_resource_group.genesis_rg.name
-}
-
-data "azurerm_resource_group" "node_resource_group" {
-  name = module.kubernetes.node_resource_group
-}
-
-data "azurerm_resource_group" "managed-identity-operator" {
-  name = "managed-identities-${var.environment}-rg"
-}
-
-data "azurerm_resource_group" "genesis_rg" {
-  name = "genesis-rg"
 }

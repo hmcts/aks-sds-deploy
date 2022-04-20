@@ -89,3 +89,9 @@ resource "azurerm_role_assignment" "externaldns-read-rg" {
   role_definition_name = "Reader"
   principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id
 }
+
+resource "azurerm_role_assignment" "genesis_managed_identity_operator" {
+  principal_id         = module.kubernetes.kubelet_object_id
+  scope                = data.azurerm_user_assigned_identity.aks.id
+  role_definition_name = "Managed Identity Operator"
+}
