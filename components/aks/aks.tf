@@ -130,6 +130,6 @@ resource "azurerm_role_assignment" "node_infrastructure_update_scale_set" {
   for_each = toset([for k, v in var.clusters : k])
 
   principal_id         = module.kubernetes[each.key].kubelet_object_id
-  scope                = data.azurerm_resource_group.kubernetes_resource_group[each.value].name
+  scope                = azurerm_resource_group.kubernetes_resource_group[each.value].name
   role_definition_name = "Virtual Machine Contributor"
 }
