@@ -125,11 +125,3 @@ resource "azurerm_role_assignment" "dev_to_stg" {
   principal_id         = module.kubernetes[each.key].kubelet_object_id
   scope                = data.azurerm_resource_group.mi_stg_rg[0].id
 }
-
-resource "azurerm_role_assignment" "node_infrastructure_update_scale_set" {
-  for_each = toset([for k, v in var.clusters : k])
-
-  principal_id         = module.kubernetes[each.key].kubelet_object_id
-  scope                = module.kubernetes[each.key].node_resource_group
-  role_definition_name = "Virtual Machine Contributor"
-}
