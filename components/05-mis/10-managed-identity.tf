@@ -91,7 +91,7 @@ resource "azurerm_role_assignment" "externaldns-read-rg" {
 }
 
 resource "azurerm_role_assignment" "genesis_managed_identity_operator" {
-  principal_id         = azurerm_user_assigned_identity.kubelet_uami.principal_id
+  principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id
   scope                = azurerm_user_assigned_identity.kubelet_uami.id
   role_definition_name = "Managed Identity Operator"
 }
