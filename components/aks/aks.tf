@@ -51,7 +51,7 @@ locals {
 
 module "kubernetes" {
   for_each    = toset([for k, v in var.clusters : k])
-  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=uami_perms"
+  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=master"
   environment = var.environment
   location    = var.location
 
