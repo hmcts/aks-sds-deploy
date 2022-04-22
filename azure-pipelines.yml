@@ -150,7 +150,7 @@ stages:
               builtFrom: $(Build.Repository.Name)
               product: ${{ variables.product }}
               ${{ if ne(parameters['cluster'], 'All') }}:
-                targetCommand: '-target azurerm_resource_group.kubernetes_resource_group["\"${{parameters.cluster}}\""] -target module.kubernetes["\"${{parameters.cluster}}\""] -target azurerm_role_assignment.dev_to_stg["\"${{parameters.cluster}}\""] -target data.azurerm_resource_group.mi_stg_rg[0] -target "module.kubernetes["\"${{parameters.cluster}}\""].azurerm_role_assignment.genesis_managed_identity_operator" -target "module.kubernetes["\"${{parameters.cluster}}\""].azurerm_role_assignment.node_infrastructure_update_scale_set" -target "module.kubernetes["\"${{parameters.cluster}}\""].azurerm_role_assignment.uami_rg_identity_operator"'
+                targetCommand: '-target azurerm_resource_group.kubernetes_resource_group["\"${{parameters.cluster}}\""] -target module.kubernetes["\"${{parameters.cluster}}\""] -target azurerm_role_assignment.dev_to_stg["\"${{parameters.cluster}}\""] -target data.azurerm_resource_group.mi_stg_rg[0] -target azurerm_role_assignment.genesis_managed_identity_operator[“\”${{parameters.cluster}}\“”]  -target azurerm_role_assignment.node_infrastructure_update_scale_set[“\”${{parameters.cluster}}\“”]  -target azurerm_role_assignment.uami_rg_identity_operator[“\”${{parameters.cluster}}\“”]'
 
   - stage: BootStrapClusters
     displayName: "BootStrap Clusters"
