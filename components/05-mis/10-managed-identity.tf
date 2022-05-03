@@ -6,6 +6,13 @@ resource "azurerm_user_assigned_identity" "sops-mi" {
   tags = local.common_tags
 }
 
+resource "azurerm_role_assignment" "MI-Operator" {
+  # DTS Bootstrap Principal_id
+  principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id
+  role_definition_name = "Managed Identity Operator"
+  scope                = azurerm_user_assigned_identity.sops-mi.id
+}
+
 resource "azurerm_role_assignment" "Reader" {
   # DTS Bootstrap Principal_id
   principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id
@@ -81,10 +88,4 @@ resource "azurerm_role_assignment" "externaldns-read-rg" {
   scope                = each.value
   role_definition_name = "Reader"
   principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id
-}
-
-resource "azurerm_role_assignment" "genesis_managed_identity_operator" {
-  principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id
-  scope                = azurerm_user_assigned_identity.kubelet_uami.id
-  role_definition_name = "Managed Identity Operator"
 }
