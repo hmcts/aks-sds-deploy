@@ -55,6 +55,8 @@ module "kubernetes" {
   environment = var.environment
   location    = var.location
 
+  kubelet_uami_enabled = true
+
   providers = {
     azurerm               = azurerm
     azurerm.hmcts-control = azurerm.hmcts-control
@@ -96,6 +98,7 @@ module "kubernetes" {
 
   depends_on         = [azurerm_resource_group.disks_resource_group]
   availability_zones = var.availability_zones
+
 }
 
 module "ctags" {
@@ -103,22 +106,6 @@ module "ctags" {
   environment = var.environment
   product     = var.product
   builtFrom   = var.builtFrom
-}
-
-
-data "azurerm_resource_group" "sds_sbox_acr" {
-  provider = azurerm.sds_sbox_acr
-  name     = "sds-acr-rg"
-
-  count = local.is_sbox ? 1 : 0
-}
-
-resource "azurerm_role_assignment" "sbox_registry_acrpull" {
-  for_each             = local.is_sbox ? toset([for k, v in var.clusters : k]) : toset([])
-  provider             = azurerm.sds_sbox_acr
-  role_definition_name = "AcrPull"
-  principal_id         = module.kubernetes[each.value].kubelet_object_id
-  scope                = data.azurerm_resource_group.sds_sbox_acr[0].id
 }
 
 
@@ -138,4 +125,3 @@ resource "azurerm_role_assignment" "dev_to_stg" {
   principal_id         = module.kubernetes[each.key].kubelet_object_id
   scope                = data.azurerm_resource_group.mi_stg_rg[0].id
 }
-

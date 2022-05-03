@@ -14,7 +14,11 @@ locals {
       subscription = "5ca62022-6aa2-4cee-aaa7-e7536c8d566c"
       project      = "sds"
     }
+    sds_sbox = {
+      subscription = "a8140a9e-f1b0-481f-a4de-09e2ee23f7ab"
+    }
   }
+  is_sbox = var.environment == "sbox" ? true : false
 
   common_tags = module.ctags.common_tags
 

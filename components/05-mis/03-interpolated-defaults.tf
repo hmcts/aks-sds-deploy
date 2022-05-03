@@ -10,6 +10,13 @@ data "azurerm_resource_group" "platform-rg" {
   name = "sds-platform-${var.environment}-rg"
 }
 
+data "azurerm_resource_group" "sds_sbox_acr" {
+  provider = azurerm.sds_sbox_acr
+  name     = "sds-acr-rg"
+
+  count = local.is_sbox ? 1 : 0
+}
+
 data "azurerm_key_vault" "genesis_keyvault" {
   name                = contains(["ptlsbox", "ptl"], var.environment) ? "dtssds${replace(var.environment, "-", "")}" : "${lower(replace(data.azurerm_subscription.current.display_name, "-", ""))}kv"
   resource_group_name = data.azurerm_resource_group.genesis_rg.name
