@@ -185,7 +185,7 @@ EOF
 # End of functions
 ############################################################
 
-FLUX_V2_CLUSTERS=( 'ptl' 'sbox' 'dev' 'stg' 'prod' 'ithc' )
+FLUX_V2_CLUSTERS=( 'ptl' 'sbox' 'dev' 'stg' 'prod' 'ithc' 'demo')
 
 if [[ " ${FLUX_V2_CLUSTERS[*]} " =~ " ${ENVIRONMENT} " ]]; then
     TMP_DIR=/tmp/flux/${ENVIRONMENT}/${CLUSTER_NAME}
@@ -197,7 +197,7 @@ if [[ " ${FLUX_V2_CLUSTERS[*]} " =~ " ${ENVIRONMENT} " ]]; then
     flux_v2_installation
 fi
 
-FLUX_V1_CLUSTERS=( 'demo' 'stg' 'test' 'prod' 'ptlsbox' 'ptl')
+FLUX_V1_CLUSTERS=( 'stg' 'test' 'prod' 'ptlsbox' 'ptl')
 
 if [[ " ${FLUX_V1_CLUSTERS[*]} " =~ " ${ENVIRONMENT} " ]]; then
     TMP_DIR=$AGENT_BUILDDIRECTORY/aad-pod-identity
