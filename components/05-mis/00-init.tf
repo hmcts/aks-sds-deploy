@@ -29,7 +29,7 @@ provider "azurerm" {
 // TODO delete after applying MI in all ENVs
 // working around 'Error: Provider configuration not present'
 provider "azurerm" {
-  subscription_id            = local.acr[var.project].subscription
+  subscription_id            = 5ca62022-6aa2-4cee-aaa7-e7536c8d566c
   skip_provider_registration = "true"
   features {}
   alias = "acr"
@@ -43,7 +43,7 @@ provider "azurerm" {
 }
 
 provider "azurerm" {
-  subscription_id            = local.acr["sds_sbox"].subscription
+  subscription_id            = a8140a9e-f1b0-481f-a4de-09e2ee23f7ab
   skip_provider_registration = "true"
   features {}
   alias = "sds_sbox_acr"
