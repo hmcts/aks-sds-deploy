@@ -38,16 +38,15 @@ parameters:
     type: string
     default: "SBOX"
     values:
-      # - ITHC
-      # - DEV
-      # - DEMO
-      # - SBOX
-      # - PTLSBOX
-      # - TEST
-      # - STG
-      # - PTL
+      - ITHC
+      - DEV
+      - DEMO
+      - SBOX
+      - PTLSBOX
+      - TEST
+      - STG
+      - PTL
       - PROD
-      # temporarily removed lower environments to avoid removing the changes made by branch DTSPO-7031, to be re-added once the change request for production is approved.
 
 variables:
   - name: tfversion
