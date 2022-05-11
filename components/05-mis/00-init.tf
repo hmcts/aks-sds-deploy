@@ -42,7 +42,7 @@ provider "azurerm" {
 }
 
 provider "azurerm" {
-  subscription_id            = a8140a9e-f1b0-481f-a4de-09e2ee23f7ab
+  subscription_id            = "a8140a9e-f1b0-481f-a4de-09e2ee23f7ab"
   skip_provider_registration = "true"
   features {}
   alias = "sds_sbox_acr"
