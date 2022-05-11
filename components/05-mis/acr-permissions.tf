@@ -11,7 +11,7 @@ data "azurerm_resource_group" "global_acr" {
 }
 
 resource "azurerm_role_assignment" "global_registry_acrpull" {
-  provider             = azurerm.global_acr
+  provider = azurerm.global_acr
 
   role_definition_name = "AcrPull"
   principal_id         = azurerm_user_assigned_identity.kubelet_uami.principal_id
@@ -20,11 +20,11 @@ resource "azurerm_role_assignment" "global_registry_acrpull" {
 
 data "azurerm_resource_group" "project_acr" {
   provider = azurerm.acr
-  name = "sds-acr-rg"
+  name     = "sds-acr-rg"
 }
 
 resource "azurerm_role_assignment" "project_registry_acrpull" {
-  provider             = azurerm.acr
+  provider = azurerm.acr
 
   role_definition_name = "AcrPull"
   principal_id         = azurerm_user_assigned_identity.kubelet_uami.principal_id
