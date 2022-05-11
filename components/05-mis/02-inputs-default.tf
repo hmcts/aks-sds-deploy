@@ -5,6 +5,7 @@ variable "application_name" {
 variable "location" {
   default = "UK South"
 }
+locals {
 
   is_sbox = var.environment == "sbox" ? true : false
 
@@ -32,7 +33,6 @@ variable "location" {
   }
   log_analytics_subscription_id = local.log_analytics_workspace[[for x in keys(local.log_analytics_env_mapping) : x if contains(local.log_analytics_env_mapping[x], var.environment)][0]].subscription_id
   resolved_name                 = local.log_analytics_workspace[[for x in keys(local.log_analytics_env_mapping) : x if contains(local.log_analytics_env_mapping[x], var.environment)][0]].name
-
 }
 
 module "ctags" {
