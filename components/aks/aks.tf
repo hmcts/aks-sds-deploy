@@ -26,7 +26,7 @@ locals {
     name                = "linux"
     vm_size             = lookup(var.linux_node_pool, "vm_size", "Standard_DS3_v2")
     min_count           = lookup(var.linux_node_pool, "min_nodes", 2)
-    max_count           = lookup(var.linux_node_pool, "max_nodes", 4)
+    max_count           = lookup(var.linux_node_pool, "max_nodes", 10)
     max_pods            = lookup(var.linux_node_pool, "max_pods", 30)
     os_type             = "Linux"
     node_taints         = []
