@@ -24,8 +24,8 @@ additional_subnets = [
     address_prefix = "10.141.36.0/22"
   },
   {
-    name           = "libragob-postgresql"
-    address_prefix = "10.141.40.0/28"
+    name           = "postgresql"
+    address_prefix = "10.141.40.0/25"
   },
 ]
 
