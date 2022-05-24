@@ -23,6 +23,10 @@ additional_subnets = [
     name           = "private-endpoints"
     address_prefix = "10.148.36.0/22"
   },
+  {
+    name           = "libragob-postgresql"
+    address_prefix = "10.148.40.0/28"
+  },
 ]
 
 
