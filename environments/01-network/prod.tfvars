@@ -5,6 +5,7 @@ aks_00_subnet_cidr_blocks              = "10.144.0.0/20"
 aks_01_subnet_cidr_blocks              = "10.144.16.0/20"
 iaas_subnet_cidr_blocks                = "10.144.32.0/25"
 application_gateway_subnet_cidr_blocks = "10.144.32.128/25"
+postgresql_subnet_cidr_blocks          = "10.144.33.0/25"
 
 additional_subnets = [
   {
@@ -22,11 +23,7 @@ additional_subnets = [
   {
     name           = "private-endpoints"
     address_prefix = "10.144.36.0/22"
-  },
-  {
-    name           = "postgresql"
-    address_prefix = "10.144.40.0/25"
-  },
+  }
 ]
 
 private_dns_subscription = "1baf5470-1c3e-40d3-a6f7-74bfbce4b348"
