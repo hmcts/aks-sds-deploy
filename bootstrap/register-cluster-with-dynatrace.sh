@@ -85,6 +85,8 @@ else
   echo "Initiating Dynatrace registration.."
   # TODO switch fail to fail-with-body once ubuntu has greater than curl 7.76.0
   curl --request POST \
+   --retry 5 \
+   --retry-delay 0 \
    --fail  \
    --url "https://$DYNATRACE_INSTANCE.live.dynatrace.com/api/config/v1/kubernetes/credentials" \
    --data "$(generate_kubernetes_credentials)" \
