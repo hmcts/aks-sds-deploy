@@ -28,6 +28,8 @@ variable "iaas_subnet_cidr_blocks" {}
 
 variable "application_gateway_subnet_cidr_blocks" {}
 
+variable "postgresql_subnet_cidr_blocks" {}
+
 variable "application_gateway_routes" {
   default = []
 }
