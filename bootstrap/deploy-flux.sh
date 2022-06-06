@@ -197,7 +197,7 @@ if [[ " ${FLUX_V2_CLUSTERS[*]} " =~ " ${ENVIRONMENT} " ]]; then
     flux_v2_installation
 fi
 
-FLUX_V1_CLUSTERS=( 'ithc' 'stg' 'test' 'prod' 'ptlsbox' 'ptl')
+FLUX_V1_CLUSTERS=( 'ithc' 'stg' 'prod' 'ptlsbox' 'ptl')
 
 if [[ " ${FLUX_V1_CLUSTERS[*]} " =~ " ${ENVIRONMENT} " ]]; then
     TMP_DIR=$AGENT_BUILDDIRECTORY/aad-pod-identity
