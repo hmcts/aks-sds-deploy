@@ -32,15 +32,15 @@ resource "azurerm_key_vault_access_policy" "sops-policy" {
   object_id = azurerm_user_assigned_identity.sops-mi.principal_id
 
   key_permissions = [
-    "get",
-    "encrypt",
-    "decrypt",
-    "list",
+    "Get",
+    "Encrypt",
+    "Decrypt",
+    "List",
   ]
 
   secret_permissions = [
-    "get",
-    "list",
+    "Get",
+    "List",
   ]
 }
 
