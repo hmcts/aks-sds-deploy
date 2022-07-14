@@ -38,6 +38,7 @@ for cluster in ${6}; do
   ./deploy-flux.sh "$@" || error_exit "ERROR: Unable to deploy Fluxcd"
   [[ $3 =~ ^(stg|prod)$ ]] && (./register-cluster-with-dynatrace.sh "$@" || error_exit "ERROR: Unable to register cluster with Dynatrace")
   echo "Cleanup"
+  [[ $3 =~ ^(dev|test|stg|demo|ithc)$ ]] && (./disable-container-insights.sh "$@" || error_exit "ERROR: Unable to disable container application insights")
   ./cleanup-sshkeys.sh "$@" || error_exit "ERROR: Unable to Cleanup"
   echo "Deployment Complete"
 done
