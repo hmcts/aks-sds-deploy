@@ -56,6 +56,7 @@ module "kubernetes" {
   location    = var.location
 
   kubelet_uami_enabled = true
+  oms_agent_enabled    = var.oms_agent_enabled
 
   providers = {
     azurerm               = azurerm
