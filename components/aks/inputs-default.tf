@@ -6,6 +6,10 @@ variable "service_shortname" {
   default = "aks"
 }
 
+variable "oms_agent_enabled" {
+  default = false
+}
+
 variable "ptl_cluster" {
   default = false
 }
