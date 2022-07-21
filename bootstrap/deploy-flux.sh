@@ -43,7 +43,7 @@ commonLabels:
 resources:
   - https://raw.githubusercontent.com/Azure/aad-pod-identity/v1.8.4/deploy/infra/deployment-rbac.yaml
 patchesStrategicMerge:
-  - https://raw.githubusercontent.com/hmcts/sds-flux-config/master/k8s/namespaces/admin/aad-pod-identity/patches/aad-pod-id.yaml
+  - https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/admin/aad-pod-identity/aad-pod-id-patch.yaml
 EOF
 ) > "${TMP_DIR}/admin/kustomization.yaml"
 
@@ -56,9 +56,8 @@ EOF
         kubectl -n flux-system wait --for condition=established --timeout=60s "customresourcedefinition.apiextensions.k8s.io/$crd"
     done
     
-    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/k8s/namespaces/admin/aad-pod-identity/mic-exception.yaml
-    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/k8s/namespaces/kube-system/aad-pod-identity/mic-exception.yaml
-
+    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/admin/aad-pod-identity/mic-exception.yaml
+    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/kube-system/aad-pod-identity/mic-exception.yaml
 }
 
 function pod_identity_flux_sop_setup {
