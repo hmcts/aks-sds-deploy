@@ -6,7 +6,6 @@ ENVIRONMENT="${3}"
 CLUSTER_NAME="${6}"
 AGENT_BUILDDIRECTORY=/tmp
 
-
 ############################################################
 # Functions
 ############################################################
@@ -94,9 +93,7 @@ function flux_v2_ssh_git_key {
 }
 
 function flux_v2_installation {
-
     FLUX_CONFIG_URL=https://raw.githubusercontent.com/hmcts/sds-flux-config/master
-    
 
 # -----------------------------------------------------------
 # Deploy components and CRDs
@@ -145,7 +142,6 @@ EOF
 ############################################################
 # End of functions
 ############################################################
-
 
 TMP_DIR=/tmp/flux/${ENVIRONMENT}/${CLUSTER_NAME}
 mkdir -p "${TMP_DIR}"/{gotk,flux-config}
