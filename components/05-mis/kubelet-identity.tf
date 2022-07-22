@@ -20,3 +20,22 @@ resource "azurerm_role_assignment" "kubelet_uami_genesis" {
   role_definition_name = "Managed Identity Operator"
   scope                = azurerm_user_assigned_identity.sops-mi.id
 }
+
+resource "azurerm_key_vault_access_policy" "kubelet-policy" {
+  key_vault_id = data.azurerm_key_vault.genesis_keyvault.id
+
+  tenant_id = data.azurerm_client_config.current.tenant_id
+  object_id = azurerm_user_assigned_identity.kubelet_uami.principal_id
+
+  key_permissions = [
+    "Get",
+    "Encrypt",
+    "Decrypt",
+    "List",
+  ]
+
+  secret_permissions = [
+    "Get",
+    "List",
+  ]
+}
