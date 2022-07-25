@@ -57,6 +57,7 @@ module "kubernetes" {
 
   kubelet_uami_enabled = true
   oms_agent_enabled    = var.oms_agent_enabled
+  csi_driver_enabled   = tobool(lookup(var.clusters[each.value], "csi_driver_enabled", false))
 
   providers = {
     azurerm               = azurerm
