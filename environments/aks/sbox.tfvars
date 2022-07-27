@@ -3,8 +3,7 @@ clusters = {
     kubernetes_version = "1.22.6"
   },
   "01" = {
-    kubernetes_version  = "1.22.6"
-    csi_driver_enabled  = true
+    kubernetes_version = "1.22.6"
   }
 }
 
