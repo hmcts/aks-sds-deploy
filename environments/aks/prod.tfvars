@@ -1,11 +1,9 @@
 clusters = {
   "00" = {
     kubernetes_version = "1.22.6"
-    csi_driver_enabled = false
   },
   "01" = {
     kubernetes_version = "1.22.6"
-    csi_driver_enabled = false
   }
 }
 kubernetes_cluster_agent_min_count = "4"
