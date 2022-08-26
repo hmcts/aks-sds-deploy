@@ -13,7 +13,7 @@ kubernetes_cluster_agent_max_count = "10"
 
 linux_node_pool = {
   max_pods = 50
-  max_count = 20
+  max_nodes = 20
 }
 
 windows_node_pool = {
