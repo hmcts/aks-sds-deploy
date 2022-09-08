@@ -2,32 +2,10 @@ name: ${{ parameters.Action }} - ${{ parameters.env }}.${{ parameters.cluster }}
 
 # TODO refactor pipeline to do plan by default, for now pls no trigger
 
+trigger: none
 
-trigger:
-  batch: true
-  branches:
-    include:
-    - master
-
-resources:
-  repositories:
-  - repository: cnp-azuredevops-libraries
-    type: github
-    ref: master
-    name: hmcts/cnp-azuredevops-libraries
-    endpoint: 'hmcts'
-
-variables:
-  - name: agentPool
-    value: "ubuntu-latest" 
-  - name: build
-    value: $(Build.BuildNumber)
-  - name: product
-    value: "cft-platform"
-  - name: terraformInitSubscription
-    value: 04d27a32-7a07-48b3-95b8-3c8691e1a263
-  - template: vars/input-variables.yaml@cnp-azuredevops-libraries
-
+pool:
+  vmImage: "ubuntu-latest"
 
 parameters:
   - name: Action
@@ -37,7 +15,6 @@ parameters:
     values:
       - Plan
       - Apply
-      - Destroy 
 
   - name: cluster
     displayName: Cluster
@@ -48,109 +25,35 @@ parameters:
       - "00"
       - "01"
 
-  # - name: location
-  #   displayName: Location
-  #   type: string
-  #   default: "UK South"
-  #   values:
-  #     - "UK South"
-  #     - "UK West"
+  - name: location
+    displayName: Location
+    type: string
+    default: "UK South"
+    values:
+      - "UK South"
+      - "UK West"
 
-  # - name: env
-  #   displayName: Environment
-  #   type: string
-  #   default: "SBOX"
-  #   values:
-  #     - ITHC
-  #     - DEV
-  #     - DEMO
-  #     - SBOX
-  #     - PTLSBOX
-  #     - TEST
-  #     - STG
-  #     - PTL
-  #     - PROD
-      
-  - name: environment_components
-    type: object
-    default:
-    - deployment: demo
-      environment: demo
-      component: demo
-      dependsOn:
-        - Precheck
-
-    - deployment: dev
-      environment: dev
-      component: dev
-      dependsOn:
-        - Precheck
- 
-    - deployment: ithc
-      environment: ithc
-      component: ithc
-      dependsOn:
-        - Precheck  
-       
-    - deployment: prod
-      environment: prod
-      component: prod
-      dependsOn:
-        - Precheck
-
-    - deployment: ptl
-      environment: ptl
-      component: sandbox
-      dependsOn:
-        - Precheck
-          
-    - deployment: ptlsbox
-      environment: ptlsbox
-      component: sandbox
-      dependsOn:
-        - Precheck
-
-    - deployment: sandbox
-      environment: sbox
-      component: sandbox
-      dependsOn:
-        - Precheck
-      
-    - deployment: staging
-      environment: staging
-      component: staging
-      dependsOn:
-        - Precheck
-
-    - deployment: test
-      environment: 
-      component: 
-      dependsOn:
-        - Precheck
-       
-
-stages:
-  - stage: Precheck
-    jobs:
-      - job:
-        pool:
-          vmImage: ${{ variables.agentPool }}
-        timeoutInMinutes: ${{ variables.timeoutInMinutes }}
-        steps:
-          - template: steps/terraform-precheck.yaml@cnp-azuredevops-libraries
-            parameters:
-              # keyvaultName: 'infra-vault-nonprod'
-              # keyvaultSecret: 'azure-devops-token'
-              # serviceConnection: 'DCD-CFT-Sandbox'
-              overrideAction: ${{ parameters.overrideAction }}
-              environment: ${{ deployment.environment }}
-              component: ${{ deployment.component }}
-              # serviceConnection: HMCTS-SOC-${{ upper(deployment.environment) }}
-              terraformInitSubscription: ${{ variables.terraformInitSubscription }}
-              product: ${{ variables.product }}
-
+  - name: env
+    displayName: Environment
+    type: string
+    default: "SBOX"
+    values:
+      - ITHC
+      - DEV
+      - DEMO
+      - SBOX
+      - PTLSBOX
+      - TEST
+      - STG
+      - PTL
+      - PROD
 
 variables:
+  - name: tfversion
+    value: 1.2.2
+  # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
+  # but it might be better to template the pipeline more and have a different pipeline file
+  # so that someone doesn't pick the wrong var in the dropdown
   - name: project
     value: ss
   # same comment as above ^^
