@@ -46,7 +46,7 @@ variables:
   #   value: ${{ parameters.Action }}
 
 parameters:
-  - name: Action
+  - name: overrideAction
     displayName: Action
     type: string
     default: "Plan"
