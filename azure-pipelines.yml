@@ -1,7 +1,6 @@
-name: ${{ parameters.Action }} - ${{ parameters.env }}.${{ parameters.cluster }}.${{ parameters.location }}
+name: ${{ parameters.overrideAction }} - ${{ parameters.env }}.${{ parameters.cluster }}.${{ parameters.location }}
 
 # TODO refactor pipeline to do plan by default, for now pls no trigger
-
 
 trigger:
   batch: true
@@ -30,7 +29,7 @@ variables:
   - name: serviceConnection
     value: OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
   - name: action
-    value: ${{ parameters.Action }}
+    value: ${{ parameters.overrideAction }}
 
 
   # - name: project
