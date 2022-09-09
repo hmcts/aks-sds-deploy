@@ -37,7 +37,7 @@ parameters:
     values:
       - Plan
       - Apply
-      - Destroy 
+
 
   - name: cluster
     displayName: Cluster
@@ -48,86 +48,296 @@ parameters:
       - "00"
       - "01"
 
-  # - name: location
-  #   displayName: Location
-  #   type: string
-  #   default: "UK South"
-  #   values:
-  #     - "UK South"
-  #     - "UK West"
+  - name: location
+    displayName: Location
+    type: string
+    default: "UK South"
+    values:
+      - "UK South"
+      - "UK West"
 
-  # - name: env
-  #   displayName: Environment
-  #   type: string
-  #   default: "SBOX"
-  #   values:
-  #     - ITHC
-  #     - DEV
-  #     - DEMO
-  #     - SBOX
-  #     - PTLSBOX
-  #     - TEST
-  #     - STG
-  #     - PTL
-  #     - PROD
+  - name: env
+    displayName: Environment
+    type: string
+    default: "sbox"
+    values:
+      - ithc
+      - dev
+      - demo
+      - sbox
+      - ptlsbox
+      - test
+      - stg
+      - ptl
+      - prod
       
   - name: environment_components
     type: object
     default:
-    - deployment: demo
+    - deployment: demo_genesis
       environment: demo
-      component: demo
+      component: "00-genesis"
+    
+    - deployment: demo_network_rg
+      environment: demo
+      component: "07-network-rg"
       dependsOn:
-        - Precheck
+        - demo_genesis
 
-    - deployment: dev
+
+    - deployment: demo_network
+      environment: demo
+      component: "01-network"
+      dependsOn:
+        - demo_network_rg
+    
+    - deployment: demo_mis
+      environment: demo
+      component: "05-mis"
+      dependsOn:
+        - demo_network
+
+    - deployment: demo_aks
+      environment: demo
+      component: "aks"
+      dependsOn:
+        - demo_mis
+
+    - deployment: dev_genesis
       environment: dev
-      component: dev
-      dependsOn:
-        - Precheck
+      component: "00-genesis"
  
-    - deployment: ithc
+    - deployment: dev_network_rg
+      environment: dev
+      component: "07-network-rg"
+      dependsOn:
+        -  dev_genesis
+
+
+    - deployment: dev_network
+      environment: dev
+      component: "01-network"
+      dependsOn:
+        -  dev_network_rg
+    
+    - deployment: dev_mis
+      environment: dev
+      component: "05-mis"
+      dependsOn:
+        -  dev_network
+
+    - deployment: dev_aks
+      environment: dev
+      component: "aks"
+      dependsOn:
+        -  dev_mis
+
+    - deployment: ithc_genesis
       environment: ithc
-      component: ithc
+      component: "00-genesis"
+
+
+    - deployment:  ithc_network_rg
+      environment:  ithc
+      component: "07-network-rg"
       dependsOn:
-        - Precheck  
-       
-    - deployment: prod
+        -   ithc_genesis
+
+
+    - deployment:  ithc_network
+      environment:  ithc
+      component: "01-network"
+      dependsOn:
+        -   ithc_network_rg
+    
+    - deployment:  ithc_mis
+      environment:  ithc
+      component: "05-mis"
+      dependsOn:
+        -   ithc_network
+
+    - deployment:  ithc_aks
+      environment:  ithc
+      component: "aks"
+      dependsOn:
+        -   ithc_mis
+
+
+    - deployment: prod_genesis
       environment: prod
-      component: prod
-      dependsOn:
-        - Precheck
+      component: "00-genesis"
 
-    - deployment: ptl
+
+    - deployment: prod_network_rg
+      environment: prod
+      component: "07-network-rg"
+      dependsOn:
+        - prod_genesis
+
+
+    - deployment: prod_network
+      environment: prod
+      component: "01-network"
+      dependsOn:
+        - prod_network_rg
+    
+    - deployment: prod_mis
+      environment: prod
+      component: "05-mis"
+      dependsOn:
+        - prod_network
+
+    - deployment: prod_aks
+      environment: prod
+      component: "aks"
+      dependsOn:
+        - prod_mis
+
+    - deployment: ptl_genesis
       environment: ptl
-      component: sandbox
+      component: "00-genesis"
+
+    - deployment: ptl_network_rg
+      environment: ptl
+      component: "07-network-rg"
       dependsOn:
-        - Precheck
-          
-    - deployment: ptlsbox
+        -     ptl_genesis
+
+    - deployment:  ptl_network
+      environment:  ptl
+      component: "01-network"
+      dependsOn:
+        - ptl_network_rg
+    
+    - deployment: ptl_mis
+      environment: ptl
+      component: "05-mis"
+      dependsOn:
+        -     ptl_network
+
+    - deployment: ptl_aks
+      environment: ptl
+      component: "aks"
+      dependsOn:
+        - ptl_mis
+
+        
+    - deployment: ptlsbox_genisis
       environment: ptlsbox
-      component: sandbox
-      dependsOn:
-        - Precheck
+      component: "00-genesis"
 
-    - deployment: sandbox
+    - deployment:  ptlsbox_network_rg
+      environment: ptlsbox
+      component: "07-network-rg"
+      dependsOn:
+        - ptlsbox_genesis
+
+    - deployment:  ptlsbox_network
+      environment:  ptlsbox
+      component: "01-network"
+      dependsOn:
+        - ptlsbox_network_rg
+    
+    - deployment: ptlsbox_mis
+      environment: ptlsbox
+      component: "05-mis"
+      dependsOn:
+        -     ptlsbox_network
+
+    - deployment: ptlsbox_aks
+      environment: ptlsbox
+      component: "aks"
+      dependsOn:
+        - ptlsbox_mis
+
+
+    - deployment: sandbox_genesis
       environment: sbox
-      component: sandbox
-      dependsOn:
-        - Precheck
-      
-    - deployment: staging
-      environment: staging
-      component: staging
-      dependsOn:
-        - Precheck
+      component: "00-genesis"
 
-    - deployment: test
-      environment: 
-      component: 
+
+    - deployment:  sandbox_network_rg
+      environment: sbox
+      component: "07-network-rg"
       dependsOn:
-        - Precheck
-       
+        - sandbox_genesis
+
+    - deployment:  sandbox_network
+      environment:  sbox
+      component: "01-network"
+      dependsOn:
+        - sandbox_network_rg
+    
+    - deployment: sandbox_mis
+      environment: sbox
+      component: "05-mis"
+      dependsOn:
+      -  sandbox_network
+
+    - deployment: sandbox_aks
+      environment: sbox
+      component: "aks"
+      dependsOn:
+        - sandbox_mis
+
+      
+    - deployment: staging_genesis
+      environment: stg
+      component: "00-genesis"
+
+    - deployment: staging_network_rg
+      environment: stg
+      component: "07-network-rg"
+      dependsOn:
+        - staging_genesis
+
+    - deployment: staging_network
+      environment: stg
+      component: "01-network"
+      dependsOn:
+        -  staging_network_rg
+    
+    - deployment: staging_mis
+      environment: stg
+      component: "05-mis"
+      dependsOn:
+        -  staging_network
+
+    - deployment: staging_aks
+      environment: stg
+      component: "aks"
+      dependsOn:
+        -   staging_mis
+
+
+    - deployment: test_genesis
+      environment: test
+      component: "00-genesis"
+
+    - deployment: test_network_rg
+      environment: test
+      component: "07-network-rg"
+      dependsOn:
+        - test_genesis
+
+    - deployment: test_network
+      environment: test
+      component: "01-network"
+      dependsOn:
+        - test_network_rg
+    
+    - deployment: test_mis
+      environment: test
+      component: "05-mis"
+      dependsOn:
+        - test_network
+
+    - deployment: test_aks
+      environment: test
+      component: "aks"
+      dependsOn:
+        - test_mis  
+
 
 stages:
   - stage: Precheck
@@ -148,6 +358,7 @@ stages:
               # serviceConnection: HMCTS-SOC-${{ upper(deployment.environment) }}
               terraformInitSubscription: ${{ variables.terraformInitSubscription }}
               product: ${{ variables.product }}
+              location: ${{ parameters.location }}
 
 
 variables:
