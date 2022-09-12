@@ -7,6 +7,8 @@ variable "builtFrom" {}
 
 variable "product" {}
 
+variable "env" {}
+
 # Remote State
 variable "control_vault" {}
 

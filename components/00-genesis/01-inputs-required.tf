@@ -5,3 +5,5 @@ variable "builtFrom" {}
 variable "product" {}
 
 variable "project" {}
+
+variable "env" {}
