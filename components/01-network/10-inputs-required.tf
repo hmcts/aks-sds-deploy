@@ -19,7 +19,6 @@ variable "private_dns_zones" {}
 
 variable "env" {}
 
-variable "subscription_id" {}
 
 # Network
 variable "network_address_space" {}

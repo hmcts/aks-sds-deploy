@@ -9,5 +9,3 @@ variable "project" {}
 variable "env" {}
 
 variable "control_vault" {}
-
-variable "subscription_id" {}

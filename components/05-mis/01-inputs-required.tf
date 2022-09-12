@@ -9,5 +9,3 @@ variable "builtFrom" {}
 variable "product" {}
 
 variable "env" {}
-
-variable "subscription_id" {}

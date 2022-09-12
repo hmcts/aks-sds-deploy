@@ -9,7 +9,6 @@ variable "product" {}
 
 variable "env" {}
 
-variable "subscription_id" {}
 
 # Remote State
 variable "control_vault" {}
