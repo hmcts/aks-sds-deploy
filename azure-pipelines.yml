@@ -237,7 +237,7 @@ parameters:
         - ptl_mis
 
         
-    - deployment: ptlsbox_genisis
+    - deployment: ptlsbox_genesis
       environment: ptlsbox
       component: "00-genesis"
 
@@ -257,7 +257,7 @@ parameters:
       environment: ptlsbox
       component: "05-mis"
       dependsOn:
-        -     ptlsbox_network
+        - ptlsbox_network
 
     - deployment: ptlsbox_aks
       environment: ptlsbox
