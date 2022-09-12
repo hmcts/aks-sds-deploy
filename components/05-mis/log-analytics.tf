@@ -16,5 +16,5 @@ resource "azurerm_role_assignment" "log_analytics_role_aks_sp" {
 
 module "loganalytics" {
   source      = "git::https://github.com/hmcts/terraform-module-log-analytics-workspace-id.git?ref=master"
-  environment = var.env
+  environment = var.environment
 }

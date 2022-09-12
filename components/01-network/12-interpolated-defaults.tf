@@ -11,7 +11,7 @@ data "azurerm_virtual_network" "vpn" {
 locals {
   network_resource_group_name = format("%s-%s-network-rg",
     var.project,
-    var.env
+    var.environment
   )
   network_shortname = format("%s_%s",
     var.project,

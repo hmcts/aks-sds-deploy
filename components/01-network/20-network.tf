@@ -5,7 +5,7 @@ module "network" {
 
   route_next_hop_in_ip_address = local.hub[var.hub].ukSouth.next_hop_ip
   additional_routes            = var.additional_routes
-  environment                  = var.env
+  environment                  = var.environment
 
   network_address_space = var.network_address_space
   network_location      = var.location
@@ -26,7 +26,7 @@ module "network" {
 
 module "ctags" {
   source      = "git::https://github.com/hmcts/terraform-module-common-tags.git?ref=master"
-  environment = var.env
+  environment = var.environment
   product     = var.product
   builtFrom   = var.builtFrom
 }

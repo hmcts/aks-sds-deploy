@@ -33,7 +33,6 @@ variables:
   - name: project
     value: ss
 
-
   # same comment as above ^^
   # - name: serviceConnection
   #   value: OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
@@ -376,7 +375,9 @@ stages:
                   kvConnectedServiceName: ${{ variables.serviceConnection }}
                   planCommandOptions: >
                     -var project=${{ variables.project }}
-              
+                    -var subscription_id=$(ARM_SUBSCRIPTION_ID)
+                    -var environment=${{ deployment.environment }}
+                    -lock=false
 
 
 # stages:

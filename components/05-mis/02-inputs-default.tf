@@ -7,7 +7,7 @@ variable "location" {
 }
 locals {
 
-  is_sbox = var.env == "sbox" ? true : false
+  is_sbox = var.environment == "sbox" ? true : false
 
   common_tags = module.ctags.common_tags
 
@@ -31,13 +31,13 @@ locals {
       name            = "hmcts-prod"
     }
   }
-  log_analytics_subscription_id = local.log_analytics_workspace[[for x in keys(local.log_analytics_env_mapping) : x if contains(local.log_analytics_env_mapping[x], var.env)][0]].subscription_id
-  resolved_name                 = local.log_analytics_workspace[[for x in keys(local.log_analytics_env_mapping) : x if contains(local.log_analytics_env_mapping[x], var.env)][0]].name
+  log_analytics_subscription_id = local.log_analytics_workspace[[for x in keys(local.log_analytics_env_mapping) : x if contains(local.log_analytics_env_mapping[x], var.environment)][0]].subscription_id
+  resolved_name                 = local.log_analytics_workspace[[for x in keys(local.log_analytics_env_mapping) : x if contains(local.log_analytics_env_mapping[x], var.environment)][0]].name
 }
 
 module "ctags" {
   source      = "git::https://github.com/hmcts/terraform-module-common-tags.git?ref=master"
-  environment = var.env
+  environment = var.environment
   product     = var.product
   builtFrom   = var.builtFrom
 }

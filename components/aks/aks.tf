@@ -4,7 +4,7 @@ resource "azurerm_resource_group" "kubernetes_resource_group" {
 
   name = format("%s-%s-%s-rg",
     var.project,
-    var.env,
+    var.environment,
     each.value
   )
   tags = module.ctags.common_tags
@@ -12,13 +12,13 @@ resource "azurerm_resource_group" "kubernetes_resource_group" {
 
 resource "azurerm_resource_group" "disks_resource_group" {
   location = var.location
-  name     = "disks-${var.env}-rg"
+  name     = "disks-${var.environment}-rg"
   tags     = module.ctags.common_tags
 }
 
 module "loganalytics" {
   source      = "git::https://github.com/hmcts/terraform-module-log-analytics-workspace-id.git?ref=master"
-  environment = var.env
+  environment = var.environment
 }
 
 locals {
@@ -52,7 +52,7 @@ locals {
 module "kubernetes" {
   for_each    = toset([for k, v in var.clusters : k])
   source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=master"
-  environment = var.env
+  environment = var.environment
   location    = var.location
 
   kubelet_uami_enabled = true
@@ -96,7 +96,7 @@ module "kubernetes" {
 
   enable_user_system_nodepool_split = true
 
-  additional_node_pools = contains(["ptlsbox", "ptl"], var.env) ? tolist([local.linux_node_pool]) : tolist([local.linux_node_pool, local.system_node_pool])
+  additional_node_pools = contains(["ptlsbox", "ptl"], var.environment) ? tolist([local.linux_node_pool]) : tolist([local.linux_node_pool, local.system_node_pool])
 
   depends_on         = [azurerm_resource_group.disks_resource_group]
   availability_zones = var.availability_zones
@@ -105,7 +105,7 @@ module "kubernetes" {
 
 module "ctags" {
   source      = "git::https://github.com/hmcts/terraform-module-common-tags.git?ref=master"
-  environment = var.env
+  environment = var.environment
   product     = var.product
   builtFrom   = var.builtFrom
 }
