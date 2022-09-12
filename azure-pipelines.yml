@@ -377,6 +377,7 @@ stages:
                     -var project=${{ variables.project }}
                     -var subscription_id=$(ARM_SUBSCRIPTION_ID)
                     -var environment=${{ deployment.environment }}
+                    -var control_vault=$(controlKeyVault)
                     -lock=false
 
 
