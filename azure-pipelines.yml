@@ -30,10 +30,10 @@ variables:
     value: OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
   - name: action
     value: ${{ parameters.overrideAction }}
+  - name: project
+    value: ss
 
 
-  # - name: project
-  #   value: ss
   # same comment as above ^^
   # - name: serviceConnection
   #   value: OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
@@ -374,6 +374,9 @@ stages:
                   terraformInitSubscription: ${{ variables.terraformInitSubscription }}
                   product: ${{ variables.product }}
                   kvConnectedServiceName: ${{ variables.serviceConnection }}
+                  planCommandOptions: >
+                    -var project=${{ variables.project }}
+              
 
 
 # stages:
