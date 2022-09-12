@@ -358,7 +358,7 @@ stages:
   - ${{ each deployment in parameters.environment_components }}:
       - stage: ${{ deployment.deployment }}
         dependsOn: ${{ deployment.dependsOn }}
-        condition: eq(parameters.env, deployment.environment)
+        condition: eq('${{ parameters.env }}', '${{ deployment.environment }}')
         jobs:
           - job: TerraformPlanApply
             pool:
