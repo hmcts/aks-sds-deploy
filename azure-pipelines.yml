@@ -48,10 +48,10 @@ parameters:
   - name: overrideAction
     displayName: Action
     type: string
-    default: "Plan"
+    default: "plan"
     values:
-      - Plan
-      - Apply
+      - plan
+      - apply
 
 
   - name: cluster
