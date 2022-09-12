@@ -3,13 +3,13 @@
 module "vnet_peer_hub_prod" {
   source = "../../modules/vnet_peering"
 
-  for_each = toset([for r in local.regions : r if contains(local.hub_to_env_mapping["prod"], var.environment)])
+  for_each = toset([for r in local.regions : r if contains(local.hub_to_env_mapping["prod"], var.env)])
 
-  initiator_peer_name = (var.environment == "ptl") || (var.environment == "dev") ? "${local.hub["prod"][each.key].peering_name}-prod" : local.hub["prod"][each.key].peering_name
+  initiator_peer_name = (var.env == "ptl") || (var.env == "dev") ? "${local.hub["prod"][each.key].peering_name}-prod" : local.hub["prod"][each.key].peering_name
 
   target_peer_name = format("%s%s",
     var.project,
-    var.environment
+    var.env
   )
   initiator_vnet                = module.network.network_name
   initiator_vnet_resource_group = module.network.network_resource_group
@@ -28,13 +28,13 @@ module "vnet_peer_hub_prod" {
 module "vnet_peer_hub_nonprod" {
   source = "../../modules/vnet_peering"
 
-  for_each = toset([for r in local.regions : r if contains(local.hub_to_env_mapping["nonprod"], var.environment)])
+  for_each = toset([for r in local.regions : r if contains(local.hub_to_env_mapping["nonprod"], var.env)])
 
-  initiator_peer_name = var.environment == "ptl" ? "${local.hub["prod"][each.key].peering_name}-nonprod" : local.hub["prod"][each.key].peering_name
+  initiator_peer_name = var.env == "ptl" ? "${local.hub["prod"][each.key].peering_name}-nonprod" : local.hub["prod"][each.key].peering_name
 
   target_peer_name = format("%s%s",
     var.project,
-    var.environment
+    var.env
   )
 
   initiator_vnet                = module.network.network_name
@@ -54,13 +54,13 @@ module "vnet_peer_hub_nonprod" {
 module "vnet_peer_hub_sbox" {
   source = "../../modules/vnet_peering"
 
-  for_each = toset([for r in local.regions : r if contains(local.hub_to_env_mapping["sbox"], var.environment)])
+  for_each = toset([for r in local.regions : r if contains(local.hub_to_env_mapping["sbox"], var.env)])
 
-  initiator_peer_name = var.environment == "ptl" ? "${local.hub["prod"][each.key].peering_name}-sbox" : local.hub["prod"][each.key].peering_name
+  initiator_peer_name = var.env == "ptl" ? "${local.hub["prod"][each.key].peering_name}-sbox" : local.hub["prod"][each.key].peering_name
 
   target_peer_name = format("%s%s",
     var.project,
-    var.environment
+    var.env
   )
 
   initiator_vnet                = module.network.network_name
@@ -86,7 +86,7 @@ module "vnet_peer_vpn" {
 
   target_peer_name = format("%s%s",
     var.project,
-    var.environment
+    var.env
   )
 
   initiator_vnet                = module.network.network_name

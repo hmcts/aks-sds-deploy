@@ -1,5 +1,5 @@
 resource "azurerm_user_assigned_identity" "kubelet_uami" {
-  name = "aks-kubelet-${var.environment}-mi"
+  name = "aks-kubelet-${var.env}-mi"
 
   resource_group_name = data.azurerm_resource_group.genesis_rg.name
   location            = data.azurerm_resource_group.genesis_rg.location
