@@ -359,6 +359,7 @@ stages:
     - ${{ if eq(parameters.env, deployment.environment) }}:
       - stage: ${{ deployment.deployment }}
         dependsOn: ${{ deployment.dependsOn }}
+        condition: succeeded()
         jobs:
           - job: TerraformPlanApply
             pool:
