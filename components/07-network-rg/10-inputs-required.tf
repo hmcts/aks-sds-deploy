@@ -12,3 +12,5 @@ variable "enable_debug" {}
 variable "control_vault" {}
 
 variable "env" {}
+
+variable "subscription_id" {}
