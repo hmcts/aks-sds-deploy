@@ -356,7 +356,7 @@ parameters:
 
 stages:
   - ${{ each deployment in parameters.environment_components }}:
-    - ${{ if eq('${{ parameters.env }}', '${{ deployment.environment }}') }}:
+    - ${{ if eq(parameters.env, deployment.environment) }}:
       - stage: ${{ deployment.deployment }}
         dependsOn: ${{ deployment.dependsOn }}
         jobs:
