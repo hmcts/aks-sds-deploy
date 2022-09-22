@@ -7,7 +7,7 @@ parameters:
 
 steps:
 
-- template: keyvault-read.yaml
+- template: steps/keyvault-read.yaml@cnp-azuredevops-libraries
   parameters:
     serviceConnection: $(serviceConnection)
     environment: ${{ parameters.environment }}

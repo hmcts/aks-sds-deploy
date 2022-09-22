@@ -1,7 +1,5 @@
 name: ${{ parameters.overrideAction }} - ${{ parameters.env }}.${{ parameters.cluster }}.${{ parameters.location }}
 
-# TODO refactor pipeline to do plan by default, for now pls no trigger
-
 trigger:
   batch: true
   branches:
@@ -33,15 +31,6 @@ variables:
   - name: project
     value: ss
 
-  # same comment as above ^^
-  # - name: serviceConnection
-  #   value: OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
-  # - name: tfInitSub
-  #   value: "04d27a32-7a07-48b3-95b8-3c8691e1a263"
-  # - name: product
-  #   value: "sds-platform"
-  # - name: action
-  #   value: ${{ parameters.Action }}
 
 parameters:
   - name: overrideAction
@@ -98,7 +87,6 @@ parameters:
       dependsOn:
         - demo_genesis
 
-
     - deployment: demo_network
       environment: demo
       component: "01-network"
@@ -127,7 +115,6 @@ parameters:
       dependsOn:
         -  dev_genesis
 
-
     - deployment: dev_network
       environment: dev
       component: "01-network"
@@ -150,13 +137,11 @@ parameters:
       environment: ithc
       component: "00-genesis"
 
-
     - deployment:  ithc_network_rg
       environment:  ithc
       component: "07-network-rg"
       dependsOn:
         -   ithc_genesis
-
 
     - deployment:  ithc_network
       environment:  ithc
@@ -176,18 +161,15 @@ parameters:
       dependsOn:
         -   ithc_mis
 
-
     - deployment: prod_genesis
       environment: prod
       component: "00-genesis"
-
 
     - deployment: prod_network_rg
       environment: prod
       component: "07-network-rg"
       dependsOn:
         - prod_genesis
-
 
     - deployment: prod_network
       environment: prod
@@ -234,8 +216,7 @@ parameters:
       component: "aks"
       dependsOn:
         - ptl_mis
-
-        
+   
     - deployment: ptlsbox_genesis
       environment: ptlsbox
       component: "00-genesis"
@@ -264,11 +245,9 @@ parameters:
       dependsOn:
         - ptlsbox_mis
 
-
     - deployment: sandbox_genesis
       environment: sbox
       component: "00-genesis"
-
 
     - deployment:  sandbox_network_rg
       environment: sbox
@@ -293,8 +272,7 @@ parameters:
       component: "aks"
       dependsOn:
         - sandbox_mis
-
-      
+ 
     - deployment: staging_genesis
       environment: stg
       component: "00-genesis"
@@ -322,7 +300,6 @@ parameters:
       component: "aks"
       dependsOn:
         -   staging_mis
-
 
     - deployment: test_genesis
       environment: test
@@ -381,104 +358,18 @@ stages:
                     -lock=false
 
 
-# stages:
-#   - stage: Genesis
-#     displayName: "Genesis"
-#     jobs:
-#       - job: Genesis
-#         steps:
-#           - template: pipeline-steps/genesis.yaml
-#             parameters:
-#               environment: ${{ parameters.env }}
-#               location: ${{ parameters.location }}
-#               stack: "00-genesis"
-#               project: $(project)
-#               tfversion: $(tfversion)
-#               tfInitSub: ${{ variables.tfInitSub }}
-#               builtFrom: $(Build.Repository.Name)
-#               product: ${{ variables.product }}
-
-#   - stage: Network
-#     displayName: "Network"
-#     jobs:
-#       - job: NetworkRg
-#         steps:
-#           - template: pipeline-steps/deploy-service.yaml
-#             parameters:
-#               environment: ${{ parameters.env }}
-#               location: ${{ parameters.location }}
-#               stack: "07-network-rg"
-#               project: $(project)
-#               tfversion: $(tfversion)
-#               tfInitSub: ${{ variables.tfInitSub }}
-#               builtFrom: $(Build.Repository.Name)
-#               product: ${{ variables.product }}
-
-#       - job: DeployInfrastructure
-#         dependsOn: NetworkRg
-#         steps:
-#           - template: pipeline-steps/deploy-network.yaml
-#             parameters:
-#               environment: ${{ parameters.env }}
-#               location: ${{ parameters.location }}
-#               stack: "01-network"
-#               project: $(project)
-#               tfversion: $(tfversion)
-#               terraformServiceConnection: OPS-APPROVAL-GATE-MGMT-ENVS
-#               tfInitSub: ${{ variables.tfInitSub }}
-#               builtFrom: $(Build.Repository.Name)
-#               product: ${{ variables.product }}
-
-#   - stage: Managed_Identity
-#     displayName: "Managed_Identity"
-#     dependsOn: Network
-#     jobs:
-#       - job: Managed_Identity
-#         steps:
-#           - template: pipeline-steps/managed_identity.yaml
-#             parameters:
-#               serviceConnection: $(serviceConnection)
-#               environment: ${{ parameters.env }}
-#               location: ${{ parameters.location }}
-#               stack: "05-mis"
-#               project: $(project)
-#               tfversion: $(tfversion)
-#               tfInitSub: ${{ variables.tfInitSub }}
-#               builtFrom: $(Build.Repository.Name)
-#               product: ${{ variables.product }}
-
-#   - stage: Aks
-#     displayName: "AKS clusters"
-#     dependsOn:
-#       - Managed_Identity
-#     jobs:
-#       - job: DeployInfrastructure
-#         steps:
-#           - template: pipeline-steps/deploy-service.yaml
-#             parameters:
-#               environment: ${{ parameters.env }}
-#               location: ${{ parameters.location }}
-#               stack: "aks"
-#               project: $(project)
-#               tfversion: $(tfversion)
-#               tfInitSub: ${{ variables.tfInitSub }}
-#               builtFrom: $(Build.Repository.Name)
-#               product: ${{ variables.product }}
-#               ${{ if ne(parameters['cluster'], 'All') }}:
-#                 targetCommand: '-target azurerm_resource_group.kubernetes_resource_group["\"${{parameters.cluster}}\""] -target module.kubernetes["\"${{parameters.cluster}}\""] -target azurerm_role_assignment.dev_to_stg["\"${{parameters.cluster}}\""] -target data.azurerm_resource_group.mi_stg_rg[0]'
-
-#   - stage: BootStrapClusters
-#     displayName: "BootStrap Clusters"
-#     dependsOn: Aks
-#     jobs:
-#       - job: BootStrap
-#         variables:
-#           ${{ if eq(parameters['cluster'], 'All') }}:
-#             clusters: $[ stageDependencies.Aks.DeployInfrastructure.outputs['setClusterNumbers.clusterNumbers'] ]
-#           ${{ if ne(parameters['cluster'], 'All') }}:
-#             clusters: ${{ parameters.cluster }}
-#         steps:
-#           - template: pipeline-steps/bootstrap.yaml
-#             parameters:
-#               environment: ${{ parameters.env }}
-#               serviceConnection: $(serviceConnection)
+  - stage: BootStrapClusters
+    displayName: "BootStrap Clusters"
+    dependsOn: ${{ parameters.env }}_aks
+    jobs:
+      - job: BootStrap
+        variables:
+          ${{ if eq(parameters['cluster'], 'All') }}:
+            clusters: $[ stageDependencies.Aks.DeployInfrastructure.outputs['setClusterNumbers.clusterNumbers'] ]
+          ${{ if ne(parameters['cluster'], 'All') }}:
+            clusters: ${{ parameters.cluster }}
+        steps:
+          - template: pipeline-steps/bootstrap.yaml
+            parameters:
+              environment: ${{ parameters.env }}
+              
