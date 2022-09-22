@@ -245,33 +245,33 @@ parameters:
       dependsOn:
         - ptlsbox_mis
 
-    - deployment: sandbox_genesis
+    - deployment: sbox_genesis
       environment: sbox
       component: "00-genesis"
 
-    - deployment:  sandbox_network_rg
+    - deployment:  sbox_network_rg
       environment: sbox
       component: "07-network-rg"
       dependsOn:
-        - sandbox_genesis
+        - sbox_genesis
 
-    - deployment:  sandbox_network
+    - deployment:  sbox_network
       environment:  sbox
       component: "01-network"
       dependsOn:
-        - sandbox_network_rg
+        - sbox_network_rg
     
-    - deployment: sandbox_mis
+    - deployment: sbox_mis
       environment: sbox
       component: "05-mis"
       dependsOn:
-      -  sandbox_network
+      -  sbox_network
 
-    - deployment: sandbox_aks
+    - deployment: sbox_aks
       environment: sbox
       component: "aks"
       dependsOn:
-        - sandbox_mis
+        - sbox_mis
  
     - deployment: staging_genesis
       environment: stg
