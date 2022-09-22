@@ -113,25 +113,25 @@ parameters:
       environment: dev
       component: "07-network-rg"
       dependsOn:
-        -  dev_genesis
+        - dev_genesis
 
     - deployment: dev_network
       environment: dev
       component: "01-network"
       dependsOn:
-        -  dev_network_rg
+        - dev_network_rg
     
     - deployment: dev_mis
       environment: dev
       component: "05-mis"
       dependsOn:
-        -  dev_network
+        - dev_network
 
     - deployment: dev_aks
       environment: dev
       component: "aks"
       dependsOn:
-        -  dev_mis
+        - dev_mis
 
     - deployment: ithc_genesis
       environment: ithc
@@ -141,25 +141,25 @@ parameters:
       environment:  ithc
       component: "07-network-rg"
       dependsOn:
-        -   ithc_genesis
+        - ithc_genesis
 
     - deployment:  ithc_network
       environment:  ithc
       component: "01-network"
       dependsOn:
-        -   ithc_network_rg
+        - ithc_network_rg
     
     - deployment:  ithc_mis
       environment:  ithc
       component: "05-mis"
       dependsOn:
-        -   ithc_network
+        - ithc_network
 
     - deployment:  ithc_aks
       environment:  ithc
       component: "aks"
       dependsOn:
-        -   ithc_mis
+        - ithc_mis
 
     - deployment: prod_genesis
       environment: prod
@@ -209,7 +209,7 @@ parameters:
       environment: ptl
       component: "05-mis"
       dependsOn:
-        -     ptl_network
+        -  ptl_network
 
     - deployment: ptl_aks
       environment: ptl
@@ -293,13 +293,13 @@ parameters:
       environment: stg
       component: "05-mis"
       dependsOn:
-        -  stg_network
+        - stg_network
 
     - deployment: stg_aks
       environment: stg
       component: "aks"
       dependsOn:
-        -   stg_mis
+        - stg_mis
 
     - deployment: test_genesis
       environment: test
@@ -329,7 +329,6 @@ parameters:
       dependsOn:
         - test_mis  
 
-
 stages:
   - ${{ each deployment in parameters.environment_components }}:
     - ${{ if eq(parameters.env, deployment.environment) }}:
@@ -357,22 +356,18 @@ stages:
                     -var control_vault=$(controlKeyVault)
                     -lock=false
 
-
-  - stage: BootStrapClusters
-    displayName: "BootStrap Clusters"
-    dependsOn: ${{ parameters.env }}_aks
-    jobs:
-      - job: BootStrap
-        variables:
-          ${{ if eq(parameters['cluster'], 'All') }}:
-            clusters: $[ stageDependencies.${{ parameters.env }}_aks.TerraformPlanApply.outputs['setClusterNumbers.clusterNumbers'] ]
-          ${{ if ne(parameters['cluster'], 'All') }}:
-            clusters: ${{ parameters.cluster }}
-        steps:
-          - bash: |
-              env | sort
-            displayName: Print Environment Variables
-          # - template: pipeline-steps/bootstrap.yaml
-          #   parameters:
-          #     environment: ${{ parameters.env }}
+      - stage: BootStrapClusters
+        displayName: "BootStrap Clusters"
+        dependsOn: ${{ parameters.env }}_aks
+        jobs:
+          - job: BootStrap
+            variables:
+              ${{ if eq(parameters['cluster'], 'All') }}:
+                clusters: $[ stageDependencies.${{ parameters.env }}_aks.TerraformPlanApply.outputs['setClusterNumbers.clusterNumbers'] ]
+              ${{ if ne(parameters['cluster'], 'All') }}:
+                clusters: ${{ parameters.cluster }}
+            steps:
+              - template: pipeline-steps/bootstrap.yaml
+                parameters:
+                  environment: ${{ parameters.env }}
               
