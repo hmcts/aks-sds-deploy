@@ -273,33 +273,33 @@ parameters:
       dependsOn:
         - sbox_mis
  
-    - deployment: staging_genesis
+    - deployment: stg_genesis
       environment: stg
       component: "00-genesis"
 
-    - deployment: staging_network_rg
+    - deployment: stg_network_rg
       environment: stg
       component: "07-network-rg"
       dependsOn:
-        - staging_genesis
+        - stg_genesis
 
-    - deployment: staging_network
+    - deployment: stg_network
       environment: stg
       component: "01-network"
       dependsOn:
-        -  staging_network_rg
+        -  stg_network_rg
     
-    - deployment: staging_mis
+    - deployment: stg_mis
       environment: stg
       component: "05-mis"
       dependsOn:
-        -  staging_network
+        -  stg_network
 
-    - deployment: staging_aks
+    - deployment: stg_aks
       environment: stg
       component: "aks"
       dependsOn:
-        -   staging_mis
+        -   stg_mis
 
     - deployment: test_genesis
       environment: test
