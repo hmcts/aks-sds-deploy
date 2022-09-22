@@ -365,7 +365,7 @@ stages:
       - job: BootStrap
         variables:
           ${{ if eq(parameters['cluster'], 'All') }}:
-            clusters: $[ stageDependencies.Aks.DeployInfrastructure.outputs['setClusterNumbers.clusterNumbers'] ]
+            clusters: $[ stageDependencies.${{ parameters.env }}_aks.TerraformPlanApply.outputs['setClusterNumbers.clusterNumbers'] ]
           ${{ if ne(parameters['cluster'], 'All') }}:
             clusters: ${{ parameters.cluster }}
         steps:
