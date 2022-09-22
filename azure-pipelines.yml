@@ -369,7 +369,10 @@ stages:
           ${{ if ne(parameters['cluster'], 'All') }}:
             clusters: ${{ parameters.cluster }}
         steps:
-          - template: pipeline-steps/bootstrap.yaml
-            parameters:
-              environment: ${{ parameters.env }}
+          - bash: |
+              env | sort
+            displayName: Print Environment Variables
+          # - template: pipeline-steps/bootstrap.yaml
+          #   parameters:
+          #     environment: ${{ parameters.env }}
               
