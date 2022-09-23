@@ -355,7 +355,7 @@ stages:
                     -var control_vault=$(controlKeyVault)
                     -lock=false
 
-      - stage: BootStrapClusters-${{ parameters.env }}
+      - stage: BootStrapClusters-${{ deployment.deployment }}
         displayName: "BootStrap Clusters"
         dependsOn: ${{ parameters.env }}_aks
         jobs:
