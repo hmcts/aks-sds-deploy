@@ -31,7 +31,6 @@ variables:
   - name: project
     value: ss
 
-
 parameters:
   - name: overrideAction
     displayName: Action
@@ -370,4 +369,4 @@ stages:
               - template: pipeline-steps/bootstrap.yaml
                 parameters:
                   environment: ${{ parameters.env }}
-                  serviceConnection: $(serviceConnection)
+              
