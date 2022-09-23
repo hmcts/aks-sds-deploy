@@ -90,19 +90,19 @@ parameters:
       environment: demo
       component: "01-network"
       dependsOn:
-        - demo_network_rg
+        - demo-network-rg
     
     - deployment: demo-mis
       environment: demo
       component: "05-mis"
       dependsOn:
-        - demo_network
+        - demo-network
 
     - deployment: demo-aks
       environment: demo
       component: "aks"
       dependsOn:
-        - demo_mis
+        - demo-mis
 
     - deployment: dev-genesis
       environment: dev
@@ -112,25 +112,25 @@ parameters:
       environment: dev
       component: "07-network-rg"
       dependsOn:
-        - dev_genesis
+        - dev-genesis
 
     - deployment: dev-network
       environment: dev
       component: "01-network"
       dependsOn:
-        - dev_network_rg
+        - dev-network-rg
     
     - deployment: dev-mis
       environment: dev
       component: "05-mis"
       dependsOn:
-        - dev_network
+        - dev-network
 
     - deployment: dev-aks
       environment: dev
       component: "aks"
       dependsOn:
-        - dev_mis
+        - dev-mis
 
     - deployment: ithc-genesis
       environment: ithc
@@ -140,25 +140,25 @@ parameters:
       environment:  ithc
       component: "07-network-rg"
       dependsOn:
-        - ithc_genesis
+        - ithc-genesis
 
     - deployment:  ithc-network
       environment:  ithc
       component: "01-network"
       dependsOn:
-        - ithc_network_rg
+        - ithc-network-rg
     
     - deployment:  ithc-mis
       environment:  ithc
       component: "05-mis"
       dependsOn:
-        - ithc_network
+        - ithc-network
 
     - deployment:  ithc-aks
       environment:  ithc
       component: "aks"
       dependsOn:
-        - ithc_mis
+        - ithc-mis
 
     - deployment: prod-genesis
       environment: prod
@@ -168,25 +168,25 @@ parameters:
       environment: prod
       component: "07-network-rg"
       dependsOn:
-        - prod_genesis
+        - prod-genesis
 
     - deployment: prod-network
       environment: prod
       component: "01-network"
       dependsOn:
-        - prod_network_rg
+        - prod-network-rg
     
     - deployment: prod-mis
       environment: prod
       component: "05-mis"
       dependsOn:
-        - prod_network
+        - prod-network
 
     - deployment: prod-aks
       environment: prod
       component: "aks"
       dependsOn:
-        - prod_mis
+        - prod-mis
 
     - deployment: ptl-genesis
       environment: ptl
@@ -196,25 +196,25 @@ parameters:
       environment: ptl
       component: "07-network-rg"
       dependsOn:
-        -     ptl_genesis
+        -     ptl-genesis
 
     - deployment:  ptl-network
       environment:  ptl
       component: "01-network"
       dependsOn:
-        - ptl_network_rg
+        - ptl-network-rg
     
     - deployment: ptl-mis
       environment: ptl
       component: "05-mis"
       dependsOn:
-        -  ptl_network
+        -  ptl-network
 
     - deployment: ptl-aks
       environment: ptl
       component: "aks"
       dependsOn:
-        - ptl_mis
+        - ptl-mis
    
     - deployment: ptlsbox-genesis
       environment: ptlsbox
@@ -224,25 +224,25 @@ parameters:
       environment: ptlsbox
       component: "07-network-rg"
       dependsOn:
-        - ptlsbox_genesis
+        - ptlsbox-genesis
 
     - deployment:  ptlsbox-network
       environment:  ptlsbox
       component: "01-network"
       dependsOn:
-        - ptlsbox_network_rg
+        - ptlsbox-network-rg
     
     - deployment: ptlsbox-mis
       environment: ptlsbox
       component: "05-mis"
       dependsOn:
-        - ptlsbox_network
+        - ptlsbox-network
 
     - deployment: ptlsbox-aks
       environment: ptlsbox
       component: "aks"
       dependsOn:
-        - ptlsbox_mis
+        - ptlsbox-mis
 
     - deployment: sbox-genesis
       environment: sbox
@@ -252,25 +252,25 @@ parameters:
       environment: sbox
       component: "07-network-rg"
       dependsOn:
-        - sbox_genesis
+        - sbox-genesis
 
     - deployment:  sbox-network
       environment:  sbox
       component: "01-network"
       dependsOn:
-        - sbox_network_rg
+        - sbox-network-rg
     
     - deployment: sbox-mis
       environment: sbox
       component: "05-mis"
       dependsOn:
-      -  sbox_network
+      -  sbox-network
 
     - deployment: sbox-aks
       environment: sbox
       component: "aks"
       dependsOn:
-        - sbox_mis
+        - sbox-mis
  
     - deployment: stg-genesis
       environment: stg
@@ -280,25 +280,25 @@ parameters:
       environment: stg
       component: "07-network-rg"
       dependsOn:
-        - stg_genesis
+        - stg-genesis
 
     - deployment: stg-network
       environment: stg
       component: "01-network"
       dependsOn:
-        -  stg_network_rg
+        -  stg-network-rg
     
     - deployment: stg-mis
       environment: stg
       component: "05-mis"
       dependsOn:
-        - stg_network
+        - stg-network
 
     - deployment: stg-aks
       environment: stg
       component: "aks"
       dependsOn:
-        - stg_mis
+        - stg-mis
 
     - deployment: test-genesis
       environment: test
@@ -308,25 +308,25 @@ parameters:
       environment: test
       component: "07-network-rg"
       dependsOn:
-        - test_genesis
+        - test-genesis
 
     - deployment: test-network
       environment: test
       component: "01-network"
       dependsOn:
-        - test_network_rg
+        - test-network-rg
     
     - deployment: test-mis
       environment: test
       component: "05-mis"
       dependsOn:
-        - test_network
+        - test-network
 
     - deployment: test-aks
       environment: test
       component: "aks"
       dependsOn:
-        - test_mis  
+        - test-mis  
 
 stages:
   - ${{ each deployment in parameters.environment_components }}:
