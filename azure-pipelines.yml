@@ -370,4 +370,4 @@ stages:
               - template: pipeline-steps/bootstrap.yaml
                 parameters:
                   environment: ${{ parameters.env }}
-              
+                  serviceConnection: $(serviceConnection)
