@@ -101,6 +101,7 @@ module "kubernetes" {
   depends_on         = [azurerm_resource_group.disks_resource_group]
   availability_zones = var.availability_zones
 
+  enable_automatic_channel_upgrade_patch = var.enable_automatic_channel_upgrade_patch
 }
 
 module "ctags" {
