@@ -355,18 +355,18 @@ stages:
                     -var control_vault=$(controlKeyVault)
                     -lock=false
 
-      - stage: BootStrapClusters_${{ deployment.deployment }}
-        displayName: "BootStrap Clusters"
-        dependsOn: ${{ parameters.env }}_aks
-        jobs:
-          - job: BootStrap
-            variables:
-              ${{ if eq(parameters['cluster'], 'All') }}:
-                clusters: $[ stageDependencies.${{ parameters.env }}_aks.TerraformPlanApply.outputs['setClusterNumbers.clusterNumbers'] ]
-              ${{ if ne(parameters['cluster'], 'All') }}:
-                clusters: ${{ parameters.cluster }}
-            steps:
-              - template: pipeline-steps/bootstrap.yaml
-                parameters:
-                  environment: ${{ parameters.env }}
+  - stage: BootStrapClusters_${{ deployment.deployment }}
+    displayName: "BootStrap Clusters"
+    dependsOn: ${{ parameters.env }}_aks
+    jobs:
+      - job: BootStrap
+        variables:
+          ${{ if eq(parameters['cluster'], 'All') }}:
+            clusters: $[ stageDependencies.${{ parameters.env }}_aks.TerraformPlanApply.outputs['setClusterNumbers.clusterNumbers'] ]
+          ${{ if ne(parameters['cluster'], 'All') }}:
+            clusters: ${{ parameters.cluster }}
+        steps:
+          - template: pipeline-steps/bootstrap.yaml
+            parameters:
+              environment: ${{ parameters.env }}
               
