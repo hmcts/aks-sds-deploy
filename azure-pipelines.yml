@@ -76,257 +76,257 @@ parameters:
   - name: environment_components
     type: object
     default:
-    - deployment: demo-genesis
+    - deployment: demo_genesis
       environment: demo
       component: "00-genesis"
     
-    - deployment: demo-network-rg
+    - deployment: demo_network_rg
       environment: demo
       component: "07-network-rg"
       dependsOn:
-        - demo-genesis
+        - demo_genesis
 
-    - deployment: demo-network
+    - deployment: demo_network
       environment: demo
       component: "01-network"
       dependsOn:
-        - demo-network-rg
+        - demo_network_rg
     
-    - deployment: demo-mis
+    - deployment: demo_mis
       environment: demo
       component: "05-mis"
       dependsOn:
-        - demo-network
+        - demo_network
 
-    - deployment: demo-aks
+    - deployment: demo_aks
       environment: demo
       component: "aks"
       dependsOn:
-        - demo-mis
+        - demo_mis
 
-    - deployment: dev-genesis
+    - deployment: dev_genesis
       environment: dev
       component: "00-genesis"
  
-    - deployment: dev-network-rg
+    - deployment: dev_network_rg
       environment: dev
       component: "07-network-rg"
       dependsOn:
-        - dev-genesis
+        - dev_genesis
 
-    - deployment: dev-network
+    - deployment: dev_network
       environment: dev
       component: "01-network"
       dependsOn:
-        - dev-network-rg
+        - dev_network_rg
     
-    - deployment: dev-mis
+    - deployment: dev_mis
       environment: dev
       component: "05-mis"
       dependsOn:
-        - dev-network
+        - dev_network
 
-    - deployment: dev-aks
+    - deployment: dev_aks
       environment: dev
       component: "aks"
       dependsOn:
-        - dev-mis
+        - dev_mis
 
-    - deployment: ithc-genesis
+    - deployment: ithc_genesis
       environment: ithc
       component: "00-genesis"
 
-    - deployment:  ithc-network-rg
+    - deployment:  ithc_network_rg
       environment:  ithc
       component: "07-network-rg"
       dependsOn:
-        - ithc-genesis
+        - ithc_genesis
 
-    - deployment:  ithc-network
+    - deployment:  ithc_network
       environment:  ithc
       component: "01-network"
       dependsOn:
-        - ithc-network-rg
+        - ithc_network_rg
     
-    - deployment:  ithc-mis
+    - deployment:  ithc_mis
       environment:  ithc
       component: "05-mis"
       dependsOn:
-        - ithc-network
+        - ithc_network
 
-    - deployment:  ithc-aks
+    - deployment:  ithc_aks
       environment:  ithc
       component: "aks"
       dependsOn:
-        - ithc-mis
+        - ithc_mis
 
-    - deployment: prod-genesis
+    - deployment: prod_genesis
       environment: prod
       component: "00-genesis"
 
-    - deployment: prod-network-rg
+    - deployment: prod_network_rg
       environment: prod
       component: "07-network-rg"
       dependsOn:
-        - prod-genesis
+        - prod_genesis
 
-    - deployment: prod-network
+    - deployment: prod_network
       environment: prod
       component: "01-network"
       dependsOn:
-        - prod-network-rg
+        - prod_network_rg
     
-    - deployment: prod-mis
+    - deployment: prod_mis
       environment: prod
       component: "05-mis"
       dependsOn:
-        - prod-network
+        - prod_network
 
-    - deployment: prod-aks
+    - deployment: prod_aks
       environment: prod
       component: "aks"
       dependsOn:
-        - prod-mis
+        - prod_mis
 
-    - deployment: ptl-genesis
+    - deployment: ptl_genesis
       environment: ptl
       component: "00-genesis"
 
-    - deployment: ptl-network-rg
+    - deployment: ptl_network_rg
       environment: ptl
       component: "07-network-rg"
       dependsOn:
-        -     ptl-genesis
+        -     ptl_genesis
 
-    - deployment:  ptl-network
+    - deployment:  ptl_network
       environment:  ptl
       component: "01-network"
       dependsOn:
-        - ptl-network-rg
+        - ptl_network_rg
     
-    - deployment: ptl-mis
+    - deployment: ptl_mis
       environment: ptl
       component: "05-mis"
       dependsOn:
-        -  ptl-network
+        -  ptl_network
 
-    - deployment: ptl-aks
+    - deployment: ptl_aks
       environment: ptl
       component: "aks"
       dependsOn:
-        - ptl-mis
+        - ptl_mis
    
-    - deployment: ptlsbox-genesis
+    - deployment: ptlsbox_genesis
       environment: ptlsbox
       component: "00-genesis"
 
-    - deployment:  ptlsbox-network-rg
+    - deployment:  ptlsbox_network_rg
       environment: ptlsbox
       component: "07-network-rg"
       dependsOn:
-        - ptlsbox-genesis
+        - ptlsbox_genesis
 
-    - deployment:  ptlsbox-network
+    - deployment:  ptlsbox_network
       environment:  ptlsbox
       component: "01-network"
       dependsOn:
-        - ptlsbox-network-rg
+        - ptlsbox_network_rg
     
-    - deployment: ptlsbox-mis
+    - deployment: ptlsbox_mis
       environment: ptlsbox
       component: "05-mis"
       dependsOn:
-        - ptlsbox-network
+        - ptlsbox_network
 
-    - deployment: ptlsbox-aks
+    - deployment: ptlsbox_aks
       environment: ptlsbox
       component: "aks"
       dependsOn:
-        - ptlsbox-mis
+        - ptlsbox_mis
 
-    - deployment: sbox-genesis
+    - deployment: sbox_genesis
       environment: sbox
       component: "00-genesis"
 
-    - deployment:  sbox-network-rg
+    - deployment:  sbox_network_rg
       environment: sbox
       component: "07-network-rg"
       dependsOn:
-        - sbox-genesis
+        - sbox_genesis
 
-    - deployment:  sbox-network
+    - deployment:  sbox_network
       environment:  sbox
       component: "01-network"
       dependsOn:
-        - sbox-network-rg
+        - sbox_network_rg
     
-    - deployment: sbox-mis
+    - deployment: sbox_mis
       environment: sbox
       component: "05-mis"
       dependsOn:
-      -  sbox-network
+      -  sbox_network
 
-    - deployment: sbox-aks
+    - deployment: sbox_aks
       environment: sbox
       component: "aks"
       dependsOn:
         - sbox-mis
  
-    - deployment: stg-genesis
+    - deployment: stg_genesis
       environment: stg
       component: "00-genesis"
 
-    - deployment: stg-network-rg
+    - deployment: stg_network_rg
       environment: stg
       component: "07-network-rg"
       dependsOn:
-        - stg-genesis
+        - stg_genesis
 
-    - deployment: stg-network
+    - deployment: stg_network
       environment: stg
       component: "01-network"
       dependsOn:
-        -  stg-network-rg
+        -  stg_network_rg
     
-    - deployment: stg-mis
+    - deployment: stg_mis
       environment: stg
       component: "05-mis"
       dependsOn:
-        - stg-network
+        - stg_network
 
-    - deployment: stg-aks
+    - deployment: stg_aks
       environment: stg
       component: "aks"
       dependsOn:
-        - stg-mis
+        - stg_mis
 
-    - deployment: test-genesis
+    - deployment: test_genesis
       environment: test
       component: "00-genesis"
 
-    - deployment: test-network-rg
+    - deployment: test_network_rg
       environment: test
-      component: "07-network-rg"
+      component: "07_network_rg"
       dependsOn:
-        - test-genesis
+        - test_genesis
 
-    - deployment: test-network
+    - deployment: test_network
       environment: test
       component: "01-network"
       dependsOn:
-        - test-network-rg
+        - test_network_rg
     
-    - deployment: test-mis
+    - deployment: test_mis
       environment: test
       component: "05-mis"
       dependsOn:
-        - test-network
+        - test_network
 
-    - deployment: test-aks
+    - deployment: test_aks
       environment: test
       component: "aks"
       dependsOn:
-        - test-mis  
+        - test_mis  
 
 stages:
   - ${{ each deployment in parameters.environment_components }}:
@@ -355,7 +355,7 @@ stages:
                     -var control_vault=$(controlKeyVault)
                     -lock=false
 
-      - stage: BootStrapClusters-${{ deployment.deployment }}
+      - stage: BootStrapClusters_${{ deployment.deployment }}
         displayName: "BootStrap Clusters"
         dependsOn: ${{ parameters.env }}_aks
         jobs:
