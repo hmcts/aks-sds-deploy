@@ -270,7 +270,7 @@ parameters:
       environment: sbox
       component: "aks"
       dependsOn:
-        - sbox-mis
+        - sbox_mis
  
     - deployment: stg_genesis
       environment: stg
