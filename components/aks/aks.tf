@@ -51,7 +51,7 @@ locals {
 
 module "kubernetes" {
   for_each    = toset([for k, v in var.clusters : k])
-  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=master"
+  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-10279_auto_channel_updates"
   environment = var.environment
   location    = var.location
 
@@ -101,6 +101,7 @@ module "kubernetes" {
   depends_on         = [azurerm_resource_group.disks_resource_group]
   availability_zones = var.availability_zones
 
+  enable_automatic_channel_upgrade_patch = var.enable_automatic_channel_upgrade_patch
 }
 
 module "ctags" {
