@@ -1,7 +1,7 @@
 clusters = {
-#   "00" = {
-#     kubernetes_version = "1.22.6"
-#   },
+  #   "00" = {
+  #     kubernetes_version = "1.22.6"
+  #   },
   "01" = {
     kubernetes_version = "1.22"
   },
@@ -16,7 +16,7 @@ kubernetes_cluster_agent_min_count = "2"
 kubernetes_cluster_agent_max_count = "10"
 
 linux_node_pool = {
-  max_pods = 50
+  max_pods  = 50
   max_nodes = 20
 }
 

@@ -9,7 +9,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "link" {
   resource_group_name   = "core-infra-intsvc-rg"
   private_dns_zone_name = each.key
   virtual_network_id    = module.network.network_id
-  tags = module.ctags.common_tags
+  tags                  = module.ctags.common_tags
 }
 
 // private endpoint zones are only located in the prod subscription
