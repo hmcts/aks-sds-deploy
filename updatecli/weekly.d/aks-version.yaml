@@ -28,177 +28,28 @@ sources:
           captureindex: 1
 
 targets:
-  sbox:
+  {{- range .environments }}
+  {{ . }}:
     sourceid: latestAksVersion
     name: Bump major AKS version
     kind: file
     scmid: default
     spec:
-      file: "environments/aks/sbox.tfvars"
+      file: "environments/aks/{{ .  }}.tfvars"
       matchpattern: 'kubernetes_version = \"(\d+\.)?(\d+\.)?(\*|\d+)\"'
       content: 'kubernetes_version  = "{{ source `latestAksVersion` }}"'
-  demo:
-    sourceid: latestAksVersion
-    name: Bump major AKS version
-    kind: file
-    scmid: default
-    spec:
-      file: "environments/aks/demo.tfvars"
-      matchpattern: 'kubernetes_version = \"(\d+\.)?(\d+\.)?(\*|\d+)\"'
-      content: 'kubernetes_version  = "{{ source `latestAksVersion` }}"'
-  dev:
-    sourceid: latestAksVersion
-    name: Bump major AKS version
-    kind: file
-    scmid: default
-    spec:
-      file: "environments/aks/dev.tfvars"
-      matchpattern: 'kubernetes_version = \"(\d+\.)?(\d+\.)?(\*|\d+)\"'
-      content: 'kubernetes_version  = "{{ source `latestAksVersion` }}"'
-  ithc:
-    sourceid: latestAksVersion
-    name: Bump major AKS version
-    kind: file
-    scmid: default
-    spec:
-      file: "environments/aks/ithc.tfvars"
-      matchpattern: 'kubernetes_version = \"(\d+\.)?(\d+\.)?(\*|\d+)\"'
-      content: 'kubernetes_version  = "{{ source `latestAksVersion` }}"'
-  ptlsbox:
-    sourceid: latestAksVersion
-    name: Bump major AKS version
-    kind: file
-    scmid: default
-    spec:
-      file: "environments/aks/ptlsbox.tfvars"
-      matchpattern: 'kubernetes_version = \"(\d+\.)?(\d+\.)?(\*|\d+)\"'
-      content: 'kubernetes_version  = "{{ source `latestAksVersion` }}"'
-  ptl:
-    sourceid: latestAksVersion
-    name: Bump major AKS version
-    kind: file
-    scmid: default
-    spec:
-      file: "environments/aks/ptl.tfvars"
-      matchpattern: 'kubernetes_version = \"(\d+\.)?(\d+\.)?(\*|\d+)\"'
-      content: 'kubernetes_version  = "{{ source `latestAksVersion` }}"'
-  stg:
-    sourceid: latestAksVersion
-    name: Bump major AKS version
-    kind: file
-    scmid: default
-    spec:
-      file: "environments/aks/stg.tfvars"
-      matchpattern: 'kubernetes_version = \"(\d+\.)?(\d+\.)?(\*|\d+)\"'
-      content: 'kubernetes_version  = "{{ source `latestAksVersion` }}"'
-  test:
-    sourceid: latestAksVersion
-    name: Bump major AKS version
-    kind: file
-    scmid: default
-    spec:
-      file: "environments/aks/test.tfvars"
-      matchpattern: 'kubernetes_version = \"(\d+\.)?(\d+\.)?(\*|\d+)\"'
-      content: 'kubernetes_version  = "{{ source `latestAksVersion` }}"'
-  prod:
-    sourceid: latestAksVersion
-    name: Bump major AKS version
-    kind: file
-    scmid: default
-    spec:
-      file: "environments/aks/prod.tfvars"
-      matchpattern: 'kubernetes_version = \"(\d+\.)?(\d+\.)?(\*|\d+)\"'
-      content: 'kubernetes_version  = "{{ source `latestAksVersion` }}"'
-
+  {{- end }}
 
 pullrequests:
-  sbox:
+  {{- range .environments }}
+  {{ . }}:
     kind: github
     scmid: default
     title: >
-      [updatecli] [sbox] Bump major aks version to {{ source "latestAksVersion" }}
+      [updatecli] [{{ . }}] Bump major aks version to {{ source "latestAksVersion" }}
     spec:
       automerge: false
       draft: false
       description: |
         Bump major aks version to {{ source "latestAksVersion" }}
-  demo:
-    kind: github
-    scmid: default
-    title: >
-      [updatecli] [demo] Bump major aks version to {{ source "latestAksVersion" }}
-    spec:
-      automerge: false
-      draft: false
-      description: |
-        Bump major aks version to {{ source "latestAksVersion" }}
-  dev:
-    kind: github
-    scmid: default
-    title: >
-      [updatecli] [dev] Bump major aks version to {{ source "latestAksVersion" }}
-    spec:
-      automerge: false
-      draft: false
-      description: |
-        Bump major aks version to {{ source "latestAksVersion" }}
-  ithc:
-    kind: github
-    scmid: default
-    title: >
-      [updatecli] [ithc] Bump major aks version to {{ source "latestAksVersion" }}
-    spec:
-      automerge: false
-      draft: false
-      description: |
-        Bump major aks version to {{ source "latestAksVersion" }}
-  ptlsbox:
-    kind: github
-    scmid: default
-    title: >
-      [updatecli] [ptlsbox] Bump major aks version to {{ source "latestAksVersion" }}
-    spec:
-      automerge: false
-      draft: false
-      description: |
-        Bump major aks version to {{ source "latestAksVersion" }}
-  ptl:
-    kind: github
-    scmid: default
-    title: >
-      [updatecli] [ptl] Bump major aks version to {{ source "latestAksVersion" }}
-    spec:
-      automerge: false
-      draft: false
-      description: |
-        Bump major aks version to {{ source "latestAksVersion" }}
-  stg:
-    kind: github
-    scmid: default
-    title: >
-      [updatecli] [stg] Bump major aks version to {{ source "latestAksVersion" }}
-    spec:
-      automerge: false
-      draft: false
-      description: |
-        Bump major aks version to {{ source "latestAksVersion" }}
-  test:
-    kind: github
-    scmid: default
-    title: >
-      [updatecli] [test] Bump major aks version to {{ source "latestAksVersion" }}
-    spec:
-      automerge: false
-      draft: false
-      description: |
-        Bump major aks version to {{ source "latestAksVersion" }}
-  prod:
-    kind: github
-    scmid: default
-    title: >
-      [updatecli] [prod] Bump major aks version to {{ source "latestAksVersion" }}
-    spec:
-      automerge: false
-      draft: false
-      description: |
-        Bump major aks version to {{ source "latestAksVersion" }}
+  {{- end }}

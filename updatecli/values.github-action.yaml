@@ -4,3 +4,13 @@ github:
   branch: "master"
   owner: "hmcts"
   repository: "aks-sds-deploy"
+environments:
+  - demo
+  - dev
+  - ithc
+  - prod
+  - ptlsbox
+  - ptl
+  - sbox
+  - stg
+  - test
