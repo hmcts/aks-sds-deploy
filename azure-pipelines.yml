@@ -30,7 +30,11 @@ variables:
     value: ${{ parameters.overrideAction }}
   - name: project
     value: ss
-
+  - name: targetCommandForAks
+    ${{ if ne(parameters['cluster'], 'All') }}:
+      value: "-target azurerm_resource_group.kubernetes_resource_group[${{parameters.cluster}}] -target module.kubernetes[${{parameters.cluster}}]"
+    ${{ if eq(parameters['cluster'], 'All') }}:
+      value: '' 
 parameters:
   - name: overrideAction
     displayName: Action
@@ -79,84 +83,99 @@ parameters:
     - deployment: demo_genesis
       environment: demo
       component: "00-genesis"
+      targetCommand: ''
     
     - deployment: demo_network_rg
       environment: demo
       component: "07-network-rg"
+      targetCommand: ''
       dependsOn:
         - demo_genesis
 
     - deployment: demo_network
       environment: demo
       component: "01-network"
+      targetCommand: ''
       dependsOn:
         - demo_network_rg
     
     - deployment: demo_mis
       environment: demo
       component: "05-mis"
+      targetCommand: ''
       dependsOn:
         - demo_network
 
     - deployment: demo_aks
       environment: demo
       component: "aks"
+      targetCommand: $(targetCommandForAks)
       dependsOn:
         - demo_mis
 
     - deployment: dev_genesis
       environment: dev
+      targetCommand: ''
       component: "00-genesis"
  
     - deployment: dev_network_rg
       environment: dev
       component: "07-network-rg"
+      targetCommand: ''
       dependsOn:
         - dev_genesis
 
     - deployment: dev_network
       environment: dev
       component: "01-network"
+      targetCommand: ''
       dependsOn:
         - dev_network_rg
     
     - deployment: dev_mis
       environment: dev
       component: "05-mis"
+      targetCommand: ''
       dependsOn:
         - dev_network
 
     - deployment: dev_aks
       environment: dev
       component: "aks"
+      targetCommand: $(targetCommandForAks)
       dependsOn:
         - dev_mis
 
     - deployment: ithc_genesis
       environment: ithc
       component: "00-genesis"
+      targetCommand: ''
 
     - deployment:  ithc_network_rg
       environment:  ithc
       component: "07-network-rg"
+      targetCommand: ''
       dependsOn:
         - ithc_genesis
 
     - deployment:  ithc_network
       environment:  ithc
       component: "01-network"
+      targetCommand: ''
       dependsOn:
         - ithc_network_rg
     
     - deployment:  ithc_mis
       environment:  ithc
       component: "05-mis"
+      targetCommand: ''
       dependsOn:
         - ithc_network
 
     - deployment:  ithc_aks
       environment:  ithc
       component: "aks"
+      targetCommand: $(targetCommandForAks)
       dependsOn:
         - ithc_mis
 
@@ -167,164 +186,193 @@ parameters:
     - deployment: prod_network_rg
       environment: prod
       component: "07-network-rg"
+      targetCommand: ''
       dependsOn:
         - prod_genesis
 
     - deployment: prod_network
       environment: prod
       component: "01-network"
+      targetCommand: ''
       dependsOn:
         - prod_network_rg
     
     - deployment: prod_mis
       environment: prod
       component: "05-mis"
+      targetCommand: ''
       dependsOn:
         - prod_network
 
     - deployment: prod_aks
       environment: prod
       component: "aks"
+      targetCommand: $(targetCommandForAks)
       dependsOn:
         - prod_mis
 
     - deployment: ptl_genesis
       environment: ptl
       component: "00-genesis"
+      targetCommand: ''
 
     - deployment: ptl_network_rg
       environment: ptl
       component: "07-network-rg"
+      targetCommand: ''
       dependsOn:
         -     ptl_genesis
 
     - deployment:  ptl_network
       environment:  ptl
       component: "01-network"
+      targetCommand: ''
       dependsOn:
         - ptl_network_rg
     
     - deployment: ptl_mis
       environment: ptl
       component: "05-mis"
+      targetCommand: ''
       dependsOn:
         -  ptl_network
 
     - deployment: ptl_aks
       environment: ptl
       component: "aks"
+      targetCommand: $(targetCommandForAks)
       dependsOn:
         - ptl_mis
    
     - deployment: ptlsbox_genesis
       environment: ptlsbox
+      targetCommand: ''
       component: "00-genesis"
 
     - deployment:  ptlsbox_network_rg
       environment: ptlsbox
       component: "07-network-rg"
+      targetCommand: ''
       dependsOn:
         - ptlsbox_genesis
 
     - deployment:  ptlsbox_network
       environment:  ptlsbox
       component: "01-network"
+      targetCommand: ''
       dependsOn:
         - ptlsbox_network_rg
     
     - deployment: ptlsbox_mis
       environment: ptlsbox
       component: "05-mis"
+      targetCommand: ''
       dependsOn:
         - ptlsbox_network
 
     - deployment: ptlsbox_aks
       environment: ptlsbox
       component: "aks"
+      targetCommand: $(targetCommandForAks)
       dependsOn:
         - ptlsbox_mis
 
     - deployment: sbox_genesis
       environment: sbox
       component: "00-genesis"
+      targetCommand: ''
 
     - deployment:  sbox_network_rg
       environment: sbox
       component: "07-network-rg"
+      targetCommand: ''
       dependsOn:
         - sbox_genesis
 
     - deployment:  sbox_network
       environment:  sbox
       component: "01-network"
+      targetCommand: ''
       dependsOn:
         - sbox_network_rg
     
     - deployment: sbox_mis
       environment: sbox
       component: "05-mis"
+      targetCommand: ''
       dependsOn:
       -  sbox_network
 
     - deployment: sbox_aks
       environment: sbox
       component: "aks"
+      targetCommand: $(targetCommandForAks)
       dependsOn:
         - sbox_mis
  
     - deployment: stg_genesis
       environment: stg
       component: "00-genesis"
+      targetCommand: ''
 
     - deployment: stg_network_rg
       environment: stg
       component: "07-network-rg"
+      targetCommand: ''
       dependsOn:
         - stg_genesis
 
     - deployment: stg_network
       environment: stg
       component: "01-network"
+      targetCommand: ''
       dependsOn:
         -  stg_network_rg
     
     - deployment: stg_mis
       environment: stg
       component: "05-mis"
+      targetCommand: ''
       dependsOn:
         - stg_network
 
     - deployment: stg_aks
       environment: stg
       component: "aks"
+      targetCommand: $(targetCommandForAks)
       dependsOn:
         - stg_mis
 
     - deployment: test_genesis
       environment: test
       component: "00-genesis"
+      targetCommand: ''
 
     - deployment: test_network_rg
       environment: test
       component: "07-network-rg"
+      targetCommand: ''
       dependsOn:
         - test_genesis
 
     - deployment: test_network
       environment: test
       component: "01-network"
+      targetCommand: ''
       dependsOn:
         - test_network_rg
     
     - deployment: test_mis
       environment: test
       component: "05-mis"
+      targetCommand: ''
       dependsOn:
         - test_network
 
     - deployment: test_aks
       environment: test
       component: "aks"
+      targetCommand: $(targetCommandForAks)
       dependsOn:
         - test_mis  
 
@@ -348,12 +396,8 @@ stages:
                   terraformInitSubscription: ${{ variables.terraformInitSubscription }}
                   product: ${{ variables.product }}
                   kvConnectedServiceName: ${{ variables.serviceConnection }}
-                  planCommandOptions: >
-                    -var project=${{ variables.project }}
-                    -var subscription_id=$(ARM_SUBSCRIPTION_ID)
-                    -var environment=${{ deployment.environment }}
-                    -var control_vault=$(controlKeyVault)
-                    -lock=false
+                  planCommandOptions: "-var project=${{ variables.project }} -var subscription_id=$(ARM_SUBSCRIPTION_ID) -var environment=${{ deployment.environment }} -var control_vault=$(controlKeyVault) -lock=false ${{ deployment.targetCommand }}"
+
 
   - stage: BootStrapClusters_${{ parameters.env }}_BootStrapClusters
     displayName: "BootStrap Clusters"
