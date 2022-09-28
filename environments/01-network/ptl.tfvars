@@ -21,7 +21,8 @@ private_dns_zones = [
   "test.platform.hmcts.net",
   "ithc.platform.hmcts.net",
   "staging.platform.hmcts.net",
-  "platform.hmcts.net"
+  "platform.hmcts.net",
+  "aat.platform.hmcts.net"
 ]
 
 hub = "prod"
