@@ -306,7 +306,7 @@ parameters:
 
     - deployment: test_network_rg
       environment: test
-      component: "07_network_rg"
+      component: "07-network-rg"
       dependsOn:
         - test_genesis
 
