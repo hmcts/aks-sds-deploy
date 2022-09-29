@@ -57,10 +57,10 @@ additional_routes = [
 
 clusters = {
   "00" = {
-    kubernetes_version = "1.22.6"
+    kubernetes_version = "1.22"
   },
   "01" = {
-    kubernetes_version = "1.22.6"
+    kubernetes_version = "1.22"
   }
 }
 
