@@ -1,0 +1,10 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: aks-sds-deploy
+  annotations:
+    github.com/project-slug: hmcts/aks-sds-deploy
+spec:
+  type: other
+  lifecycle: unknown
+  owner: dts_platform_operations
