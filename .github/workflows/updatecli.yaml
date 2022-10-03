@@ -8,6 +8,7 @@ on:
     - cron: '0 2 * * 1'  # Every monday at 2am UTC
 
 permissions:
+  id-token: write
   contents: write
   pull-requests: write
 
@@ -17,6 +18,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+
+      - name: 'Az CLI login'
+        uses: azure/login@v1
+        with:
+          client-id: 11ec3fe1-cfd2-440f-a7a3-034182926fb7
+          tenant-id: 6bfc3457-f58c-47de-80dd-56844abea49e
+          subscription-id: acb72003-b211-435f-8759-77b8290870b8
 
       - name: Install Updatecli in the runner
         uses: updatecli/updatecli-action@v2
