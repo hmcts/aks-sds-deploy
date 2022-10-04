@@ -85,87 +85,87 @@ stages:
               builtFrom: $(Build.Repository.Name)
               product: ${{ variables.product }}
 
-  - stage: Network
-    displayName: "Network"
-    jobs:
-      - job: NetworkRg
-        steps:
-          - template: pipeline-steps/deploy-service.yaml
-            parameters:
-              environment: ${{ parameters.env }}
-              location: ${{ parameters.location }}
-              stack: "07-network-rg"
-              project: $(project)
-              tfversion: $(tfversion)
-              tfInitSub: ${{ variables.tfInitSub }}
-              builtFrom: $(Build.Repository.Name)
-              product: ${{ variables.product }}
+  # - stage: Network
+  #   displayName: "Network"
+  #   jobs:
+  #     - job: NetworkRg
+  #       steps:
+  #         - template: pipeline-steps/deploy-service.yaml
+  #           parameters:
+  #             environment: ${{ parameters.env }}
+  #             location: ${{ parameters.location }}
+  #             stack: "07-network-rg"
+  #             project: $(project)
+  #             tfversion: $(tfversion)
+  #             tfInitSub: ${{ variables.tfInitSub }}
+  #             builtFrom: $(Build.Repository.Name)
+  #             product: ${{ variables.product }}
 
-      - job: DeployInfrastructure
-        dependsOn: NetworkRg
-        steps:
-          - template: pipeline-steps/deploy-network.yaml
-            parameters:
-              environment: ${{ parameters.env }}
-              location: ${{ parameters.location }}
-              stack: "01-network"
-              project: $(project)
-              tfversion: $(tfversion)
-              terraformServiceConnection: OPS-APPROVAL-GATE-MGMT-ENVS
-              tfInitSub: ${{ variables.tfInitSub }}
-              builtFrom: $(Build.Repository.Name)
-              product: ${{ variables.product }}
+  #     - job: DeployInfrastructure
+  #       dependsOn: NetworkRg
+  #       steps:
+  #         - template: pipeline-steps/deploy-network.yaml
+  #           parameters:
+  #             environment: ${{ parameters.env }}
+  #             location: ${{ parameters.location }}
+  #             stack: "01-network"
+  #             project: $(project)
+  #             tfversion: $(tfversion)
+  #             terraformServiceConnection: OPS-APPROVAL-GATE-MGMT-ENVS
+  #             tfInitSub: ${{ variables.tfInitSub }}
+  #             builtFrom: $(Build.Repository.Name)
+  #             product: ${{ variables.product }}
 
-  - stage: Managed_Identity
-    displayName: "Managed_Identity"
-    dependsOn: Network
-    jobs:
-      - job: Managed_Identity
-        steps:
-          - template: pipeline-steps/managed_identity.yaml
-            parameters:
-              serviceConnection: $(serviceConnection)
-              environment: ${{ parameters.env }}
-              location: ${{ parameters.location }}
-              stack: "05-mis"
-              project: $(project)
-              tfversion: $(tfversion)
-              tfInitSub: ${{ variables.tfInitSub }}
-              builtFrom: $(Build.Repository.Name)
-              product: ${{ variables.product }}
+  # - stage: Managed_Identity
+  #   displayName: "Managed_Identity"
+  #   dependsOn: Network
+  #   jobs:
+  #     - job: Managed_Identity
+  #       steps:
+  #         - template: pipeline-steps/managed_identity.yaml
+  #           parameters:
+  #             serviceConnection: $(serviceConnection)
+  #             environment: ${{ parameters.env }}
+  #             location: ${{ parameters.location }}
+  #             stack: "05-mis"
+  #             project: $(project)
+  #             tfversion: $(tfversion)
+  #             tfInitSub: ${{ variables.tfInitSub }}
+  #             builtFrom: $(Build.Repository.Name)
+  #             product: ${{ variables.product }}
 
-  - stage: Aks
-    displayName: "AKS clusters"
-    dependsOn:
-      - Managed_Identity
-    jobs:
-      - job: DeployInfrastructure
-        steps:
-          - template: pipeline-steps/deploy-service.yaml
-            parameters:
-              environment: ${{ parameters.env }}
-              location: ${{ parameters.location }}
-              stack: "aks"
-              project: $(project)
-              tfversion: $(tfversion)
-              tfInitSub: ${{ variables.tfInitSub }}
-              builtFrom: $(Build.Repository.Name)
-              product: ${{ variables.product }}
-              ${{ if ne(parameters['cluster'], 'All') }}:
-                targetCommand: '-target azurerm_resource_group.kubernetes_resource_group["\"${{parameters.cluster}}\""] -target module.kubernetes["\"${{parameters.cluster}}\""] -target azurerm_role_assignment.dev_to_stg["\"${{parameters.cluster}}\""] -target data.azurerm_resource_group.mi_stg_rg[0]'
+  # - stage: Aks
+  #   displayName: "AKS clusters"
+  #   dependsOn:
+  #     - Managed_Identity
+  #   jobs:
+  #     - job: DeployInfrastructure
+  #       steps:
+  #         - template: pipeline-steps/deploy-service.yaml
+  #           parameters:
+  #             environment: ${{ parameters.env }}
+  #             location: ${{ parameters.location }}
+  #             stack: "aks"
+  #             project: $(project)
+  #             tfversion: $(tfversion)
+  #             tfInitSub: ${{ variables.tfInitSub }}
+  #             builtFrom: $(Build.Repository.Name)
+  #             product: ${{ variables.product }}
+  #             ${{ if ne(parameters['cluster'], 'All') }}:
+  #               targetCommand: '-target azurerm_resource_group.kubernetes_resource_group["\"${{parameters.cluster}}\""] -target module.kubernetes["\"${{parameters.cluster}}\""] -target azurerm_role_assignment.dev_to_stg["\"${{parameters.cluster}}\""] -target data.azurerm_resource_group.mi_stg_rg[0]'
 
-  - stage: BootStrapClusters
-    displayName: "BootStrap Clusters"
-    dependsOn: Aks
-    jobs:
-      - job: BootStrap
-        variables:
-          ${{ if eq(parameters['cluster'], 'All') }}:
-            clusters: $[ stageDependencies.Aks.DeployInfrastructure.outputs['setClusterNumbers.clusterNumbers'] ]
-          ${{ if ne(parameters['cluster'], 'All') }}:
-            clusters: ${{ parameters.cluster }}
-        steps:
-          - template: pipeline-steps/bootstrap.yaml
-            parameters:
-              environment: ${{ parameters.env }}
-              serviceConnection: $(serviceConnection)
+  # - stage: BootStrapClusters
+  #   displayName: "BootStrap Clusters"
+  #   dependsOn: Aks
+  #   jobs:
+  #     - job: BootStrap
+  #       variables:
+  #         ${{ if eq(parameters['cluster'], 'All') }}:
+  #           clusters: $[ stageDependencies.Aks.DeployInfrastructure.outputs['setClusterNumbers.clusterNumbers'] ]
+  #         ${{ if ne(parameters['cluster'], 'All') }}:
+  #           clusters: ${{ parameters.cluster }}
+  #       steps:
+  #         - template: pipeline-steps/bootstrap.yaml
+  #           parameters:
+  #             environment: ${{ parameters.env }}
+  #             serviceConnection: $(serviceConnection)
