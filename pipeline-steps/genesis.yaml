@@ -22,7 +22,6 @@ steps:
       serviceConnection: ${{ variables.serviceConnection }}
       terraformInitSubscription: ${{ variables.tfInitSub }}
       product: ${{ variables.product }}
-      # kvConnectedServiceName: ${{ variables.serviceConnection }}
       terraformVarFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/00-genesis/${{ parameters.environment }}.tfvars"
       planCommandOptions: "-var project=${{ variables.project }} -var subscription_id=$(ARM_SUBSCRIPTION_ID) -var environment=${{ parameters.environment }}"
 
