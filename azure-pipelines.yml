@@ -1,20 +1,26 @@
 name: ${{ parameters.Action }} - ${{ parameters.env }}.${{ parameters.cluster }}.${{ parameters.location }}
 
-# TODO refactor pipeline to do plan by default, for now pls no trigger
-
 trigger: none
 
 pool:
   vmImage: "ubuntu-latest"
 
+resources:
+  repositories:
+    - repository: cnp-azuredevops-libraries
+      type: github
+      ref: refs/heads/DTSPO-9695-make-tf-varfile-configurable 
+      name: hmcts//cnp-azuredevops-libraries
+      endpoints: 'hmcts-PlatformOperations'
+
 parameters:
-  - name: Action
-    displayName: Action
+  - name: action
+    displayName: action
     type: string
-    default: "Plan"
+    default: "plan"
     values:
-      - Plan
-      - Apply
+      - plan
+      - apply
 
   - name: cluster
     displayName: Cluster
@@ -36,27 +42,23 @@ parameters:
   - name: env
     displayName: Environment
     type: string
-    default: "SBOX"
+    default: "sbox"
     values:
-      - ITHC
-      - DEV
-      - DEMO
-      - SBOX
-      - PTLSBOX
-      - TEST
-      - STG
-      - PTL
-      - PROD
+      - ithc
+      - dev
+      - demo
+      - sbox
+      - ptlsbox
+      - test
+      - stg
+      - ptl
+      - prod
 
 variables:
-  - name: tfversion
-    value: 1.2.8
-  # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
-  # but it might be better to template the pipeline more and have a different pipeline file
-  # so that someone doesn't pick the wrong var in the dropdown
+  
   - name: project
     value: ss
-  # same comment as above ^^
+
   - name: serviceConnection
     value: OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
   - name: tfInitSub

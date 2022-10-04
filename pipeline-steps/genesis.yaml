@@ -12,6 +12,18 @@ parameters:
 steps:
 
   - script: rm -fr .terraform/modules/genesis
+             
+  - template: steps/terraform.yaml@cnp-azuredevops-libraries
+    parameters:
+    overrideAction: ${{ parameters.overrideAction }}
+    environment: ${{ deployment.environment }}
+    component: ${{ deployment.component }}
+    serviceConnection: ${{ variables.serviceConnection }}
+    terraformInitSubscription: ${{ variables.terraformInitSubscription }}
+    product: ${{ variables.product }}
+    kvConnectedServiceName: ${{ variables.serviceConnection }}
+    planCommandOptions: "-var project=${{ variables.project }} -var subscription_id=$(ARM_SUBSCRIPTION_ID) -var environment=${{ deployment.environment }} -var control_vault=$(controlKeyVault) -lock=false ${{ deployment.targetCommand }}"
+
 
   - template: keyvault-read.yaml
     parameters:
