@@ -80,10 +80,7 @@ stages:
               location: ${{ parameters.location }}
               stack: "00-genesis"
               project: $(project)
-              tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
-              builtFrom: $(Build.Repository.Name)
-              product: ${{ variables.product }}
               action: ${{ parameters.action }}
 
   # - stage: Network

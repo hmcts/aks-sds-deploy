@@ -4,10 +4,7 @@ parameters:
   serviceConnection: ''
   stack: ''
   project: ''
-  tfversion: ''
   tfInitSub: ''
-  builtFrom: ''
-  product: ''
   action: ''
 
 steps:
@@ -19,10 +16,11 @@ steps:
     parameters:
       overrideAction: ${{ parameters.action }}
       environment: ${{ parameters.environment }}
-      component: "00-genesis"
+      component: ${{ parameters.stack }}
       serviceConnection: ${{ variables.serviceConnection }}
-      terraformInitSubscription: ${{ variables.tfInitSub }}
+      terraformInitSubscription: ${{ parameters.tfInitSub }}
       product: ${{ variables.product }}
-      terraformVarFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/00-genesis/${{ parameters.environment }}.tfvars"
+      location: ${{ parameters.location }}
+      terraformVarFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/${{ parameters.stack }}/${{ parameters.environment }}.tfvars"
       planCommandOptions: "-var project=${{ variables.project }} -var subscription_id=$(ARM_SUBSCRIPTION_ID) -var environment=${{ parameters.environment }}"
 
