@@ -46,7 +46,7 @@ pullrequests:
     kind: github
     scmid: default
     title: >
-      [updatecli] [{{ . }}] Bump major aks version to {{ source "latestAksVersion" }}
+      [updatecli] [{{ . }}] Bump AKS version to {{ source "latestAksVersion" }}
     spec:
       automerge: false
       draft: false
