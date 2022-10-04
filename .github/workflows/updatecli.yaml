@@ -22,9 +22,9 @@ jobs:
       - name: 'Az CLI login'
         uses: azure/login@v1
         with:
-          client-id: 11ec3fe1-cfd2-440f-a7a3-034182926fb7
-          tenant-id: 6bfc3457-f58c-47de-80dd-56844abea49e
-          subscription-id: acb72003-b211-435f-8759-77b8290870b8
+          client-id: 7150f04e-3563-4649-b5b9-9381f88da05b        # DTS AKS version checker
+          tenant-id: 531ff96d-0ae9-462a-8d2d-bec7c0b42082        # HMCTS.NET
+          subscription-id: a8140a9e-f1b0-481f-a4de-09e2ee23f7ab  # DTS-SHAREDSERVICES-SBOX
 
       - name: Install Updatecli in the runner
         uses: updatecli/updatecli-action@v2
