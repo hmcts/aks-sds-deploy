@@ -9,7 +9,7 @@ locals {
 locals {
   network_resource_group_name = format("%s-%s-network-rg",
     var.project,
-    var.environment
+    var.env
   )
   network_shortname = format("%s_%s",
     var.project,
@@ -17,7 +17,7 @@ locals {
   )
   network_name = format("%s-%s-vnet",
     var.project,
-    var.environment
+    var.env
   )
 }
 
