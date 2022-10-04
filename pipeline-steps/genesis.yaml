@@ -12,67 +12,17 @@ parameters:
 steps:
 
   - script: rm -fr .terraform/modules/genesis
-             
+
+  - template: steps/set-build-repo-suffix-env-var.yaml@cnp-azuredevops-libraries           
   - template: steps/terraform.yaml@cnp-azuredevops-libraries
     parameters:
-    overrideAction: ${{ parameters.overrideAction }}
-    environment: ${{ deployment.environment }}
-    component: ${{ deployment.component }}
-    serviceConnection: ${{ variables.serviceConnection }}
-    terraformInitSubscription: ${{ variables.terraformInitSubscription }}
-    product: ${{ variables.product }}
-    kvConnectedServiceName: ${{ variables.serviceConnection }}
-    planCommandOptions: "-var project=${{ variables.project }} -var subscription_id=$(ARM_SUBSCRIPTION_ID) -var environment=${{ deployment.environment }} -var control_vault=$(controlKeyVault) -lock=false ${{ deployment.targetCommand }}"
-
-
-  - template: keyvault-read.yaml
-    parameters:
-      serviceConnection: $(serviceConnection)
+      overrideAction: ${{ parameters.overrideAction }}
       environment: ${{ parameters.environment }}
+      component: "00-genesis"
+      serviceConnection: ${{ variables.serviceConnection }}
+      terraformInitSubscription: ${{ variables.tfInitSub }}
+      product: ${{ variables.product }}
+      # kvConnectedServiceName: ${{ variables.serviceConnection }}
+      terraformVarFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/00-genesis/${{ parameters.environment }}.tfvars"
+      planCommandOptions: "-var project=${{ variables.project }} -var subscription_id=$(ARM_SUBSCRIPTION_ID) -var environment=${{ parameters.environment }}"
 
-  - task: TerraformInstaller@0
-    displayName: 'Install Terraform ${{ parameters.tfversion }}'
-    inputs:
-      terraformVersion: ${{ parameters.tfversion }}
-
-  - task: TerraformCLI@0
-    displayName: terraform init
-    inputs:
-      command: init
-      terraformVersion: ${{ parameters.tfversion }}
-      workingDirectory: '$(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}'
-      backendType: azurerm
-      backendServiceArm: $(serviceconnection)
-      backendAzureRmResourceGroupName: 'azure-control-$(env)-rg'
-      backendAzureRmResourceGroupLocation: ${{ parameters.location }}
-      backendAzureRmStorageAccountName: $(controlStorageAccount)
-      backendAzureRmStorageAccountSku: Standard_LRS
-      backendAzureRmContainerName: subscription-tfstate
-      backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/$(env)/${{ parameters.stack }}/terraform-genesis.tfstate'
-      commandOptions: '-backend-config=subscription_id=${{ parameters.tfInitSub }} -var builtFrom=${{ parameters.builtFrom }} -var product=${{ parameters.product }}'
-
-  - task: TerraformCLI@0
-    displayName: terraform validate
-    inputs:
-      command: validate
-      terraformVersion: ${{ parameters.tfversion }}
-      workingDirectory: '$(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}'
-
-  - task: TerraformCLI@0
-    displayName: terraform plan
-    inputs:
-      command: plan
-      terraformVersion: ${{ parameters.tfversion }}
-      workingDirectory: '$(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}'
-      environmentServiceName: $(serviceConnection)
-      commandOptions: '-out=tfplan-${{ parameters.project }}-${{ parameters.stack }}-$(env) -var subscription_id=$(ARM_SUBSCRIPTION_ID) -var environment=$(env) -var builtFrom=${{ parameters.builtFrom }}  -var product=${{ parameters.product }} -var project=$(project) -var-file $(System.DefaultWorkingDirectory)/environments/${{ parameters.stack }}/$(env).tfvars'
-
-  - task: TerraformCLI@0
-    displayName: Terraform apply
-    condition: and(succeeded(), eq(variables['action'], 'Apply'))
-    inputs:
-      command: apply
-      terraformVersion: ${{ parameters.tfversion }}
-      workingDirectory: '$(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}'
-      environmentServiceName: $(serviceConnection)
-      commandOptions: '--auto-approve tfplan-${{ parameters.project }}-${{ parameters.stack }}-$(env)'
