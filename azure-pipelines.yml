@@ -11,7 +11,7 @@ resources:
       type: github
       ref: refs/heads/DTSPO-9695-make-tf-varfile-configurable 
       name: hmcts//cnp-azuredevops-libraries
-      endpoints: 'hmcts-PlatformOperations'
+      endpoint: 'hmcts-PlatformOperations'
 
 parameters:
   - name: action
