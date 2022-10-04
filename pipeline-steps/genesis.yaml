@@ -22,5 +22,4 @@ steps:
       product: ${{ variables.product }}
       location: ${{ parameters.location }}
       terraformVarFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/${{ parameters.stack }}/${{ parameters.environment }}.tfvars"
-      planCommandOptions: "-var project=${{ variables.project }} -var subscription_id=$(ARM_SUBSCRIPTION_ID) -var environment=${{ parameters.environment }}"
-
+      planCommandOptions: "-var project=${{ variables.project }} -var subscription_id=$(ARM_SUBSCRIPTION_ID)"
