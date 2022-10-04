@@ -84,6 +84,7 @@ stages:
               tfInitSub: ${{ variables.tfInitSub }}
               builtFrom: $(Build.Repository.Name)
               product: ${{ variables.product }}
+              action: ${{ parameters.action }}
 
   # - stage: Network
   #   displayName: "Network"
