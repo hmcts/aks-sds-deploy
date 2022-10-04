@@ -83,6 +83,7 @@ stages:
               tfInitSub: ${{ variables.tfInitSub }}
               action: ${{ parameters.action }}
               serviceConnection: $(serviceConnection)
+              product: $(product)
 
   # - stage: Network
   #   displayName: "Network"

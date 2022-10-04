@@ -6,6 +6,7 @@ parameters:
   project: ''
   tfInitSub: ''
   action: ''
+  product: ''
 
 steps:
 
@@ -19,7 +20,7 @@ steps:
       component: ${{ parameters.stack }}
       serviceConnection: ${{ parameters.serviceConnection }}
       terraformInitSubscription: ${{ parameters.tfInitSub }}
-      product: ${{ variables.product }}
+      product: ${{ parameters.product }}
       location: ${{ parameters.location }}
       terraformVarFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/${{ parameters.stack }}/${{ parameters.environment }}.tfvars"
       planCommandOptions: "-var project=${{ variables.project }} -var subscription_id=$(ARM_SUBSCRIPTION_ID)"
