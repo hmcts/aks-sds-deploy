@@ -102,6 +102,7 @@ module "kubernetes" {
   availability_zones = var.availability_zones
 
   enable_automatic_channel_upgrade_patch = var.enable_automatic_channel_upgrade_patch
+  enable_recommended_max_surge           = true
 }
 
 module "ctags" {
@@ -110,7 +111,6 @@ module "ctags" {
   product     = var.product
   builtFrom   = var.builtFrom
 }
-
 
 data "azurerm_resource_group" "mi_stg_rg" {
   count = local.is_dev ? 1 : 0
