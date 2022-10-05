@@ -22,7 +22,7 @@ jobs:
       - name: 'Az CLI login'
         uses: azure/login@v1
         with:
-          client-id: 7150f04e-3563-4649-b5b9-9381f88da05b        # DTS AKS version checker
+          client-id: c1e0233b-c18f-4a04-b458-bd60fbecb7cf        # DTS SDS AKS version checker
           tenant-id: 531ff96d-0ae9-462a-8d2d-bec7c0b42082        # HMCTS.NET
           subscription-id: a8140a9e-f1b0-481f-a4de-09e2ee23f7ab  # DTS-SHAREDSERVICES-SBOX
 
