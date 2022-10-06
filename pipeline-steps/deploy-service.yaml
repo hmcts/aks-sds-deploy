@@ -24,7 +24,7 @@ steps:
       product: ${{ parameters.product }}
       location: ${{ parameters.location }}
       terraformVarFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/${{ parameters.stack }}/${{ parameters.environment }}.tfvars"
-      planCommandOptions: "-var project=${{ variables.project }} -var control_vault=$(controlKeyVault) ${{ parameters.targetCommand }} "
+      planCommandOptions: "-var project=${{ parameters.project }} -var control_vault=$(controlKeyVault) ${{ parameters.targetCommand }} "
 
   - pwsh: |
       $tfVersion = Get-Content "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/.terraform-version" -Raw
