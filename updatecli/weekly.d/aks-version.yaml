@@ -45,6 +45,7 @@ pullrequests:
   {{ . }}:
     kind: github
     scmid: default
+    targets: ["{{ . }}"]
     title: >-
       [updatecli] [{{ . }}] Bump AKS version to {{ source "latestAksVersion" }}
     spec:
