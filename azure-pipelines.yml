@@ -68,7 +68,7 @@ variables:
   - name: action
     value: ${{ parameters.action }}
 
-# stages:
+stages:
 #   - stage: Genesis
 #     displayName: "Genesis"
 #     jobs:
@@ -101,7 +101,7 @@ variables:
               builtFrom: $(Build.Repository.Name)
               product: ${{ variables.product }}
               action: ${{ parameters.action }}
-              
+
 
   #     - job: DeployInfrastructure
   #       dependsOn: NetworkRg
