@@ -97,9 +97,9 @@ stages:
               serviceConnection: $(serviceConnection)
               stack: "07-network-rg"
               project: $(project)
-              terraformInitSubscription: ${{ parameters.tfInitSub }}
+              tfInitSub: ${{ variables.tfInitSub }}
               builtFrom: $(Build.Repository.Name)
-              product: ${{ variables.product }}
+              product: $(product)
               action: ${{ parameters.action }}
 
 
