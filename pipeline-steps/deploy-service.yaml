@@ -36,7 +36,7 @@ steps:
     inputs:
       command: output
       terraformVersion: $(tfVersion)
-      workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
+      workingDirectory: $(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/components/${{ parameters.stack }}
       environmentServiceName: $(serviceConnection)
 
   - script: |
