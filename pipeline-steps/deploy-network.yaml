@@ -3,8 +3,8 @@ parameters:
   location: ''
   stack: ''
   project: ''
-  tfversion: ''
-  tfvars: ''
+  # tfversion: ''
+  # tfvars: ''
   terraformServiceConnection: ''
   tfInitSub: ''
   builtFrom: ''
@@ -13,6 +13,7 @@ parameters:
 steps:
 
   - template: keyvault-read.yaml
+  - template: steps/terraform.yaml@cnp-azuredevops-libraries
     parameters:
       serviceConnection: $(serviceConnection)
       environment: ${{ parameters.environment }}
@@ -26,18 +27,23 @@ steps:
     displayName: Terraform init
     inputs:
       command: init
-      terraformVersion: ${{ parameters.tfversion }}
+      # terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: '$(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}'
       backendType: azurerm
-      backendServiceArm: ${{ parameters.terraformServiceConnection }}
-      backendAzureRmResourceGroupName: 'azure-control-$(env)-rg'
+      backendServiceArm: ${{ parameters.ServiceConnection }}
+      backendAzureRmResourceGroupName: 'azure-control-${{ parameters.environment }}-rg'
       backendAzureRmResourceGroupLocation: ${{ parameters.location }}
       backendAzureRmStorageAccountName: $(controlStorageAccount)
       backendAzureRmStorageAccountSku: Standard_LRS
       backendAzureRmContainerName: subscription-tfstate
       backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/$(env)/${{ parameters.stack }}/terraform.tfstate'
       commandOptions: '-backend-config=subscription_id=${{ parameters.tfInitSub }} -var builtFrom=${{ parameters.builtFrom }} -var product=${{ parameters.product }}'
-      publishPlanResults: '${{ parameters.environment }}-${{ parameters.stack }}'
+      
+      
+      
+      # publishPlanResults: '${{ parameters.environment }}-${{ parameters.stack }}'
+      
+
 
   - task: TerraformCLI@0
     displayName: Terraform validate

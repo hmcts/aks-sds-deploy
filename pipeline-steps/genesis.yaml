@@ -7,7 +7,7 @@ parameters:
   tfInitSub: ''
   action: ''
   product: ''
-
+  
 steps:
 
   - script: rm -fr .terraform/modules/genesis

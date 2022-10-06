@@ -68,38 +68,40 @@ variables:
   - name: action
     value: ${{ parameters.action }}
 
-stages:
-  - stage: Genesis
-    displayName: "Genesis"
+# stages:
+#   - stage: Genesis
+#     displayName: "Genesis"
+#     jobs:
+#       - job: Genesis
+#         steps:
+#           - template: pipeline-steps/genesis.yaml
+#             parameters:
+#               environment: ${{ parameters.env }}
+#               location: ${{ parameters.location }}
+#               stack: "00-genesis"
+#               project: $(project)
+#               tfInitSub: ${{ variables.tfInitSub }}
+#               action: ${{ parameters.action }}
+#               serviceConnection: $(serviceConnection)
+#               product: $(product)
+
+  - stage: Network
+    displayName: "Network"
     jobs:
-      - job: Genesis
+      - job: NetworkRg
         steps:
-          - template: pipeline-steps/genesis.yaml
+          - template: pipeline-steps/deploy-service.yaml
             parameters:
               environment: ${{ parameters.env }}
               location: ${{ parameters.location }}
-              stack: "00-genesis"
-              project: $(project)
-              tfInitSub: ${{ variables.tfInitSub }}
-              action: ${{ parameters.action }}
               serviceConnection: $(serviceConnection)
-              product: $(product)
-
-  # - stage: Network
-  #   displayName: "Network"
-  #   jobs:
-  #     - job: NetworkRg
-  #       steps:
-  #         - template: pipeline-steps/deploy-service.yaml
-  #           parameters:
-  #             environment: ${{ parameters.env }}
-  #             location: ${{ parameters.location }}
-  #             stack: "07-network-rg"
-  #             project: $(project)
-  #             tfversion: $(tfversion)
-  #             tfInitSub: ${{ variables.tfInitSub }}
-  #             builtFrom: $(Build.Repository.Name)
-  #             product: ${{ variables.product }}
+              stack: "07-network-rg"
+              project: $(project)
+              terraformInitSubscription: ${{ parameters.tfInitSub }}
+              builtFrom: $(Build.Repository.Name)
+              product: ${{ variables.product }}
+              action: ${{ parameters.action }}
+              
 
   #     - job: DeployInfrastructure
   #       dependsOn: NetworkRg
