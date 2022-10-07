@@ -27,30 +27,27 @@ sources:
           pattern: ((\d+\.)?(\d+))?(\*|\.\d+)
           captureindex: 1
 
+{{ $environment := (requiredEnv "CURRENT_ITER_ENVIRONMENT") }}
+
 targets:
-  {{- range .environments }}
-  {{ . }}:
+  default:
     sourceid: latestAksVersion
     name: Bump major AKS version
     kind: file
     scmid: default
     spec:
-      file: "environments/aks/{{ .  }}.tfvars"
+      file: "environments/aks/{{ $environment }}.tfvars"
       matchpattern: 'kubernetes_version = \"(\d+\.)?(\d+\.)?(\*|\d+)\"'
       content: 'kubernetes_version  = "{{ source `latestAksVersion` }}"'
-  {{- end }}
 
 pullrequests:
-  {{- range .environments }}
-  {{ . }}:
+  default:
     kind: github
     scmid: default
-    targets: ["{{ . }}"]
     title: >-
-      [updatecli] [{{ . }}] Bump AKS version to {{ source "latestAksVersion" }}
+      [updatecli] [{{ $environment }}] Bump AKS version to {{ source "latestAksVersion" }}
     spec:
       automerge: false
       draft: false
       description: |
         Bump major aks version to {{ source "latestAksVersion" }}
-  {{- end }}
