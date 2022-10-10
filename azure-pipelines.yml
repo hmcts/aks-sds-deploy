@@ -69,21 +69,21 @@ variables:
     value: ${{ parameters.action }}
 
 stages:
-#   - stage: Genesis
-#     displayName: "Genesis"
-#     jobs:
-#       - job: Genesis
-#         steps:
-#           - template: pipeline-steps/genesis.yaml
-#             parameters:
-#               environment: ${{ parameters.env }}
-#               location: ${{ parameters.location }}
-#               stack: "00-genesis"
-#               project: $(project)
-#               tfInitSub: ${{ variables.tfInitSub }}
-#               action: ${{ parameters.action }}
-#               serviceConnection: $(serviceConnection)
-#               product: $(product)
+  - stage: Genesis
+    displayName: "Genesis"
+    jobs:
+      - job: Genesis
+        steps:
+          - template: pipeline-steps/genesis.yaml
+            parameters:
+              environment: ${{ parameters.env }}
+              location: ${{ parameters.location }}
+              stack: "00-genesis"
+              project: $(project)
+              tfInitSub: ${{ variables.tfInitSub }}
+              action: ${{ parameters.action }}
+              serviceConnection: $(serviceConnection)
+              product: $(product)
 
   - stage: Network
     displayName: "Network"
@@ -98,25 +98,23 @@ stages:
               stack: "07-network-rg"
               project: $(project)
               tfInitSub: ${{ variables.tfInitSub }}
-              builtFrom: $(Build.Repository.Name)
               product: $(product)
               action: ${{ parameters.action }}
 
 
-  #     - job: DeployInfrastructure
-  #       dependsOn: NetworkRg
-  #       steps:
-  #         - template: pipeline-steps/deploy-network.yaml
-  #           parameters:
-  #             environment: ${{ parameters.env }}
-  #             location: ${{ parameters.location }}
-  #             stack: "01-network"
-  #             project: $(project)
-  #             tfversion: $(tfversion)
-  #             terraformServiceConnection: OPS-APPROVAL-GATE-MGMT-ENVS
-  #             tfInitSub: ${{ variables.tfInitSub }}
-  #             builtFrom: $(Build.Repository.Name)
-  #             product: ${{ variables.product }}
+      - job: DeployInfrastructure
+        dependsOn: NetworkRg
+        steps:
+          - template: pipeline-steps/deploy-network.yaml
+            parameters:
+              environment: ${{ parameters.env }}
+              location: ${{ parameters.location }}
+              stack: "01-network"
+              project: $(project)
+              tfversion: $(tfversion)
+              terraformServiceConnection: OPS-APPROVAL-GATE-MGMT-ENVS
+              tfInitSub: ${{ variables.tfInitSub }}
+              product: $(product)
 
   # - stage: Managed_Identity
   #   displayName: "Managed_Identity"

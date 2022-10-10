@@ -3,8 +3,8 @@ parameters:
   location: ''
   stack: ''
   project: ''
-  # tfversion: ''
-  # tfvars: ''
+  tfversion: ''
+  tfvars: ''
   terraformServiceConnection: ''
   tfInitSub: ''
   builtFrom: ''
@@ -15,7 +15,7 @@ steps:
   - template: keyvault-read.yaml
   - template: steps/terraform.yaml@cnp-azuredevops-libraries
     parameters:
-      serviceConnection: $(serviceConnection)
+      serviceConnection: ${{ parameters.serviceConnection }}
       environment: ${{ parameters.environment }}
 
   - task: TerraformInstaller@0
@@ -27,7 +27,7 @@ steps:
     displayName: Terraform init
     inputs:
       command: init
-      # terraformVersion: ${{ parameters.tfversion }}
+      terraformVersion: ${{ parameters.tfversion }}
       workingDirectory: '$(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}'
       backendType: azurerm
       backendServiceArm: ${{ parameters.ServiceConnection }}
@@ -45,28 +45,28 @@ steps:
       
 
 
-  - task: TerraformCLI@0
-    displayName: Terraform validate
-    inputs:
-      command: validate
-      terraformVersion: ${{ parameters.tfversion }}
-      workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
+  # - task: TerraformCLI@0
+  #   displayName: Terraform validate
+  #   inputs:
+  #     command: validate
+  #     terraformVersion: ${{ parameters.tfversion }}
+  #     workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
 
-  - task: TerraformCLI@0
-    displayName: Terraform plan
-    inputs:
-      command: plan
-      terraformVersion: ${{ parameters.tfversion }}
-      workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
-      environmentServiceName: ${{ parameters.terraformServiceConnection }}
-      commandOptions: '-out=tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }} -var subscription_id=$(ARM_SUBSCRIPTION_ID) -var control_vault=$(controlKeyVault) -var environment=$(env) -var project=$(project) -var builtFrom=${{ parameters.builtFrom }} -var product=${{ parameters.product }} -var-file $(System.DefaultWorkingDirectory)/environments/${{ parameters.stack }}/$(env).tfvars'
+  # - task: TerraformCLI@0
+  #   displayName: Terraform plan
+  #   inputs:
+  #     command: plan
+  #     terraformVersion: ${{ parameters.tfversion }}
+  #     workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
+  #     environmentServiceName: ${{ parameters.terraformServiceConnection }}
+  #     commandOptions: '-out=tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }} -var subscription_id=$(ARM_SUBSCRIPTION_ID) -var control_vault=$(controlKeyVault) -var environment=$(env) -var project=$(project) -var builtFrom=${{ parameters.builtFrom }} -var product=${{ parameters.product }} -var-file $(System.DefaultWorkingDirectory)/environments/${{ parameters.stack }}/$(env).tfvars'
 
-  - task: TerraformCLI@0
-    displayName: Terraform apply
-    condition: and(succeeded(), eq(variables['Action'], 'Apply'))
-    inputs:
-      command: apply
-      terraformVersion: ${{ parameters.tfversion }}
-      workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
-      environmentServiceName: ${{ parameters.terraformServiceConnection }}
-      commandOptions: '--auto-approve tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }}'
+  # - task: TerraformCLI@0
+  #   displayName: Terraform apply
+  #   condition: and(succeeded(), eq(variables['Action'], 'Apply'))
+  #   inputs:
+  #     command: apply
+  #     terraformVersion: ${{ parameters.tfversion }}
+  #     workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
+  #     environmentServiceName: ${{ parameters.terraformServiceConnection }}
+  #     commandOptions: '--auto-approve tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }}'

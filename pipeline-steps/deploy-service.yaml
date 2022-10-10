@@ -13,8 +13,10 @@ parameters:
   action: ''
 
 steps:
+
   - template: steps/set-build-repo-suffix-env-var.yaml@cnp-azuredevops-libraries           
   - template: steps/terraform.yaml@cnp-azuredevops-libraries
+    
     parameters:
       overrideAction: ${{ parameters.action }}
       environment: ${{ parameters.environment }}
