@@ -20,5 +20,5 @@ steps:
       terraformInitSubscription: ${{ parameters.tfInitSub }}
       product: ${{ parameters.product }}
       location: ${{ parameters.location }}
-      terraformVarFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/${{ parameters.stack }}/${{ parameters.environment }}.tfvars"
+      terraformVarFile: "NULL"
       planCommandOptions: "-var project=${{ parameters.project }} -var control_vault=$(controlKeyVault) -var subscription_id=$(ARM_SUBSCRIPTION_ID) ${{ parameters.targetCommand }} "
