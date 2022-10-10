@@ -111,7 +111,7 @@ stages:
               location: ${{ parameters.location }}
               stack: "01-network"
               project: $(project)
-              serviceConnection: OPS-APPROVAL-GATE-MGMT-ENVS
+              serviceConnection: $(serviceConnection)
               tfInitSub: ${{ variables.tfInitSub }}
               product: $(product)
               action: ${{ parameters.action }}
