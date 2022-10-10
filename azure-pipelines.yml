@@ -116,23 +116,23 @@ stages:
               product: $(product)
               action: ${{ parameters.action }}
 
-  # - stage: Managed_Identity
-  #   displayName: "Managed_Identity"
-  #   dependsOn: Network
-  #   jobs:
-  #     - job: Managed_Identity
-  #       steps:
-  #         - template: pipeline-steps/managed_identity.yaml
-  #           parameters:
-  #             serviceConnection: $(serviceConnection)
-  #             environment: ${{ parameters.env }}
-  #             location: ${{ parameters.location }}
-  #             stack: "05-mis"
-  #             project: $(project)
-  #             tfversion: $(tfversion)
-  #             tfInitSub: ${{ variables.tfInitSub }}
-  #             builtFrom: $(Build.Repository.Name)
-  #             product: ${{ variables.product }}
+  - stage: Managed_Identity
+    displayName: "Managed_Identity"
+    dependsOn: Network
+    jobs:
+      - job: Managed_Identity
+        steps:
+          - template: pipeline-steps/managed_identity.yaml
+            parameters:
+              serviceConnection: $(serviceConnection)
+              environment: ${{ parameters.env }}
+              location: ${{ parameters.location }}
+              stack: "05-mis"
+              project: $(project)
+              tfInitSub: ${{ variables.tfInitSub }}
+              product: $(product)
+              action: ${{ parameters.action }}
+
 
   # - stage: Aks
   #   displayName: "AKS clusters"

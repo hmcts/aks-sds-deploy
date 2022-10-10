@@ -4,61 +4,21 @@ parameters:
   serviceConnection: ''
   stack: ''
   project: ''
-  tfversion: ''
   tfInitSub: ''
-  builtFrom: ''
   product: ''
+  action: ''
 
 steps:
-
-  - template: keyvault-read.yaml
+  - template: steps/set-build-repo-suffix-env-var.yaml@cnp-azuredevops-libraries           
+  - template: steps/terraform.yaml@cnp-azuredevops-libraries
+    
     parameters:
-      serviceConnection: $(serviceConnection)
+      overrideAction: ${{ parameters.action }}
       environment: ${{ parameters.environment }}
-
-  - task: TerraformInstaller@0
-    displayName: 'Install Terraform ${{ parameters.tfversion }}'
-    inputs:
-      terraformVersion: ${{ parameters.tfversion }}
-
-  - task: TerraformCLI@0
-    displayName: terraform init
-    inputs:
-      command: init
-      terraformVersion: ${{ parameters.tfversion }}
-      workingDirectory: '$(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}'
-      backendType: azurerm
-      backendServiceArm: $(serviceConnection)
-      backendAzureRmResourceGroupName: 'azure-control-$(env)-rg'
-      backendAzureRmResourceGroupLocation: ${{ parameters.location }}
-      backendAzureRmStorageAccountName: $(controlStorageAccount)
-      backendAzureRmStorageAccountSku: Standard_LRS
-      backendAzureRmContainerName: subscription-tfstate
-      backendAzureRmKey: '${{ parameters.location }}/${{ parameters.project }}/$(env)/${{ parameters.stack }}/terraform-mi.tfstate'
-      commandOptions: '-backend-config=subscription_id=${{ parameters.tfInitSub }} -var builtFrom=${{ parameters.builtFrom }} -var product=${{ parameters.product }}'
-
-  - task: TerraformCLI@0
-    displayName: terraform validate
-    inputs:
-      command: validate
-      terraformVersion: ${{ parameters.tfversion }}
-      workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
-
-  - task: TerraformCLI@0
-    displayName: terraform plan
-    inputs:
-      command: plan
-      terraformVersion: ${{ parameters.tfversion }}
-      workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
-      environmentServiceName: $(serviceConnection)
-      commandOptions: '-out=tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }} -var subscription_id=$(ARM_SUBSCRIPTION_ID) -var control_vault=$(controlKeyVault) -var environment=$(env) -var project=$(project) -var builtFrom=${{ parameters.builtFrom }} -var product=${{ parameters.product }}'
-
-  - task: TerraformCLI@0
-    displayName: Terraform apply
-    condition: and(succeeded(), eq(variables['action'], 'Apply'))
-    inputs:
-      command: apply
-      terraformVersion: ${{ parameters.tfversion }}
-      workingDirectory: $(System.DefaultWorkingDirectory)/components/${{ parameters.stack }}
-      environmentServiceName: $(serviceConnection)
-      commandOptions: '--auto-approve tfplan-${{ parameters.project }}-$(env)-${{ parameters.stack }}'
+      component: ${{ parameters.stack }}
+      serviceConnection: ${{ parameters.serviceConnection }}
+      terraformInitSubscription: ${{ parameters.tfInitSub }}
+      product: ${{ parameters.product }}
+      location: ${{ parameters.location }}
+      terraformVarFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/${{ parameters.stack }}/${{ parameters.environment }}.tfvars"
+      planCommandOptions: "-var project=${{ parameters.project }} -var control_vault=$(controlKeyVault) -var subscription_id=$(ARM_SUBSCRIPTION_ID) ${{ parameters.targetCommand }} "
