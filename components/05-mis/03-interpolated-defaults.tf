@@ -35,6 +35,7 @@ data "azurerm_key_vault_secret" "kubernetes_cluster_client_id" {
 }
 
 data "azurerm_key_vault" "acme" {
+  provider            = azurerm.hmcts-control
   name                = "acmedtssds${var.environment}"
-  resource_group_name = data.azurerm_resource_group.platform-rg.name
+  resource_group_name = "enterprise-${var.environment}-rg"
 }
