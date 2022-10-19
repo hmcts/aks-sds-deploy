@@ -1,0 +1,16 @@
+github:
+  email: "104018155+hmcts-dependency-updater[bot]@users.noreply.github.com"
+  user: "hmcts-dependency-updater"
+  branch: "master"
+  owner: "hmcts"
+  repository: "aks-sds-deploy"
+environments:
+  - demo
+  - dev
+  - ithc
+  - prod
+  - ptlsbox
+  - ptl
+  - sbox
+  - stg
+  - test

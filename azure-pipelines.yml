@@ -2,16 +2,18 @@ name: ${{ parameters.action }} - ${{ parameters.env }}.${{ parameters.cluster }}
 
 trigger: none
 
+resources:
+  repositories:
+  - repository: cnp-azuredevops-libraries
+    type: github
+    ref: refs/heads/DTSPO-9695-make-tf-varfile-configurable
+    name: hmcts/cnp-azuredevops-libraries
+    endpoint: 'hmcts (1)'
+
 pool:
   vmImage: "ubuntu-latest"
 
-resources:
-  repositories:
-    - repository: cnp-azuredevops-libraries
-      type: github
-      ref: refs/heads/DTSPO-9695-make-tf-varfile-configurable 
-      name: hmcts//cnp-azuredevops-libraries
-      endpoint: 'hmcts-PlatformOperations'
+
 
 parameters:
   - name: action
@@ -55,10 +57,8 @@ parameters:
       - prod
 
 variables:
-  
   - name: project
     value: ss
-
   - name: serviceConnection
     value: OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
   - name: tfInitSub
@@ -69,6 +69,20 @@ variables:
     value: ${{ parameters.action }}
 
 stages:
+
+  - stage: Precheck
+    jobs:
+      - job:
+        pool:
+          vmImage: ${{ variables.agentPool }}
+        timeoutInMinutes: ${{ variables.timeoutInMinutes }}
+        steps:
+          - template: steps/terraform-precheck.yaml@cnp-azuredevops-libraries
+            parameters:
+              keyvaultName: 'infra-vault-nonprod'
+              keyvaultSecret: 'azure-devops-token'
+              serviceConnection: 'DCD-CFT-Sandbox'
+
   - stage: Genesis
     displayName: "Genesis"
     jobs:
