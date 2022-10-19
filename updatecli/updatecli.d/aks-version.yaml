@@ -21,7 +21,7 @@ sources:
     kind: shell
     name: Get latest AKS version for a given region
     spec:
-      command: az aks get-versions --location uksouth --query orchestrators[?default].orchestratorVersion -o tsv
+      command: ./updatecli/get-latest-ga-aks-version.sh
       versionfilter:
         kind: semver
     transformers:
