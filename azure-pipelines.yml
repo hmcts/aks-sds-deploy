@@ -4,6 +4,14 @@ name: ${{ parameters.Action }} - ${{ parameters.env }}.${{ parameters.cluster }}
 
 trigger: none
 
+resources:
+  repositories:
+  - repository: cnp-azuredevops-libraries
+    type: github
+    ref: refs/heads/master
+    name: hmcts/cnp-azuredevops-libraries
+    endpoint: 'hmcts (1)'
+
 pool:
   vmImage: "ubuntu-latest"
 
@@ -49,6 +57,10 @@ parameters:
       - PROD
 
 variables:
+  - name: timeoutInMinutes
+    value: 60
+  - name: agentPool
+    value: ubuntu-20.04
   - name: tfversion
     value: 1.2.8
   # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
@@ -67,6 +79,20 @@ variables:
     value: ${{ parameters.Action }}
 
 stages:
+
+  - stage: Precheck
+    jobs:
+      - job:
+        pool:
+          vmImage: ${{ variables.agentPool }}
+        timeoutInMinutes: ${{ variables.timeoutInMinutes }}
+        steps:
+          - template: steps/terraform-precheck.yaml@cnp-azuredevops-libraries
+            parameters:
+              keyvaultName: 'infra-vault-nonprod'
+              keyvaultSecret: 'azure-devops-token'
+              serviceConnection: 'DCD-CFT-Sandbox'
+
   - stage: Genesis
     displayName: "Genesis"
     jobs:
