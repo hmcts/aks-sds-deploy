@@ -36,7 +36,7 @@ jobs:
 
       - name: Run Updatecli in Dry Run mode
         run: |
-          yq '.environments' updatecli/values.github-action.yaml | cut -d "-" -f 2 | while read i
+          yq -r '.environments | to_entries | map(select(.value.enabled == true)) | .[].key' updatecli/values.github-action.yaml | while read i
           do
               CURRENT_ITER_ENVIRONMENT="$i" updatecli diff --config ./updatecli/updatecli.d --values ./updatecli/values.github-action.yaml
           done
@@ -46,7 +46,7 @@ jobs:
       - name: Run Updatecli in Apply mode
         if: github.ref == 'refs/heads/master'
         run: |
-          yq '.environments' updatecli/values.github-action.yaml | cut -d "-" -f 2 | while read i
+          yq -r '.environments | to_entries | map(select(.value.enabled == true)) | .[].key' updatecli/values.github-action.yaml | while read i
           do
               CURRENT_ITER_ENVIRONMENT="$i" updatecli apply --config ./updatecli/updatecli.d --values ./updatecli/values.github-action.yaml
           done
