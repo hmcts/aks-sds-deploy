@@ -2,6 +2,10 @@
 version: 0.33.3
 title: "Update aks version"
 {{ $environment := (requiredEnv "CURRENT_ITER_ENVIRONMENT") }}
+{{ $aks_name := (requiredEnv "CURRENT_ITER_AKS_NAME") }}
+{{ $aks_resource_group := (requiredEnv "CURRENT_ITER_AKS_RESOURCE_GROUP") }}
+{{ $aks_subscription_id := (requiredEnv "CURRENT_ITER_AKS_SUBSCRIPTION_ID") }}
+
 pipelineid: "updatecli_aks_version_{{ $environment }}"
 
 scms:
@@ -21,7 +25,7 @@ sources:
     kind: shell
     name: Get latest AKS version for a given region
     spec:
-      command: ./updatecli/get-latest-ga-aks-version.sh
+      command: ./updatecli/get-latest-aks-upgrade-version.sh {{ $aks_name }} {{ $aks_resource_group }} {{ $aks_subscription_id }}
       versionfilter:
         kind: semver
     transformers:

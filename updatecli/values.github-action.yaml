@@ -5,12 +5,19 @@ github:
   owner: "hmcts"
   repository: "aks-sds-deploy"
 environments:
-  - demo
-  - dev
-  - ithc
-  - prod
-  - ptlsbox
-  - ptl
-  - sbox
-  - stg
-  - test
+  sbox:
+    name: ss-sbox-00-aks
+    resource_group: ss-sbox-00-rg
+    subscription_id: a8140a9e-f1b0-481f-a4de-09e2ee23f7ab
+  demo:
+    name: ss-sbox-00-aks
+    resource_group: ss-sbox-00-rg
+    subscription_id: a8140a9e-f1b0-481f-a4de-09e2ee23f7ab
+  #demo
+  #dev
+  #ithc
+  #prod
+  #ptlsbox
+  #ptl
+  #stg
+  #test

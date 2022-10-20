@@ -36,9 +36,14 @@ jobs:
 
       - name: Run Updatecli in Dry Run mode
         run: |
-          yq '.environments' updatecli/values.github-action.yaml | cut -d "-" -f 2 | while read i
+          yq '.environments' updatecli/values.github-action.yaml -o=json | jq -r 'keys|.[]'| while read i
           do
-              CURRENT_ITER_ENVIRONMENT="$i" updatecli diff --config ./updatecli/updatecli.d --values ./updatecli/values.github-action.yaml
+              export CURRENT_ITER_ENVIRONMENT="$i"
+              export CURRENT_ITER_AKS_NAME=$(yq '.environments' updatecli/values.github-action.yaml -o=json | jq -r ".$i.name")
+              export CURRENT_ITER_AKS_RESOURCE_GROUP=$(yq '.environments' updatecli/values.github-action.yaml -o=json | jq -r ".$i.resource_group")
+              export CURRENT_ITER_AKS_SUBSCRIPTION_ID=$(yq '.environments' updatecli/values.github-action.yaml -o=json | jq -r ".$i.subscription_id")
+
+              updatecli diff --config ./updatecli/updatecli.d --values ./updatecli/values.github-action.yaml
           done
         env:
           UPDATECLI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -46,9 +51,14 @@ jobs:
       - name: Run Updatecli in Apply mode
         if: github.ref == 'refs/heads/master'
         run: |
-          yq '.environments' updatecli/values.github-action.yaml | cut -d "-" -f 2 | while read i
+          yq '.environments' updatecli/values.github-action.yaml -o=json | jq -r 'keys|.[]'| while read i
           do
-              CURRENT_ITER_ENVIRONMENT="$i" updatecli apply --config ./updatecli/updatecli.d --values ./updatecli/values.github-action.yaml
+              export CURRENT_ITER_ENVIRONMENT="$i"
+              export CURRENT_ITER_AKS_NAME=$(yq '.environments' updatecli/values.github-action.yaml -o=json | jq -r ".$i.name")
+              export CURRENT_ITER_AKS_RESOURCE_GROUP=$(yq '.environments' updatecli/values.github-action.yaml -o=json | jq -r ".$i.resource_group")
+              export CURRENT_ITER_AKS_SUBSCRIPTION_ID=$(yq '.environments' updatecli/values.github-action.yaml -o=json | jq -r ".$i.subscription_id")
+
+              updatecli apply --config ./updatecli/updatecli.d --values ./updatecli/values.github-action.yaml
           done
         env:
           UPDATECLI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
