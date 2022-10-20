@@ -16,31 +16,37 @@ environments:
     aks_resource_group: ss-demo-00-rg
     aks_subscription_id: c68a4bed-4c3d-4956-af51-4ae164c1957c
   dev:
-    enabled: false
+    enabled: true
     aks_name: ss-dev-01-aks
     aks_resource_group: ss-dev-01-rg
     aks_subscription_id: 867a878b-cb68-4de5-9741-361ac9e178b6
   ithc:
+    enabled: true
     aks_name: ss-ithc-00-aks
     aks_resource_group: ss-ithc-00-rg
     aks_subscription_id: ba71a911-e0d6-4776-a1a6-079af1df7139
   ptlsbox:
+    enabled: true
     aks_name: ss-ptlsbox-00-aks
     aks_resource_group: ss-ptlsbox-00-rg
     aks_subscription_id: 64b1c6d6-1481-44ad-b620-d8fe26a2c768
   ptl:
+    enabled: true
     aks_name: ss-ptl-00-aks
     aks_resource_group: ss-ptl-00-rg
     aks_subscription_id: 6c4d2513-a873-41b4-afdd-b05a33206631
   stg:
+    enabled: true
     aks_name: ss-stg-00-aks
     aks_resource_group: ss-stg-00-rg
     aks_subscription_id: 74dacd4f-a248-45bb-a2f0-af700dc4cf68
   test:
+    enabled: true
     aks_name: ss-test-00-aks
     aks_resource_group: ss-test-00-rg
     aks_subscription_id: 3eec5bde-7feb-4566-bfb6-805df6e10b90
   prod:
+    enabled: true
     aks_name: ss-prod-00-aks
     aks_resource_group: ss-prod-00-rg
     aks_subscription_id: 5ca62022-6aa2-4cee-aaa7-e7536c8d566c
