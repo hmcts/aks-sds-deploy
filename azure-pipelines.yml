@@ -124,16 +124,18 @@ stages:
       - job: DeployInfrastructure
         dependsOn: NetworkRg
         steps:
-          - template: pipeline-steps/deploy-network.yaml
+          - template: steps/set-build-repo-suffix-env-var.yaml@cnp-azuredevops-libraries           
+          - template: steps/terraform.yaml@cnp-azuredevops-libraries
             parameters:
-              environment: ${{ parameters.env }}
-              location: ${{ parameters.location }}
-              stack: "01-network"
-              project: $(project)
+              overrideAction: ${{ parameters.action }}
+              environment: ${{ parameters.env  }}
+              component: "01-network"
               serviceConnection: $(serviceConnection)
-              tfInitSub: ${{ variables.tfInitSub }}
+              terraformInitSubscription: ${{ variables.tfInitSub }}
               product: $(product)
-              action: ${{ parameters.action }}
+              location: ${{ parameters.location }}
+              terraformVarFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/01-network/${{ parameters.environment }}.tfvars"
+              planCommandOptions: "-var project=$(project) -var control_vault=$(controlKeyVault) -var subscription_id=$(ARM_SUBSCRIPTION_ID)"
 
   - stage: Managed_Identity
     displayName: "Managed_Identity"
