@@ -150,7 +150,7 @@ stages:
               overrideAction: ${{ parameters.action }}
               environment: ${{ parameters.env }}
               component: "05-mis"
-              serviceConnection: ${{ parameters.serviceConnection }}
+              serviceConnection: $(serviceConnection)
               terraformInitSubscription: ${{ variables.tfInitSub }}
               product: $(product)
               location: ${{ parameters.location }}
