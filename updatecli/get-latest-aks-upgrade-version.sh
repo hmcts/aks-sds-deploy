@@ -9,4 +9,4 @@ az aks get-upgrades \
     --resource-group $aks_resource_group \
     --subscription $aks_subscription \
     --query 'controlPlaneProfile.upgrades[?isPreview==null].kubernetesVersion' \
-    --output tsv
+    --output tsv | sort --reverse --version-sort | head --lines 1
