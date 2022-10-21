@@ -144,19 +144,19 @@ stages:
     dependsOn: Network
     jobs:
       - job: Managed_Identity
-        steps:
-          - template: pipeline-steps/managed_identity.yaml
+        steps:       
+          - template: steps/terraform.yaml@cnp-azuredevops-libraries
             parameters:
-              serviceConnection: $(serviceConnection)
+              overrideAction: ${{ parameters.action }}
               environment: ${{ parameters.env }}
-              location: ${{ parameters.location }}
-              stack: "05-mis"
-              project: $(project)
-              tfInitSub: ${{ variables.tfInitSub }}
+              component: "05-mis"
+              serviceConnection: ${{ parameters.serviceConnection }}
+              terraformInitSubscription: ${{ variables.tfInitSub }}
               product: $(product)
-              action: ${{ parameters.action }}
-
-
+              location: ${{ parameters.location }}
+              terraformVarFile: "NULL"
+              planCommandOptions: "-var project=$(project) -var control_vault=$(controlKeyVault) -var subscription_id=$(ARM_SUBSCRIPTION_ID) "
+         
   - stage: Aks
     displayName: "AKS clusters"
     dependsOn:
