@@ -29,7 +29,13 @@ jobs:
       - name: Install Updatecli in the runner
         uses: updatecli/updatecli-action@v2
         with:
-          version: v0.33.3
+          version: v0.35.1
+
+      - uses: tibdex/github-app-token@v1
+        id: generate-token
+        with:
+          app_id: ${{ secrets.DEPENDENCY_UPDATER_APP_ID }}
+          private_key: ${{ secrets.DEPENDENCY_UPDATER_APP_PRIVATE_KEY }}
 
       - name: Install YQ
         uses: mikefarah/yq@master
@@ -41,7 +47,7 @@ jobs:
               CURRENT_ITER_ENVIRONMENT="$i" updatecli diff --config ./updatecli/updatecli.d --values ./updatecli/values.github-action.yaml
           done
         env:
-          UPDATECLI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UPDATECLI_GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
 
       - name: Run Updatecli in Apply mode
         if: github.ref == 'refs/heads/master'
@@ -51,4 +57,4 @@ jobs:
               CURRENT_ITER_ENVIRONMENT="$i" updatecli apply --config ./updatecli/updatecli.d --values ./updatecli/values.github-action.yaml
           done
         env:
-          UPDATECLI_GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          UPDATECLI_GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
