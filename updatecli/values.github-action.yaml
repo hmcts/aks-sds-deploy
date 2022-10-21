@@ -5,12 +5,48 @@ github:
   owner: "hmcts"
   repository: "aks-sds-deploy"
 environments:
-  - demo
-  - dev
-  - ithc
-  - prod
-  - ptlsbox
-  - ptl
-  - sbox
-  - stg
-  - test
+  sbox:
+    enabled: true
+    aks_name: ss-sbox-00-aks
+    aks_resource_group: ss-sbox-00-rg
+    aks_subscription: DTS-SHAREDSERVICES-SBOX
+  demo:
+    enabled: true
+    aks_name: ss-demo-00-aks
+    aks_resource_group: ss-demo-00-rg
+    aks_subscription: DTS-SHAREDSERVICES-DEMO
+  dev:
+    enabled: true
+    aks_name: ss-dev-01-aks
+    aks_resource_group: ss-dev-01-rg
+    aks_subscription: DTS-SHAREDSERVICES-DEV
+  ithc:
+    enabled: true
+    aks_name: ss-ithc-00-aks
+    aks_resource_group: ss-ithc-00-rg
+    aks_subscription: DTS-SHAREDSERVICES-ITHC
+  ptlsbox:
+    enabled: true
+    aks_name: ss-ptlsbox-00-aks
+    aks_resource_group: ss-ptlsbox-00-rg
+    aks_subscription: DTS-SHAREDSERVICESPTL-SBOX
+  ptl:
+    enabled: true
+    aks_name: ss-ptl-00-aks
+    aks_resource_group: ss-ptl-00-rg
+    aks_subscription: DTS-SHAREDSERVICESPTL
+  stg:
+    enabled: true
+    aks_name: ss-stg-00-aks
+    aks_resource_group: ss-stg-00-rg
+    aks_subscription: DTS-SHAREDSERVICES-STG
+  test:
+    enabled: true
+    aks_name: ss-test-00-aks
+    aks_resource_group: ss-test-00-rg
+    aks_subscription: DTS-SHAREDSERVICES-TEST
+  prod:
+    enabled: true
+    aks_name: ss-prod-00-aks
+    aks_resource_group: ss-prod-00-rg
+    aks_subscription: DTS-SHAREDSERVICES-PROD
