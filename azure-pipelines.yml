@@ -132,7 +132,7 @@ stages:
               overrideAction: ${{ parameters.action }}
               environment: ${{ parameters.env  }}
               component: "01-network"
-              serviceConnection: OPS-APPROVAL-GATE-MGMT-ENVS-CNP
+              serviceConnection: "OPS-APPROVAL-GATE-MGMT-ENVS-CNP"
               terraformInitSubscription: ${{ variables.tfInitSub }}
               product: $(product)
               location: ${{ parameters.location }}
