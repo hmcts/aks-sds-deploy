@@ -48,6 +48,9 @@ locals {
   }
 }
 
+data "azuread_service_principal" "version_checker" {
+  display_name = "DTS SDS AKS version checker"
+}
 
 module "kubernetes" {
   for_each    = toset([for k, v in var.clusters : k])
@@ -100,6 +103,8 @@ module "kubernetes" {
 
   depends_on         = [azurerm_resource_group.disks_resource_group]
   availability_zones = var.availability_zones
+
+  aks_version_checker_principal_id = data.azuread_service_principal.version_checker.object_id
 
   enable_automatic_channel_upgrade_patch = var.enable_automatic_channel_upgrade_patch
 }
