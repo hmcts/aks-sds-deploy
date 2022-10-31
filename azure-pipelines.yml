@@ -144,7 +144,7 @@ stages:
     dependsOn: Network
     jobs:
       - job: Managed_Identity
-        steps:       
+        steps:
           - template: steps/terraform.yaml@cnp-azuredevops-libraries
             parameters:
               overrideAction: ${{ parameters.action }}
