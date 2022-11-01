@@ -103,7 +103,7 @@ stages:
               terraformInitSubscription: ${{ variables.tfInitSub }}
               product: $(product)
               location: ${{ parameters.location }}
-              terraformVarFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/00-genesis/${{ parameters.env }}.tfvars"
+              tfVarsFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/00-genesis/${{ parameters.env }}.tfvars"
               planCommandOptions: "-var project=$(project) -var subscription_id=$(ARM_SUBSCRIPTION_ID)"
 
   - stage: Network
@@ -145,7 +145,7 @@ stages:
               terraformInitSubscription: ${{ variables.tfInitSub }}
               product: $(product)
               location: ${{ parameters.location }}
-              terraformVarFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/01-network/${{ parameters.env }}.tfvars"
+              tfVarsFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/01-network/${{ parameters.env }}.tfvars"
               planCommandOptions: "-var project=$(project) -var control_vault=$(KEY_VAULT) -var subscription_id=$(SUBSCRIPTION_ID)"
               initCommandOptions: >
                 -var subscription_id=$(SUBSCRIPTION_ID)
@@ -167,7 +167,7 @@ stages:
               terraformInitSubscription: ${{ variables.tfInitSub }}
               product: $(product)
               location: ${{ parameters.location }}
-              terraformVarFile: "NULL"
+              tfVarsFile: "NULL"
               planCommandOptions: "-var project=$(project) -var control_vault=$(controlKeyVault) -var subscription_id=$(ARM_SUBSCRIPTION_ID) "
          
   - stage: Aks
