@@ -11,6 +11,7 @@ parameters:
   product: ''
   serviceConnection: ''
   action: ''
+  setClusterNumbersEnvVar: false
 
 steps:
 
@@ -28,22 +29,23 @@ steps:
       terraformVarFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/${{ parameters.stack }}/${{ parameters.environment }}.tfvars"
       planCommandOptions: "-var project=${{ parameters.project }} -var control_vault=$(controlKeyVault) ${{ parameters.targetCommand }} "
 
-  - pwsh: |
-      $tfVersion = Get-Content "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/.terraform-version" -Raw
-      Write-Host "##vso[task.setvariable variable=tfVersion]$tfVersion"
-    displayName: Set terraform version env variable
+  - ${{ if eq(parameters.setClusterNumbersEnvVar, true) }}:
+    - pwsh: |
+        $tfVersion = Get-Content "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/.terraform-version" -Raw
+        Write-Host "##vso[task.setvariable variable=tfVersion]$tfVersion"
+      displayName: Set terraform version env variable
 
-  - task: TerraformCLI@0
-    displayName: Terraform output
-    inputs:
-      command: output
-      terraformVersion: $(tfVersion)
-      workingDirectory: $(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/components/${{ parameters.stack }}
-      environmentServiceName: $(serviceConnection)
+    - task: TerraformCLI@0
+      displayName: Terraform output
+      inputs:
+        command: output
+        terraformVersion: $(tfVersion)
+        workingDirectory: $(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/components/${{ parameters.stack }}
+        environmentServiceName: $(serviceConnection)
 
-  - script: |
-      echo "Setting clusterNumbers variable to $clusters"
-      echo "##vso[task.setvariable variable=clusterNumbers;isOutput=true]$clusters"
-    name: setClusterNumbers
-    env:
-      clusters: $(TF_OUT_CLUSTERS)
+    - script: |
+        echo "Setting clusterNumbers variable to $clusters"
+        echo "##vso[task.setvariable variable=clusterNumbers;isOutput=true]$clusters"
+      name: setClusterNumbers
+      env:
+        clusters: $(TF_OUT_CLUSTERS)

@@ -126,7 +126,16 @@ stages:
       - job: DeployInfrastructure
         dependsOn: NetworkRg
         steps:
-          - template: steps/set-build-repo-suffix-env-var.yaml@cnp-azuredevops-libraries           
+          - template: steps/set-build-repo-suffix-env-var.yaml@cnp-azuredevops-libraries   
+
+          - template: steps/keyvault-read.yaml@cnp-azuredevops-libraries
+            parameters:
+              serviceConnection: $(serviceConnection)
+              environment: ${{ parameters.env }}
+              subscriptionIdVariableName: 'SUBSCRIPTION_ID'
+              storageAccountVariableName: 'STORAGE_ACCOUNT'
+              keyVaultVariableName: 'KEY_VAULT'
+
           - template: steps/terraform.yaml@cnp-azuredevops-libraries
             parameters:
               overrideAction: ${{ parameters.action }}
@@ -137,7 +146,11 @@ stages:
               product: $(product)
               location: ${{ parameters.location }}
               terraformVarFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/01-network/${{ parameters.env }}.tfvars"
-              planCommandOptions: "-var project=$(project) -var control_vault=$(controlKeyVault) -var subscription_id=$(ARM_SUBSCRIPTION_ID)"
+              planCommandOptions: "-var project=$(project) -var control_vault=$(KEY_VAULT) -var subscription_id=$(SUBSCRIPTION_ID)"
+              initCommandOptions: >
+                -var subscription_id=$(SUBSCRIPTION_ID)
+                -backend-config storage_account_name=$(STORAGE_ACCOUNT)
+
 
   - stage: Managed_Identity
     displayName: "Managed_Identity"
