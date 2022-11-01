@@ -26,7 +26,7 @@ steps:
       terraformInitSubscription: ${{ parameters.tfInitSub }}
       product: ${{ parameters.product }}
       location: ${{ parameters.location }}
-      terraformVarFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/${{ parameters.stack }}/${{ parameters.environment }}.tfvars"
+      tfVarsFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/${{ parameters.stack }}/${{ parameters.environment }}.tfvars"
       planCommandOptions: "-var project=${{ parameters.project }} -var control_vault=$(controlKeyVault) ${{ parameters.targetCommand }} "
 
   - ${{ if eq(parameters.setClusterNumbersEnvVar, true) }}:
