@@ -71,8 +71,7 @@ variables:
     value: "sds-platform"
   - name: action
     value: ${{ parameters.action }}
-  - name: isMain
-    value: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
+  - template: vars/input-variables.yaml@cnp-azuredevops-libraries
 
 
 stages:
