@@ -2,7 +2,7 @@ resource "azurerm_user_assigned_identity" "sops-mi" {
   resource_group_name = data.azurerm_resource_group.genesis_rg.name
   location            = data.azurerm_resource_group.genesis_rg.location
 
-  name = "aks-${var.environment}-mi"
+  name = "aks-${var.env}-mi"
   tags = local.common_tags
 }
 
@@ -67,7 +67,7 @@ locals {
 }
 
 resource "azurerm_role_assignment" "externaldns-dns-zone-contributor" {
-  for_each = lookup(local.external_dns, var.environment, toset([]))
+  for_each = lookup(local.external_dns, var.env, toset([]))
 
   scope                = each.value
   role_definition_name = contains(regex("^.*/Microsoft.Network/(.*)/.*$", each.value), "privateDnsZones") ? "Private DNS Zone Contributor" : "DNS Zone Contributor"
@@ -76,7 +76,7 @@ resource "azurerm_role_assignment" "externaldns-dns-zone-contributor" {
 
 resource "azurerm_role_assignment" "externaldns-read-rg" {
   # Only add the reader role if there are zones configured
-  for_each = lookup(local.external_dns, var.environment, null) != null ? local.external_dns.resource_groups : toset([])
+  for_each = lookup(local.external_dns, var.env, null) != null ? local.external_dns.resource_groups : toset([])
 
   scope                = each.value
   role_definition_name = "Reader"
