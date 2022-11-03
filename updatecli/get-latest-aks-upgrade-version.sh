@@ -9,7 +9,7 @@ az aks get-upgrades \
     --resource-group $aks_resource_group \
     --subscription $aks_subscription \
     | jq -r '
-    if (.controlPlaneProfile.upgrades == null) then
+    if (.controlPlaneProfile.upgrades|map(select(.isPreview == null)) == []) then
         .controlPlaneProfile.kubernetesVersion
     else .controlPlaneProfile.upgrades|map(select(.isPreview == null).kubernetesVersion)
     | .[] end' \
