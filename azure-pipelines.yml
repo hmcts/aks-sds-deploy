@@ -71,6 +71,7 @@ variables:
     value: "sds-platform"
   - name: action
     value: ${{ parameters.action }}
+  - template: vars/input-variables.yaml@cnp-azuredevops-libraries
 
 
 stages:
