@@ -7,7 +7,7 @@ terraform {
   required_providers {
     azurerm = {
       source                = "hashicorp/azurerm"
-      version               = "3.27.0"
+      version               = "3.28.0"
       configuration_aliases = [azurerm.hmcts-control]
     }
   }
@@ -29,8 +29,8 @@ locals {
       subscription = "a8140a9e-f1b0-481f-a4de-09e2ee23f7ab"
     }
   }
-  is_sbox = var.environment == "sbox" ? true : false
-  is_dev  = var.environment == "dev" ? true : false
+  is_sbox = var.env == "sbox" ? true : false
+  is_dev  = var.env == "dev" ? true : false
 }
 
 provider "azurerm" {

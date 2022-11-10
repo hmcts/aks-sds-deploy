@@ -1,5 +1,5 @@
 # General
-variable "environment" {}
+variable "env" {}
 
 variable "project" {}
 

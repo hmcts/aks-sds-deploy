@@ -1,6 +1,4 @@
-name: ${{ parameters.Action }} - ${{ parameters.env }}.${{ parameters.cluster }}.${{ parameters.location }}
-
-# TODO refactor pipeline to do plan by default, for now pls no trigger
+name: ${{ parameters.action }} - ${{ parameters.env }}.${{ parameters.cluster }}.${{ parameters.location }}
 
 trigger: none
 
@@ -15,14 +13,16 @@ resources:
 pool:
   vmImage: "ubuntu-latest"
 
+
+
 parameters:
-  - name: Action
-    displayName: Action
+  - name: action
+    displayName: action
     type: string
-    default: "Plan"
+    default: "plan"
     values:
-      - Plan
-      - Apply
+      - plan
+      - apply
 
   - name: cluster
     displayName: Cluster
@@ -44,31 +44,25 @@ parameters:
   - name: env
     displayName: Environment
     type: string
-    default: "SBOX"
+    default: "sbox"
     values:
-      - ITHC
-      - DEV
-      - DEMO
-      - SBOX
-      - PTLSBOX
-      - TEST
-      - STG
-      - PTL
-      - PROD
+      - ithc
+      - dev
+      - demo
+      - sbox
+      - ptlsbox
+      - test
+      - stg
+      - ptl
+      - prod
 
 variables:
   - name: timeoutInMinutes
     value: 60
   - name: agentPool
-    value: ubuntu-20.04
-  - name: tfversion
-    value: 1.2.8
-  # If another project comes along and wants to use the same pipeline file then make this a variable in the UI
-  # but it might be better to template the pipeline more and have a different pipeline file
-  # so that someone doesn't pick the wrong var in the dropdown
+    value: ubuntu-20.04 
   - name: project
     value: ss
-  # same comment as above ^^
   - name: serviceConnection
     value: OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
   - name: tfInitSub
@@ -76,7 +70,9 @@ variables:
   - name: product
     value: "sds-platform"
   - name: action
-    value: ${{ parameters.Action }}
+    value: ${{ parameters.action }}
+  - template: vars/input-variables.yaml@cnp-azuredevops-libraries
+
 
 stages:
 
@@ -85,7 +81,7 @@ stages:
       - job:
         pool:
           vmImage: ${{ variables.agentPool }}
-        timeoutInMinutes: ${{ variables.timeoutInMinutes }}
+          timeoutInMinutes: ${{ variables.timeoutInMinutes }}
         steps:
           - template: steps/terraform-precheck.yaml@cnp-azuredevops-libraries
             parameters:
@@ -98,16 +94,18 @@ stages:
     jobs:
       - job: Genesis
         steps:
-          - template: pipeline-steps/genesis.yaml
+          - template: steps/set-build-repo-suffix-env-var.yaml@cnp-azuredevops-libraries           
+          - template: steps/terraform.yaml@cnp-azuredevops-libraries
             parameters:
+              overrideAction: ${{ parameters.action }}
               environment: ${{ parameters.env }}
+              component: "00-genesis"
+              serviceConnection: $(serviceConnection)
+              terraformInitSubscription: ${{ variables.tfInitSub }}
+              product: $(product)
               location: ${{ parameters.location }}
-              stack: "00-genesis"
-              project: $(project)
-              tfversion: $(tfversion)
-              tfInitSub: ${{ variables.tfInitSub }}
-              builtFrom: $(Build.Repository.Name)
-              product: ${{ variables.product }}
+              tfVarsFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/00-genesis/${{ parameters.env }}.tfvars"
+              planCommandOptions: "-var project=$(project) -var subscription_id=$(ARM_SUBSCRIPTION_ID)"
 
   - stage: Network
     displayName: "Network"
@@ -118,27 +116,42 @@ stages:
             parameters:
               environment: ${{ parameters.env }}
               location: ${{ parameters.location }}
+              serviceConnection: $(serviceConnection)
               stack: "07-network-rg"
               project: $(project)
-              tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
-              builtFrom: $(Build.Repository.Name)
-              product: ${{ variables.product }}
+              product: $(product)
+              action: ${{ parameters.action }}
+
 
       - job: DeployInfrastructure
         dependsOn: NetworkRg
         steps:
-          - template: pipeline-steps/deploy-network.yaml
+          - template: steps/set-build-repo-suffix-env-var.yaml@cnp-azuredevops-libraries   
+
+          - template: steps/keyvault-read.yaml@cnp-azuredevops-libraries
             parameters:
+              serviceConnection: $(serviceConnection)
               environment: ${{ parameters.env }}
+              subscriptionIdVariableName: 'SUBSCRIPTION_ID'
+              storageAccountVariableName: 'STORAGE_ACCOUNT'
+              keyVaultVariableName: 'KEY_VAULT'
+
+          - template: steps/terraform.yaml@cnp-azuredevops-libraries
+            parameters:
+              overrideAction: ${{ parameters.action }}
+              environment: ${{ parameters.env  }}
+              component: "01-network"
+              serviceConnection: "OPS-APPROVAL-GATE-MGMT-ENVS"
+              terraformInitSubscription: ${{ variables.tfInitSub }}
+              product: $(product)
               location: ${{ parameters.location }}
-              stack: "01-network"
-              project: $(project)
-              tfversion: $(tfversion)
-              terraformServiceConnection: OPS-APPROVAL-GATE-MGMT-ENVS
-              tfInitSub: ${{ variables.tfInitSub }}
-              builtFrom: $(Build.Repository.Name)
-              product: ${{ variables.product }}
+              tfVarsFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/01-network/${{ parameters.env }}.tfvars"
+              planCommandOptions: "-var project=$(project) -var control_vault=$(KEY_VAULT) -var subscription_id=$(SUBSCRIPTION_ID)"
+              initCommandOptions: >
+                -var subscription_id=$(SUBSCRIPTION_ID)
+                -backend-config storage_account_name=$(STORAGE_ACCOUNT)
+
 
   - stage: Managed_Identity
     displayName: "Managed_Identity"
@@ -146,18 +159,18 @@ stages:
     jobs:
       - job: Managed_Identity
         steps:
-          - template: pipeline-steps/managed_identity.yaml
+          - template: steps/terraform.yaml@cnp-azuredevops-libraries
             parameters:
-              serviceConnection: $(serviceConnection)
+              overrideAction: ${{ parameters.action }}
               environment: ${{ parameters.env }}
+              component: "05-mis"
+              serviceConnection: $(serviceConnection)
+              terraformInitSubscription: ${{ variables.tfInitSub }}
+              product: $(product)
               location: ${{ parameters.location }}
-              stack: "05-mis"
-              project: $(project)
-              tfversion: $(tfversion)
-              tfInitSub: ${{ variables.tfInitSub }}
-              builtFrom: $(Build.Repository.Name)
-              product: ${{ variables.product }}
-
+              tfVarsFile: "NULL"
+              planCommandOptions: "-var project=$(project) -var control_vault=$(controlKeyVault) -var subscription_id=$(ARM_SUBSCRIPTION_ID) "
+         
   - stage: Aks
     displayName: "AKS clusters"
     dependsOn:
@@ -169,15 +182,16 @@ stages:
             parameters:
               environment: ${{ parameters.env }}
               location: ${{ parameters.location }}
+              serviceConnection: $(serviceConnection)
               stack: "aks"
               project: $(project)
-              tfversion: $(tfversion)
               tfInitSub: ${{ variables.tfInitSub }}
-              builtFrom: $(Build.Repository.Name)
-              product: ${{ variables.product }}
+              product: $(product)
+              action: ${{ parameters.action }}
               ${{ if ne(parameters['cluster'], 'All') }}:
                 targetCommand: '-target azurerm_resource_group.kubernetes_resource_group["\"${{parameters.cluster}}\""] -target module.kubernetes["\"${{parameters.cluster}}\""] -target azurerm_role_assignment.dev_to_stg["\"${{parameters.cluster}}\""] -target data.azurerm_resource_group.mi_stg_rg[0]'
 
+ 
   - stage: BootStrapClusters
     displayName: "BootStrap Clusters"
     dependsOn: Aks
