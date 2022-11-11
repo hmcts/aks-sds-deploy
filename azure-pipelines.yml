@@ -6,7 +6,7 @@ resources:
   repositories:
   - repository: cnp-azuredevops-libraries
     type: github
-    ref: refs/heads/master
+    ref: refs/heads/jgw/azapi_role_assignment
     name: hmcts/cnp-azuredevops-libraries
     endpoint: 'hmcts (1)'
 
