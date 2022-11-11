@@ -177,8 +177,7 @@ stages:
       - Managed_Identity
     jobs:
       - job: DeployInfrastructure
-        pool:
-          vmImage: 'hmcts-cftptl-agent-pool'
+        pool: hmcts-cftptl-agent-pool
         steps:
           - template: pipeline-steps/deploy-service.yaml
             parameters:
