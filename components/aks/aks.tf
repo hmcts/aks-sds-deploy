@@ -54,7 +54,7 @@ data "azuread_service_principal" "version_checker" {
 
 module "kubernetes" {
   for_each    = toset([for k, v in var.clusters : k])
-  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=master"
+  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=jgw/switch_to_azapi_role_assignments"
   environment = var.env
   location    = var.location
 
