@@ -178,6 +178,8 @@ stages:
     jobs:
       - job: DeployInfrastructure
         timeoutInMinutes: 180
+        pool:
+          vmImage: 'hmcts-cftptl-agent-pool'
         steps:
           - template: pipeline-steps/deploy-service.yaml
             parameters:
