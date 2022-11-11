@@ -177,7 +177,6 @@ stages:
       - Managed_Identity
     jobs:
       - job: DeployInfrastructure
-        timeoutInMinutes: 180
         pool:
           vmImage: 'hmcts-cftptl-agent-pool'
         steps:
