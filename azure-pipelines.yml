@@ -172,7 +172,6 @@ stages:
               planCommandOptions: "-var project=$(project) -var control_vault=$(controlKeyVault) -var subscription_id=$(ARM_SUBSCRIPTION_ID) "
          
   - stage: Aks
-    pool: hmcts-cftptl-agent-pool
     displayName: "AKS clusters"
     dependsOn:
       - Managed_Identity
