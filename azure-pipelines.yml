@@ -173,6 +173,7 @@ stages:
          
   - stage: Aks
     displayName: "AKS clusters"
+    pool: hmcts-cftptl-agent-pool
     dependsOn:
       - Managed_Identity
     jobs:
