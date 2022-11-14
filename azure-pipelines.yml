@@ -178,6 +178,7 @@ stages:
       - Managed_Identity
     jobs:
       - job: DeployInfrastructure
+        timeoutInMinutes: 180
         steps:
           - template: pipeline-steps/deploy-service.yaml
             parameters:
