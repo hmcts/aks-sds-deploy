@@ -6,7 +6,7 @@ resources:
   repositories:
   - repository: cnp-azuredevops-libraries
     type: github
-    ref: refs/heads/jgw/test_self_hosted_ado_tfenv
+    ref: refs/heads/jgw/force_clean_checkout
     name: hmcts/cnp-azuredevops-libraries
     endpoint: 'hmcts (1)'
 
