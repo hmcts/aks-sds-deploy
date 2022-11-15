@@ -1,11 +1,11 @@
 data "azurerm_virtual_network" "network" {
   name = format("%s-%s-vnet",
     var.project,
-    var.environment
+    var.env
   )
   resource_group_name = format("%s-%s-network-rg",
     var.project,
-    var.environment
+    var.env
   )
 }
 

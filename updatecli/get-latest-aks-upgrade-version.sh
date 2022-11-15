@@ -8,5 +8,9 @@ az aks get-upgrades \
     --name $aks_name \
     --resource-group $aks_resource_group \
     --subscription $aks_subscription \
-    --query 'controlPlaneProfile.upgrades[?isPreview==null].kubernetesVersion' \
-    --output tsv | sort --reverse --version-sort | head --lines 1
+    | jq -r '
+    if (.controlPlaneProfile.upgrades|map(select(.isPreview == null)) == []) then
+        .controlPlaneProfile.kubernetesVersion
+    else .controlPlaneProfile.upgrades|map(select(.isPreview == null).kubernetesVersion)
+    | .[] end' \
+    | sort --reverse --version-sort | head --lines 1

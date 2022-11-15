@@ -48,7 +48,19 @@ application_gateway_routes = [
     address_prefix         = "10.147.64.0/18"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.8.36"
-  }
+  },
+  {
+    name                   = "vh-perf-test-stg"
+    address_prefix         = "10.100.197.224/28"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.8.36"
+  },
+  {
+    name                   = "vh-infra-core-ado"
+    address_prefix         = "10.10.52.0/24"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.8.36"
+  },
 ]
 
 additional_routes = [
