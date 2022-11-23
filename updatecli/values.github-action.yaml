@@ -10,11 +10,13 @@ environments:
     aks_name: ss-sbox-00-aks
     aks_resource_group: ss-sbox-00-rg
     aks_subscription: DTS-SHAREDSERVICES-SBOX
+  ## Do not change demo to 01
   demo:
     enabled: true
     aks_name: ss-demo-00-aks
     aks_resource_group: ss-demo-00-rg
     aks_subscription: DTS-SHAREDSERVICES-DEMO
+  ## Do not change dev to 01
   dev:
     enabled: true
     aks_name: ss-dev-01-aks
