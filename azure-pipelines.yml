@@ -75,6 +75,7 @@ variables:
 
 
 stages:
+
   - stage: Precheck
     jobs:
       - job:
