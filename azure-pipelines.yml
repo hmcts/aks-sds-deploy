@@ -75,8 +75,8 @@ variables:
 
 
 stages:
-
   - stage: Precheck
+    condition: ne('${{ parameters.action }}', 'plan')
     jobs:
       - job:
         pool:
