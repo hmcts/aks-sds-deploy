@@ -1,10 +1,10 @@
 clusters = {
-  "00" = {
+  # "00" = {
+  #   kubernetes_version = "1.24"
+  # },
+  "01" = {
     kubernetes_version = "1.24"
-  },
-  #   "01" = {
-  #     kubernetes_version = "1.24"
-  #   }
+  }
 }
 enable_automatic_channel_upgrade_patch = true
 kubernetes_cluster_agent_min_count     = "1"
