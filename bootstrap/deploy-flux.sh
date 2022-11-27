@@ -39,7 +39,7 @@ commonLabels:
 resources:
   - https://raw.githubusercontent.com/Azure/aad-pod-identity/v1.8.4/deploy/infra/deployment-rbac.yaml
 patchesStrategicMerge:
-  - https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/admin/aad-pod-identity/aad-pod-id-patch.yaml
+  - https://raw.githubusercontent.com/hmcts/sds-flux-config/DTSPO-11343-nameoverrides/apps/admin/aad-pod-identity/aad-pod-id-patch.yaml
 EOF
 ) > "${TMP_DIR}/admin/kustomization.yaml"
 
@@ -52,8 +52,8 @@ EOF
         kubectl -n flux-system wait --for condition=established --timeout=60s "customresourcedefinition.apiextensions.k8s.io/$crd"
     done
     
-    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/admin/aad-pod-identity/mic-exception.yaml
-    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/kube-system/aad-pod-identity/mic-exception.yaml
+    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/DTSPO-11343-nameoverrides/apps/admin/aad-pod-identity/mic-exception.yaml
+    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/DTSPO-11343-nameoverrides/apps/kube-system/aad-pod-identity/mic-exception.yaml
 
 }
 
@@ -93,8 +93,7 @@ function flux_v2_ssh_git_key {
 }
 
 function flux_v2_installation {
-    FLUX_CONFIG_URL=https://raw.githubusercontent.com/hmcts/sds-flux-config/master
-
+    FLUX_CONFIG_URL=https://raw.githubusercontent.com/hmcts/sds-flux-config/DTSPO-11343-nameoverrides
 # -----------------------------------------------------------
 # Deploy components and CRDs
     (
