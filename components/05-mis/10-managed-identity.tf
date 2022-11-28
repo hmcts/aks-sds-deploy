@@ -6,6 +6,14 @@ resource "azurerm_user_assigned_identity" "sops-mi" {
   tags = local.common_tags
 }
 
+resource "azurerm_user_assigned_identity" "aks-start_stop" {
+  resource_group_name = data.azurerm_resource_group.genesis_rg.name
+  location            = data.azurerm_resource_group.genesis_rg.location
+
+  name = "aks-start-stop-${var.env}-mi"
+  tags = local.common_tags
+}
+
 resource "azurerm_role_assignment" "Reader" {
   # DTS Bootstrap Principal_id
   principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id

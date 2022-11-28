@@ -20,3 +20,11 @@ resource "azurerm_role_assignment" "kubelet_uami_genesis" {
   role_definition_name = "Managed Identity Operator"
   scope                = azurerm_user_assigned_identity.sops-mi.id
 }
+
+resource "azurerm_user_assigned_identity" "aks-start_stop" {
+  name = "aks-start-stop-${var.env}-mi"
+
+  resource_group_name = data.azurerm_resource_group.genesis_rg.name
+  location            = data.azurerm_resource_group.genesis_rg.location
+  tags                = local.common_tags
+}
