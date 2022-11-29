@@ -6,19 +6,25 @@ resource "azurerm_user_assigned_identity" "sops-mi" {
   tags = local.common_tags
 }
 
-resource "azurerm_user_assigned_identity" "aks-start_stop" {
-  resource_group_name = data.azurerm_resource_group.genesis_rg.name
-  location            = data.azurerm_resource_group.genesis_rg.location
-
-  name = "aks-start-stop-${var.env}-mi"
-  tags = local.common_tags
-}
-
 resource "azurerm_role_assignment" "Reader" {
   # DTS Bootstrap Principal_id
   principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id
   role_definition_name = "Reader"
   scope                = data.azurerm_key_vault.genesis_keyvault.id
+}
+
+resource "azurerm_user_assigned_identity" "aks-start_stop-mi" {
+  resource_group_name = data.azurerm_resource_group.genesis_rg.name
+  location            = data.azurerm_resource_group.genesis_rg.location
+
+  name = "aks-start-stop-${var.env}-${each.value}-mi"
+  tags = local.common_tags
+}
+
+resource "azurerm_role_assignment" "Contributor" {
+  principal_id         = azurerm_user_assigned_identity.aks-start_stop-mi.principal_id
+  role_definition_name = "Contributor"
+  scope                = data.azurerm_kubernetes_cluster.${var.project}-${var.env}-${each.value}-aks.id
 }
 
 resource "azurerm_key_vault_key" "sops-key" {
