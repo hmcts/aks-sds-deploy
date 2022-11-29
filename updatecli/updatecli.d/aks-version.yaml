@@ -25,7 +25,7 @@ sources:
     kind: shell
     name: Get latest AKS version for a given region
     spec:
-      command: ./updatecli/get-latest-aks-upgrade-version.sh {{ $aks_name }} {{ $aks_resource_group }} {{ $aks_subscription }}
+      command: ./updatecli/get-latest-aks-upgrade-version.sh {{ $aks_name }} {{ $aks_resource_group }} {{ $aks_subscription }} {{ $environment }}
       versionfilter:
         kind: semver
     transformers:
