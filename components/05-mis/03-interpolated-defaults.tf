@@ -17,6 +17,15 @@ data "azurerm_resource_group" "sds_sbox_acr" {
   count = local.is_sbox ? 1 : 0
 }
 
+data "azurerm_resource_group" "aks-cluster-rg" {
+  name = "${var.project}-${var.env}-${var.cluster}-rg"
+}
+
+data "azurerm_kubernetes_cluster" "aks_cluster" {
+  name                = "${var.project}-${var.env}-${var.cluster}-aks"
+  resource_group_name = data.azurerm_resource_group.aks-cluster-rg.name
+}
+
 data "azurerm_key_vault" "genesis_keyvault" {
   name                = contains(["ptlsbox", "ptl"], var.env) ? "dtssds${replace(var.env, "-", "")}" : "${lower(replace(data.azurerm_subscription.current.display_name, "-", ""))}kv"
   resource_group_name = data.azurerm_resource_group.genesis_rg.name

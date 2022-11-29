@@ -24,7 +24,7 @@ resource "azurerm_user_assigned_identity" "aks-start_stop-mi" {
 resource "azurerm_role_assignment" "Contributor" {
   principal_id         = azurerm_user_assigned_identity.aks-start_stop-mi.principal_id
   role_definition_name = "Contributor"
-  scope                = data.azurerm_kubernetes_cluster.${var.project}-${var.env}-${each.value}-aks.id
+  scope                = data.azurerm_kubernetes_cluster.aks_cluster.name
 }
 
 resource "azurerm_key_vault_key" "sops-key" {
