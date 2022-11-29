@@ -19,7 +19,7 @@ data "azurerm_resource_group" "sds_sbox_acr" {
 
 data "azurerm_kubernetes_cluster" "aks_cluster" {
   name                = "ss-sbox-00-aks"
-  resource_group_name = "module.kubernetes.kubernetes_resource_group"
+  resource_group_name = module.kubernetes.kubernetes_resource_group
 }
 
 data "azurerm_key_vault" "genesis_keyvault" {
