@@ -17,7 +17,7 @@ resource "azurerm_user_assigned_identity" "aks-start_stop-mi" {
   resource_group_name = data.azurerm_resource_group.genesis_rg.name
   location            = data.azurerm_resource_group.genesis_rg.location
 
-  name = "aks-start-stop-${var.env}-${each.value}-mi"
+  name = "aks-start-stop-${var.env}-00-mi"
   tags = local.common_tags
 }
 
