@@ -6,7 +6,7 @@ resources:
   repositories:
   - repository: cnp-azuredevops-libraries
     type: github
-    ref: refs/heads/master
+    ref: refs/heads/jgw/parallel_run_test
     name: hmcts/cnp-azuredevops-libraries
     endpoint: 'hmcts (1)'
 
@@ -85,7 +85,7 @@ stages:
         steps:
           - template: steps/terraform-precheck.yaml@cnp-azuredevops-libraries
             parameters:
-              keyvaultName: 'infra-vault-nonprod'
+              keyvaultName: 'infra-vault-sandbox'
               keyvaultSecret: 'azure-devops-token'
               serviceConnection: 'DCD-CFT-Sandbox'
 
