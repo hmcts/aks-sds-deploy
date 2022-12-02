@@ -18,7 +18,7 @@ system_node_pool = {
 
 linux_node_pool = {
   min_nodes = 2,
-  max_nodes = 4
+  max_nodes = 5
 }
 
 windows_node_pool = {
