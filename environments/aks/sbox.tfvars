@@ -1,6 +1,6 @@
 clusters = {
   "00" = {
-    kubernetes_version = "1.24"
+    kubernetes_version = "1.24.6"
   },
   "01" = {
     kubernetes_version = "1.24"
@@ -18,7 +18,7 @@ system_node_pool = {
 
 linux_node_pool = {
   min_nodes = 2,
-  max_nodes = 5
+  max_nodes = 4
 }
 
 windows_node_pool = {
