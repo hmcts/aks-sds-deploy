@@ -7,8 +7,6 @@ variable "builtFrom" {}
 
 variable "product" {}
 
-variable "autoShutdown" {}
-
 # Remote State
 variable "control_vault" {}
 
