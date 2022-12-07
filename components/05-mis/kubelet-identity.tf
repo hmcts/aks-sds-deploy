@@ -3,7 +3,7 @@ resource "azurerm_user_assigned_identity" "kubelet_uami" {
 
   resource_group_name = data.azurerm_resource_group.genesis_rg.name
   location            = data.azurerm_resource_group.genesis_rg.location
-  tags                = local.all_tags
+  tags                = local.common_tags
 }
 
 resource "azurerm_role_assignment" "sbox_registry_acrpull" {
