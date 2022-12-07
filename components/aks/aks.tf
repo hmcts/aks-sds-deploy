@@ -94,7 +94,7 @@ module "kubernetes" {
   kubernetes_cluster_version            = var.clusters[each.value]["kubernetes_version"]
   kubernetes_cluster_agent_os_disk_size = "128"
 
-  tags     = module.ctags.all_tags
+  tags     = module.ctags.common_tags
   sku_tier = var.sku_tier
 
   enable_user_system_nodepool_split = true
