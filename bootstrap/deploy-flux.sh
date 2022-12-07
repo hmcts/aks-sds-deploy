@@ -94,6 +94,7 @@ function flux_v2_ssh_git_key {
 
 function flux_v2_installation {
     FLUX_CONFIG_URL=https://raw.githubusercontent.com/hmcts/sds-flux-config/master
+
 # -----------------------------------------------------------
 # Deploy components and CRDs
     (
