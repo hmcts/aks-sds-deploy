@@ -94,6 +94,13 @@ stages:
     jobs:
       - job: Genesis
         steps:
+          - task: AzureCLI@2
+            displayName: test fork build for Thom
+            inputs:
+              azureSubscription: $(serviceConnection)
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: 'az account show'
           - template: steps/set-build-repo-suffix-env-var.yaml@cnp-azuredevops-libraries           
           - template: steps/terraform.yaml@cnp-azuredevops-libraries
             parameters:
