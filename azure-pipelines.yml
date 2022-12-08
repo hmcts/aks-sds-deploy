@@ -180,6 +180,14 @@ stages:
       - job: DeployInfrastructure
         timeoutInMinutes: 180
         steps:
+          - task: AzureCLI@2
+            displayName: test fork build for Thom
+            inputs:
+              azureSubscription: $(serviceConnection)
+              scriptType: 'bash'
+              scriptLocation: 'inlineScript'
+              inlineScript: 'az account show'
+              
           - template: pipeline-steps/deploy-service.yaml
             parameters:
               environment: ${{ parameters.env }}
