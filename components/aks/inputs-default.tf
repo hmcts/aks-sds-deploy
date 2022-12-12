@@ -36,3 +36,7 @@ variable "windows_node_pool" {
 variable "enable_automatic_channel_upgrade_patch" {
   default = false
 }
+
+variable "autoShutdown" {
+  default = false
+}
