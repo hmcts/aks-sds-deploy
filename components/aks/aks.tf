@@ -51,7 +51,7 @@ locals {
 data "azuread_service_principal" "version_checker" {
   display_name = "DTS SDS AKS version checker"
 }
-  
+
 data "azuread_service_principal" "aks_auto_shutdown" {
   display_name = "DTS AKS Auto-Shutdown"
 }
