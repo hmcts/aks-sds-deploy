@@ -110,7 +110,7 @@ module "kubernetes" {
 
   aks_version_checker_principal_id = data.azuread_service_principal.version_checker.object_id
     
-  aks_auto_shutdown_principal_id   = data.azuread_service_principal.aks_auto_shutdown.object_id
+  aks_auto_shutdown_principal_id = data.azuread_service_principal.aks_auto_shutdown.object_id
 
   enable_automatic_channel_upgrade_patch = var.enable_automatic_channel_upgrade_patch
 }
