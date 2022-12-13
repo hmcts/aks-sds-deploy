@@ -51,6 +51,10 @@ locals {
 data "azuread_service_principal" "version_checker" {
   display_name = "DTS SDS AKS version checker"
 }
+  
+data "azuread_service_principal" "aks_auto_shutdown" {
+  display_name = "DTS AKS Auto-Shutdown"
+}
 
 module "kubernetes" {
   for_each    = toset([for k, v in var.clusters : k])
@@ -105,6 +109,8 @@ module "kubernetes" {
   availability_zones = var.availability_zones
 
   aks_version_checker_principal_id = data.azuread_service_principal.version_checker.object_id
+    
+  aks_auto_shutdown_principal_id = data.azuread_service_principal.aks_auto_shutdown.object_id
 
   enable_automatic_channel_upgrade_patch = var.enable_automatic_channel_upgrade_patch
 }
