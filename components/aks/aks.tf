@@ -122,6 +122,7 @@ module "ctags" {
   product      = var.product
   builtFrom    = var.builtFrom
   autoShutdown = var.autoShutdown
+  expiresAfter = "3000-01-01"
 }
 
 
