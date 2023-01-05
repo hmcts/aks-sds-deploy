@@ -58,7 +58,7 @@ data "azuread_service_principal" "aks_auto_shutdown" {
 
 module "kubernetes" {
   for_each    = toset([for k, v in var.clusters : k])
-  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-11790_disk_resource_group_var"
+  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=master"
   environment = var.env
   location    = var.location
 
