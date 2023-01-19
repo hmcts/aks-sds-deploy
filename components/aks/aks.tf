@@ -105,7 +105,8 @@ module "kubernetes" {
 
   additional_node_pools = contains(["ptlsbox", "ptl"], var.env) ? tolist([local.linux_node_pool]) : tolist([local.linux_node_pool, local.system_node_pool])
 
-  depends_on         = [azurerm_resource_group.disks_resource_group]
+  disks_resource_group_id = azurerm_resource_group.disks_resource_group.id
+
   availability_zones = var.availability_zones
 
   aks_version_checker_principal_id = data.azuread_service_principal.version_checker.object_id
@@ -121,6 +122,7 @@ module "ctags" {
   product      = var.product
   builtFrom    = var.builtFrom
   autoShutdown = var.autoShutdown
+  expiresAfter = var.expiresAfter
 }
 
 

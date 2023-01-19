@@ -85,3 +85,7 @@ variable "additional_routes" {
 variable "additional_subnets" {
   default = []
 }
+
+variable "expiresAfter" {
+  default = "3000-01-01"
+}
