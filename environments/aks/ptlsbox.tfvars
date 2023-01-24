@@ -10,3 +10,5 @@ kubernetes_cluster_ssh_key             = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQ
 ptl_cluster                            = true
 sku_tier                               = "Paid"
 availability_zones                     = ["1"]
+
+autoShutdown = true
