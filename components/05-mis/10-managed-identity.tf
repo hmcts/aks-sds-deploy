@@ -57,7 +57,7 @@ locals {
     resource_groups = toset([
       "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg"
     ])
-    # Demo DNS zones to add "DNS Zone Contributor" premissions for external dns to
+    # Dev DNS zones to add "DNS Zone Contributor" premissions for external dns to
     dev = toset([
       "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg/providers/Microsoft.Network/privateDnsZones/dev.platform.hmcts.net"
     ])
