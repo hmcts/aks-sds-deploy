@@ -55,13 +55,11 @@ locals {
   external_dns = {
     # Resource Groups to add Reader permissions for external dns to
     resource_groups = toset([
-      "/subscriptions/ed302caf-ec27-4c64-a05e-85731c3ce90e/resourceGroups/reformMgmtRG",
       "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg"
     ])
-    # Demo DNS zones to add "DNS Zone Contributor" premissions for external dns to
-    demo = toset([
-      "/subscriptions/ed302caf-ec27-4c64-a05e-85731c3ce90e/resourceGroups/reformMgmtRG/providers/Microsoft.Network/dnszones/demo.platform.hmcts.net",
-      "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg/providers/Microsoft.Network/privateDnsZones/demo.platform.hmcts.net"
+    # Dev DNS zones to add "DNS Zone Contributor" premissions for external dns to
+    dev = toset([
+      "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg/providers/Microsoft.Network/privateDnsZones/dev.platform.hmcts.net"
     ])
   }
 }
