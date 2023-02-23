@@ -35,7 +35,7 @@ env=${3}
 if [[ "${6}" == "All" ]]; then
   echo "Checking for available clusters"
   clusters=$(az aks list --output tsv --query '[].name' | sed -n "s/${project}-${env}-\([0-9][0-9]\)-aks/\1/p")
-  echo "Clusters found ${clusters}"
+  echo -e "Clusters found:\n${clusters}"
 else
   clusters=${6}
 fi
@@ -43,7 +43,7 @@ fi
 for cluster in ${clusters}; do
   set -- "${@:1:5}" "$cluster" "${@:7}"
   echo "################################"
-  echo "Starting Deployment on ${project}-${env}-${cluster}-aks"
+  echo -e "Starting Deployment on ${project}-${env}-${cluster}-aks\n"
   ./get-aks-credentials.sh "$@" || error_exit "ERROR: Unable to get AKS credentials"
   ./create-sshkeys.sh "$@" || error_exit "ERROR: SSHKey Create Issues"
   ./apply-default-rbac.sh "$@" || error_exit "ERROR: Unable to set k8s RBAC"
@@ -52,5 +52,5 @@ for cluster in ${clusters}; do
   echo "Cleanup"
   ./cleanup-sshkeys.sh "$@" || error_exit "ERROR: Unable to Cleanup"
   echo "Deployment Complete for ${project}-${env}-${cluster}-aks"
-  echo "################################\n\n\n"
+  echo -e "################################\n\n\n"
 done
