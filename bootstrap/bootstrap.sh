@@ -40,7 +40,7 @@ else
   clusters=${6}
 fi
 
-for cluster in ${6}; do 
+for cluster in ${clusters}; do
   set -- "${@:1:5}" "$cluster" "${@:7}"
   echo "Starting Deployment"
   ./get-aks-credentials.sh "$@" || error_exit "ERROR: Unable to get AKS credentials"
