@@ -27,7 +27,7 @@ then
     usage
 fi
 
-echo "Params: $@"
+echo "Params: $*"
 
 for cluster in ${6}; do 
   set -- "${@:1:5}" "$cluster" "${@:7}"
