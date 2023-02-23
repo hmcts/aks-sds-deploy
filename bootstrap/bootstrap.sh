@@ -21,7 +21,7 @@ function error_exit {
 
 ############################################################
 
-# Make sure they 7 arguments are passed
+# Make sure the 7 arguments are passed
 if [[ $# -lt 7 ]]
 then
     usage
