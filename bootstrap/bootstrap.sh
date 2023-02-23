@@ -29,6 +29,17 @@ fi
 
 echo "Params: $*"
 
+project=${1}
+env=${3}
+
+if [[ "${6}" == "All" ]]; then
+  echo "Checking for available clusters"
+  clusters=$(az aks list --output tsv --query '[].name' | sed -n "s/${project}-${env}-\([0-9][0-9]\)-aks/\1/p")
+  echo "Clusters found ${clusters}"
+else
+  clusters=${6}
+fi
+
 for cluster in ${6}; do 
   set -- "${@:1:5}" "$cluster" "${@:7}"
   echo "Starting Deployment"

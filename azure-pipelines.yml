@@ -201,10 +201,7 @@ stages:
     jobs:
       - job: BootStrap
         variables:
-          ${{ if eq(parameters['cluster'], 'All') }}:
-            clusters: $[ stageDependencies.Aks.DeployInfrastructure.outputs['setClusterNumbers.clusterNumbers'] ]
-          ${{ if ne(parameters['cluster'], 'All') }}:
-            clusters: ${{ parameters.cluster }}
+          clusters: ${{ parameters.cluster }}
         steps:
           - template: pipeline-steps/bootstrap.yaml
             parameters:
