@@ -38,7 +38,7 @@ commonLabels:
   k8s-app: aad-pod-id
 resources:
   - https://raw.githubusercontent.com/Azure/aad-pod-identity/v1.8.4/deploy/infra/deployment-rbac.yaml
-patchesStrategicMerge:
+patches:
   - https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/admin/aad-pod-identity/aad-pod-id-patch.yaml
 EOF
 ) > "${TMP_DIR}/admin/kustomization.yaml"
@@ -107,7 +107,7 @@ resources:
 - git-credentials.yaml
 - aks-sops-aadpodidentity.yaml
 
-patchesStrategicMerge:
+patches:
 - ${FLUX_CONFIG_URL}/apps/flux-system/base/patches/kustomize-controller-patch.yaml
 EOF
     ) > "${TMP_DIR}/gotk/kustomization.yaml"
@@ -130,7 +130,7 @@ resources:
 - ${FLUX_CONFIG_URL}/apps/flux-system/base/kustomize.yaml
 - ${FLUX_CONFIG_URL}/apps/flux-system/base/flux-config-gitrepo.yaml
 
-patchesStrategicMerge:
+patches:
 - ${FLUX_CONFIG_URL}/apps/flux-system/${ENVIRONMENT}/${CLUSTER_NAME}/kustomize.yaml
 EOF
     ) > "${TMP_DIR}/flux-config/kustomization.yaml"
