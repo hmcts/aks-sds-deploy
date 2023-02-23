@@ -52,5 +52,5 @@ for cluster in ${clusters}; do
   echo "Cleanup"
   ./cleanup-sshkeys.sh "$@" || error_exit "ERROR: Unable to Cleanup"
   echo "Deployment Complete for ${project}-${env}-${cluster}-aks"
-  echo "################################"
+  echo "################################\n\n\n"
 done
