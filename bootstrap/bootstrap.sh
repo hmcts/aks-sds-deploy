@@ -42,7 +42,8 @@ fi
 
 for cluster in ${clusters}; do
   set -- "${@:1:5}" "$cluster" "${@:7}"
-  echo "Starting Deployment"
+  echo "################################"
+  echo "Starting Deployment on ${project}-${env}-${cluster}-aks"
   ./get-aks-credentials.sh "$@" || error_exit "ERROR: Unable to get AKS credentials"
   ./create-sshkeys.sh "$@" || error_exit "ERROR: SSHKey Create Issues"
   ./apply-default-rbac.sh "$@" || error_exit "ERROR: Unable to set k8s RBAC"
@@ -50,5 +51,6 @@ for cluster in ${clusters}; do
   [[ $3 =~ ^(stg|prod)$ ]] && (./register-cluster-with-dynatrace.sh "$@" || error_exit "ERROR: Unable to register cluster with Dynatrace")
   echo "Cleanup"
   ./cleanup-sshkeys.sh "$@" || error_exit "ERROR: Unable to Cleanup"
-  echo "Deployment Complete"
+  echo "Deployment Complete for ${project}-${env}-${cluster}-aks"
+  echo "################################"
 done
