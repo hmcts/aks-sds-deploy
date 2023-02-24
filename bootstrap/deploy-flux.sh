@@ -5,7 +5,7 @@ set -e
 ENVIRONMENT="${3}"
 CLUSTER_NAME="${6}"
 AGENT_BUILDDIRECTORY=/tmp
-
+KUSTOMIZE_VERSION=4.5.7
 ############################################################
 # Functions
 ############################################################
@@ -26,7 +26,7 @@ function pod_identity_components {
         echo "Kustomize installed"
     else
         #Install kustomize
-        curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+        curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/kustomize/v${KUSTOMIZE_VERSION}/hack/install_kustomize.sh" | bash
     fi 
     # -----------------------------------------------------------
 (
