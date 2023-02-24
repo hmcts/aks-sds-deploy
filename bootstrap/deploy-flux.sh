@@ -26,8 +26,7 @@ function pod_identity_components {
         echo "Kustomize installed"
     else
         #Install kustomize
-        curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/kustomize/master/hack/install_kustomize.sh" v${KUSTOMIZE_VERSION} | bash
-        echo "kustomize version $(./kustomize version)"
+        curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/kustomize/master/hack/install_kustomize.sh" | bash -s v${KUSTOMIZE_VERSION}
     fi 
     # -----------------------------------------------------------
 (
