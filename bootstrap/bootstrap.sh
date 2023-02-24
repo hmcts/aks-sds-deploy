@@ -41,7 +41,7 @@ else
   cluster_numbers=${6}
 fi
 
-for clusters_num in ${clusters}; do
+for clusters_num in ${cluster_numbers}; do
   set -- "${@:1:5}" "$cluster" "${@:7}"
   echo "################################"
   echo -e "Starting Deployment on ${project}-${env}-${cluster}-aks\n"
