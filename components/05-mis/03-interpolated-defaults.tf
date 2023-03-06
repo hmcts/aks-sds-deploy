@@ -38,4 +38,3 @@ data "azurerm_key_vault" "acme" {
   name                = "acmedtssds${var.env}"
   resource_group_name = data.azurerm_resource_group.platform-rg.name
 }
-data "azurerm_subscription" "subscription" {}
