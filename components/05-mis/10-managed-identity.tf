@@ -86,3 +86,10 @@ resource "azurerm_role_assignment" "genesis_managed_identity_operator" {
   scope                = azurerm_user_assigned_identity.kubelet_uami.id
   role_definition_name = "Managed Identity Operator"
 }
+
+resource "azurerm_role_assignment" "service_operator" {
+  count                = var.service_operator_settings_enabled ? 1 : 0
+  principal_id         = data.azurerm_user_assigned_identity.aks.principal_id
+  role_definition_name = "Contributor"
+  scope                = data.azurerm_subscription.subscription.id
+}
