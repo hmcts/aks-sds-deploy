@@ -10,12 +10,6 @@ resource "azurerm_resource_group" "kubernetes_resource_group" {
   tags = module.ctags.common_tags
 }
 
-resource "azurerm_resource_group" "disks_resource_group" {
-  location = var.location
-  name     = "disks-${var.env}-rg"
-  tags     = module.ctags.common_tags
-}
-
 module "loganalytics" {
   source      = "git::https://github.com/hmcts/terraform-module-log-analytics-workspace-id.git?ref=master"
   environment = var.env
@@ -104,8 +98,6 @@ module "kubernetes" {
   enable_user_system_nodepool_split = true
 
   additional_node_pools = contains(["ptlsbox", "ptl"], var.env) ? tolist([local.linux_node_pool]) : tolist([local.linux_node_pool, local.system_node_pool])
-
-  disks_resource_group_id = azurerm_resource_group.disks_resource_group.id
 
   availability_zones = var.availability_zones
 
