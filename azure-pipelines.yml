@@ -207,3 +207,22 @@ stages:
             parameters:
               environment: ${{ parameters.env }}
               serviceConnection: $(serviceConnection)
+
+  - stage: PipelineTests
+    displayName: "PipelineTests"
+    dependsOn: BootStrapClusters
+    jobs:
+      - job: PipelineTests
+        pool:
+          vmImage: ${{ variables.agentPool }}
+        timeoutInMinutes: ${{ variables.timeoutInMinutes }}
+        # condition: and(succeeded(), eq(variables['isMain'], true), eq('${{ parameters.action }}', 'apply'))
+        steps:
+          - template: steps/pipeline-tests-jest.yaml@cnp-azuredevops-libraries
+            parameters:
+              workingDirectory: $(Pipeline.Workspace)/s/aks-sds-deploy/scripts
+              junit_output_dir: $(Pipeline.Workspace)/s/aks-sds-deploy/environments/junit
+              environment: ${{ parameters.env }}
+              product: ${{ variables.product }}
+              test_title: '${{ parameters.env }}_${{ parameters.cluster }}_${{ parameters.location }}'
+              test_pattern: pipeline.test.ts
