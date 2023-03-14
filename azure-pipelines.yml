@@ -216,7 +216,7 @@ stages:
         pool:
           vmImage: ${{ variables.agentPool }}
         timeoutInMinutes: ${{ variables.timeoutInMinutes }}
-        # condition: and(succeeded(), eq(variables['isMain'], true), eq('${{ parameters.action }}', 'apply'))
+        condition: and(succeeded(), eq(variables['isMain'], true), eq('${{ parameters.action }}', 'apply'))
         steps:
           - template: steps/pipeline-tests-jest.yaml@cnp-azuredevops-libraries
             parameters:
