@@ -216,13 +216,13 @@ stages:
         pool:
           vmImage: ${{ variables.agentPool }}
         timeoutInMinutes: ${{ variables.timeoutInMinutes }}
-        # condition: and(succeeded(), eq(variables['isMain'], true), eq('${{ parameter.action }}', 'apply'))
+        # condition: and(succeeded(), eq(variables['isMain'], true), eq('${{ parameters.action }}', 'apply'))
         steps:
           - template: steps/pipeline-tests-jest.yaml@cnp-azuredevops-libraries
             parameters:
               workingDirectory: $(Pipeline.Workspace)/s/aks-sds-deploy/scripts
               junit_output_dir: $(Pipeline.Workspace)/s/aks-sds-deploy/environments/junit
-              environment: ${{ parameter.env }}
+              environment: ${{ parameters.env }}
               product: ${{ variables.product }}
-              test_title: '${{ parameter.env }}_${{ parameter.cluster }}_${{ parameter.location }}'
+              test_title: '${{ parameters.env }}_${{ parameters.cluster }}_${{ parameters.location }}'
               test_pattern: pipeline.test.ts
