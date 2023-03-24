@@ -36,8 +36,16 @@ locals {
 }
 
 module "ctags" {
-  source      = "git::https://github.com/hmcts/terraform-module-common-tags.git?ref=master"
-  environment = var.env
-  product     = var.product
-  builtFrom   = var.builtFrom
+  source       = "git::https://github.com/hmcts/terraform-module-common-tags.git?ref=master"
+  environment  = var.env
+  product      = var.product
+  builtFrom    = var.builtFrom
+  expiresAfter = var.expiresAfter
+}
+
+variable "expiresAfter" {
+  default = "3000-01-01"
+}
+variable "service_operator_settings_enabled" {
+  default = false
 }

@@ -20,7 +20,7 @@ variable "kubernetes_cluster_agent_max_count" {
   default = 3
 }
 variable "kubernetes_cluster_agent_vm_size" {
-  default = "Standard_DS3_v2"
+  default = "Standard_D4ds_v5"
 }
 
 variable "availability_zones" {
