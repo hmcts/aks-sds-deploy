@@ -40,3 +40,7 @@ variable "enable_automatic_channel_upgrade_patch" {
 variable "autoShutdown" {
   default = false
 }
+
+variable "expiresAfter" {
+  default = "3000-01-01"
+}
