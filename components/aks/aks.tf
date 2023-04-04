@@ -10,12 +10,6 @@ resource "azurerm_resource_group" "kubernetes_resource_group" {
   tags = module.ctags.common_tags
 }
 
-resource "azurerm_resource_group" "disks_resource_group" {
-  location = var.location
-  name     = "disks-${var.env}-rg"
-  tags     = module.ctags.common_tags
-}
-
 module "loganalytics" {
   source      = "git::https://github.com/hmcts/terraform-module-log-analytics-workspace-id.git?ref=master"
   environment = var.env
@@ -24,7 +18,7 @@ module "loganalytics" {
 locals {
   linux_node_pool = {
     name                = "linux"
-    vm_size             = lookup(var.linux_node_pool, "vm_size", "Standard_DS3_v2")
+    vm_size             = lookup(var.linux_node_pool, "vm_size", "Standard_D4ds_v5")
     min_count           = lookup(var.linux_node_pool, "min_nodes", 2)
     max_count           = lookup(var.linux_node_pool, "max_nodes", 10)
     max_pods            = lookup(var.linux_node_pool, "max_pods", 30)
@@ -36,7 +30,7 @@ locals {
   }
   system_node_pool = {
     name                = "msnode"
-    vm_size             = lookup(var.windows_node_pool, "vm_size", "Standard_DS3_v2")
+    vm_size             = lookup(var.windows_node_pool, "vm_size", "Standard_D4ds_v5")
     min_count           = lookup(var.windows_node_pool, "min_nodes", 2)
     max_count           = lookup(var.windows_node_pool, "max_nodes", 4)
     max_pods            = lookup(var.windows_node_pool, "max_pods", 30)
@@ -93,7 +87,7 @@ module "kubernetes" {
 
   kubernetes_cluster_agent_min_count = lookup(var.system_node_pool, "min_nodes", 2)
   kubernetes_cluster_agent_max_count = lookup(var.system_node_pool, "max_nodes", 4)
-  kubernetes_cluster_agent_vm_size   = lookup(var.system_node_pool, "vm_size", "Standard_DS3_v2")
+  kubernetes_cluster_agent_vm_size   = lookup(var.system_node_pool, "vm_size", "Standard_D4ds_v5")
 
   kubernetes_cluster_version            = var.clusters[each.value]["kubernetes_version"]
   kubernetes_cluster_agent_os_disk_size = "128"
@@ -105,7 +99,6 @@ module "kubernetes" {
 
   additional_node_pools = contains(["ptlsbox", "ptl"], var.env) ? tolist([local.linux_node_pool]) : tolist([local.linux_node_pool, local.system_node_pool])
 
-  depends_on         = [azurerm_resource_group.disks_resource_group]
   availability_zones = var.availability_zones
 
   aks_version_checker_principal_id = data.azuread_service_principal.version_checker.object_id
@@ -121,6 +114,7 @@ module "ctags" {
   product      = var.product
   builtFrom    = var.builtFrom
   autoShutdown = var.autoShutdown
+  expiresAfter = var.expiresAfter
 }
 
 

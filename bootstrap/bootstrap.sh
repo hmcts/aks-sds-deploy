@@ -21,23 +21,36 @@ function error_exit {
 
 ############################################################
 
-# Make sure they 7 arguments are passed
+# Make sure the 7 arguments are passed
 if [[ $# -lt 7 ]]
 then
     usage
 fi
 
-echo "Params: $@"
+echo "Params: $*"
 
-for cluster in ${6}; do 
+project=${1}
+env=${3}
+
+if [[ "${6}" == "All" ]]; then
+  echo "Checking for available clusters"
+  clusters=$(az aks list --output tsv --query '[].name')
+  echo -e "Clusters found:\n${clusters}"
+  cluster_numbers=$(echo "${clusters}" |sed -n "s/${project}-${env}-\([0-9][0-9]\)-aks/\1/p" )
+else
+  cluster_numbers=${6}
+fi
+
+for cluster in ${cluster_numbers}; do
   set -- "${@:1:5}" "$cluster" "${@:7}"
-  echo "Starting Deployment"
+  echo "################################"
+  echo -e "Starting Deployment on ${project}-${env}-${cluster}-aks\n"
   ./get-aks-credentials.sh "$@" || error_exit "ERROR: Unable to get AKS credentials"
   ./create-sshkeys.sh "$@" || error_exit "ERROR: SSHKey Create Issues"
   ./apply-default-rbac.sh "$@" || error_exit "ERROR: Unable to set k8s RBAC"
   ./deploy-flux.sh "$@" || error_exit "ERROR: Unable to deploy Fluxcd"
-  [[ $3 =~ ^(stg|prod)$ ]] && (./register-cluster-with-dynatrace.sh "$@" || error_exit "ERROR: Unable to register cluster with Dynatrace")
   echo "Cleanup"
   ./cleanup-sshkeys.sh "$@" || error_exit "ERROR: Unable to Cleanup"
-  echo "Deployment Complete"
+  echo "Deployment Complete for ${project}-${env}-${cluster}-aks"
+  echo -e "################################\n\n\n"
 done
