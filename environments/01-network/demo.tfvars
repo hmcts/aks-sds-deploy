@@ -26,6 +26,21 @@ additional_subnets = [
   },
 ]
 
+application_gateway_routes = [
+  {
+    name                   = "vh-perf-test-demo"
+    address_prefix         = "10.50.10.80/28"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
+  },
+  {
+    name                   = "vh-infra-core-ado"
+    address_prefix         = "10.10.52.0/24"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
+  }
+]
+
 private_dns_subscription = "1baf5470-1c3e-40d3-a6f7-74bfbce4b348"
 private_dns_zones = [
   "demo.platform.hmcts.net",
