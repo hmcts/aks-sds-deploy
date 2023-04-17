@@ -1,9 +1,9 @@
 clusters = {
   "00" = {
-    kubernetes_version = "1.25"
+    kubernetes_version = "1.26"
   },
   #   "01" = {
-  #     kubernetes_version = "1.25"
+  #     kubernetes_version = "1.26"
   #   }
 }
 enable_automatic_channel_upgrade_patch = true
