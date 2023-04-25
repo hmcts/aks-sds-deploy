@@ -103,7 +103,7 @@ module "kubernetes" {
 
   aks_version_checker_principal_id = data.azuread_service_principal.version_checker.object_id
 
-  aks_role_definition = "Administrator"
+  aks_role_definition = "Contributor"
 
   aks_auto_shutdown_principal_id = data.azuread_service_principal.aks_auto_shutdown.object_id
 
