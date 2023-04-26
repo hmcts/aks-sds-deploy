@@ -49,3 +49,29 @@ jobs:
           done
         env:
           UPDATECLI_GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+      - name: Install Pluto
+        uses: FairwindsOps/pluto/github-action@master
+      - name: Run Pluto
+        run: |
+           yq -r '.environments | to_entries | map(select(.value.enabled == true)) | .[].key' updatecli/values.github-action.yaml | while read i
+           do
+               CURRENT_ITER_ENVIRONMENT="$i" bash ./updatecli/get-deprecation.sh >> output.txt
+           done
+        env:
+          UPDATECLI_GITHUB_TOKEN: $${{ steps.generate-token.outputs.token }}
+      - name: cat output
+        uses: pCYSl5EDgo/cat@master
+        id: coverage
+        with:
+          path: ./output.txt
+      - name: Find Pull Request
+        uses: juliangruber/find-pull-request-action@v1
+        id: find-pull-request
+        with:
+          branch: updatecli_aks_version_${environment}
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            Pluto Output: ${{steps.coverage.outputs.text}}
+          pr_number: ${{steps.find-pull-request.outputs.number}}
