@@ -52,24 +52,23 @@ module "vnet_peer_hub_nonprod" {
 }
 
 module "vnet_peer_hub_sbox" {
-  source = "../../modules/vnet_peering"
+  source = "github.com/hmcts/terraform-module-vnet-peering"
 
   for_each = toset([for r in local.regions : r if contains(local.hub_to_env_mapping["sbox"], var.env)])
+  peerings = {
+    source = {
+      name           = format("%s%s_To_%s", var.project, var.environment, local.hub["sbox"][each.key].name)
+      vnet           = azurerm_virtual_network.virtual_network.name
+      resource_group = azurerm_virtual_network.virtual_network.resource_group_name
+    }
+    target = {
+      name           = format("%s_To_%s%s", local.hub["sbox"][each.key].name, var.project, var.environment)
+      vnet           = local.hub["sbox"][each.key].name
+      resource_group = local.hub["sbox"][each.key].name
+    }
+  }
 
-  initiator_peer_name = var.env == "ptl" ? "${local.hub["prod"][each.key].peering_name}-sbox" : local.hub["prod"][each.key].peering_name
 
-  target_peer_name = format("%s%s",
-    var.project,
-    var.env
-  )
-
-  initiator_vnet                = module.network.network_name
-  initiator_vnet_resource_group = module.network.network_resource_group
-  initiator_vnet_subscription   = var.subscription_id
-
-  target_vnet                = local.hub["sbox"][each.key].name
-  target_vnet_resource_group = local.hub["sbox"][each.key].name
-  target_vnet_subscription   = local.hub["sbox"].subscription
 
   providers = {
     azurerm.initiator = azurerm
