@@ -21,7 +21,7 @@ module "vnet_peer_hub_prod" {
 
   providers = {
     azurerm.initiator = azurerm
-    azurerm.target    = azurerm.hub-prod 
+    azurerm.target    = azurerm.hub-prod
   }
 }
 
