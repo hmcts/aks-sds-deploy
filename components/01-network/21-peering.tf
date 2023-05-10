@@ -57,12 +57,12 @@ module "vnet_peer_hub_sbox" {
   for_each = toset([for r in local.regions : r if contains(local.hub_to_env_mapping["sbox"], var.env)])
   peerings = {
     source = {
-      name           = format("%s%s_To_%s", var.project, var.environment, local.hub["sbox"][each.key].name)
-      vnet           = azurerm_virtual_network.virtual_network.name
-      resource_group = azurerm_virtual_network.virtual_network.resource_group_name
+      name           = var.env == "ptl" ? "${local.hub["prod"][each.key].peering_name}-sbox" : local.hub["prod"][each.key].peering_name
+      vnet           = module.network.network_name
+      resource_group = module.network.network_resource_group
     }
     target = {
-      name           = format("%s_To_%s%s", local.hub["sbox"][each.key].name, var.project, var.environment)
+      name           = format("%s%s", var.project, var.env)
       vnet           = local.hub["sbox"][each.key].name
       resource_group = local.hub["sbox"][each.key].name
     }
