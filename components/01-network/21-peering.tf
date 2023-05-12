@@ -5,7 +5,7 @@ module "vnet_peer_hub_prod" {
 
   for_each = toset([for r in local.regions : r if contains(local.hub_to_env_mapping["prod"], var.env)])
   peerings = {
-      source = {
+    source = {
       name           = (var.env == "ptl") || (var.env == "dev") ? "${local.hub["prod"][each.key].peering_name}-prod" : local.hub["prod"][each.key].peering_name
       vnet           = module.network.network_name
       resource_group = module.network.network_resource_group
