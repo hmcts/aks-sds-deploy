@@ -23,9 +23,9 @@ scms:
 sources:
   latestAksVersion:
     kind: shell
-    name: Get latest AKS version for a given region
+    name: Get latest AKS version for a given region {{ $aks_name }}
     spec:
-      command: echo {{ $aks_name }} && ./updatecli/get-latest-aks-upgrade-version.sh {{ $aks_name }} {{ $aks_resource_group }} {{ $aks_subscription }} {{ $environment }}
+      command: ./updatecli/get-latest-aks-upgrade-version.sh {{ $aks_name }} {{ $aks_resource_group }} {{ $aks_subscription }} {{ $environment }}
       versionfilter:
         kind: semver
     transformers:
