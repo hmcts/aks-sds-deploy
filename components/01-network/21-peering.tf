@@ -42,7 +42,6 @@ module "vnet_peer_hub_nonprod" {
     }
   }
 
-
   providers = {
     azurerm.initiator = azurerm
     azurerm.target    = azurerm.hub-nonprod
