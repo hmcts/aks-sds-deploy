@@ -8,7 +8,7 @@ resources:
     type: github
     ref: refs/heads/DTSPO-13833-SP-credentials-instead-of-PAT-token
     name: hmcts/cnp-azuredevops-libraries
-    endpoint: 'hmcts (1)'
+    endpoint: 'hmcts'
 
 pool:
   vmImage: "ubuntu-latest"
