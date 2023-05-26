@@ -6,7 +6,7 @@ resources:
   repositories:
   - repository: cnp-azuredevops-libraries
     type: github
-    ref: refs/heads/master
+    ref: refs/heads/DTSPO-13833-SP-credentials-instead-of-PAT-token
     name: hmcts/cnp-azuredevops-libraries
     endpoint: 'hmcts (1)'
 
@@ -86,7 +86,7 @@ stages:
           - template: steps/terraform-precheck.yaml@cnp-azuredevops-libraries
             parameters:
               keyvaultName: 'infra-vault-nonprod'
-              keyvaultSecret: 'azure-devops-token'
+              keyvaultSecret: 'devops-test-SP-token'
               serviceConnection: 'DCD-CFT-Sandbox'
               overrideAction: ${{ parameters.action }}
 
