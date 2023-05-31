@@ -72,10 +72,10 @@ jobs:
         uses: FairwindsOps/pluto/github-action@master
       - name: Run Pluto
         run: |
-             yq -r '.environments | to_entries | map(select(.value.enabled == true)) | .[].key' updatecli/values.github-action.yaml | while read i
-             do
-                 CURRENT_ITER_ENVIRONMENT="$i" bash ./updatecli/get-deprecation.sh >> output.txt
-             done
+            yq -r '.environments | to_entries | map(select(.value.enabled == true)) | .[].key' updatecli/values.github-action.yaml | while read i
+            do
+               CURRENT_ITER_ENVIRONMENT="$i" bash ./updatecli/get-deprecation.sh >> output.txt
+            done
         env:
           UPDATECLI_GITHUB_TOKEN: ${{ steps.pluto-token.outputs.token }}
       - name: cat output
