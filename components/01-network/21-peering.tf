@@ -72,19 +72,18 @@ module "vnet_peer_hub_sbox" {
 
 module "vnet_peer_vpn" {
   source = "github.com/hmcts/terraform-module-vnet-peering"
-
   peerings = {
-    source = {
-      name           = "vpn"
-      vnet           = module.network.network_name
-      resource_group = module.network.network_resource_group
+      source = {
+        name           = "vpn"
+        vnet           = module.network.network_name
+        resource_group = module.network.network_resource_group
+      }
+      target = {
+        name           = format("%s%s", var.project, var.env)
+        vnet           = data.azurerm_virtual_network.vpn.name
+        resource_group = data.azurerm_virtual_network.vpn.resource_group_name
+      }
     }
-    target = {
-      name           = format("%s%s", var.project, var.env)
-      vnet           = data.azurerm_virtual_network.vpn.name
-      resource_group = data.azurerm_virtual_network.vpn.resource_group_name
-    }
-  }
 
   providers = {
     azurerm.initiator = azurerm
