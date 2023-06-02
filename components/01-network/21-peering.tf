@@ -71,22 +71,19 @@ module "vnet_peer_hub_sbox" {
 # VPN
 
 module "vnet_peer_vpn" {
-  source = "../../modules/vnet_peering"
-
-  initiator_peer_name = "vpn"
-
-  target_peer_name = format("%s%s",
-    var.project,
-    var.env
-  )
-
-  initiator_vnet                = module.network.network_name
-  initiator_vnet_resource_group = module.network.network_resource_group
-  initiator_vnet_subscription   = var.subscription_id
-
-  target_vnet                = data.azurerm_virtual_network.vpn.name
-  target_vnet_resource_group = data.azurerm_virtual_network.vpn.resource_group_name
-  target_vnet_subscription   = "ed302caf-ec27-4c64-a05e-85731c3ce90e"
+  source = "github.com/hmcts/terraform-module-vnet-peering"
+  peerings = {
+    source = {
+      name           = "vpn"
+      vnet           = module.network.network_name
+      resource_group = module.network.network_resource_group
+    }
+    target = {
+      name           = format("%s%s", var.project, var.env)
+      vnet           = data.azurerm_virtual_network.vpn.name
+      resource_group = data.azurerm_virtual_network.vpn.resource_group_name
+    }
+  }
 
   providers = {
     azurerm.initiator = azurerm
