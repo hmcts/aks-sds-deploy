@@ -36,7 +36,7 @@ jobs:
         run: |
           yq -r '.environments | to_entries | map(select(.value.enabled == true)) | .[].key' updatecli/values.github-action.yaml | while read i
           do
-              CURRENT_ITER_ENVIRONMENT="$i" updatecli diff --config ./updatecli/updatecli.d --values ./updatecli/values.github-action.yaml
+              CURRENT_ITER_ENVIRONMENT="$i" updatecli diff --config ./updatecli/updatecli.d --values ./updatecli/values.github-action.yaml --debug
           done
         env:
           UPDATECLI_GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
