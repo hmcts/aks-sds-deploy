@@ -1,5 +1,5 @@
 module "genesis" {
-  source           = "git::https://github.com/hmcts/aks-module-genesis.git?ref=master"
+  source           = "git::https://github.com/hmcts/aks-module-genesis.git?ref=update-ptl-group"
   environment      = var.env
   tags             = module.ctags.common_tags
   developers_group = local.developers_group
