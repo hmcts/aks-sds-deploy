@@ -3,6 +3,7 @@ module "genesis" {
   environment      = var.env
   tags             = module.ctags.common_tags
   developers_group = local.developers_group
+  business_area    = lower(module.ctags.common_tags["businessArea"])
 }
 
 module "ctags" {
