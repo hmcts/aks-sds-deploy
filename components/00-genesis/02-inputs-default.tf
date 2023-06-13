@@ -5,6 +5,6 @@ locals {
 variable "expiresAfter" {
   default = "3000-01-01"
 }
-variable "business_area"{
+variable "business_area" {
   default = "cross-cutting"
 }
