@@ -95,22 +95,18 @@ moved {
   from = module.vnet_peer_hub_sbox["ukSouth"].azurerm_virtual_network_peering.initiator-To-target
   to   = module.vnet_peer_hub_sbox["ukSouth"].azurerm_virtual_network_peering.initiator_to_target
 }
-
 moved {
   from = module.vnet_peer_hub_sbox["ukSouth"].azurerm_virtual_network_peering.target-To-initiator
   to   = module.vnet_peer_hub_sbox["ukSouth"].azurerm_virtual_network_peering.target_to_initiator
 }
-
 moved {
   from = module.vnet_peer_hub_sbox["ukWest"].azurerm_virtual_network_peering.initiator-To-target
   to   = module.vnet_peer_hub_sbox["ukWest"].azurerm_virtual_network_peering.initiator_to_target
 }
-
 moved {
   from = module.vnet_peer_hub_sbox["ukWest"].azurerm_virtual_network_peering.target-To-initiator
   to   = module.vnet_peer_hub_sbox["ukWest"].azurerm_virtual_network_peering.target_to_initiator
 }
-
 moved {
   from = module.vnet_peer_vpn.azurerm_virtual_network_peering.initiator-To-target
   to   = module.vnet_peer_vpn.azurerm_virtual_network_peering.initiator_to_target
@@ -119,23 +115,35 @@ moved {
   from = module.vnet_peer_vpn.azurerm_virtual_network_peering.target-To-initiator
   to   = module.vnet_peer_vpn.azurerm_virtual_network_peering.target_to_initiator
 }
-
 moved {
   from = module.vnet_peer_hub_nonprod["ukSouth"].azurerm_virtual_network_peering.initiator-To-target
   to   = module.vnet_peer_hub_nonprod["ukSouth"].azurerm_virtual_network_peering.initiator_to_target
 }
-
 moved {
   from = module.vnet_peer_hub_nonprod["ukSouth"].azurerm_virtual_network_peering.target-To-initiator
   to   = module.vnet_peer_hub_nonprod["ukSouth"].azurerm_virtual_network_peering.target_to_initiator
 }
-
 moved {
   from = module.vnet_peer_hub_nonprod["ukWest"].azurerm_virtual_network_peering.initiator-To-target
   to   = module.vnet_peer_hub_nonprod["ukWest"].azurerm_virtual_network_peering.initiator_to_target
 }
-
 moved {
   from = module.vnet_peer_hub_nonprod["ukWest"].azurerm_virtual_network_peering.target-To-initiator
   to   = module.vnet_peer_hub_nonprod["ukWest"].azurerm_virtual_network_peering.target_to_initiator
+}
+moved {
+  from = module.vnet_peer_hub_prod["ukSouth"].azurerm_virtual_network_peering.initiator-To-target
+  to   = module.vnet_peer_hub_prod["ukSouth"].azurerm_virtual_network_peering.initiator_to_target
+}
+moved {
+  from = module.vnet_peer_hub_prod["ukSouth"].azurerm_virtual_network_peering.target-To-initiator
+  to   = module.vnet_peer_hub_prod["ukSouth"].azurerm_virtual_network_peering.target_to_initiator
+}
+moved {
+  from = module.vnet_peer_hub_prod["ukWest"].azurerm_virtual_network_peering.initiator-To-target
+  to   = module.vnet_peer_hub_prod["ukWest"].azurerm_virtual_network_peering.initiator_to_target
+}
+moved {
+  from = module.vnet_peer_hub_prod["ukWest"].azurerm_virtual_network_peering.target-To-initiator
+  to   = module.vnet_peer_hub_prod["ukWest"].azurerm_virtual_network_peering.target_to_initiator
 }
