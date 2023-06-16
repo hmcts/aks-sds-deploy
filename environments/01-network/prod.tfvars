@@ -67,7 +67,7 @@ additional_routes = [
   }
 ]
 
-application_gateway_routes = [
+additional_route_appgw = [
   {
     name                   = "vh-infra-core-ado"
     address_prefix         = "10.10.52.0/24"
