@@ -36,7 +36,7 @@ private_dns_zones = [
 
 hub = "nonprod"
 
-additional_route_appgw = [
+additional_routes_appgw = [
   {
     name                   = "vh-infra-core-ado"
     address_prefix         = "10.10.52.0/24"

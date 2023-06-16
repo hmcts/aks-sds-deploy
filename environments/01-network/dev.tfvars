@@ -48,7 +48,7 @@ additional_routes = [
   },
 ]
 
-additional_route_appgw = [
+additional_routes_appgw = [
   {
     name                   = "vh-perf-test-dev"
     address_prefix         = "10.50.10.96/28"
