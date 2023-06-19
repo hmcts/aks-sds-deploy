@@ -26,7 +26,7 @@ additional_subnets = [
   },
 ]
 
-application_gateway_routes = [
+additional_routes_application_gateway = [
   {
     name                   = "vh-perf-test-demo"
     address_prefix         = "10.50.10.80/28"
