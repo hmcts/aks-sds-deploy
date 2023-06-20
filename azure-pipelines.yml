@@ -140,7 +140,7 @@ stages:
               product: $(product)
               location: ${{ parameters.location }}
               tfVarsFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/01-network/${{ parameters.env }}.tfvars"
-              planCommandOptions: "-var project=$(project) -var control_vault=$(KEY_VAULT) -var subscription_id=$(SUBSCRIPTION_ID)"
+              planCommandOptions: "-var project=$(project) -var control_vault=$(KEY_VAULT) -var subscription_id=$(ARM_SUBSCRIPTION_ID)"
 
   - stage: Managed_Identity
     displayName: "Managed_Identity"
