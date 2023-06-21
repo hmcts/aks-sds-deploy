@@ -44,31 +44,31 @@ additional_routes_application_gateway = [
     next_hop_in_ip_address = "10.11.72.36"
   },
   {
-	name                   = "hmi-ss-dev-vnet"
+    name                   = "hmi-ss-dev-vnet"
     address_prefix         = "10.101.1.64/26"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.72.36"
   },
   {
-	name                   = "hmi-ss-test-vnet"
+    name                   = "hmi-ss-test-vnet"
     address_prefix         = "10.101.1.128/26"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.72.36"
   },
   {
-	name                   = "hmi-ss-stg-vnet"
+    name                   = "hmi-ss-stg-vnet"
     address_prefix         = "10.101.1.192/26"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.72.36"
   },
   {
-	name                   = "hmi-ss-ithc-vnet"
+    name                   = "hmi-ss-ithc-vnet"
     address_prefix         = "10.101.2.64/26"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.72.36"
   },
   {
-	name                   = "hmi-ss-demo-vnet"
+    name                   = "hmi-ss-demo-vnet"
     address_prefix         = "10.101.2.128/26"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.72.36"
