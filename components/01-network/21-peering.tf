@@ -48,7 +48,6 @@ module "vnet_peer_hub_nonprod" {
 module "vnet_peer_hub_sbox" {
   source = "github.com/hmcts/terraform-module-vnet-peering"
 
-  for_each = toset([for r in local.regions : r if contains(local.hub_to_env_mapping["sbox"], var.env)])
   peerings = {
     source = {
       name           = var.env == "ptl" ? "${local.hub["prod"][each.key].peering_name}-sbox" : local.hub["prod"][each.key].peering_name
@@ -57,8 +56,8 @@ module "vnet_peer_hub_sbox" {
     }
     target = {
       name           = format("%s%s", var.project, var.env)
-      vnet           = local.hub["sbox"].name
-      resource_group = local.hub["sbox"].name
+      vnet           = local.hub["sbox"][each.key].name
+      resource_group = local.hub["sbox"][each.key].name
     }
   }
 
