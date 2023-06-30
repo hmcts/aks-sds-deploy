@@ -44,11 +44,6 @@ locals {
         peering_name = "hubUkS"
         next_hop_ip  = "10.10.200.36"
       }
-      ukWest = {
-        name         = "ukw-hub-sbox-int"
-        peering_name = "hubUkW"
-        next_hop_ip  = "10.48.200.36"
-      }
     }
     prod = {
       subscription = "0978315c-75fe-4ada-9d11-1eb5e0e0b214"
