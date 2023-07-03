@@ -72,5 +72,11 @@ additional_routes_application_gateway = [
     address_prefix         = "10.101.2.128/26"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.72.36"
+  },
+  {
+    name                   = "vh-perf-test-test"
+    address_prefix         = "10.24.0.112/28"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
   }
 ]
