@@ -14,7 +14,7 @@ additional_subnets = [
   },
   {
     name           = "private-endpoints"
-    address_prefix = "10.147.34.0/22"
+    address_prefix = "10.147.36.0/22"
   }
 ]
 
