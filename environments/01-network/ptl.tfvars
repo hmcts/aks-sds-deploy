@@ -67,5 +67,17 @@ additional_routes = [
     address_prefix         = "10.25.250.0/24"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.72.36"
+  },
+  {
+    name                   = "pre_vnet_demo"
+    address_prefix         = "10.50.12.0/24"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
+  },
+  {
+    name                   = "pre_vnet_test"
+    address_prefix         = "10.70.21.0/24"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
   }
 ]
