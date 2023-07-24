@@ -48,11 +48,6 @@ locals {
         peering_name = "hubUkS"
         next_hop_ip  = "10.11.8.36"
       }
-      ukWest = {
-        name         = "ukw-hub-prod-int"
-        peering_name = "hubUkW"
-        next_hop_ip  = "10.49.8.36"
-      }
     }
   }
 
@@ -63,8 +58,7 @@ locals {
   }
 
   regions = [
-    "ukSouth",
-    "ukWest"
+    "ukSouth"
   ]
 
 }
