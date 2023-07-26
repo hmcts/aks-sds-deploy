@@ -32,11 +32,6 @@ locals {
         peering_name = "hubUkS"
         next_hop_ip  = "10.11.72.36"
       }
-      ukWest = {
-        name         = "ukw-hub-nonprodi"
-        peering_name = "hubUkW"
-        next_hop_ip  = "10.49.72.36"
-      }
     }
     sbox = {
       subscription = "ea3a8c1e-af9d-4108-bc86-a7e2d267f49c"
@@ -53,11 +48,6 @@ locals {
         peering_name = "hubUkS"
         next_hop_ip  = "10.11.8.36"
       }
-      ukWest = {
-        name         = "ukw-hub-prod-int"
-        peering_name = "hubUkW"
-        next_hop_ip  = "10.49.8.36"
-      }
     }
   }
 
@@ -68,8 +58,7 @@ locals {
   }
 
   regions = [
-    "ukSouth",
-    "ukWest"
+    "ukSouth"
   ]
 
 }

@@ -25,7 +25,7 @@ module "vnet_peer_hub_prod" {
 module "vnet_peer_hub_nonprod" {
   source = "github.com/hmcts/terraform-module-vnet-peering"
 
-  for_each = toset([for r in local.regions : r if contains(local.hub_to_env_mapping["nonprod"], var.env)])
+  for_each = toset([for r in ["ukSouth"] : r if contains(local.hub_to_env_mapping["nonprod"], var.env)])
   peerings = {
     source = {
       name           = var.env == "ptl" ? "${local.hub["prod"][each.key].peering_name}-nonprod" : local.hub["prod"][each.key].peering_name
@@ -48,7 +48,7 @@ module "vnet_peer_hub_nonprod" {
 module "vnet_peer_hub_sbox" {
   source = "github.com/hmcts/terraform-module-vnet-peering"
 
-  for_each = toset([for r in local.regions : r if contains(local.hub_to_env_mapping["sbox"], var.env) && r != "ukWest"])
+  for_each = toset([for r in ["ukSouth"] : r if contains(local.hub_to_env_mapping["sbox"], var.env)])
   peerings = {
     source = {
       name           = var.env == "ptl" ? "${local.hub["prod"][each.key].peering_name}-sbox" : local.hub["prod"][each.key].peering_name
@@ -89,61 +89,4 @@ module "vnet_peer_vpn" {
     azurerm.initiator = azurerm
     azurerm.target    = azurerm.vpn
   }
-}
-
-moved {
-  from = module.vnet_peer_hub_sbox["ukSouth"].azurerm_virtual_network_peering.initiator-To-target
-  to   = module.vnet_peer_hub_sbox["ukSouth"].azurerm_virtual_network_peering.initiator_to_target
-}
-moved {
-  from = module.vnet_peer_hub_sbox["ukSouth"].azurerm_virtual_network_peering.target-To-initiator
-  to   = module.vnet_peer_hub_sbox["ukSouth"].azurerm_virtual_network_peering.target_to_initiator
-}
-moved {
-  from = module.vnet_peer_hub_sbox["ukWest"].azurerm_virtual_network_peering.initiator-To-target
-  to   = module.vnet_peer_hub_sbox["ukWest"].azurerm_virtual_network_peering.initiator_to_target
-}
-moved {
-  from = module.vnet_peer_hub_sbox["ukWest"].azurerm_virtual_network_peering.target-To-initiator
-  to   = module.vnet_peer_hub_sbox["ukWest"].azurerm_virtual_network_peering.target_to_initiator
-}
-moved {
-  from = module.vnet_peer_vpn.azurerm_virtual_network_peering.initiator-To-target
-  to   = module.vnet_peer_vpn.azurerm_virtual_network_peering.initiator_to_target
-}
-moved {
-  from = module.vnet_peer_vpn.azurerm_virtual_network_peering.target-To-initiator
-  to   = module.vnet_peer_vpn.azurerm_virtual_network_peering.target_to_initiator
-}
-moved {
-  from = module.vnet_peer_hub_nonprod["ukSouth"].azurerm_virtual_network_peering.initiator-To-target
-  to   = module.vnet_peer_hub_nonprod["ukSouth"].azurerm_virtual_network_peering.initiator_to_target
-}
-moved {
-  from = module.vnet_peer_hub_nonprod["ukSouth"].azurerm_virtual_network_peering.target-To-initiator
-  to   = module.vnet_peer_hub_nonprod["ukSouth"].azurerm_virtual_network_peering.target_to_initiator
-}
-moved {
-  from = module.vnet_peer_hub_nonprod["ukWest"].azurerm_virtual_network_peering.initiator-To-target
-  to   = module.vnet_peer_hub_nonprod["ukWest"].azurerm_virtual_network_peering.initiator_to_target
-}
-moved {
-  from = module.vnet_peer_hub_nonprod["ukWest"].azurerm_virtual_network_peering.target-To-initiator
-  to   = module.vnet_peer_hub_nonprod["ukWest"].azurerm_virtual_network_peering.target_to_initiator
-}
-moved {
-  from = module.vnet_peer_hub_prod["ukSouth"].azurerm_virtual_network_peering.initiator-To-target
-  to   = module.vnet_peer_hub_prod["ukSouth"].azurerm_virtual_network_peering.initiator_to_target
-}
-moved {
-  from = module.vnet_peer_hub_prod["ukSouth"].azurerm_virtual_network_peering.target-To-initiator
-  to   = module.vnet_peer_hub_prod["ukSouth"].azurerm_virtual_network_peering.target_to_initiator
-}
-moved {
-  from = module.vnet_peer_hub_prod["ukWest"].azurerm_virtual_network_peering.initiator-To-target
-  to   = module.vnet_peer_hub_prod["ukWest"].azurerm_virtual_network_peering.initiator_to_target
-}
-moved {
-  from = module.vnet_peer_hub_prod["ukWest"].azurerm_virtual_network_peering.target-To-initiator
-  to   = module.vnet_peer_hub_prod["ukWest"].azurerm_virtual_network_peering.target_to_initiator
 }
