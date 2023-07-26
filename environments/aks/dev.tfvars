@@ -23,3 +23,5 @@ linux_node_pool = {
 windows_node_pool = {
   max_pods = 50
 }
+
+autoShutdown = true
