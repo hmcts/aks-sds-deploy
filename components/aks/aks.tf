@@ -29,7 +29,7 @@ locals {
     availability_zones  = var.availability_zones
   }
 
-  arm_pool = {
+  arm_node_pool = {
     name                = "arm"
     vm_size             = lookup(var.arm_node_pool, "vm_size", "Standard_D4pds_v5")
     min_count           = lookup(var.arm_node_pool, "min_nodes", 2)
