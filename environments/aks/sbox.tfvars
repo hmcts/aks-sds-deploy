@@ -18,6 +18,13 @@ system_node_pool = {
 }
 
 linux_node_pool = {
+  vm_size   = "Standard_D4ds_v5",
+  min_nodes = 2,
+  max_nodes = 4,
+  max_pods  = 40
+}
+
+arm_node_pool = {
   vm_size   = "Standard_D4pds_v5",
   min_nodes = 2,
   max_nodes = 4,
