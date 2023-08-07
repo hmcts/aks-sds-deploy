@@ -3,7 +3,7 @@ clusters = {
   #     kubernetes_version = "1.25"
   #   },
   "01" = {
-    kubernetes_version = "1.25"
+    kubernetes_version = "1.26"
   },
 }
 
@@ -23,3 +23,5 @@ linux_node_pool = {
 windows_node_pool = {
   max_pods = 50
 }
+
+autoShutdown = true

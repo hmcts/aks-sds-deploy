@@ -39,7 +39,6 @@ parameters:
     default: "UK South"
     values:
       - "UK South"
-      - "UK West"
 
   - name: env
     displayName: Environment

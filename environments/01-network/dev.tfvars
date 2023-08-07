@@ -48,7 +48,7 @@ additional_routes = [
   },
 ]
 
-application_gateway_routes = [
+additional_routes_application_gateway = [
   {
     name                   = "vh-perf-test-dev"
     address_prefix         = "10.50.10.96/28"
@@ -58,6 +58,36 @@ application_gateway_routes = [
   {
     name                   = "vh-infra-core-ado"
     address_prefix         = "10.10.52.0/24"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
+  },
+  {
+    name                   = "hmi-ss-dev-vnet"
+    address_prefix         = "10.101.1.64/26"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
+  },
+  {
+    name                   = "hmi-ss-test-vnet"
+    address_prefix         = "10.101.1.128/26"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
+  },
+  {
+    name                   = "hmi-ss-stg-vnet"
+    address_prefix         = "10.101.1.192/26"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
+  },
+  {
+    name                   = "hmi-ss-ithc-vnet"
+    address_prefix         = "10.101.2.64/26"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
+  },
+  {
+    name                   = "hmi-ss-demo-vnet"
+    address_prefix         = "10.101.2.128/26"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.72.36"
   }

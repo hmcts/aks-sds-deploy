@@ -36,7 +36,7 @@ private_dns_zones = [
 
 hub = "prod"
 
-application_gateway_routes = [
+additional_routes_application_gateway = [
   {
     name                   = "ss-dev-vnet"
     address_prefix         = "10.145.0.0/18"
