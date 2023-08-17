@@ -163,7 +163,7 @@ kind: Kustomization
 resources:
   - https://github.com/hmcts/sds-flux-config//apps/azureserviceoperator-system/cert-manager/
   - https://github.com/hmcts/sds-flux-config//apps/azureserviceoperator-system/aso/
-  - https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/azureserviceoperator-system/${CLUSTER_ENV}/base/aso-controller-settings.yaml
+  - https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/azureserviceoperator-system/${ENVIRONMENT}/base/aso-controller-settings.yaml
 EOF
 ) > "${TMP_DIR}/kustomization.yaml"
 # -----------------------------------------------------------
