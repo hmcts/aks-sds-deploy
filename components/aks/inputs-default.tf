@@ -49,11 +49,3 @@ variable "autoShutdown" {
 variable "expiresAfter" {
   default = "3000-01-01"
 }
-
-variable "workload_identity_enabled" {
-  default = true
-}
-
-variable "service_operator_settings_enabled" {
-  default = true
-}
