@@ -15,6 +15,3 @@ availability_zones                     = ["1"]
 autoShutdown = true
 
 oms_agent_enabled = true
-
-workload_identity_enabled         = true
-service_operator_settings_enabled = true

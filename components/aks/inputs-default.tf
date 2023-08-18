@@ -51,9 +51,9 @@ variable "expiresAfter" {
 }
 
 variable "workload_identity_enabled" {
-  default = false
+  default = true
 }
 
 variable "service_operator_settings_enabled" {
-  default = false
+  default = true
 }

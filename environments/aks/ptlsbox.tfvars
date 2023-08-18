@@ -13,5 +13,3 @@ availability_zones                     = ["1"]
 
 autoShutdown = true
 
-workload_identity_enabled         = true
-service_operator_settings_enabled = true
