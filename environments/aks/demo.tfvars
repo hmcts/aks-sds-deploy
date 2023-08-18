@@ -13,3 +13,6 @@ kubernetes_cluster_ssh_key             = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQ
 availability_zones                     = ["1"]
 
 autoShutdown = true
+
+workload_identity_enabled         = true
+service_operator_settings_enabled = true
