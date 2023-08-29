@@ -23,7 +23,7 @@ scms:
 sources:
   latestAksVersion:
     kind: shell
-    name: Get latest AKS version for a given region
+    name: Get latest AKS version for a given region {{ $aks_name }}
     spec:
       command: ./updatecli/get-latest-aks-upgrade-version.sh {{ $aks_name }} {{ $aks_resource_group }} {{ $aks_subscription }} {{ $environment }}
       versionfilter:
@@ -55,3 +55,5 @@ pullrequests:
       draft: false
       description: |
         Bump major aks version to {{ source "latestAksVersion" }}
+      labels: 
+        - pluto-required

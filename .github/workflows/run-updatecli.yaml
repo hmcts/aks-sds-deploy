@@ -24,7 +24,7 @@ jobs:
       - name: Install Updatecli in the runner
         uses: updatecli/updatecli-action@v2
         with:
-          version: v0.46.1
+          version: v0.49.2
       - uses: tibdex/github-app-token@v1
         id: generate-token
         with:
@@ -49,3 +49,49 @@ jobs:
           done
         env:
           UPDATECLI_GITHUB_TOKEN: ${{ steps.generate-token.outputs.token }}
+
+  ### Pluto Run if there is a label ' Pluto-required'
+  pluto-run:
+    runs-on: ubuntu-latest
+    if: contains(github.event.pull_request.labels.*.name, 'pluto-required')
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: 'Az CLI login'
+        uses: azure/login@v1
+        with:
+          client-id: b430ef1e-4e79-4e92-a152-8e5b5bc195d4 # DTS CFT AKS version checker
+          tenant-id: 531ff96d-0ae9-462a-8d2d-bec7c0b42082 # HMCTS.NET
+          allow-no-subscriptions: true
+      - uses: tibdex/github-app-token@v1
+        id: pluto-token
+        with:
+          app_id: ${{ secrets.DEPENDENCY_UPDATER_APP_ID }}
+          private_key: ${{ secrets.DEPENDENCY_UPDATER_APP_PRIVATE_KEY }}
+      - name: Install Pluto
+        uses: FairwindsOps/pluto/github-action@master
+      - name: Run Pluto
+        run: |
+            yq -r '.environments | to_entries | map(select(.value.enabled == true)) | .[].key' updatecli/values.github-action.yaml | while read i
+            do
+               CURRENT_ITER_ENVIRONMENT="$i" bash ./updatecli/get-deprecation.sh >> output.txt
+            done
+        env:
+          UPDATECLI_GITHUB_TOKEN: ${{ steps.pluto-token.outputs.token }}
+      - name: cat output
+        uses: pCYSl5EDgo/cat@master
+        id: coverage
+        with:
+          path: ./output.txt
+      - name: Find Pull Request
+        uses: juliangruber/find-pull-request-action@v1
+        id: find-pull-request
+        with:
+          branch: updatecli_aks_version_${environment}
+      - name: Comment PR
+        uses: thollander/actions-comment-pull-request@v2
+        with:
+          message: |
+            # Pluto Report
+            ${{steps.coverage.outputs.text}}
+          pr_number: ${{steps.find-pull-request.outputs.number}}

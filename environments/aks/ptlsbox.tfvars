@@ -1,6 +1,6 @@
 clusters = {
   "00" = {
-    kubernetes_version = "1.25"
+    kubernetes_version = "1.26"
   }
 }
 enable_automatic_channel_upgrade_patch = true
@@ -12,3 +12,4 @@ sku_tier                               = "Paid"
 availability_zones                     = ["1"]
 
 autoShutdown = true
+
