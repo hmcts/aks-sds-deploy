@@ -11,3 +11,4 @@ sku_tier                           = "Paid"
 availability_zones                 = ["1"]
 
 autoShutdown = true
+
