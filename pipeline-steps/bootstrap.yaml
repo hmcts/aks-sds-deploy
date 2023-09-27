@@ -7,7 +7,7 @@ parameters:
 
 steps:
 - checkout: self
-- checkout: cnp-flux-config
+- checkout: sds-flux-config
 - template: steps/keyvault-read.yaml@cnp-azuredevops-libraries
   parameters:
     serviceConnection: $(serviceConnection)
