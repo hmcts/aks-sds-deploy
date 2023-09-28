@@ -14,7 +14,7 @@ if [ -n "$ISSUER_URL" ]; then
     echo "Issuer URL is: ${ISSUER_URL}"
     #  Make file changes
     file_path="apps/flux-system/${ENV}/${CLUSTER}/kustomize.yaml"
-    sed -i -e "s/ISSUER_URL:.*/ISSUER_URL: \"$(echo $ISSUER_URL | sed 's/[\/&]/\\&/g')_test\"/g" $file_path
+    sed -i -e "s/ISSUER_URL:.*/ISSUER_URL: \"$(echo $ISSUER_URL | sed 's/[\/&]/\\&/g')\"/g" $file_path
 
     # Commit changes to github if there is any
     if [[ -n $(git status -s) ]]; then 
@@ -25,7 +25,7 @@ if [ -n "$ISSUER_URL" ]; then
         git commit -m "Updating OIDC Issuer URL for $CLUSTER cluster in $ENV"
         git remote set-url origin https://hmcts-platform-operations:"${GIT_TOKEN}"@github.com/hmcts/"$REPO".git
         git pull origin master --rebase
-        git push --set-upstream origin HEAD:refs/heads/test_issuer_url
+        git push --set-upstream origin HEAD:master
     else
         echo "No change to issuer URL, skipping git push..."
     fi
