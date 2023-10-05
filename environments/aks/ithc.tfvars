@@ -1,6 +1,6 @@
 clusters = {
   "00" = {
-    kubernetes_version = "1.26"
+    kubernetes_version = "1.27"
   },
   "01" = {
     kubernetes_version = "1.26"
@@ -13,4 +13,3 @@ kubernetes_cluster_ssh_key             = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQ
 availability_zones                     = ["1"]
 
 autoShutdown = true
-
