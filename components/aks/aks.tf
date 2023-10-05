@@ -53,7 +53,7 @@ locals {
     mode                = "User"
     availability_zones  = var.availability_zones
   }
-  {
+  cron_job_node_pool = {
     name                = "cronjob"
     vm_size             = "Standard_D4ds_v5"
     min_count           = 0
