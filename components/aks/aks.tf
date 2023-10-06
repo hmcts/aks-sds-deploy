@@ -120,7 +120,7 @@ module "kubernetes" {
   tags     = module.ctags.common_tags
   sku_tier = var.sku_tier
 
-  enable_user_system_nodepool_split = true
+  enable_user_system_nodepool_split = true ? true : false
 
   additional_node_pools = contains(["ptlsbox", "ptl"], var.env) ? tolist([local.linux_node_pool, local.cron_job_node_pool]) : (contains(["sbox"], var.env) ? tolist([local.linux_node_pool, local.arm_node_pool, local.cron_job_node_pool]) : tolist([local.linux_node_pool, local.cron_job_node_pool]))
 
