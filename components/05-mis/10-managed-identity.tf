@@ -62,7 +62,7 @@ locals {
       "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg/providers/Microsoft.Network/privateDnsZones/dev.platform.hmcts.net"
     ])
   }
-  wi_environment_rg    = var.env == "dev" ? "stg" : var.env
+  wi_environment_rg = var.env == "dev" ? "stg" : var.env
 
   # MIs for managed-identities-sbox-rg etc - for workload identity with ASO
   mi_sds = {
