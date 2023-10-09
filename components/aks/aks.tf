@@ -161,13 +161,3 @@ resource "azurerm_role_assignment" "dev_to_stg" {
   principal_id         = module.kubernetes[each.key].kubelet_object_id
   scope                = data.azurerm_resource_group.mi_stg_rg[0].id
 }
-
-moved {
-  from = module.kubernetes["01"].azapi_resource.service_operator_credential[0]
-  to   = module.kubernetes["01"].azapi_resource.service_operator_credential
-}
-
-moved {
-  from = module.kubernetes["00"].azapi_resource.service_operator_credential[0]
-  to   = module.kubernetes["00"].azapi_resource.service_operator_credential
-}
