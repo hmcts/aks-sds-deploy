@@ -6,6 +6,13 @@ resource "azurerm_user_assigned_identity" "sops-mi" {
   tags = local.common_tags
 }
 
+resource "azurerm_user_assigned_identity" "wi-admin-mi" {
+  resource_group_name = azurerm_resource_group.application-mi.name
+  location            = azurerm_resource_group.application-mi.location
+  name                = "admin-${local.wi_environment_rg}-mi"
+  tags                = module.ctags.common_tags
+}
+
 resource "azurerm_role_assignment" "Reader" {
   # DTS Bootstrap Principal_id
   principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id
@@ -52,6 +59,8 @@ resource "azurerm_role_assignment" "acme-vault-access" {
 
 
 locals {
+  wi_environment_rg = var.env == "dev" ? "stg" : var.env
+
   external_dns = {
     # Resource Groups to add Reader permissions for external dns to
     resource_groups = toset([
@@ -62,7 +71,6 @@ locals {
       "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg/providers/Microsoft.Network/privateDnsZones/dev.platform.hmcts.net"
     ])
   }
-  wi_environment_rg = var.env == "dev" ? "stg" : var.env
 
   # MIs for managed-identities-sbox-rg etc - for workload identity with ASO
   mi_sds = {
@@ -103,7 +111,6 @@ locals {
     }
   }
 }
-
 resource "azurerm_role_assignment" "externaldns-dns-zone-contributor" {
   for_each = lookup(local.external_dns, var.env, toset([]))
 
@@ -127,15 +134,9 @@ resource "azurerm_role_assignment" "genesis_managed_identity_operator" {
   role_definition_name = "Managed Identity Operator"
 }
 
-resource "azurerm_role_assignment" "service_operator" {
-  count                = var.service_operator_settings_enabled ? 1 : 0
-  principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id
-  role_definition_name = "Contributor"
-  scope                = data.azurerm_subscription.current.id
-}
-
+# Gives dev access to stg resource group
 resource "azurerm_role_assignment" "service_operator_workload_identity" {
-  count                = var.service_operator_settings_enabled ? 1 : 0
+  count                = var.env == "dev" ? 1 : 0
   principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id
   role_definition_name = "Contributor"
   scope                = "/subscriptions/${local.mi_sds[var.env].subscription_id}/resourceGroups/managed-identities-${local.wi_environment_rg}-rg"

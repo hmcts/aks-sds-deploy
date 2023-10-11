@@ -167,7 +167,7 @@ stages:
               terraformInitSubscription: ${{ variables.tfInitSub }}
               product: $(product)
               location: ${{ parameters.location }}
-              tfVarsFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/05-mis/${{ parameters.env }}.tfvars"
+              tfVarsFile: NULL
               planCommandOptions: "-var project=$(project) -var control_vault=$(controlKeyVault) -var subscription_id=$(ARM_SUBSCRIPTION_ID) "
          
   - stage: Aks
