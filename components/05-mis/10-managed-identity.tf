@@ -125,7 +125,7 @@ resource "azurerm_role_assignment" "genesis_managed_identity_operator" {
 # Needed for dev MI to STG subscription
 resource "azurerm_role_assignment" "preview_mi" {
   count                = var.env == "dev" ? 1 : 0
-  principal_id         = data.azurerm_user_assigned_identity.sops-mi.principal_id
+  principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id
   scope                = local.mi_sds.stg.subscription_id
   role_definition_name = "Contributor"
 }
