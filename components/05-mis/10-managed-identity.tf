@@ -9,7 +9,7 @@ resource "azurerm_user_assigned_identity" "sops-mi" {
 resource "azurerm_user_assigned_identity" "wi-admin-mi" {
   resource_group_name = azurerm_resource_group.application-mi.name
   location            = azurerm_resource_group.application-mi.location
-  name                = "admin-${local.wi_environment_rg}-mi"
+  name                = "admin-${var.env}-mi"
   tags                = module.ctags.common_tags
 }
 
@@ -59,19 +59,15 @@ resource "azurerm_role_assignment" "acme-vault-access" {
 
 
 locals {
+  # Needed for role assignment only
   wi_environment_rg = var.env == "dev" ? "stg" : var.env
-
-  external_dns = {
-    # Resource Groups to add Reader permissions for external dns to
-    resource_groups = toset([
-      "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg"
-    ])
-    # Dev DNS zones to add "DNS Zone Contributor" premissions for external dns to
-    dev = toset([
-      "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg/providers/Microsoft.Network/privateDnsZones/dev.platform.hmcts.net"
-    ])
-  }
-
+  # Needed for for_each loop with these principals before first apply
+  mi_prinipal_ids = [
+    # sops-mi
+    "6c5fded7-1350-4d99-b404-8f57d0025643",
+    # workload-identity-mi
+    "7084af80-5e53-41fc-ab72-ab1df380c544"
+  ]
   # MIs for managed-identities-sbox-rg etc - for workload identity with ASO
   mi_sds = {
     # DTS-SHAREDSERVICES-SBOX
@@ -111,22 +107,21 @@ locals {
     }
   }
 }
-resource "azurerm_role_assignment" "externaldns-dns-zone-contributor" {
-  for_each = lookup(local.external_dns, var.env, toset([]))
 
-  scope                = each.value
-  role_definition_name = contains(regex("^.*/Microsoft.Network/(.*)/.*$", each.value), "privateDnsZones") ? "Private DNS Zone Contributor" : "DNS Zone Contributor"
-  principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id
+resource "azurerm_role_assignment" "externaldns-dns-zone-contributor" {
+  for_each             = var.env == "dev" ? toset(local.mi_prinipal_ids) : []
+  scope                = "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg/providers/Microsoft.Network/privateDnsZones/dev.platform.hmcts.net"
+  role_definition_name = "Private DNS Zone Contributor"
+  principal_id         = each.key
 }
 
 resource "azurerm_role_assignment" "externaldns-read-rg" {
-  # Only add the reader role if there are zones configured
-  for_each = lookup(local.external_dns, var.env, null) != null ? local.external_dns.resource_groups : toset([])
-
-  scope                = each.value
+  for_each             = var.env == "dev" ? toset(local.mi_prinipal_ids) : []
+  scope                = "/subscriptions/1baf5470-1c3e-40d3-a6f7-74bfbce4b348/resourceGroups/core-infra-intsvc-rg"
   role_definition_name = "Reader"
-  principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id
+  principal_id         = each.key
 }
+
 
 resource "azurerm_role_assignment" "genesis_managed_identity_operator" {
   principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id
