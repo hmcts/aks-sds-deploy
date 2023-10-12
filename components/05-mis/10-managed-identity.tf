@@ -66,7 +66,7 @@ locals {
     # sops-mi
     "6c5fded7-1350-4d99-b404-8f57d0025643",
     # workload-identity-mi
-    "7084af80-5e53-41fc-ab72-ab1df380c544"
+    "23e3cc17-ddba-4162-9701-7676082d0192"
   ]
   # MIs for managed-identities-sbox-rg etc - for workload identity with ASO
   mi_sds = {
