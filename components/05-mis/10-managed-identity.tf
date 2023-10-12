@@ -68,7 +68,7 @@ locals {
     # admin-dev-mi
     "23e3cc17-ddba-4162-9701-7676082d0192",
     # admin-stg-mi
-    "354c7107-f52e-4e4e-a07f-e2403d90c865"
+    "444916fa-f440-4423-9f27-67c95625a3b8"
   ]
   # MIs for managed-identities-sbox-rg etc - for workload identity with ASO
   mi_sds = {
