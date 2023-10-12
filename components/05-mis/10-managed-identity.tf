@@ -134,5 +134,5 @@ resource "azurerm_role_assignment" "service_operator_workload_identity" {
   count                = var.env == "dev" ? 1 : 0
   principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id
   role_definition_name = "Contributor"
-  scope                = "/subscriptions/${local.mi_sds[var.env].subscription_id}/resourceGroups/managed-identities-${local.wi_environment_rg}-rg"
+  scope                = "/subscriptions/${local.mi_sds[var.env].subscription_id}"
 }
