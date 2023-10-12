@@ -65,8 +65,10 @@ locals {
   mi_prinipal_ids = [
     # sops-mi
     "6c5fded7-1350-4d99-b404-8f57d0025643",
-    # workload-identity-mi
-    "23e3cc17-ddba-4162-9701-7676082d0192"
+    # admin-dev-mi
+    "23e3cc17-ddba-4162-9701-7676082d0192",
+    # admin-stg-mi
+    "354c7107-f52e-4e4e-a07f-e2403d90c865"
   ]
   # MIs for managed-identities-sbox-rg etc - for workload identity with ASO
   mi_sds = {
