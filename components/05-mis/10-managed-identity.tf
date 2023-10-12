@@ -65,7 +65,7 @@ locals {
   mi_sds = {
     # DTS-SHAREDSERVICES-SBOX
     sbox = {
-      subscription_id = "a8140a9e-f1b0-481f-a4de-09e2ee23f7ab"
+      subscription_id   = "a8140a9e-f1b0-481f-a4de-09e2ee23f7ab"
     }
     # DTS-SHAREDSERVICES-STG
     dev = {
