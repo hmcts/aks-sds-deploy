@@ -39,8 +39,8 @@ data "azurerm_key_vault" "acme" {
   resource_group_name = data.azurerm_resource_group.platform-rg.name
 }
 
-
 data "azurerm_key_vault" "acme_dev" {
+  count               = var.env == "stg" ? 1 : 0
   name                = "acmedtssdsdev"
   resource_group_name = data.azurerm_resource_group.platform-rg.name
 }
