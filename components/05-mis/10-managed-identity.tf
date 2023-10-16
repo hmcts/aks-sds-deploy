@@ -63,6 +63,14 @@ resource "azurerm_role_assignment" "admin-acme-vault-access" {
   principal_id         = azurerm_user_assigned_identity.wi-admin-mi.principal_id
 }
 
+# Gives stg-mi access to dev acme vault for traefik
+resource "azurerm_role_assignment" "dev-traefik-acme-vault-access" {
+  count                = var.env == "stg" ? 1 : 0
+  scope                = data.azurerm_key_vault.acme_dev.id
+  role_definition_name = "Key Vault Secrets User"
+  principal_id         = azurerm_user_assigned_identity.wi-admin-mi.principal_id
+}
+
 locals {
   # Needed for role assignment only
   wi_environment_rg = var.env == "dev" ? "stg" : var.env
