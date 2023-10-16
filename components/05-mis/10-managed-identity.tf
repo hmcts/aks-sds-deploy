@@ -141,7 +141,7 @@ resource "azurerm_role_assignment" "service_operator" {
   count                = var.env == "dev" || var.env == "demo" ? 1 : 0
   principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id
   role_definition_name = "Contributor"
-  scope                = azurerm_resource_group.application-mi
+  scope                = azurerm_resource_group.application-mi.id
 }
 
 # Gives dev access to stg resource group
