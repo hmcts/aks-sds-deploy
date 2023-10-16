@@ -136,6 +136,14 @@ resource "azurerm_role_assignment" "genesis_managed_identity_operator" {
   role_definition_name = "Managed Identity Operator"
 }
 
+# Adds missing role assignment for demo and dev for azure service operator
+resource "azurerm_role_assignment" "service_operator" {
+  count                = var.env == "dev" || var.env == "demo" ? 1 : 0
+  principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id
+  role_definition_name = "Contributor"
+  scope                = data.azurerm_subscription.current.id
+}
+
 # Gives dev access to stg resource group
 resource "azurerm_role_assignment" "service_operator_workload_identity" {
   count                = var.env == "dev" ? 1 : 0
