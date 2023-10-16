@@ -64,7 +64,7 @@ resource "azurerm_role_assignment" "admin-acme-vault-access" {
 }
 
 # Needed due to ASO restriction and traefik using stg-mi in dev env 
-resource "azurerm_role_assignment" "admin-acme-vault-access" {
+resource "azurerm_role_assignment" "stg-to-dev-acme-vault-access" {
   count                = var.env == "stg" ? 1 : 0
   scope                = local.dev_acme_vault_id
   role_definition_name = "Key Vault Secrets User"
