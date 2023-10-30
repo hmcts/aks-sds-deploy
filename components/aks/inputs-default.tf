@@ -49,3 +49,7 @@ variable "autoShutdown" {
 variable "expiresAfter" {
   default = "3000-01-01"
 }
+
+variable "startupMode" {
+  default = null
+}
