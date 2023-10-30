@@ -51,5 +51,5 @@ variable "expiresAfter" {
 }
 
 variable "startupMode" {
-  default = ""
+  default = null
 }
