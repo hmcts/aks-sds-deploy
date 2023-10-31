@@ -22,7 +22,7 @@ steps:
       failOnStandardError: 'true'
       inlineScript: |   
         echo "##vso[task.setvariable variable=AZURE_MI_ID]$(az identity show --resource-group genesis-rg --name aks-$(env)-mi --query="clientId" -o tsv)"
-        echo "##vso[task.setvariable variable=AKS_ISSUER_URL]$(az aks show -n ss-${{ parameters.environment }}-${{ parameters.cluster }}-aks -g ss-${{ parameters.environment }}-${{ parameters.cluster }}-rg --query "oidcIssuerProfile.issuerUrl" -otsv)"
+        echo "##vso[task.setvariable variable=AKS_ISSUER_URL]$(az aks show -n ss-${{ parameters.environment }}-"$(clusters)"-aks -g ss-${{ parameters.environment }}-"$(clusters)"-rg --query "oidcIssuerProfile.issuerUrl" -otsv)"
 
 - task: Bash@3
   displayName: 'Bootstrap Replacement'
