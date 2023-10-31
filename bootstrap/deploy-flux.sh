@@ -29,6 +29,3 @@ TMP_DIR=/tmp/flux/${ENVIRONMENT}/${CLUSTER_NAME}
 mkdir -p "${TMP_DIR}"/{gotk,flux-config}
 
 flux_v2_ssh_git_key
-
- Cleanup
-rm -rf "${TMP_DIR}"
