@@ -94,28 +94,6 @@ function flux_v2_ssh_git_key {
 }
 
 # -----------------------------------------------------------
-# Deploy components and CRDs
-    (
-    cat <<EOF
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-namespace: flux-system
-resources:
-- ${FLUX_CONFIG_URL}/apps/flux-system/base/gotk-components.yaml
-- git-credentials.yaml
-- aks-sops-aadpodidentity.yaml
-
-patchesStrategicMerge:
-- ${FLUX_CONFIG_URL}/apps/flux-system/base/patches/kustomize-controller-patch.yaml
-EOF
-    ) > "${TMP_DIR}/gotk/kustomization.yaml"
-# -----------------------------------------------------------
-    ./kustomize build "${TMP_DIR}/gotk" |  kubectl apply -f -
-
-    # Wait for CRDs to be in an established state
-    kubectl -n flux-system wait --for condition=established --timeout=60s customresourcedefinition.apiextensions.k8s.io/gitrepositories.source.toolkit.fluxcd.io
-    kubectl -n flux-system wait --for condition=established --timeout=60s customresourcedefinition.apiextensions.k8s.io/kustomizations.kustomize.toolkit.fluxcd.io
-# -----------------------------------------------------------
 
 # -----------------------------------------------------------
 # Apply kustomization and gitrepository declarations
