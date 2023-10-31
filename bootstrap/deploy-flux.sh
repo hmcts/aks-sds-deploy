@@ -96,24 +96,7 @@ function flux_v2_ssh_git_key {
 # -----------------------------------------------------------
 
 # -----------------------------------------------------------
-# Apply kustomization and gitrepository declarations
-    (
-    cat <<EOF
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-namespace: flux-system
-resources:
-- ${FLUX_CONFIG_URL}/apps/flux-system/base/kustomize.yaml
-- ${FLUX_CONFIG_URL}/apps/flux-system/base/flux-config-gitrepo.yaml
 
-patchesStrategicMerge:
-- ${FLUX_CONFIG_URL}/apps/flux-system/${ENVIRONMENT}/${CLUSTER_NAME}/kustomize.yaml
-EOF
-    ) > "${TMP_DIR}/flux-config/kustomization.yaml"
-# -----------------------------------------------------------
-    ./kustomize build "${TMP_DIR}/flux-config" |  kubectl apply -f -
-
-}
 
 ############################################################
 # End of functions
