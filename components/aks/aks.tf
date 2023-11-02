@@ -104,7 +104,10 @@ module "kubernetes" {
 
   ptl_cluster = var.ptl_cluster
 
-  log_workspace_id = module.loganalytics.workspace_id
+  log_workspace_id                   = module.loganalytics.workspace_id
+  monitor_diagnostic_setting         = var.monitor_diagnostic_setting
+  monitor_diagnostic_setting_metrics = var.monitor_diagnostic_setting_metrics
+  kube_audit_admin_logs_enabled      = var.kube_audit_admin_logs_enabled
 
   control_vault = var.control_vault
 
