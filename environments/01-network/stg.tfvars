@@ -23,6 +23,10 @@ additional_subnets = [
   {
     name           = "private-endpoints"
     address_prefix = "10.148.36.0/22"
+  },
+  {
+    name           = "postgres-expanded"
+    address_prefix = "10.148.44.0/22"
   }
 ]
 
