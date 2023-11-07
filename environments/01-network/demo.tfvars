@@ -6,6 +6,7 @@ aks_01_subnet_cidr_blocks              = "10.51.80.0/20"
 iaas_subnet_cidr_blocks                = "10.51.96.0/25"
 application_gateway_subnet_cidr_blocks = "10.51.96.128/25"
 postgresql_subnet_cidr_blocks          = "10.51.104.0/25"
+postgresql_subnet_expanded_cidr_blocks = "10.51.106.0/23"
 
 additional_subnets = [
   {
