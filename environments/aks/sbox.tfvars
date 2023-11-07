@@ -40,4 +40,3 @@ windows_node_pool = {
 availability_zones = ["1"]
 
 autoShutdown = true
-startupMode  = "onDemand"
