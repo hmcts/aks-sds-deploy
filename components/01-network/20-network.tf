@@ -14,19 +14,21 @@ module "network" {
   service_shortname     = var.service_shortname
 
   aks_00_subnet_cidr_blocks              = var.aks_00_subnet_cidr_blocks #UK South
-  aks_01_subnet_cidr_blocks              = var.aks_01_subnet_cidr_blocks #UK West # Currently both clusters in UK South
+  aks_01_subnet_cidr_blocks              = var.aks_01_subnet_cidr_blocks # Currently both clusters in UK South
   application_gateway_subnet_cidr_blocks = var.application_gateway_subnet_cidr_blocks
-  application_gateway_routes             = var.application_gateway_routes
+  additional_routes_application_gateway  = var.additional_routes_application_gateway
   iaas_subnet_cidr_blocks                = var.iaas_subnet_cidr_blocks
   additional_subnets                     = var.additional_subnets
   postgresql_subnet_cidr_blocks          = var.postgresql_subnet_cidr_blocks
+  postgresql_subnet_expanded_cidr_blocks = var.postgresql_subnet_expanded_cidr_blocks
 
   tags = module.ctags.common_tags
 }
 
 module "ctags" {
-  source      = "git::https://github.com/hmcts/terraform-module-common-tags.git?ref=master"
-  environment = var.env
-  product     = var.product
-  builtFrom   = var.builtFrom
+  source       = "git::https://github.com/hmcts/terraform-module-common-tags.git?ref=master"
+  environment  = var.env
+  product      = var.product
+  builtFrom    = var.builtFrom
+  expiresAfter = var.expiresAfter
 }

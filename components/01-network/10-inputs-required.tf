@@ -30,7 +30,9 @@ variable "application_gateway_subnet_cidr_blocks" {}
 
 variable "postgresql_subnet_cidr_blocks" {}
 
-variable "application_gateway_routes" {
+variable "postgresql_subnet_expanded_cidr_blocks" {}
+
+variable "additional_routes_application_gateway" {
   default = []
 }
 # Remote State

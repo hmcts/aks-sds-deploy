@@ -6,6 +6,7 @@ aks_01_subnet_cidr_blocks              = "10.144.16.0/20"
 iaas_subnet_cidr_blocks                = "10.144.32.0/25"
 application_gateway_subnet_cidr_blocks = "10.144.32.128/25"
 postgresql_subnet_cidr_blocks          = "10.144.40.0/25"
+postgresql_subnet_expanded_cidr_blocks = "10.144.44.0/22"
 
 additional_subnets = [
   {
@@ -67,7 +68,7 @@ additional_routes = [
   }
 ]
 
-application_gateway_routes = [
+additional_routes_application_gateway = [
   {
     name                   = "vh-infra-core-ado"
     address_prefix         = "10.10.52.0/24"

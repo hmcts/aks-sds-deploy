@@ -10,12 +10,6 @@ resource "azurerm_resource_group" "kubernetes_resource_group" {
   tags = module.ctags.common_tags
 }
 
-resource "azurerm_resource_group" "disks_resource_group" {
-  location = var.location
-  name     = "disks-${var.env}-rg"
-  tags     = module.ctags.common_tags
-}
-
 module "loganalytics" {
   source      = "git::https://github.com/hmcts/terraform-module-log-analytics-workspace-id.git?ref=master"
   environment = var.env
@@ -24,7 +18,7 @@ module "loganalytics" {
 locals {
   linux_node_pool = {
     name                = "linux"
-    vm_size             = lookup(var.linux_node_pool, "vm_size", "Standard_DS3_v2")
+    vm_size             = lookup(var.linux_node_pool, "vm_size", "Standard_D4ds_v5")
     min_count           = lookup(var.linux_node_pool, "min_nodes", 2)
     max_count           = lookup(var.linux_node_pool, "max_nodes", 10)
     max_pods            = lookup(var.linux_node_pool, "max_pods", 30)
@@ -34,14 +28,39 @@ locals {
     mode                = "User"
     availability_zones  = var.availability_zones
   }
+
+  arm_node_pool = {
+    name                = "arm"
+    vm_size             = lookup(var.arm_node_pool, "vm_size", "Standard_D4pds_v5")
+    min_count           = lookup(var.arm_node_pool, "min_nodes", 2)
+    max_count           = lookup(var.arm_node_pool, "max_nodes", 10)
+    max_pods            = lookup(var.arm_node_pool, "max_pods", 30)
+    os_type             = "Linux"
+    node_taints         = []
+    enable_auto_scaling = true
+    mode                = "User"
+    availability_zones  = var.availability_zones
+  }
   system_node_pool = {
     name                = "msnode"
-    vm_size             = lookup(var.windows_node_pool, "vm_size", "Standard_DS3_v2")
+    vm_size             = lookup(var.windows_node_pool, "vm_size", "Standard_D4ds_v5")
     min_count           = lookup(var.windows_node_pool, "min_nodes", 2)
     max_count           = lookup(var.windows_node_pool, "max_nodes", 4)
     max_pods            = lookup(var.windows_node_pool, "max_pods", 30)
     os_type             = "Windows"
     node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
+    enable_auto_scaling = true
+    mode                = "User"
+    availability_zones  = var.availability_zones
+  }
+  cron_job_node_pool = {
+    name                = "cronjob"
+    vm_size             = "Standard_D4ds_v5"
+    min_count           = 0
+    max_count           = 10
+    max_pods            = 30
+    os_type             = "Linux"
+    node_taints         = ["dedicated=jobs:NoSchedule"]
     enable_auto_scaling = true
     mode                = "User"
     availability_zones  = var.availability_zones
@@ -85,7 +104,10 @@ module "kubernetes" {
 
   ptl_cluster = var.ptl_cluster
 
-  log_workspace_id = module.loganalytics.workspace_id
+  log_workspace_id                   = module.loganalytics.workspace_id
+  monitor_diagnostic_setting         = var.monitor_diagnostic_setting
+  monitor_diagnostic_setting_metrics = var.monitor_diagnostic_setting_metrics
+  kube_audit_admin_logs_enabled      = var.kube_audit_admin_logs_enabled
 
   control_vault = var.control_vault
 
@@ -93,7 +115,7 @@ module "kubernetes" {
 
   kubernetes_cluster_agent_min_count = lookup(var.system_node_pool, "min_nodes", 2)
   kubernetes_cluster_agent_max_count = lookup(var.system_node_pool, "max_nodes", 4)
-  kubernetes_cluster_agent_vm_size   = lookup(var.system_node_pool, "vm_size", "Standard_DS3_v2")
+  kubernetes_cluster_agent_vm_size   = lookup(var.system_node_pool, "vm_size", "Standard_D4ds_v5")
 
   kubernetes_cluster_version            = var.clusters[each.value]["kubernetes_version"]
   kubernetes_cluster_agent_os_disk_size = "128"
@@ -103,12 +125,13 @@ module "kubernetes" {
 
   enable_user_system_nodepool_split = true
 
-  additional_node_pools = contains(["ptlsbox", "ptl"], var.env) ? tolist([local.linux_node_pool]) : tolist([local.linux_node_pool, local.system_node_pool])
+  additional_node_pools = contains(["ptlsbox", "ptl"], var.env) ? tolist([local.linux_node_pool, local.cron_job_node_pool]) : (contains(["sbox"], var.env) ? toset([local.linux_node_pool, local.system_node_pool, local.arm_node_pool, local.cron_job_node_pool]) : tolist([local.linux_node_pool, local.system_node_pool, local.cron_job_node_pool]))
 
-  depends_on         = [azurerm_resource_group.disks_resource_group]
   availability_zones = var.availability_zones
 
   aks_version_checker_principal_id = data.azuread_service_principal.version_checker.object_id
+
+  aks_role_definition = "Contributor"
 
   aks_auto_shutdown_principal_id = data.azuread_service_principal.aks_auto_shutdown.object_id
 
@@ -121,6 +144,8 @@ module "ctags" {
   product      = var.product
   builtFrom    = var.builtFrom
   autoShutdown = var.autoShutdown
+  expiresAfter = var.expiresAfter
+  startupMode  = var.startupMode
 }
 
 

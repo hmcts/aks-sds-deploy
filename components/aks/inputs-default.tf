@@ -28,6 +28,11 @@ variable "linux_node_pool" {
   default     = {}
 }
 
+variable "arm_node_pool" {
+  description = "Map to override the linux node pool config"
+  default     = {}
+}
+
 variable "windows_node_pool" {
   description = "Map to override the windows node pool config"
   default     = {}
@@ -38,5 +43,25 @@ variable "enable_automatic_channel_upgrade_patch" {
 }
 
 variable "autoShutdown" {
+  default = false
+}
+
+variable "expiresAfter" {
+  default = "3000-01-01"
+}
+
+variable "startupMode" {
+  default = null
+}
+
+variable "monitor_diagnostic_setting" {
+  default = false
+}
+
+variable "kube_audit_admin_logs_enabled" {
+  default = false
+}
+
+variable "monitor_diagnostic_setting_metrics" {
   default = false
 }

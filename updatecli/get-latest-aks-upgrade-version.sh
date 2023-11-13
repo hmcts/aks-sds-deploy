@@ -12,7 +12,9 @@ get_upgrades () {
       --resource-group "${aks_resource_group}" \
       --subscription "${aks_subscription}" \
       | jq -r '
-      if (.controlPlaneProfile.upgrades|map(select(.isPreview == null)) == []) then
+      if (.controlPlaneProfile.upgrades == null) then 
+          .controlPlaneProfile.kubernetesVersion 
+      elif (.controlPlaneProfile.upgrades|map(select(.isPreview == null)) == []) then
           .controlPlaneProfile.kubernetesVersion
       else .controlPlaneProfile.upgrades|map(select(.isPreview == null).kubernetesVersion)
       | .[] end' \
@@ -24,7 +26,7 @@ UPGRADE_VERSION=$(get_upgrades)
 
 # For environments usually only running one cluster at a time
 # check the second cluster if response from 00 is empty
-if [[ ${UPGRADE_VERSION} == "" ]] && [[ ${environment} =~ ^(dev|demo)$ ]]; then
+if [[ ${UPGRADE_VERSION} == "" ]] && [[ ! ${environment} =~ ^(dev|ptlsbox|ptl)$ ]]; then
 
   aks_name=$(echo "${aks_name}" | sed -E "s/00/01/g" )
   aks_resource_group=$(echo "${aks_resource_group}" | sed -E "s/00/01/g" )

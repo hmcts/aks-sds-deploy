@@ -5,7 +5,7 @@ set -e
 ENVIRONMENT="${3}"
 CLUSTER_NAME="${6}"
 AGENT_BUILDDIRECTORY=/tmp
-
+KUSTOMIZE_VERSION=4.5.7
 ############################################################
 # Functions
 ############################################################
@@ -26,7 +26,7 @@ function pod_identity_components {
         echo "Kustomize installed"
     else
         #Install kustomize
-        curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash
+        curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash -s ${KUSTOMIZE_VERSION}
     fi 
     # -----------------------------------------------------------
 (
@@ -38,8 +38,9 @@ commonLabels:
   k8s-app: aad-pod-id
 resources:
   - https://raw.githubusercontent.com/Azure/aad-pod-identity/v1.8.4/deploy/infra/deployment-rbac.yaml
-patchesStrategicMerge:
-  - https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/admin/aad-pod-identity/aad-pod-id-patch.yaml
+patches:
+  - https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/admin/aad-pod-identity/nmi-patch.yaml
+  - https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/admin/aad-pod-identity/mic-patch.yaml
 EOF
 ) > "${TMP_DIR}/admin/kustomization.yaml"
 
@@ -154,6 +155,24 @@ pod_identity_components
 flux_v2_pod_identity_sops_setup
 flux_v2_ssh_git_key
 flux_v2_installation
+
+(
+cat <<EOF
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - https://github.com/hmcts/sds-flux-config/apps/azureserviceoperator-system/cert-manager/
+  - https://github.com/hmcts/sds-flux-config/apps/azureserviceoperator-system/aso/
+  - https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/azureserviceoperator-system/${ENVIRONMENT}/base/aso-controller-settings.yaml
+EOF
+) > "${TMP_DIR}/kustomization.yaml"
+# -----------------------------------------------------------
+./kustomize build ${TMP_DIR} > "${TMP_DIR}/result.yaml"
+
+#retries so that CRDs apply first and then manifests
+for i in {1..3}; do
+  (kubectl apply -f ${TMP_DIR}/result.yaml && break) || sleep 15;
+done
 
 # Cleanup
 rm -rf "${TMP_DIR}"

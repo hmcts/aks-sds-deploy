@@ -19,6 +19,7 @@ variable "private_endpoint_private_dns_zones" {
     "privatelink.service.signalr.net",
     "privatelink.servicebus.windows.net",
     "private.postgres.database.azure.com",
+    "privatelink.azurewebsites.net"
   ]
 }
 
@@ -31,11 +32,6 @@ locals {
         peering_name = "hubUkS"
         next_hop_ip  = "10.11.72.36"
       }
-      ukWest = {
-        name         = "ukw-hub-nonprodi"
-        peering_name = "hubUkW"
-        next_hop_ip  = "10.49.72.36"
-      }
     }
     sbox = {
       subscription = "ea3a8c1e-af9d-4108-bc86-a7e2d267f49c"
@@ -44,11 +40,6 @@ locals {
         peering_name = "hubUkS"
         next_hop_ip  = "10.10.200.36"
       }
-      ukWest = {
-        name         = "ukw-hub-sbox-int"
-        peering_name = "hubUkW"
-        next_hop_ip  = "10.48.200.36"
-      }
     }
     prod = {
       subscription = "0978315c-75fe-4ada-9d11-1eb5e0e0b214"
@@ -56,11 +47,6 @@ locals {
         name         = "hmcts-hub-prod-int"
         peering_name = "hubUkS"
         next_hop_ip  = "10.11.8.36"
-      }
-      ukWest = {
-        name         = "ukw-hub-prod-int"
-        peering_name = "hubUkW"
-        next_hop_ip  = "10.49.8.36"
       }
     }
   }
@@ -72,8 +58,7 @@ locals {
   }
 
   regions = [
-    "ukSouth",
-    "ukWest"
+    "ukSouth"
   ]
 
 }
@@ -84,4 +69,8 @@ variable "additional_routes" {
 
 variable "additional_subnets" {
   default = []
+}
+
+variable "expiresAfter" {
+  default = "3000-01-01"
 }
