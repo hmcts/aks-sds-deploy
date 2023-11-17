@@ -6,7 +6,7 @@ resources:
   repositories:
   - repository: cnp-azuredevops-libraries
     type: github
-    ref: refs/heads/origin/dtspo-15333-ado-auto-env-start
+    ref: refs/heads/dtspo-15333-ado-auto-env-start
     name: hmcts/cnp-azuredevops-libraries
     endpoint: 'hmcts'
   - repository: sds-flux-config
