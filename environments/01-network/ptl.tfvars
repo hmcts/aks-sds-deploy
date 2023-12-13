@@ -86,5 +86,11 @@ additional_routes = [
     address_prefix         = "10.70.21.0/24"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.72.36"
+  },
+  {
+    name                   = "dc_vnet_dev"
+    address_prefix         = "10.24.0.192/28"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
   }
 ]
