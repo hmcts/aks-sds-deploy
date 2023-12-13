@@ -6,7 +6,7 @@ resources:
   repositories:
   - repository: cnp-azuredevops-libraries
     type: github
-    ref: master
+    ref: refs/head/master
     name: hmcts/cnp-azuredevops-libraries
     endpoint: 'hmcts'
   - repository: sds-flux-config
