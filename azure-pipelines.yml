@@ -89,6 +89,9 @@ stages:
               keyvaultSecret: 'azure-devops-sp-token'
               serviceConnection: 'DCD-CFT-Sandbox'
               overrideAction: ${{ parameters.action }}
+              projectName: ${{ variables.project }}
+              cluster: ${{ parameters.cluster }}
+              environment: ${{ parameters.env }}
 
   - stage: Genesis
     displayName: "Genesis"
