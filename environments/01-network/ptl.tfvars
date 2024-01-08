@@ -92,7 +92,7 @@ additional_routes = [
     address_prefix         = "10.11.74.32/27"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.72.36"
-  }
+  },
   {
     name                   = "dc_vnet_test"
     address_prefix         = "10.11.75.32/27"
