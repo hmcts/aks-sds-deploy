@@ -21,8 +21,11 @@ steps:
       scriptLocation: inlineScript
       failOnStandardError: 'true'
       inlineScript: |   
-        echo "##vso[task.setvariable variable=AZURE_MI_ID]$(az identity show --resource-group genesis-rg --name aks-$(env)-mi --query="clientId" -o tsv)"
-        echo "##vso[task.setvariable variable=AKS_ISSUER_URL]$(az aks show -n ss-${{ parameters.environment }}-${{ parameters.cluster }}-aks -g ss-${{ parameters.environment }}-${{ parameters.cluster }}-rg --query "oidcIssuerProfile.issuerUrl" -otsv)"
+        echo "##vso[task.setvariable variable=AZURE_MI_ID]$(az identity show --resource-group genesis-rg --name aks-${{ parameters.environment }}-mi --query="clientId" -o tsv)"
+
+        if [[ "$(clusters)" != "All" ]]; then
+          echo "##vso[task.setvariable variable=AKS_ISSUER_URL]$(az aks show -n cft-${{ parameters.environment }}-$(clusters)-aks -g cft-${{ parameters.environment }}-$(clusters)-rg --query "oidcIssuerProfile.issuerUrl" -otsv)"
+        fi
 
 - task: Bash@3
   displayName: 'Bootstrap Replacement'
@@ -47,6 +50,7 @@ steps:
   inputs:
     arguments: ${{ parameters.environment }} ${{ parameters.cluster }} $(AKS_ISSUER_URL) sds-flux-config $(github-management-api-token)
     filePath: aks-sds-deploy/scripts/update-issuer-url.sh
+  condition: ne('${{ parameters.cluster }}', 'All')
 
 - task: AzureCLI@1
   displayName: 'Bootstrap'
