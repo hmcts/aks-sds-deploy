@@ -1,10 +1,7 @@
 clusters = {
   "00" = {
-    kubernetes_version = "1.26"
+    kubernetes_version = "1.28"
   },
-  "01" = {
-    kubernetes_version = "1.26"
-  }
 }
 enable_automatic_channel_upgrade_patch = true
 kubernetes_cluster_agent_min_count     = "1"
@@ -13,4 +10,3 @@ kubernetes_cluster_ssh_key             = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQ
 availability_zones                     = ["1"]
 
 autoShutdown = true
-

@@ -9,11 +9,14 @@ resources:
     ref: refs/heads/master
     name: hmcts/cnp-azuredevops-libraries
     endpoint: 'hmcts'
+  - repository: sds-flux-config
+    type: github
+    ref: refs/heads/master
+    name: hmcts/sds-flux-config
+    endpoint: 'hmcts'
 
 pool:
   vmImage: "ubuntu-latest"
-
-
 
 parameters:
   - name: action
@@ -72,9 +75,7 @@ variables:
     value: ${{ parameters.action }}
   - template: vars/input-variables.yaml@cnp-azuredevops-libraries
 
-
 stages:
-
   - stage: Precheck
     jobs:
       - job:
@@ -88,6 +89,9 @@ stages:
               keyvaultSecret: 'azure-devops-sp-token'
               serviceConnection: 'DCD-CFT-Sandbox'
               overrideAction: ${{ parameters.action }}
+              projectName: ${{ variables.project }}
+              cluster: ${{ parameters.cluster }}
+              environment: ${{ parameters.env }}
 
   - stage: Genesis
     displayName: "Genesis"
@@ -123,7 +127,6 @@ stages:
               product: $(product)
               action: ${{ parameters.action }}
 
-
       - job: DeployInfrastructure
         dependsOn: NetworkRg
         steps:
@@ -152,7 +155,6 @@ stages:
                 -var subscription_id=$(SUBSCRIPTION_ID)
                 -backend-config storage_account_name=$(STORAGE_ACCOUNT)
 
-
   - stage: Managed_Identity
     displayName: "Managed_Identity"
     dependsOn: Network
@@ -168,7 +170,7 @@ stages:
               terraformInitSubscription: ${{ variables.tfInitSub }}
               product: $(product)
               location: ${{ parameters.location }}
-              tfVarsFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/05-mis/${{ parameters.env }}.tfvars"
+              tfVarsFile: NULL
               planCommandOptions: "-var project=$(project) -var control_vault=$(controlKeyVault) -var subscription_id=$(ARM_SUBSCRIPTION_ID) "
          
   - stage: Aks
@@ -193,18 +195,23 @@ stages:
               ${{ if ne(parameters['cluster'], 'All') }}:
                 targetCommand: '-target azurerm_resource_group.kubernetes_resource_group["\"${{parameters.cluster}}\""] -target module.kubernetes["\"${{parameters.cluster}}\""] -target azurerm_role_assignment.dev_to_stg["\"${{parameters.cluster}}\""] -target data.azurerm_resource_group.mi_stg_rg[0]'
 
- 
   - stage: BootStrapClusters
     displayName: "BootStrap Clusters"
     dependsOn: Aks
     jobs:
       - job: BootStrap
+        condition: |
+          or(
+            and(succeeded(), eq('${{ parameters.action }}', 'apply')),
+            and(succeeded(), eq(variables['isMain'], true), eq(variables['isAutoTriggered'], true))
+          )
         variables:
           clusters: ${{ parameters.cluster }}
         steps:
           - template: pipeline-steps/bootstrap.yaml
             parameters:
               environment: ${{ parameters.env }}
+              cluster: ${{ parameters.cluster }}
               serviceConnection: $(serviceConnection)
 
   - stage: PipelineTests
@@ -215,7 +222,11 @@ stages:
         pool:
           vmImage: ${{ variables.agentPool }}
         timeoutInMinutes: ${{ variables.timeoutInMinutes }}
-        condition: and(succeeded(), eq(variables['isMain'], true), eq('${{ parameters.action }}', 'apply'))
+        condition: |
+          or(
+            and(succeeded(), eq('${{ parameters.action }}', 'apply')),
+            and(succeeded(), eq(variables['isMain'], true), eq(variables['isAutoTriggered'], true))
+          )
         steps:
           - template: steps/pipeline-tests-jest.yaml@cnp-azuredevops-libraries
             parameters:

@@ -6,6 +6,7 @@ aks_01_subnet_cidr_blocks              = "10.147.80.0/20"
 iaas_subnet_cidr_blocks                = "10.147.96.0/25"
 application_gateway_subnet_cidr_blocks = "10.147.96.128/25"
 postgresql_subnet_cidr_blocks          = "10.147.97.128/25"
+postgresql_subnet_expanded_cidr_blocks = "10.147.98.0/25"
 
 additional_subnets = [
   {
@@ -83,6 +84,18 @@ additional_routes = [
   {
     name                   = "pre_vnet_test"
     address_prefix         = "10.70.21.0/24"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
+  },
+  {
+    name                   = "dc_vnet_dev"
+    address_prefix         = "10.11.74.32/27"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
+  },
+  {
+    name                   = "dc_vnet_test"
+    address_prefix         = "10.11.75.32/27"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.72.36"
   }

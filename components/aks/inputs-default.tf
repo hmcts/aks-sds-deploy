@@ -49,3 +49,19 @@ variable "autoShutdown" {
 variable "expiresAfter" {
   default = "3000-01-01"
 }
+
+variable "startupMode" {
+  default = null
+}
+
+variable "monitor_diagnostic_setting" {
+  default = false
+}
+
+variable "kube_audit_admin_logs_enabled" {
+  default = false
+}
+
+variable "monitor_diagnostic_setting_metrics" {
+  default = false
+}

@@ -53,6 +53,18 @@ locals {
     mode                = "User"
     availability_zones  = var.availability_zones
   }
+  cron_job_node_pool = {
+    name                = "cronjob"
+    vm_size             = "Standard_D4ds_v5"
+    min_count           = 0
+    max_count           = 10
+    max_pods            = 30
+    os_type             = "Linux"
+    node_taints         = ["dedicated=jobs:NoSchedule"]
+    enable_auto_scaling = true
+    mode                = "User"
+    availability_zones  = var.availability_zones
+  }
 }
 
 data "azuread_service_principal" "version_checker" {
@@ -92,7 +104,10 @@ module "kubernetes" {
 
   ptl_cluster = var.ptl_cluster
 
-  log_workspace_id = module.loganalytics.workspace_id
+  log_workspace_id                   = module.loganalytics.workspace_id
+  monitor_diagnostic_setting         = var.monitor_diagnostic_setting
+  monitor_diagnostic_setting_metrics = var.monitor_diagnostic_setting_metrics
+  kube_audit_admin_logs_enabled      = var.kube_audit_admin_logs_enabled
 
   control_vault = var.control_vault
 
@@ -110,7 +125,7 @@ module "kubernetes" {
 
   enable_user_system_nodepool_split = true
 
-  additional_node_pools = contains(["ptlsbox", "ptl"], var.env) ? tolist([local.linux_node_pool]) : (contains(["sbox"], var.env) ? tolist([local.linux_node_pool, local.system_node_pool, local.arm_node_pool]) : tolist([local.linux_node_pool, local.system_node_pool]))
+  additional_node_pools = contains(["ptlsbox", "ptl"], var.env) ? tolist([local.linux_node_pool, local.cron_job_node_pool]) : (contains(["sbox"], var.env) ? toset([local.linux_node_pool, local.system_node_pool, local.arm_node_pool, local.cron_job_node_pool]) : tolist([local.linux_node_pool, local.system_node_pool, local.cron_job_node_pool]))
 
   availability_zones = var.availability_zones
 
@@ -130,6 +145,7 @@ module "ctags" {
   builtFrom    = var.builtFrom
   autoShutdown = var.autoShutdown
   expiresAfter = var.expiresAfter
+  startupMode  = var.startupMode
 }
 
 
@@ -148,14 +164,4 @@ resource "azurerm_role_assignment" "dev_to_stg" {
   role_definition_name = "Managed Identity Operator"
   principal_id         = module.kubernetes[each.key].kubelet_object_id
   scope                = data.azurerm_resource_group.mi_stg_rg[0].id
-}
-
-moved {
-  from = module.kubernetes["01"].azapi_resource.service_operator_credential[0]
-  to   = module.kubernetes["01"].azapi_resource.service_operator_credential
-}
-
-moved {
-  from = module.kubernetes["00"].azapi_resource.service_operator_credential[0]
-  to   = module.kubernetes["00"].azapi_resource.service_operator_credential
 }

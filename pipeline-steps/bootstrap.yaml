@@ -6,7 +6,8 @@ parameters:
   clusterName: ''
 
 steps:
-
+- checkout: self
+- checkout: sds-flux-config
 - template: steps/keyvault-read.yaml@cnp-azuredevops-libraries
   parameters:
     serviceConnection: $(serviceConnection)
@@ -20,26 +21,43 @@ steps:
       scriptLocation: inlineScript
       failOnStandardError: 'true'
       inlineScript: |   
-        echo "##vso[task.setvariable variable=AZURE_MI_ID]$(az identity show --resource-group genesis-rg --name aks-$(env)-mi --query="clientId" -o tsv)"
+        echo "##vso[task.setvariable variable=AZURE_MI_ID]$(az identity show --resource-group genesis-rg --name aks-${{ parameters.environment }}-mi --query="clientId" -o tsv)"
+
+        if [[ "$(clusters)" != "All" ]]; then
+          echo "##vso[task.setvariable variable=AKS_ISSUER_URL]$(az aks show -n ss-${{ parameters.environment }}-$(clusters)-aks -g ss-${{ parameters.environment }}-$(clusters)-rg --query "oidcIssuerProfile.issuerUrl" -otsv)"
+        fi
 
 - task: Bash@3
   displayName: 'Bootstrap Replacement'
   inputs:
       targetType: 'inline'
-      workingDirectory: '$(System.DefaultWorkingDirectory)/kubernetes/charts/aad-pod-identities'
+      workingDirectory: 'aks-sds-deploy/kubernetes/charts/aad-pod-identities'
       script: |
             sed -i 's|AZURE_SUBSCRIPTION|$(ARM_SUBSCRIPTION_ID)|g' 'aks-sops-role.yaml'
             sed -i 's|AZURE_ENVIRONMENT|$(env)|g' 'aks-sops-role.yaml'
             sed -i 's|MI_CLIENTID|$(AZURE_MI_ID)|g' 'aks-sops-role.yaml'
             cat aks-sops-role.yaml
 
+- task: AzureKeyVault@1
+  displayName: 'Get secrets from Keyvault'
+  inputs:
+    azureSubscription:  "DTS-CFTPTL-INTSVC"
+    keyVaultName:   "cftptl-intsvc"
+    secretsFilter: 'github-management-api-token'
+
+- task: Bash@3
+  displayName: 'Update flux-config'
+  inputs:
+    arguments: ${{ parameters.environment }} ${{ parameters.cluster }} $(AKS_ISSUER_URL) sds-flux-config $(github-management-api-token)
+    filePath: aks-sds-deploy/scripts/update-issuer-url.sh
+  condition: ne('${{ parameters.cluster }}', 'All')
+
 - task: AzureCLI@1
   displayName: 'Bootstrap'
-  condition: and(succeeded(), eq(variables['action'], 'apply'))
   inputs:
     azureSubscription: $(serviceConnection)
     addSpnToEnvironment: true
     scriptType: shell
     failOnStandardError: 'false'
-    scriptPath: bootstrap/bootstrap.sh
+    scriptPath: aks-sds-deploy/bootstrap/bootstrap.sh
     arguments: $(project) aks $(env) $(controlKeyVault) $(serviceConnection) "$(clusters)" deploy 
