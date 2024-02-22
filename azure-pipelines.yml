@@ -92,6 +92,7 @@ stages:
               projectName: ${{ variables.project }}
               cluster: ${{ parameters.cluster }}
               environment: ${{ parameters.env }}
+              runManualStart: true
 
   - stage: Genesis
     displayName: "Genesis"
