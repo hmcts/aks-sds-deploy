@@ -73,7 +73,7 @@ variables:
     value: "sds-platform"
   - name: action
     value: ${{ parameters.action }}
-  - template: vars/input-variables.yaml@cnp-azuredevops-libraries
+  - template: vars/input-variables.yaml@cnp-azuredevops-libraries 
 
 stages:
   - stage: Precheck
@@ -92,6 +92,7 @@ stages:
               projectName: ${{ variables.project }}
               cluster: ${{ parameters.cluster }}
               environment: ${{ parameters.env }}
+              runManualStart: true
 
   - stage: Genesis
     displayName: "Genesis"
