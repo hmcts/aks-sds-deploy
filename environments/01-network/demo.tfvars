@@ -39,6 +39,24 @@ additional_routes_application_gateway = [
     address_prefix         = "10.10.52.0/24"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.72.36"
+  },
+  {
+    name                   = "RFC1918_Class_A"
+    address_prefix         = "10.0.0.0/8"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
+  },
+  {
+    name                   = "102PF-A"
+    address_prefix         = "10.232.38.0/23"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.37"
+  },
+  {
+    name                   = "102PF-B"
+    address_prefix         = "10.188.100.0/23"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.37"
   }
 ]
 
