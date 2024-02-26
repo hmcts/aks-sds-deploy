@@ -97,7 +97,7 @@ stages:
               environment: ${{ parameters.env }}
               runManualStart: true
 
-  - ${{ each component in [sbox, dev] }}:
+  - ${{ each component in ['sbox', 'dev'] }}:
     - stage: "Genesis-${{ component.env }}"
       displayName: "Genesis - ${{ component.env }}"
       dependsOn: Precheck
