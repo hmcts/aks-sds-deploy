@@ -2,6 +2,9 @@ name: ${{ parameters.action }} - ${{ parameters.env }}.${{ parameters.cluster }}
 
 trigger: none
 
+extends:
+  template: azure-pipelines-environments.yaml
+  
 resources:
   repositories:
   - repository: cnp-azuredevops-libraries
@@ -94,8 +97,10 @@ stages:
               environment: ${{ parameters.env }}
               runManualStart: true
 
-  - stage: Genesis
-    displayName: "Genesis"
+  - ${{ each component in [sbox, dev] }}:
+  - stage: "Genesis-${{ component.env }}"
+    displayName: "Genesis - ${{ component.env }}"
+    dependsOn: Precheck
     jobs:
       - job: Genesis
         steps:
@@ -112,8 +117,8 @@ stages:
               tfVarsFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/00-genesis/${{ parameters.env }}.tfvars"
               planCommandOptions: "-var project=$(project) -var subscription_id=$(ARM_SUBSCRIPTION_ID)"
 
-  - stage: Network
-    displayName: "Network"
+  - stage: "Network-${{ component.env }}"
+    displayName: "Network - ${{ component.env }}"
     jobs:
       - job: NetworkRg
         steps:
@@ -156,8 +161,8 @@ stages:
                 -var subscription_id=$(SUBSCRIPTION_ID)
                 -backend-config storage_account_name=$(STORAGE_ACCOUNT)
 
-  - stage: Managed_Identity
-    displayName: "Managed_Identity"
+  - stage: "Managed_Identity-${{ component.env }}"
+    displayName: "Managed_Identity - ${{ component.env }}"
     dependsOn: Network
     jobs:
       - job: Managed_Identity
@@ -174,11 +179,11 @@ stages:
               tfVarsFile: NULL
               planCommandOptions: "-var project=$(project) -var control_vault=$(controlKeyVault) -var subscription_id=$(ARM_SUBSCRIPTION_ID) "
          
-  - stage: Aks
-    displayName: "AKS clusters"
+  - stage: Aks-${{ component.env }}
+    displayName: "AKS clusters - ${{ component.env }}"
     pool: hmcts-cftptl-agent-pool
     dependsOn:
-      - Managed_Identity
+      - "Managed_Identity-${{ component.dependsOn }}"
     jobs:
       - job: DeployInfrastructure
         timeoutInMinutes: 180
@@ -196,9 +201,9 @@ stages:
               ${{ if ne(parameters['cluster'], 'All') }}:
                 targetCommand: '-target azurerm_resource_group.kubernetes_resource_group["\"${{parameters.cluster}}\""] -target module.kubernetes["\"${{parameters.cluster}}\""] -target azurerm_role_assignment.dev_to_stg["\"${{parameters.cluster}}\""] -target data.azurerm_resource_group.mi_stg_rg[0]'
 
-  - stage: BootStrapClusters
-    displayName: "BootStrap Clusters"
-    dependsOn: Aks
+  - stage: "BootStrapClusters-${{ component.env }}"
+    displayName: "BootStrap Clusters - ${{ component.env }}"
+    dependsOn: "Aks-${{ component.dependsOn }}"
     jobs:
       - job: BootStrap
         condition: |
@@ -217,7 +222,7 @@ stages:
 
   - stage: PipelineTests
     displayName: "PipelineTests"
-    dependsOn: BootStrapClusters
+    dependsOn: "BootStrapClusters-${{ component.dependsOn }}"
     jobs:
       - job: PipelineTests
         pool:
