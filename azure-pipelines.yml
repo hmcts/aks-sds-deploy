@@ -145,8 +145,8 @@ stages:
                 tfVarsFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/00-genesis/${{ parameters.env }}.tfvars"
                 planCommandOptions: "-var project=$(project) -var subscription_id=$(ARM_SUBSCRIPTION_ID)"
 
-    - stage: "Network-${{ component }}.env"
-      displayName: "Network - ${{ component}}.env"
+    - stage: "Network-${{ component.env }}"
+      displayName: "Network - ${{ component.env }}"
       jobs:
         - job: NetworkRg
           steps:
@@ -189,9 +189,9 @@ stages:
                   -var subscription_id=$(SUBSCRIPTION_ID)
                   -backend-config storage_account_name=$(STORAGE_ACCOUNT)
 
-    - stage: "Managed_Identity-${{ component }}.env"
-      displayName: "Managed_Identity - ${{ component }}.env"
-      dependsOn: "Network-{{ component }}.dependsOn"
+    - stage: "Managed_Identity-${{ component.env }}"
+      displayName: "Managed_Identity - ${{ component.env }}"
+      dependsOn: "Network-{{ component.dependsOn }}"
       jobs:
         - job: Managed_Identity
           steps:
@@ -207,11 +207,11 @@ stages:
                 tfVarsFile: NULL
                 planCommandOptions: "-var project=$(project) -var control_vault=$(controlKeyVault) -var subscription_id=$(ARM_SUBSCRIPTION_ID) "
           
-    - stage: "Aks-${{ component}}.env"
-      displayName: "AKS clusters - ${{ component }}.env"
+    - stage: "Aks-${{ component.env }}"
+      displayName: "AKS clusters - ${{ component.env }}"
       pool: hmcts-cftptl-agent-pool
       dependsOn:
-        - "Managed_Identity-${{ component }}.dependsOn"
+        - "Managed_Identity-${{ component.dependsOn }}"
       jobs:
         - job: DeployInfrastructure
           timeoutInMinutes: 180
@@ -229,9 +229,9 @@ stages:
                 ${{ if ne(parameters['cluster'], 'All') }}:
                   targetCommand: '-target azurerm_resource_group.kubernetes_resource_group["\"${{parameters.cluster}}\""] -target module.kubernetes["\"${{parameters.cluster}}\""] -target azurerm_role_assignment.dev_to_stg["\"${{parameters.cluster}}\""] -target data.azurerm_resource_group.mi_stg_rg[0]'
 
-    - stage: "BootStrapClusters-${{ component }}.env"
-      displayName: "BootStrap Clusters - ${{ component }}.env"
-      dependsOn: "Aks-${{ component }}.dependsOn"
+    - stage: "BootStrapClusters-${{ component.env }}"
+      displayName: "BootStrap Clusters - ${{ component.env }}"
+      dependsOn: "Aks-${{ component.dependsOn }}"
       jobs:
         - job: BootStrap
           condition: |
@@ -250,7 +250,7 @@ stages:
 
     - stage: PipelineTests
       displayName: "PipelineTests"
-      dependsOn: "BootStrapClusters-${{ component }}.dependsOn"
+      dependsOn: "BootStrapClusters-${{ component.dependsOn }}"
       jobs:
         - job: PipelineTests
           pool:
