@@ -63,7 +63,7 @@ parameters:
     default:
     - env: 'sbox'
       service_connection: 'OPS-APPROVAL-GATE-SBOX-ENVS'
-      dependsOn: 'Precheck'
+      dependsOn: ''
     - env: 'dev'
       service_connection: 'OPS-APPROVAL-GATE-DEV-ENVS'
       dependsOn: 'dev'
@@ -191,7 +191,8 @@ stages:
 
     - stage: "Managed_Identity_${{ component.env }}"
       displayName: "Managed_Identity - ${{ component.env }}"
-      dependsOn: "Network_{{ component.dependsOn }}"
+      dependsOn: ${{ if eq(parameters.env, 'sbox') }}:
+        - "Network_{{ component.dependsOn }}"
       jobs:
         - job: Managed_Identity
           steps:
