@@ -1,9 +1,6 @@
 name: ${{ parameters.action }} - ${{ parameters.env }}.${{ parameters.cluster }}.${{ parameters.location }}
 
 trigger: none
-
-extends:
-  template: azure-pipelines-environments.yaml
   
 resources:
   repositories:
@@ -61,6 +58,37 @@ parameters:
       - ptl
       - prod
 
+  - name: environment_components
+    type: object
+    default:
+    - env: 'sbox'
+      service_connection: 'OPS-APPROVAL-GATE-SBOX-ENVS'
+      dependsOn: 'Precheck'
+    - env: 'dev'
+      service_connection: 'OPS-APPROVAL-GATE-DEV-ENVS'
+      dependsOn: 'dev'
+    - env: 'demo'
+      service_connection: 'OPS-APPROVAL-GATE-DEMO-ENVS'
+      dependsOn: 'sbox'
+    - env: 'ithc'
+      service_connection: 'OPS-APPROVAL-GATE-ITHC-ENVS'
+      dependsOn: 'sbox'
+    - env: 'ptlsbox'
+      service_connection: 'OPS-APPROVAL-GATE-PTLSBOX-ENVS'
+      dependsOn: 'sbox'
+    - env: 'test'
+      service_connection: 'OPS-APPROVAL-GATE-TEST-ENVS'
+      dependsOn: 'sbox'
+    - env: 'stg'
+      service_connection: 'OPS-APPROVAL-GATE-STG-ENVS'
+      dependsOn: 'sbox'
+    - env: 'ptl'
+      service_connection: 'OPS-APPROVAL-GATE-PTL-ENVS'
+      dependsOn: 'sbox'
+    - env: 'prod'
+      service_connection: 'OPS-APPROVAL-GATE-PROD-ENVS'
+      dependsOn: 'stg'
+
 variables:
   - name: timeoutInMinutes
     value: 60
@@ -97,7 +125,7 @@ stages:
               environment: ${{ parameters.env }}
               runManualStart: true
 
-  - ${{ each component in ['sbox', 'dev'] }}:
+  - ${{ each component in parameters.environment_components }}:
     - stage: "Genesis-${{ component.env }}"
       displayName: "Genesis - ${{ component.env }}"
       dependsOn: Precheck
