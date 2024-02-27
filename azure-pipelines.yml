@@ -248,7 +248,7 @@ stages:
                 cluster: ${{ parameters.cluster }}
                 serviceConnection: $(serviceConnection)
 
-    - stage: PipelineTests
+    - stage: PipelineTests_${{ component.env }}
       displayName: "PipelineTests"
       dependsOn: "BootStrapClusters_${{ component.dependsOn }}"
       jobs:
