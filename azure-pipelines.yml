@@ -191,10 +191,9 @@ stages:
 
     - stage: "Managed_Identity_${{ component.env }}"
       displayName: "Managed_Identity - ${{ component.env }}"
-      - ${{ if eq(component.env, 'sbox') }}:
-        dependsOn: 
-        - "Network_{{ component.dependsOn }}"
-      - ${{ else }}:
+      dependsOn: 
+        - ${{ if neq(component.env, 'sbox') }}:
+          - "Network_{{ component.dependsOn }}"
       jobs:
         - job: Managed_Identity
           steps:
