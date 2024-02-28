@@ -212,8 +212,9 @@ stages:
     - stage: "Aks_${{ component.env }}"
       displayName: "AKS clusters - ${{ component.env }}"
       pool: hmcts-cftptl-agent-pool
-      dependsOn:
-        - "Managed_Identity_${{ component.dependsOn }}"
+      dependsOn: 
+        - ${{ if ne(component.env, 'sbox') }}:
+          - "Managed_Identity_${{ component.dependsOn }}"
       jobs:
         - job: DeployInfrastructure
           timeoutInMinutes: 180
@@ -233,7 +234,9 @@ stages:
 
     - stage: "BootStrapClusters_${{ component.env }}"
       displayName: "BootStrap Clusters - ${{ component.env }}"
-      dependsOn: "Aks_${{ component.dependsOn }}"
+      dependsOn: 
+        - ${{ if ne(component.env, 'sbox') }}:
+          - "Aks_${{ component.dependsOn }}"
       jobs:
         - job: BootStrap
           condition: |
@@ -252,7 +255,9 @@ stages:
 
     - stage: "PipelineTests_${{ component.env }}"
       displayName: "PipelineTests_${{ component.env }}"
-      dependsOn: "BootStrapClusters_${{ component.dependsOn }}"
+      dependsOn: 
+        - ${{ if ne(component.env, 'sbox') }}:
+          - "BootStrapClusters_${{ component.dependsOn }}"
       jobs:
         - job: PipelineTests
           pool:
