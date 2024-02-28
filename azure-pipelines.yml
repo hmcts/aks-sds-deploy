@@ -63,10 +63,9 @@ parameters:
     default:
     - env: 'sbox'
       service_connection: 'OPS-APPROVAL-GATE-SBOX-ENVS'
-      dependsOn: ''
     - env: 'dev'
       service_connection: 'OPS-APPROVAL-GATE-DEV-ENVS'
-      dependsOn: 'dev'
+      dependsOn: 'sbox'
     - env: 'demo'
       service_connection: 'OPS-APPROVAL-GATE-DEMO-ENVS'
       dependsOn: 'sbox'
