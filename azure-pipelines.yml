@@ -191,7 +191,7 @@ stages:
 
     - stage: "Managed_Identity_${{ component.env }}"
       displayName: "Managed_Identity - ${{ component.env }}"
-      - ${{ if eq(parameters.env, 'sbox') }}:
+      - ${{ if eq(component.env, 'sbox') }}:
         dependsOn: 
         - "Network_{{ component.dependsOn }}"
       - ${{ else }}:
