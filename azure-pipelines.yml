@@ -65,28 +65,28 @@ parameters:
       service_connection: 'OPS-APPROVAL-GATE-SBOX-ENVS'
     - env: 'dev'
       service_connection: 'OPS-APPROVAL-GATE-DEV-ENVS'
-      dependsOn: 'sbox'
+      dependsOnEnv: 'sbox'
     - env: 'demo'
       service_connection: 'OPS-APPROVAL-GATE-DEMO-ENVS'
-      dependsOn: 'sbox'
+      dependsOnEnv: 'sbox'
     - env: 'ithc'
       service_connection: 'OPS-APPROVAL-GATE-ITHC-ENVS'
-      dependsOn: 'sbox'
+      dependsOnEnv: 'sbox'
     - env: 'ptlsbox'
       service_connection: 'OPS-APPROVAL-GATE-PTLSBOX-ENVS'
-      dependsOn: 'sbox'
+      dependsOnEnv: 'sbox'
     - env: 'test'
       service_connection: 'OPS-APPROVAL-GATE-TEST-ENVS'
-      dependsOn: 'sbox'
+      dependsOnEnv: 'sbox'
     - env: 'stg'
       service_connection: 'OPS-APPROVAL-GATE-STG-ENVS'
-      dependsOn: 'sbox'
+      dependsOnEnv: 'sbox'
     - env: 'ptl'
       service_connection: 'OPS-APPROVAL-GATE-PTL-ENVS'
-      dependsOn: 'sbox'
+      dependsOnEnv: 'sbox'
     - env: 'prod'
       service_connection: 'OPS-APPROVAL-GATE-PROD-ENVS'
-      dependsOn: 'stg'
+      dependsOnEnv: 'stg'
 
 variables:
   - name: timeoutInMinutes
@@ -127,6 +127,9 @@ stages:
   - ${{ each component in parameters.environment_components }}:
     - stage: "Genesis_${{ component.env }}"
       displayName: "Genesis - ${{ component.env }}"
+      dependsOn: 
+        - ${{ if ne(component.env, 'sbox') }}:
+          - "PipelineTests_${{ component.dependsOn }}"
       dependsOn: Precheck
       jobs:
         - job: Genesis
