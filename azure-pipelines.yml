@@ -130,6 +130,7 @@ stages:
       dependsOn: 
         - ${{ if ne(component.env, 'sbox') }}:
           - "PipelineTests_${{ component.dependsOn }}"
+          - "Aks_${{ component.dependsOn }}"
       jobs:
         - job: Genesis
           steps:
