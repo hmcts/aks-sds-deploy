@@ -136,6 +136,9 @@ module "kubernetes" {
   aks_auto_shutdown_principal_id = data.azuread_service_principal.aks_auto_shutdown.object_id
 
   enable_automatic_channel_upgrade_patch = var.enable_automatic_channel_upgrade_patch
+
+  # optional flag, if env is sbox then apply NodeImage else set None
+  node_os_channel_upgrade = contains(["sbox"], var.env) ? "NodeImage" : "None"
 }
 
 module "ctags" {
