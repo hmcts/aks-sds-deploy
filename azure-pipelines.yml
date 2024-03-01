@@ -148,6 +148,9 @@ stages:
 
     - stage: "Network_${{ component.env }}"
       displayName: "Network - ${{ component.env }}"
+      dependsOn: 
+        - ${{ if ne(component.env, 'sbox') }}:
+          - "PipelineTests_${{ component.dependsOn }}"
       jobs:
         - job: NetworkRg
           steps:
@@ -194,7 +197,7 @@ stages:
       displayName: "Managed_Identity - ${{ component.env }}"
       dependsOn: 
         - ${{ if ne(component.env, 'sbox') }}:
-          - "Network_${{ component.dependsOn }}"
+          - "Network_${{ component.env }}"
       jobs:
         - job: Managed_Identity
           steps:
@@ -215,7 +218,7 @@ stages:
       pool: hmcts-cftptl-agent-pool
       dependsOn: 
         - ${{ if ne(component.env, 'sbox') }}:
-          - "Managed_Identity_${{ component.dependsOn }}"
+          - "Managed_Identity_${{ component.env }}"
       jobs:
         - job: DeployInfrastructure
           timeoutInMinutes: 180
@@ -237,7 +240,7 @@ stages:
       displayName: "BootStrap Clusters - ${{ component.env }}"
       dependsOn: 
         - ${{ if ne(component.env, 'sbox') }}:
-          - "Aks_${{ component.dependsOn }}"
+          - "Aks_${{ component.env }}"
       jobs:
         - job: BootStrap
           condition: |
@@ -258,7 +261,7 @@ stages:
       displayName: "PipelineTests_${{ component.env }}"
       dependsOn: 
         - ${{ if ne(component.env, 'sbox') }}:
-          - "BootStrapClusters_${{ component.dependsOn }}"
+          - "BootStrapClusters_${{ component.env }}"
       jobs:
         - job: PipelineTests
           pool:
