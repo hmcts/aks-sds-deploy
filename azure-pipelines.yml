@@ -109,7 +109,7 @@ stages:
 
   - ${{ each component in parameters.environment_components }}:
     - stage: "Genesis_${{ component.env }}"
-      displayName: "${{ component.env }}: Genesis"
+      displayName: "${{ upper(component.env) }}: Genesis"
       dependsOn: 
         - ${{ if ne(component.env, 'sbox') }}:
           - "Network_${{ component.dependsOn }}"
@@ -136,7 +136,7 @@ stages:
                 planCommandOptions: "-var project=$(project) -var subscription_id=$(ARM_SUBSCRIPTION_ID)"
 
     - stage: "Network_${{ component.env }}"
-      displayName: "${{ component.env }}: Network"
+      displayName: "${{ upper(component.env) }}: Network"
       dependsOn: 
         - ${{ if ne(component.env, 'sbox') }}:
           - "Network_${{ component.dependsOn }}"
@@ -189,7 +189,7 @@ stages:
                   -backend-config storage_account_name=$(STORAGE_ACCOUNT)
 
     - stage: "Managed_Identity_${{ component.env }}"
-      displayName: "${{ component.env }}: Managed_Identity"
+      displayName: "${{ upper(component.env) }}: Managed_Identity"
       dependsOn: 
         - "Network_${{ component.env }}"
       jobs:
@@ -208,7 +208,7 @@ stages:
                 planCommandOptions: "-var project=$(project) -var control_vault=$(controlKeyVault) -var subscription_id=$(ARM_SUBSCRIPTION_ID) "
           
     - stage: "Aks_${{ component.env }}"
-      displayName: "${{ component.env }}: AKS clusters"
+      displayName: "${{ upper(component.env) }}: AKS clusters"
       pool: hmcts-cftptl-agent-pool
       dependsOn:
         - "Managed_Identity_${{ component.env }}"
@@ -230,7 +230,7 @@ stages:
                   targetCommand: '-target azurerm_resource_group.kubernetes_resource_group["\"${{parameters.cluster}}\""] -target module.kubernetes["\"${{parameters.cluster}}\""] -target azurerm_role_assignment.dev_to_stg["\"${{parameters.cluster}}\""] -target data.azurerm_resource_group.mi_stg_rg[0]'
 
     - stage: "BootStrapClusters_${{ component.env }}"
-      displayName: "${{ component.env }}: BootStrap Clusters"
+      displayName: "${{ upper(component.env) }}: BootStrap Clusters"
       dependsOn: 
         - "Aks_${{ component.env }}"
       jobs:
@@ -250,7 +250,7 @@ stages:
                 serviceConnection: ${{ component.serviceConnection }}
 
     - stage: "PipelineTests_${{ component.env }}"
-      displayName: "${{ component.env }}: PipelineTests"
+      displayName: "${{ upper(component.env) }}: PipelineTests"
       dependsOn: 
         - "BootStrapClusters_${{ component.env }}"
       jobs:
