@@ -1,4 +1,4 @@
-name: ${{ parameters.action }} - ${{ parameters.env }}.${{ parameters.cluster }}.${{ parameters.location }}
+name: AKS-SDS-Deploy - ${{ parameters.action }}
 
 trigger: none
   
