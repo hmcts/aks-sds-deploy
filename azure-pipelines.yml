@@ -43,41 +43,35 @@ parameters:
     values:
       - "UK South"
 
-  - name: env
-    displayName: Environment
-    type: string
-    default: "sbox"
-    values:
-      - ithc
-      - dev
-      - demo
-      - sbox
-      - ptlsbox
-      - test
-      - stg
-      - ptl
-      - prod
-
   - name: environment_components
     type: object
     default:
     - env: 'sbox'
+      serviceConnection: 'OPS-APPROVAL-GATE-SBOX-ENVS'
     - env: 'dev'
       dependsOn: 'sbox'
+      serviceConnection: 'OPS-APPROVAL-GATE-DEV-ENVS'
     - env: 'demo'
       dependsOn: 'sbox'
+      serviceConnection: 'OPS-APPROVAL-GATE-DEMO-ENVS'
     - env: 'ithc'
       dependsOn: 'sbox'
+      serviceConnection: 'OPS-APPROVAL-GATE-ITHC-ENVS'
     - env: 'ptlsbox'
       dependsOn: 'sbox'
+      serviceConnection: 'OPS-APPROVAL-GATE-PTLSBOX-ENVS'
     - env: 'test'
       dependsOn: 'sbox'
+      serviceConnection: 'OPS-APPROVAL-GATE-TEST-ENVS'
     - env: 'stg'
       dependsOn: 'sbox'
+      serviceConnection: 'OPS-APPROVAL-GATE-STG-ENVS'
     - env: 'ptl'
       dependsOn: 'ptlsbox'
+      serviceConnection: 'OPS-APPROVAL-GATE-PTL-ENVS'
     - env: 'prod'
       dependsOn: 'stg'
+      serviceConnection: 'OPS-APPROVAL-GATE-PROD-ENVS'
 
 variables:
   - name: timeoutInMinutes
@@ -86,8 +80,6 @@ variables:
     value: ubuntu-20.04 
   - name: project
     value: ss
-  - name: serviceConnection
-    value: OPS-APPROVAL-GATE-${{ parameters.env }}-ENVS
   - name: tfInitSub
     value: "04d27a32-7a07-48b3-95b8-3c8691e1a263"
   - name: product
@@ -112,7 +104,7 @@ stages:
               overrideAction: ${{ parameters.action }}
               projectName: ${{ variables.project }}
               cluster: ${{ parameters.cluster }}
-              environment: ${{ parameters.env }}
+              environment: 'sbox'
               runManualStart: true
 
   - ${{ each component in parameters.environment_components }}:
@@ -134,13 +126,13 @@ stages:
             - template: steps/terraform.yaml@cnp-azuredevops-libraries
               parameters:
                 overrideAction: ${{ parameters.action }}
-                environment: ${{ parameters.env }}
+                environment: ${{ component.env }}
                 component: "00-genesis"
-                serviceConnection: $(serviceConnection)
+                serviceConnection: ${{ component.serviceConnection }}
                 terraformInitSubscription: ${{ variables.tfInitSub }}
                 product: $(product)
                 location: ${{ parameters.location }}
-                tfVarsFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/00-genesis/${{ parameters.env }}.tfvars"
+                tfVarsFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/00-genesis/${{ component.env }}.tfvars"
                 planCommandOptions: "-var project=$(project) -var subscription_id=$(ARM_SUBSCRIPTION_ID)"
 
     - stage: "Network_${{ component.env }}"
@@ -159,9 +151,9 @@ stages:
           steps:
             - template: pipeline-steps/deploy-service.yaml
               parameters:
-                environment: ${{ parameters.env }}
+                environment: ${{ component.env }}
                 location: ${{ parameters.location }}
-                serviceConnection: $(serviceConnection)
+                serviceConnection: ${{ component.serviceConnection }}
                 stack: "07-network-rg"
                 project: $(project)
                 tfInitSub: ${{ variables.tfInitSub }}
@@ -175,8 +167,8 @@ stages:
 
             - template: steps/keyvault-read.yaml@cnp-azuredevops-libraries
               parameters:
-                serviceConnection: $(serviceConnection)
-                environment: ${{ parameters.env }}
+                serviceConnection: ${{ component.serviceConnection }}
+                environment: ${{ component.env }}
                 subscriptionIdVariableName: 'SUBSCRIPTION_ID'
                 storageAccountVariableName: 'STORAGE_ACCOUNT'
                 keyVaultVariableName: 'KEY_VAULT'
@@ -184,13 +176,13 @@ stages:
             - template: steps/terraform.yaml@cnp-azuredevops-libraries
               parameters:
                 overrideAction: ${{ parameters.action }}
-                environment: ${{ parameters.env  }}
+                environment: ${{ component.env  }}
                 component: "01-network"
                 serviceConnection: "OPS-APPROVAL-GATE-MGMT-ENVS"
                 terraformInitSubscription: ${{ variables.tfInitSub }}
                 product: $(product)
                 location: ${{ parameters.location }}
-                tfVarsFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/01-network/${{ parameters.env }}.tfvars"
+                tfVarsFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/01-network/${{ component.env }}.tfvars"
                 planCommandOptions: "-var project=$(project) -var control_vault=$(KEY_VAULT) -var subscription_id=$(SUBSCRIPTION_ID)"
                 initCommandOptions: >
                   -var subscription_id=$(SUBSCRIPTION_ID)
@@ -206,9 +198,9 @@ stages:
             - template: steps/terraform.yaml@cnp-azuredevops-libraries
               parameters:
                 overrideAction: ${{ parameters.action }}
-                environment: ${{ parameters.env }}
+                environment: ${{ component.env }}
                 component: "05-mis"
-                serviceConnection: $(serviceConnection)
+                serviceConnection: ${{ component.serviceConnection }}
                 terraformInitSubscription: ${{ variables.tfInitSub }}
                 product: $(product)
                 location: ${{ parameters.location }}
@@ -226,9 +218,9 @@ stages:
           steps:
             - template: pipeline-steps/deploy-service.yaml
               parameters:
-                environment: ${{ parameters.env }}
+                environment: ${{ component.env }}
                 location: ${{ parameters.location }}
-                serviceConnection: $(serviceConnection)
+                serviceConnection: ${{ component.serviceConnection }}
                 stack: "aks"
                 project: $(project)
                 tfInitSub: ${{ variables.tfInitSub }}
@@ -253,9 +245,9 @@ stages:
           steps:
             - template: pipeline-steps/bootstrap.yaml
               parameters:
-                environment: ${{ parameters.env }}
+                environment: ${{ component.env }}
                 cluster: ${{ parameters.cluster }}
-                serviceConnection: $(serviceConnection)
+                serviceConnection: ${{ component.serviceConnection }}
 
     - stage: "PipelineTests_${{ component.env }}"
       displayName: "${{ component.env }}: PipelineTests"
@@ -276,7 +268,7 @@ stages:
               parameters:
                 workingDirectory: $(Pipeline.Workspace)/s/aks-sds-deploy/scripts
                 junit_output_dir: $(Pipeline.Workspace)/s/aks-sds-deploy/environments/junit
-                environment: ${{ parameters.env }}
+                environment: ${{ component.env }}
                 product: ${{ variables.product }}
-                test_title: '${{ parameters.env }}_${{ parameters.cluster }}_${{ parameters.location }}'
+                test_title: '${{ component.env }}_${{ parameters.cluster }}_${{ parameters.location }}'
                 test_pattern: pipeline.test.ts
