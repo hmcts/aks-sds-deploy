@@ -137,8 +137,8 @@ module "kubernetes" {
 
   enable_automatic_channel_upgrade_patch = var.enable_automatic_channel_upgrade_patch
 
-  # optional flag, if env is sbox then apply NodeImage else set None
-  node_os_channel_upgrade = contains(["sbox"], var.env) ? "NodeImage" : null
+  # optional flag, if env is sbox then set flag to true
+  enable_node_os_channel_upgrade_nodeimage = contains(["sbox"], var.env) ? true : false
 }
 
 module "ctags" {
