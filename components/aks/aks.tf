@@ -77,7 +77,7 @@ data "azuread_service_principal" "aks_auto_shutdown" {
 
 module "kubernetes" {
   for_each    = toset([for k, v in var.clusters : k])
-  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=master"
+  source      = "git::https://github.com/hmcts/aks-module-kubernetes/tree/DTSPO-14865-replace-kured?ref=DTSPO-14865-replace-kured"
   environment = var.env
   location    = var.location
 
