@@ -1,7 +1,13 @@
 name: AKS-SDS-Deploy - ${{ parameters.action }}
 
-trigger: none
-  
+trigger:
+  branches:
+    include:
+    - master
+
+pool:
+  vmImage: "ubuntu-latest"
+
 resources:
   repositories:
   - repository: cnp-azuredevops-libraries
@@ -14,9 +20,6 @@ resources:
     ref: refs/heads/master
     name: hmcts/sds-flux-config
     endpoint: 'hmcts'
-
-pool:
-  vmImage: "ubuntu-latest"
 
 parameters:
   - name: action
