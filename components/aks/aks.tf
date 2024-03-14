@@ -139,12 +139,12 @@ module "kubernetes" {
 
   enable_node_os_channel_upgrade_nodeimage = contains(["sbox"], var.env) ? true : false
 
-  dynamic "maintenance_window_node_os" {
+  maintenance_window_node_os {
     for_each = var.enable_node_os_channel_upgrade_nodeimage != false ? [1] : [0]
     content {
       duration    = var.node_os_maintenance_window_duration
       frequency   = var.node_os_maintenance_window_frequency
-      day_of_week = var.node_os_maintenance_window_frequency
+      day_of_week = var.node_os_maintenance_window_day_of_week
       interval    = var.node_os_maintenance_window_interval
       start_time  = var.node_os_maintenance_window_start_time
       utc_offset  = var.node_os_maintenance_window_utc_offset
