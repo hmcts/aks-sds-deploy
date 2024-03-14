@@ -89,3 +89,7 @@ variable "node_os_maintenance_window_start_time" {
 variable "node_os_maintenance_window_utc_offset" {
   default = null
 }
+
+variable "node_os_maintenance_window_start_date" {
+  default = null
+}
