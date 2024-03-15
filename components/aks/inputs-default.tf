@@ -65,27 +65,3 @@ variable "kube_audit_admin_logs_enabled" {
 variable "monitor_diagnostic_setting_metrics" {
   default = false
 }
-
-variable "node_os_maintenance_window_duration" {
-  default = null
-}
-
-variable "node_os_maintenance_window_frequency" {
-  default = null
-}
-
-variable "node_os_maintenance_window_interval" {
-  default = null
-}
-
-variable "node_os_maintenance_window_start_time" {
-  default = null
-}
-
-variable "node_os_maintenance_window_utc_offset" {
-  default = null
-}
-
-variable "node_os_maintenance_window_start_date" {
-  default = null
-}
