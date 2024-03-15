@@ -65,3 +65,33 @@ variable "kube_audit_admin_logs_enabled" {
 variable "monitor_diagnostic_setting_metrics" {
   default = false
 }
+
+variable "node_os_maintenance_window_duration" {
+  description = "Duration of maintenance window"
+  default     = 4
+}
+
+variable "node_os_maintenance_window_frequency" {
+  description = "Frequency of maintenance window"
+  default     = "Daily"
+}
+
+variable "node_os_maintenance_window_interval" {
+  description = "The interval for maintenance runs"
+  default     = 1
+}
+
+variable "node_os_maintenance_window_start_time" {
+  description = "Start time of maintenance run format HH:mm"
+  default     = null
+}
+
+variable "node_os_maintenance_window_utc_offset" {
+  description = "Used to adjust time zome of start time, +/-HH:mm"
+  default     = null
+}
+
+variable "node_os_maintenance_window_start_date" {
+  description = "Date when maintenance window will start"
+  default     = null
+}
