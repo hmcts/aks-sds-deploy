@@ -141,6 +141,7 @@ module "kubernetes" {
 
   node_os_maintenance_window_duration   = var.node_os_maintenance_window_duration
   node_os_maintenance_window_frequency  = var.node_os_maintenance_window_frequency
+  node_os_maintenance_window_day_of_week = var.node_os_maintenance_window_day_of_week
   node_os_maintenance_window_interval   = var.node_os_maintenance_window_interval
   node_os_maintenance_window_start_time = var.node_os_maintenance_window_start_time
   node_os_maintenance_window_utc_offset = var.node_os_maintenance_window_utc_offset
