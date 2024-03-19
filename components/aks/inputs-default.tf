@@ -83,7 +83,7 @@ variable "node_os_maintenance_window_interval" {
 
 variable "node_os_maintenance_window_day_of_week" {
   description = "The day of the week for the maintenance run. Required in combination with weekly frequency."
-  default = null
+  default     = null
 }
 
 variable "node_os_maintenance_window_start_time" {
