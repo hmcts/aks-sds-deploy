@@ -42,7 +42,7 @@ availability_zones = ["1"]
 autoShutdown = true
 
 node_os_maintenance_window_duration   = 2
-node_os_maintenance_window_frequency  = "Daily"
-node_os_maintenance_window_interval   = 1
+node_os_maintenance_window_frequency  = "today"
+node_os_maintenance_window_interval   = 0
 node_os_maintenance_window_start_time = "16:00"
 node_os_maintenance_window_utc_offset = "+00:00"
