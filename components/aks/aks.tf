@@ -147,7 +147,7 @@ module "kubernetes" {
   # node_os_maintenance_window_utc_offset  = var.node_os_maintenance_window_utc_offset
   # node_os_maintenance_window_start_date  = var.node_os_maintenance_window_start_date
 
-  node_os_maintenance_window_config = [{
+  node_os_maintenance_window_config = {
     frequency   = var.node_os_maintenance_window_config.frequency
     interval    = var.node_os_maintenance_window_config.interval
     duration    = var.node_os_maintenance_window_config.duration
@@ -155,7 +155,7 @@ module "kubernetes" {
     start_time  = var.node_os_maintenance_window_config.start_time
     utc_offset  = var.node_os_maintenance_window_config.utc_offset
     start_date  = var.node_os_maintenance_window_config.start_date
-  }]
+  }
 }
 
 module "ctags" {
