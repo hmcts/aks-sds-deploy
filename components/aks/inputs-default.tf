@@ -103,12 +103,20 @@ variable "node_os_maintenance_window_start_date" {
 
 variable "node_os_maintenance_window_config" {
   type = object({
-    frequency   = required(string, "Daily")
-    interval    = required(number, 1)
-    duration    = required(number, 4)
-    day_of_week = optional(string, null)
-    start_time  = optional(string, null)
-    utc_offset  = optional(string, null)
-    start_date  = optional(string, null)
+    frequency   = string
+    interval    = number
+    duration    = number
+    day_of_week = optional(string)
+    start_time  = optional(string)
+    utc_offset  = optional(string)
+    start_date  = optional(string)
   })
+  default = {
+    frequency = "Daily"
+    interval = 1
+    duration = 4
+    start_date = null
+    utc_offset = null
+    start_date = null
+  }
 }
