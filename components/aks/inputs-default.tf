@@ -112,9 +112,9 @@ variable "node_os_maintenance_window_config" {
     start_date  = optional(string)
   })
   default = {
-    frequency = "Daily"
-    interval = 1
-    duration = 4
+    frequency  = "Daily"
+    interval   = 1
+    duration   = 4
     start_date = null
     utc_offset = null
     start_date = null
