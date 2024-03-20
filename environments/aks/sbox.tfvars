@@ -44,7 +44,6 @@ autoShutdown = true
 node_os_maintenance_window_config = {
   frequency   = "Weekly"
   interval    = 1
-  day_of_week = "Monday"
   duration    = 4
   start_time  = "16:00"
   utc_offset  = "+00:00"
