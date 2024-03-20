@@ -42,7 +42,7 @@ availability_zones = ["1"]
 autoShutdown = true
 
 node_os_maintenance_window_config = {
-  frequency   = "Weekly"
+  frequency   = "Daily"
   interval    = 1
   day_of_week = "Monday"
   duration    = 4
