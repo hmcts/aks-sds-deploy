@@ -81,7 +81,7 @@ variable "node_os_maintenance_window_config" {
     interval    = 1
     duration    = 4
     day_of_week = "Monday"
-    start_time  = "01:00"
+    start_time  = "18:00"
     utc_offset  = "+00:00"
     start_date  = null
   }
