@@ -139,15 +139,7 @@ module "kubernetes" {
 
   enable_node_os_channel_upgrade_nodeimage = contains(["sbox"], var.env) ? true : false
 
-  node_os_maintenance_window_config = {
-    frequency   = var.node_os_maintenance_window_config.frequency
-    interval    = var.node_os_maintenance_window_config.interval
-    duration    = var.node_os_maintenance_window_config.duration
-    day_of_week = var.node_os_maintenance_window_config.frequency == "Weekly" ? var.node_os_maintenance_window_config.day_of_week : null
-    start_time  = var.node_os_maintenance_window_config.start_time
-    utc_offset  = var.node_os_maintenance_window_config.utc_offset
-    start_date  = var.node_os_maintenance_window_config.start_date
-  }
+  node_os_maintenance_window_config = var.node_os_maintenance_window_config
 }
 
 module "ctags" {
