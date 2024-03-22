@@ -42,6 +42,6 @@ availability_zones = ["1"]
 autoShutdown = true
 
 node_os_maintenance_window_config = {
-  frequency   = "Daily"
+  frequency   = "Weekly"
   start_time  = "16:00"
 }
