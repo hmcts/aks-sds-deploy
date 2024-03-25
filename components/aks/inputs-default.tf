@@ -72,7 +72,7 @@ variable "node_os_maintenance_window_config" {
     interval    = optional(number, 1)
     duration    = optional(number, 4)
     day_of_week = optional(string, "Monday")
-    start_time  = optional(string, "18:00")
+    start_time  = optional(string, "16:00")
     utc_offset  = optional(string, "+00:00")
     start_date  = optional(string, null)
   })
