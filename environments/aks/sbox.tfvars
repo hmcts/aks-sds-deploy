@@ -43,5 +43,5 @@ autoShutdown = true
 
 node_os_maintenance_window_config = {
   frequency   = "Daily"
-  start_time  = "23:30"
+  start_time  = "16:00"
 }
