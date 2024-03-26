@@ -139,7 +139,7 @@ module "kubernetes" {
 
   enable_node_os_channel_upgrade_nodeimage = contains(["sbox"], var.env) ? true : false
 
-  node_os_maintenance_window_config = merge(var.node_os_maintenance_window_config, {is_prod = contains(["sbox"], var.env) ? true : false})
+  node_os_maintenance_window_config = merge(var.node_os_maintenance_window_config, { is_prod = contains(["sbox"], var.env) ? true : false })
 }
 
 module "ctags" {
