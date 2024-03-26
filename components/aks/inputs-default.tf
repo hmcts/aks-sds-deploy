@@ -77,7 +77,5 @@ variable "node_os_maintenance_window_config" {
     start_date  = optional(string, null)
     is_prod     = optional(bool, false)
   })
-  default = {
-    is_prod = contains(["sbox"], var.env) ? true : false
-  }
+  default = {}
 }
