@@ -75,7 +75,7 @@ variable "node_os_maintenance_window_config" {
     start_time  = optional(string, "16:00")
     utc_offset  = optional(string, "+00:00")
     start_date  = optional(string, null)
-    is_prod     = optional(bool, false, contains(["sbox"], var.env) ? true : false)
+    is_prod     = optional(bool, contains(["sbox"], var.env) ? true : false)
   })
   default = {}
 }
