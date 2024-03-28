@@ -94,7 +94,7 @@ variables:
 stages:
   - stage: Precheck
     jobs:
-      - job:
+      - job: PreChecks
         pool:
           vmImage: ${{ variables.agentPool }}
           timeoutInMinutes: ${{ variables.timeoutInMinutes }}
@@ -109,12 +109,49 @@ stages:
               cluster: ${{ parameters.cluster }}
               environment: 'sbox'
               runManualStart: true
+  - ${{ each component in parameters.environment_components }}:
+      - stage: "CheckingClusters_${{ component.env }}"
+        displayName: "Checking Clusters for ${{ component.env }}"
+        dependsOn:
+          - ${{ if ne(component.env, 'sbox') }}:
+              - "Network_${{ component.dependsOn }}"
+              - "Managed_Identity_${{ component.dependsOn }}"
+              - "Aks_${{ component.dependsOn }}"
+              - "PipelineTests_${{ component.dependsOn }}"
+              - "BootStrapClusters_${{ component.dependsOn }}"
+          - ${{ else }}:
+              - "Precheck"
+        jobs:
+          - job: CheckingClusters
+            steps:
+              - checkout: self
+              - task: AzureCLI@2
+                displayName: "Checking available clusters"
+                inputs:
+                  scriptType: bash
+                  azureSubscription: ${{ component.serviceConnection }}
+                  scriptPath: "scripts/checking-clusters.sh"
+                name: check_clusters
+              - script: |
+                  echo "Cluster output: $(check_clusters.cluster_deploy)"
+                displayName: "Print cluster output"
+                name: set_cluster_output
+              - script: |
+                  echo "Cluster Parameter: ${{ parameters.cluster }}"
+                  if [ "${{ parameters.cluster }}" = "$(check_clusters.cluster_deploy)" ]; then
+                      echo "Input matches cluster"
+                  else
+                      echo "Input does not match cluster"
+                  fi
+                displayName: "Print cluster parameter and output"
+                name: compare_cluster_and_output
 
   - ${{ each component in parameters.environment_components }}:
     - stage: "Genesis_${{ component.env }}"
       displayName: "${{ upper(component.env) }}: Genesis"
-      dependsOn: 
+      dependsOn:
         - ${{ if ne(component.env, 'sbox') }}:
+          - "CheckingClusters_${{ component.env }}"
           - "Network_${{ component.dependsOn }}"
           - "Managed_Identity_${{ component.dependsOn }}"
           - "Aks_${{ component.dependsOn }}"
@@ -142,6 +179,7 @@ stages:
       displayName: "${{ upper(component.env) }}: Network"
       dependsOn: 
         - ${{ if ne(component.env, 'sbox') }}:
+          - "CheckingClusters_${{ component.env }}"
           - "Network_${{ component.dependsOn }}"
           - "Managed_Identity_${{ component.dependsOn }}"
           - "Aks_${{ component.dependsOn }}"
@@ -166,8 +204,7 @@ stages:
         - job: DeployInfrastructure
           dependsOn: NetworkRg
           steps:
-            - template: steps/set-build-repo-suffix-env-var.yaml@cnp-azuredevops-libraries   
-
+            - template: steps/set-build-repo-suffix-env-var.yaml@cnp-azuredevops-libraries
             - template: steps/keyvault-read.yaml@cnp-azuredevops-libraries
               parameters:
                 serviceConnection: ${{ component.serviceConnection }}
@@ -193,7 +230,7 @@ stages:
 
     - stage: "Managed_Identity_${{ component.env }}"
       displayName: "${{ upper(component.env) }}: Managed_Identity"
-      dependsOn: 
+      dependsOn:
         - "Network_${{ component.env }}"
       jobs:
         - job: Managed_Identity
@@ -209,15 +246,36 @@ stages:
                 location: ${{ parameters.location }}
                 tfVarsFile: NULL
                 planCommandOptions: "-var project=$(project) -var control_vault=$(controlKeyVault) -var subscription_id=$(ARM_SUBSCRIPTION_ID) "
-          
+
     - stage: "Aks_${{ component.env }}"
       displayName: "${{ upper(component.env) }}: AKS clusters"
       pool: hmcts-cftptl-agent-pool
       dependsOn:
-        - "Managed_Identity_${{ component.env }}"
+          - "CheckingClusters_${{ component.env }}"
+          - "Managed_Identity_${{ component.env }}"
+      variables:
+          existing_clusters: $[stageDependencies.CheckingClusters_${{ component.env }}.CheckingClusters.outputs['check_clusters.cluster_deploy']]
+          deploy_cluster: ${{ parameters.cluster }}
+      condition: |
+        or(
+          and(eq('${{ parameters.cluster }}', 'All'), eq(variables['Build.Reason'], 'Manual')),
+          and(in(dependencies.CheckingClusters_${{ component.env }}.outputs['CheckingClusters.check_clusters.cluster_deploy'], 'All', '00', '01'), eq(variables['Build.Reason'], 'Manual')),
+          and(eq(stageDependencies.CheckingClusters_${{ component.env }}.CheckingClusters.outputs['check_clusters.cluster_deploy'], 'All'), eq(variables['Build.Reason'], 'Manual'))
+        )
       jobs:
+        - job: SetClusterVariables
+          steps:
+            - script: echo "##vso[task.setvariable variable=existing_clusters;isOutput=true]value"
+              name: SetExistingClustersVariable
+            - script: echo "##vso[task.setvariable variable=deploy_cluster;isOutput=true]value"
+              name: SetDeployClusterVariable
         - job: DeployInfrastructure
           timeoutInMinutes: 180
+          condition: |
+            or(
+              and(succeeded(), eq(variables['isAutoTriggered'], true), eq(variables['Build.Reason'], 'PullRequest')),
+              and(succeeded(), eq(variables['isMain'], true), eq(variables['isAutoTriggered'], true))
+            )
           steps:
             - template: pipeline-steps/deploy-service.yaml
               parameters:
@@ -234,17 +292,25 @@ stages:
 
     - stage: "BootStrapClusters_${{ component.env }}"
       displayName: "${{ upper(component.env) }}: BootStrap Clusters"
-      dependsOn: 
+      dependsOn:
         - "Aks_${{ component.env }}"
+      variables:
+          existing_clusters_from_aks: $[ stageDependencies.Aks_${{ component.env }}.SetClusterVariables.outputs['SetExistingClustersVariable.existing_clusters'] ]
+          deploy_cluster_from_aks: $[ stageDependencies.Aks_${{ component.env }}.SetDeployClusterVariable.outputs['SetDeployClusterVariable.deploy_cluster'] ]
+      condition: |
+        or(
+          and(eq('${{ parameters.cluster }}', 'All'), eq(variables['Build.Reason'], 'Manual')),
+          and(in(dependencies.CheckingClusters_${{ component.env }}.outputs['CheckingClusters.check_clusters.cluster_deploy'], 'All', '00', '01'), eq(variables['Build.Reason'], 'Manual')),
+          and(eq(stageDependencies.CheckingClusters_${{ component.env }}.CheckingClusters.outputs['check_clusters.cluster_deploy'], 'All'), eq(variables['Build.Reason'], 'Manual'))
+        )
       jobs:
         - job: BootStrap
           condition: |
             or(
               and(succeeded(), eq('${{ parameters.action }}', 'apply')),
+              and(succeeded(), eq(variables['isAutoTriggered'], true), eq(variables['Build.Reason'], 'PullRequest')),
               and(succeeded(), eq(variables['isMain'], true), eq(variables['isAutoTriggered'], true))
             )
-          variables:
-            clusters: ${{ parameters.cluster }}
           steps:
             - template: pipeline-steps/bootstrap.yaml
               parameters:
@@ -254,7 +320,7 @@ stages:
 
     - stage: "PipelineTests_${{ component.env }}"
       displayName: "${{ upper(component.env) }}: PipelineTests"
-      dependsOn: 
+      dependsOn:
         - "BootStrapClusters_${{ component.env }}"
       jobs:
         - job: PipelineTests
