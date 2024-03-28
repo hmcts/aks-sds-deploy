@@ -5,6 +5,11 @@ trigger:
     include:
     - master
 
+pr:
+  branches:
+    include:
+      - "refs/heads/master"
+
 pool:
   vmImage: "ubuntu-latest"
 
