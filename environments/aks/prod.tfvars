@@ -17,5 +17,7 @@ monitor_diagnostic_setting_metrics = true
 kube_audit_admin_logs_enabled      = true
 
 linux_node_pool = {
-  max_nodes = 12
+  max_nodes = 14
 }
+
+sku_tier = "Standard"
