@@ -15,7 +15,7 @@ variable "ptl_cluster" {
 }
 
 variable "sku_tier" {
-  default = "Free"
+  default = "Standard"
 }
 
 variable "system_node_pool" {
