@@ -80,7 +80,6 @@ parameters:
       - env: "prod"
         dependsOn:
           - "sbox"
-          - "nonprod"
           - "aat"
         serviceConnection: "OPS-APPROVAL-GATE-PROD-ENVS"
 
