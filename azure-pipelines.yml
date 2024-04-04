@@ -3,7 +3,7 @@ name: AKS-SDS-Deploy - ${{ parameters.action }}
 trigger:
   branches:
     include:
-    - master
+      - master
 
 pr:
   branches:
@@ -15,16 +15,16 @@ pool:
 
 resources:
   repositories:
-  - repository: cnp-azuredevops-libraries
-    type: github
-    ref: refs/heads/master
-    name: hmcts/cnp-azuredevops-libraries
-    endpoint: 'hmcts'
-  - repository: sds-flux-config
-    type: github
-    ref: refs/heads/master
-    name: hmcts/sds-flux-config
-    endpoint: 'hmcts'
+    - repository: cnp-azuredevops-libraries
+      type: github
+      ref: refs/heads/master
+      name: hmcts/cnp-azuredevops-libraries
+      endpoint: "hmcts"
+    - repository: sds-flux-config
+      type: github
+      ref: refs/heads/master
+      name: hmcts/sds-flux-config
+      endpoint: "hmcts"
 
 parameters:
   - name: action
@@ -54,32 +54,35 @@ parameters:
   - name: environment_components
     type: object
     default:
-    - env: 'sbox'
-      serviceConnection: 'OPS-APPROVAL-GATE-SBOX-ENVS'
-    - env: 'dev'
-      dependsOn: 'sbox'
-      serviceConnection: 'OPS-APPROVAL-GATE-DEV-ENVS'
-    - env: 'demo'
-      dependsOn: 'sbox'
-      serviceConnection: 'OPS-APPROVAL-GATE-DEMO-ENVS'
-    - env: 'ithc'
-      dependsOn: 'sbox'
-      serviceConnection: 'OPS-APPROVAL-GATE-ITHC-ENVS'
-    - env: 'ptlsbox'
-      dependsOn: 'sbox'
-      serviceConnection: 'OPS-APPROVAL-GATE-PTLSBOX-ENVS'
-    - env: 'test'
-      dependsOn: 'sbox'
-      serviceConnection: 'OPS-APPROVAL-GATE-TEST-ENVS'
-    - env: 'stg'
-      dependsOn: 'sbox'
-      serviceConnection: 'OPS-APPROVAL-GATE-STG-ENVS'
-    - env: 'ptl'
-      dependsOn: 'ptlsbox'
-      serviceConnection: 'OPS-APPROVAL-GATE-PTL-ENVS'
-    - env: 'prod'
-      dependsOn: 'stg'
-      serviceConnection: 'OPS-APPROVAL-GATE-PROD-ENVS'
+      - env: "sbox"
+        serviceConnection: "OPS-APPROVAL-GATE-SBOX-ENVS"
+      - env: "dev"
+        dependsOn: "sbox"
+        serviceConnection: "OPS-APPROVAL-GATE-DEV-ENVS"
+      - env: "demo"
+        dependsOn: "sbox"
+        serviceConnection: "OPS-APPROVAL-GATE-DEMO-ENVS"
+      - env: "ithc"
+        dependsOn: "sbox"
+        serviceConnection: "OPS-APPROVAL-GATE-ITHC-ENVS"
+      - env: "ptlsbox"
+        dependsOn: "sbox"
+        serviceConnection: "OPS-APPROVAL-GATE-PTLSBOX-ENVS"
+      - env: "test"
+        dependsOn: "sbox"
+        serviceConnection: "OPS-APPROVAL-GATE-TEST-ENVS"
+      - env: "stg"
+        dependsOn: "sbox"
+        serviceConnection: "OPS-APPROVAL-GATE-STG-ENVS"
+      - env: "ptl"
+        dependsOn: "ptlsbox"
+        serviceConnection: "OPS-APPROVAL-GATE-PTL-ENVS"
+      - env: "prod"
+        dependsOn:
+          - "sbox"
+          - "nonprod"
+          - "aat"
+        serviceConnection: "OPS-APPROVAL-GATE-PROD-ENVS"
 
 variables:
   - name: timeoutInMinutes
@@ -106,13 +109,13 @@ stages:
         steps:
           - template: steps/terraform-precheck.yaml@cnp-azuredevops-libraries
             parameters:
-              keyvaultName: 'infra-vault-nonprod'
-              keyvaultSecret: 'azure-devops-sp-token'
-              serviceConnection: 'DCD-CFT-Sandbox'
+              keyvaultName: "infra-vault-nonprod"
+              keyvaultSecret: "azure-devops-sp-token"
+              serviceConnection: "DCD-CFT-Sandbox"
               overrideAction: ${{ parameters.action }}
               projectName: ${{ variables.project }}
               cluster: ${{ parameters.cluster }}
-              environment: 'sbox'
+              environment: "sbox"
               runManualStart: true
 
   - ${{ each component in parameters.environment_components }}:
@@ -143,14 +146,14 @@ stages:
         displayName: "${{ upper(component.env) }}: Genesis"
         dependsOn:
           - ${{ if ne(component.env, 'sbox') }}:
-            - "CheckingClusters_${{ component.env }}"
-            - "Network_${{ component.dependsOn }}"
-            - "Managed_Identity_${{ component.dependsOn }}"
-            - "Aks_${{ component.dependsOn }}"
-            - "PipelineTests_${{ component.dependsOn }}"
-            - "BootStrapClusters_${{ component.dependsOn }}"
+              - "CheckingClusters_${{ component.env }}"
+              - "Network_${{ component.dependsOn }}"
+              - "Managed_Identity_${{ component.dependsOn }}"
+              - "Aks_${{ component.dependsOn }}"
+              - "PipelineTests_${{ component.dependsOn }}"
+              - "BootStrapClusters_${{ component.dependsOn }}"
           - ${{ else }}:
-            - "Precheck"
+              - "Precheck"
         jobs:
           - job: Genesis
             steps:
@@ -171,14 +174,14 @@ stages:
         displayName: "${{ upper(component.env) }}: Network"
         dependsOn:
           - ${{ if ne(component.env, 'sbox') }}:
-            - "CheckingClusters_${{ component.env }}"
-            - "Network_${{ component.dependsOn }}"
-            - "Managed_Identity_${{ component.dependsOn }}"
-            - "Aks_${{ component.dependsOn }}"
-            - "PipelineTests_${{ component.dependsOn }}"
-            - "BootStrapClusters_${{ component.dependsOn }}"
+              - "CheckingClusters_${{ component.env }}"
+              - "Network_${{ component.dependsOn }}"
+              - "Managed_Identity_${{ component.dependsOn }}"
+              - "Aks_${{ component.dependsOn }}"
+              - "PipelineTests_${{ component.dependsOn }}"
+              - "BootStrapClusters_${{ component.dependsOn }}"
           - ${{ else }}:
-            - "Precheck"
+              - "Precheck"
         jobs:
           - job: NetworkRg
             steps:
@@ -201,9 +204,9 @@ stages:
                 parameters:
                   serviceConnection: ${{ component.serviceConnection }}
                   environment: ${{ component.env }}
-                  subscriptionIdVariableName: 'SUBSCRIPTION_ID'
-                  storageAccountVariableName: 'STORAGE_ACCOUNT'
-                  keyVaultVariableName: 'KEY_VAULT'
+                  subscriptionIdVariableName: "SUBSCRIPTION_ID"
+                  storageAccountVariableName: "STORAGE_ACCOUNT"
+                  keyVaultVariableName: "KEY_VAULT"
 
               - template: steps/terraform.yaml@cnp-azuredevops-libraries
                 parameters:
@@ -243,22 +246,22 @@ stages:
         displayName: "${{ upper(component.env) }}: AKS clusters"
         pool: hmcts-cftptl-agent-pool
         dependsOn:
-            - "CheckingClusters_${{ component.env }}"
-            - "Managed_Identity_${{ component.env }}"
+          - "CheckingClusters_${{ component.env }}"
+          - "Managed_Identity_${{ component.env }}"
         condition: |
-            or (
-              and(
-                eq(variables['Build.Reason'], 'Manual'),
-                in('${{ parameters.cluster }}', '00', '01'),
-                eq(dependencies.CheckingClusters_${{ component.env }}.outputs['CheckingClusters.check_clusters.cluster_deploy'], '${{ parameters.cluster }}')
-              ),
-              and(
-                eq(variables['Build.Reason'], 'Manual'),
-                eq('${{ parameters.cluster }}', 'All')
-              ),
-              and(succeeded(), eq(variables['isAutoTriggered'], true)),
-              and(succeeded(), eq(variables['isMain'], true), eq(variables['isAutoTriggered'], true))
-            )
+          or (
+            and(
+              eq(variables['Build.Reason'], 'Manual'),
+              in('${{ parameters.cluster }}', '00', '01'),
+              eq(dependencies.CheckingClusters_${{ component.env }}.outputs['CheckingClusters.check_clusters.cluster_deploy'], '${{ parameters.cluster }}')
+            ),
+            and(
+              eq(variables['Build.Reason'], 'Manual'),
+              eq('${{ parameters.cluster }}', 'All')
+            ),
+            and(succeeded(), eq(variables['isAutoTriggered'], true)),
+            and(succeeded(), eq(variables['isMain'], true), eq(variables['isAutoTriggered'], true))
+          )
         jobs:
           - job: DeployInfrastructure
             timeoutInMinutes: 180
@@ -281,18 +284,18 @@ stages:
         dependsOn:
           - "Aks_${{ component.env }}"
         condition: |
-            or (
-              and(
-                eq(variables['Build.Reason'], 'Manual'),
-                in('${{ parameters.cluster }}', '00', '01'),
-                eq(dependencies.CheckingClusters_${{ component.env }}.outputs['CheckingClusters.check_clusters.cluster_deploy'], '${{ parameters.cluster }}')
-              ),
-              and(
-                eq(variables['Build.Reason'], 'Manual'),
-                eq('${{ parameters.cluster }}', 'All')
-              ),
-              and(succeeded(), eq(variables['isMain'], true), eq(variables['isAutoTriggered'], true))
-            )
+          or (
+            and(
+              eq(variables['Build.Reason'], 'Manual'),
+              in('${{ parameters.cluster }}', '00', '01'),
+              eq(dependencies.CheckingClusters_${{ component.env }}.outputs['CheckingClusters.check_clusters.cluster_deploy'], '${{ parameters.cluster }}')
+            ),
+            and(
+              eq(variables['Build.Reason'], 'Manual'),
+              eq('${{ parameters.cluster }}', 'All')
+            ),
+            and(succeeded(), eq(variables['isMain'], true), eq(variables['isAutoTriggered'], true))
+          )
         variables:
           clusters: ${{ parameters.cluster }}
         jobs:
@@ -325,5 +328,5 @@ stages:
                   junit_output_dir: $(Pipeline.Workspace)/s/aks-sds-deploy/environments/junit
                   environment: ${{ component.env }}
                   product: ${{ variables.product }}
-                  test_title: '${{ component.env }}_${{ parameters.cluster }}_${{ parameters.location }}'
+                  test_title: "${{ component.env }}_${{ parameters.cluster }}_${{ parameters.location }}"
                   test_pattern: pipeline.test.ts
