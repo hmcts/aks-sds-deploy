@@ -150,7 +150,7 @@ stages:
               - "PipelineTests_${{ component.dependsOn }}"
               - "BootStrapClusters_${{ component.dependsOn }}"
           - ${{ else }}:
-              - "Precheck"
+              - Precheck
         jobs:
           - job: Genesis
             steps:
