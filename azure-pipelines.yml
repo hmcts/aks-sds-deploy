@@ -8,10 +8,10 @@ trigger:
 pr:
   branches:
     include:
-      - "refs/heads/master"
+      - refs/heads/master
 
 pool:
-  vmImage: "ubuntu-latest"
+  vmImage: ubuntu-latest
 
 resources:
   repositories:
@@ -40,48 +40,48 @@ parameters:
     type: string
     default: "All"
     values:
-      - "All"
-      - "00"
-      - "01"
+      - 'All'
+      - '00'
+      - '01'
 
   - name: location
     displayName: Location
     type: string
     default: "UK South"
     values:
-      - "UK South"
+      - 'UK South'
 
-  - name: environment_components
-    type: object
+  - name: 'environment_components'
+    type: 'object'
     default:
-      - env: "sbox"
-        serviceConnection: "OPS-APPROVAL-GATE-SBOX-ENVS"
-      - env: "dev"
-        dependsOn: "sbox"
-        serviceConnection: "OPS-APPROVAL-GATE-DEV-ENVS"
-      - env: "demo"
-        dependsOn: "sbox"
-        serviceConnection: "OPS-APPROVAL-GATE-DEMO-ENVS"
-      - env: "ithc"
-        dependsOn: "sbox"
-        serviceConnection: "OPS-APPROVAL-GATE-ITHC-ENVS"
-      - env: "ptlsbox"
-        dependsOn: "sbox"
-        serviceConnection: "OPS-APPROVAL-GATE-PTLSBOX-ENVS"
-      - env: "test"
-        dependsOn: "sbox"
-        serviceConnection: "OPS-APPROVAL-GATE-TEST-ENVS"
-      - env: "stg"
-        dependsOn: "sbox"
-        serviceConnection: "OPS-APPROVAL-GATE-STG-ENVS"
-      - env: "ptl"
-        dependsOn: "ptlsbox"
-        serviceConnection: "OPS-APPROVAL-GATE-PTL-ENVS"
-      - env: "prod"
+      - env: 'sbox'
+        serviceConnection: 'OPS-APPROVAL-GATE-SBOX-ENVS'
+      - env: 'dev'
+        dependsOn: 'sbox'
+        serviceConnection: 'OPS-APPROVAL-GATE-DEV-ENVS'
+      - env: 'demo'
+        dependsOn: 'sbox'
+        serviceConnection: 'OPS-APPROVAL-GATE-DEMO-ENVS'
+      - env: 'ithc'
+        dependsOn: 'sbox'
+        serviceConnection: 'OPS-APPROVAL-GATE-ITHC-ENVS'
+      - env: 'ptlsbox'
+        dependsOn: 'sbox'
+        serviceConnection: 'OPS-APPROVAL-GATE-PTLSBOX-ENVS'
+      - env: 'test'
+        dependsOn: 'sbox'
+        serviceConnection: 'OPS-APPROVAL-GATE-TEST-ENVS'
+      - env: 'stg'
+        dependsOn: 'sbox'
+        serviceConnection: 'OPS-APPROVAL-GATE-STG-ENVS'
+      - env: 'ptl'
+        dependsOn: 'ptlsbox'
+        serviceConnection: 'OPS-APPROVAL-GATE-PTL-ENVS'
+      - env: 'prod'
         dependsOn:
-          - "sbox"
-          - "aat"
-        serviceConnection: "OPS-APPROVAL-GATE-PROD-ENVS"
+          - 'sbox'
+          - 'aat'
+        serviceConnection: 'OPS-APPROVAL-GATE-PROD-ENVS'
 
 variables:
   - name: timeoutInMinutes
@@ -248,19 +248,19 @@ stages:
           - "CheckingClusters_${{ component.env }}"
           - "Managed_Identity_${{ component.env }}"
         condition: |
-          or (
-            and(
-              eq(variables['Build.Reason'], 'Manual'),
-              in('${{ parameters.cluster }}', '00', '01'),
-              eq(dependencies.CheckingClusters_${{ component.env }}.outputs['CheckingClusters.check_clusters.cluster_deploy'], '${{ parameters.cluster }}')
-            ),
-            and(
-              eq(variables['Build.Reason'], 'Manual'),
-              eq('${{ parameters.cluster }}', 'All')
-            ),
-            and(succeeded(), eq(variables['isAutoTriggered'], true)),
-            and(succeeded(), eq(variables['isMain'], true), eq(variables['isAutoTriggered'], true))
-          )
+            or (
+              and(
+                eq(variables['Build.Reason'], 'Manual'),
+                in('${{ parameters.cluster }}', '00', '01'),
+                eq(dependencies.CheckingClusters_${{ component.env }}.outputs['CheckingClusters.check_clusters.cluster_deploy'], '${{ parameters.cluster }}')
+              ),
+              and(
+                eq(variables['Build.Reason'], 'Manual'),
+                eq('${{ parameters.cluster }}', 'All')
+              ),
+              and(succeeded(), eq(variables['isAutoTriggered'], true)),
+              and(succeeded(), eq(variables['isMain'], true), eq(variables['isAutoTriggered'], true))
+            )
         jobs:
           - job: DeployInfrastructure
             timeoutInMinutes: 180
@@ -283,16 +283,8 @@ stages:
         dependsOn:
           - "Aks_${{ component.env }}"
         condition: |
-          or (
-            and(
-              eq(variables['Build.Reason'], 'Manual'),
-              in('${{ parameters.cluster }}', '00', '01'),
-              eq(dependencies.CheckingClusters_${{ component.env }}.outputs['CheckingClusters.check_clusters.cluster_deploy'], '${{ parameters.cluster }}')
-            ),
-            and(
-              eq(variables['Build.Reason'], 'Manual'),
-              eq('${{ parameters.cluster }}', 'All')
-            ),
+          or(
+            and(succeeded(), eq('${{ parameters.action }}', 'apply')),
             and(succeeded(), eq(variables['isMain'], true), eq(variables['isAutoTriggered'], true))
           )
         variables:
