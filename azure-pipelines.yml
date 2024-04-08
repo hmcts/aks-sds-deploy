@@ -85,7 +85,7 @@ parameters:
 
 variables:
   - name: timeoutInMinutes
-    value: 60
+    value: '60'
   - name: agentPool
     value: ubuntu-20.04
   - name: project
@@ -93,7 +93,7 @@ variables:
   - name: tfInitSub
     value: "04d27a32-7a07-48b3-95b8-3c8691e1a263"
   - name: product
-    value: "sds-platform"
+    value: 'sds-platform'
   - name: action
     value: ${{ parameters.action }}
   - template: vars/input-variables.yaml@cnp-azuredevops-libraries
@@ -118,7 +118,7 @@ stages:
               runManualStart: true
 
   - ${{ each component in parameters.environment_components }}:
-      - stage: "CheckingClusters_${{ component.env }}"
+      - stage: CheckingClusters_${{ component.env }}
         displayName: "Checking Clusters for ${{ component.env }}"
         dependsOn:
           - ${{ if ne(component.env, 'sbox') }}:
@@ -128,7 +128,7 @@ stages:
               - "PipelineTests_${{ component.dependsOn }}"
               - "BootStrapClusters_${{ component.dependsOn }}"
           - ${{ else }}:
-              - "Precheck"
+              - Precheck
         jobs:
           - job: CheckingClusters
             steps:
@@ -141,7 +141,7 @@ stages:
                   azureSubscription: ${{ component.serviceConnection }}
                   scriptPath: "scripts/checking-clusters.sh"
 
-      - stage: "Genesis_${{ component.env }}"
+      - stage: Genesis_${{ component.env }}
         displayName: "${{ upper(component.env) }}: Genesis"
         dependsOn:
           - ${{ if ne(component.env, 'sbox') }}:
@@ -169,7 +169,7 @@ stages:
                   tfVarsFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/00-genesis/${{ component.env }}.tfvars"
                   planCommandOptions: "-var project=$(project) -var subscription_id=$(ARM_SUBSCRIPTION_ID)"
 
-      - stage: "Network_${{ component.env }}"
+      - stage: Network_${{ component.env }}
         displayName: "${{ upper(component.env) }}: Network"
         dependsOn:
           - ${{ if ne(component.env, 'sbox') }}:
@@ -180,7 +180,7 @@ stages:
               - "PipelineTests_${{ component.dependsOn }}"
               - "BootStrapClusters_${{ component.dependsOn }}"
           - ${{ else }}:
-              - "Precheck"
+              - Precheck
         jobs:
           - job: NetworkRg
             steps:
@@ -222,7 +222,7 @@ stages:
                     -var subscription_id=$(SUBSCRIPTION_ID)
                     -backend-config storage_account_name=$(STORAGE_ACCOUNT)
 
-      - stage: "Managed_Identity_${{ component.env }}"
+      - stage: Managed_Identity_${{ component.env }}
         displayName: "${{ upper(component.env) }}: Managed_Identity"
         dependsOn:
           - "Network_${{ component.env }}"
@@ -241,7 +241,7 @@ stages:
                   tfVarsFile: NULL
                   planCommandOptions: "-var project=$(project) -var control_vault=$(controlKeyVault) -var subscription_id=$(ARM_SUBSCRIPTION_ID) "
 
-      - stage: "Aks_${{ component.env }}"
+      - stage: Aks_${{ component.env }}
         displayName: "${{ upper(component.env) }}: AKS clusters"
         pool: hmcts-cftptl-agent-pool
         dependsOn:
@@ -278,7 +278,7 @@ stages:
                   ${{ if ne(parameters['cluster'], 'All') }}:
                     targetCommand: '-target azurerm_resource_group.kubernetes_resource_group["\"${{parameters.cluster}}\""] -target module.kubernetes["\"${{parameters.cluster}}\""] -target azurerm_role_assignment.dev_to_stg["\"${{parameters.cluster}}\""] -target data.azurerm_resource_group.mi_stg_rg[0]'
 
-      - stage: "BootStrapClusters_${{ component.env }}"
+      - stage: BootStrapClusters_${{ component.env }}
         displayName: "${{ upper(component.env) }}: BootStrap Clusters"
         dependsOn:
           - "Aks_${{ component.env }}"
@@ -298,7 +298,7 @@ stages:
                   cluster: ${{ parameters.cluster }}
                   serviceConnection: ${{ component.serviceConnection }}
 
-      - stage: "PipelineTests_${{ component.env }}"
+      - stage: PipelineTests_${{ component.env }}
         displayName: "${{ upper(component.env) }}: PipelineTests"
         dependsOn:
           - "BootStrapClusters_${{ component.env }}"
