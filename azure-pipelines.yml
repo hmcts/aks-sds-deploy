@@ -3,7 +3,7 @@ name: AKS-SDS-Deploy - ${{ parameters.action }}
 trigger:
   branches:
     include:
-      - master
+    - master
 
 pr:
   branches:
@@ -15,16 +15,16 @@ pool:
 
 resources:
   repositories:
-    - repository: cnp-azuredevops-libraries
-      type: github
-      ref: refs/heads/master
-      name: hmcts/cnp-azuredevops-libraries
-      endpoint: "hmcts"
-    - repository: sds-flux-config
-      type: github
-      ref: refs/heads/master
-      name: hmcts/sds-flux-config
-      endpoint: "hmcts"
+  - repository: cnp-azuredevops-libraries
+    type: github
+    ref: refs/heads/master
+    name: hmcts/cnp-azuredevops-libraries
+    endpoint: 'hmcts'
+  - repository: sds-flux-config
+    type: github
+    ref: refs/heads/master
+    name: hmcts/sds-flux-config
+    endpoint: 'hmcts'
 
 parameters:
   - name: action
@@ -40,46 +40,46 @@ parameters:
     type: string
     default: "All"
     values:
-      - 'All'
-      - '00'
-      - '01'
+      - "All"
+      - "00"
+      - "01"
 
   - name: location
     displayName: Location
     type: string
     default: "UK South"
     values:
-      - 'UK South'
+      - "UK South"
 
-  - name: 'environment_components'
-    type: 'object'
+  - name: environment_components
+    type: object
     default:
-      - env: 'sbox'
-        serviceConnection: 'OPS-APPROVAL-GATE-SBOX-ENVS'
-      - env: 'dev'
-        dependsOn: 'sbox'
-        serviceConnection: 'OPS-APPROVAL-GATE-DEV-ENVS'
-      - env: 'demo'
-        dependsOn: 'sbox'
-        serviceConnection: 'OPS-APPROVAL-GATE-DEMO-ENVS'
-      - env: 'ithc'
-        dependsOn: 'sbox'
-        serviceConnection: 'OPS-APPROVAL-GATE-ITHC-ENVS'
-      - env: 'ptlsbox'
-        dependsOn: 'sbox'
-        serviceConnection: 'OPS-APPROVAL-GATE-PTLSBOX-ENVS'
-      - env: 'test'
-        dependsOn: 'sbox'
-        serviceConnection: 'OPS-APPROVAL-GATE-TEST-ENVS'
-      - env: 'stg'
-        dependsOn: 'sbox'
-        serviceConnection: 'OPS-APPROVAL-GATE-STG-ENVS'
-      - env: 'ptl'
-        dependsOn: 'ptlsbox'
-        serviceConnection: 'OPS-APPROVAL-GATE-PTL-ENVS'
-      - env: 'prod'
-        dependsOn: 'aat'
-        serviceConnection: 'OPS-APPROVAL-GATE-PROD-ENVS'
+    - env: 'sbox'
+      serviceConnection: 'OPS-APPROVAL-GATE-SBOX-ENVS'
+    - env: 'dev'
+      dependsOn: 'sbox'
+      serviceConnection: 'OPS-APPROVAL-GATE-DEV-ENVS'
+    - env: 'demo'
+      dependsOn: 'sbox'
+      serviceConnection: 'OPS-APPROVAL-GATE-DEMO-ENVS'
+    - env: 'ithc'
+      dependsOn: 'sbox'
+      serviceConnection: 'OPS-APPROVAL-GATE-ITHC-ENVS'
+    - env: 'ptlsbox'
+      dependsOn: 'sbox'
+      serviceConnection: 'OPS-APPROVAL-GATE-PTLSBOX-ENVS'
+    - env: 'test'
+      dependsOn: 'sbox'
+      serviceConnection: 'OPS-APPROVAL-GATE-TEST-ENVS'
+    - env: 'stg'
+      dependsOn: 'sbox'
+      serviceConnection: 'OPS-APPROVAL-GATE-STG-ENVS'
+    - env: 'ptl'
+      dependsOn: 'ptlsbox'
+      serviceConnection: 'OPS-APPROVAL-GATE-PTL-ENVS'
+    - env: 'prod'
+      dependsOn: 'stg'
+      serviceConnection: 'OPS-APPROVAL-GATE-PROD-ENVS'
 
 variables:
   - name: timeoutInMinutes
@@ -91,7 +91,7 @@ variables:
   - name: tfInitSub
     value: "04d27a32-7a07-48b3-95b8-3c8691e1a263"
   - name: product
-    value: 'sds-platform'
+    value: "sds-platform"
   - name: action
     value: ${{ parameters.action }}
   - template: vars/input-variables.yaml@cnp-azuredevops-libraries
@@ -106,13 +106,13 @@ stages:
         steps:
           - template: steps/terraform-precheck.yaml@cnp-azuredevops-libraries
             parameters:
-              keyvaultName: "infra-vault-nonprod"
-              keyvaultSecret: "azure-devops-sp-token"
-              serviceConnection: "DCD-CFT-Sandbox"
+              keyvaultName: 'infra-vault-nonprod'
+              keyvaultSecret: 'azure-devops-sp-token'
+              serviceConnection: 'DCD-CFT-Sandbox'
               overrideAction: ${{ parameters.action }}
               projectName: ${{ variables.project }}
               cluster: ${{ parameters.cluster }}
-              environment: "sbox"
+              environment: 'sbox'
               runManualStart: true
 
   - ${{ each component in parameters.environment_components }}:
@@ -139,18 +139,18 @@ stages:
                   azureSubscription: ${{ component.serviceConnection }}
                   scriptPath: "scripts/checking-clusters.sh"
 
-      - stage: Genesis_${{ component.env }}
+      - stage: "Genesis_${{ component.env }}"
         displayName: "${{ upper(component.env) }}: Genesis"
         dependsOn:
           - ${{ if ne(component.env, 'sbox') }}:
-              - "CheckingClusters_${{ component.env }}"
-              - "Network_${{ component.dependsOn }}"
-              - "Managed_Identity_${{ component.dependsOn }}"
-              - "Aks_${{ component.dependsOn }}"
-              - "PipelineTests_${{ component.dependsOn }}"
-              - "BootStrapClusters_${{ component.dependsOn }}"
+            - "CheckingClusters_${{ component.env }}"
+            - "Network_${{ component.dependsOn }}"
+            - "Managed_Identity_${{ component.dependsOn }}"
+            - "Aks_${{ component.dependsOn }}"
+            - "PipelineTests_${{ component.dependsOn }}"
+            - "BootStrapClusters_${{ component.dependsOn }}"
           - ${{ else }}:
-              - Precheck
+            - Precheck
         jobs:
           - job: Genesis
             steps:
@@ -167,18 +167,18 @@ stages:
                   tfVarsFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/00-genesis/${{ component.env }}.tfvars"
                   planCommandOptions: "-var project=$(project) -var subscription_id=$(ARM_SUBSCRIPTION_ID)"
 
-      - stage: Network_${{ component.env }}
+      - stage: "Network_${{ component.env }}"
         displayName: "${{ upper(component.env) }}: Network"
         dependsOn:
           - ${{ if ne(component.env, 'sbox') }}:
-              - "CheckingClusters_${{ component.env }}"
-              - "Network_${{ component.dependsOn }}"
-              - "Managed_Identity_${{ component.dependsOn }}"
-              - "Aks_${{ component.dependsOn }}"
-              - "PipelineTests_${{ component.dependsOn }}"
-              - "BootStrapClusters_${{ component.dependsOn }}"
+            - "CheckingClusters_${{ component.env }}"
+            - "Network_${{ component.dependsOn }}"
+            - "Managed_Identity_${{ component.dependsOn }}"
+            - "Aks_${{ component.dependsOn }}"
+            - "PipelineTests_${{ component.dependsOn }}"
+            - "BootStrapClusters_${{ component.dependsOn }}"
           - ${{ else }}:
-              - Precheck
+            - Precheck
         jobs:
           - job: NetworkRg
             steps:
@@ -201,9 +201,9 @@ stages:
                 parameters:
                   serviceConnection: ${{ component.serviceConnection }}
                   environment: ${{ component.env }}
-                  subscriptionIdVariableName: "SUBSCRIPTION_ID"
-                  storageAccountVariableName: "STORAGE_ACCOUNT"
-                  keyVaultVariableName: "KEY_VAULT"
+                  subscriptionIdVariableName: 'SUBSCRIPTION_ID'
+                  storageAccountVariableName: 'STORAGE_ACCOUNT'
+                  keyVaultVariableName: 'KEY_VAULT'
 
               - template: steps/terraform.yaml@cnp-azuredevops-libraries
                 parameters:
@@ -243,8 +243,8 @@ stages:
         displayName: "${{ upper(component.env) }}: AKS clusters"
         pool: hmcts-cftptl-agent-pool
         dependsOn:
-          - "CheckingClusters_${{ component.env }}"
-          - "Managed_Identity_${{ component.env }}"
+            - "CheckingClusters_${{ component.env }}"
+            - "Managed_Identity_${{ component.env }}"
         condition: |
             or (
               and(
@@ -317,5 +317,5 @@ stages:
                   junit_output_dir: $(Pipeline.Workspace)/s/aks-sds-deploy/environments/junit
                   environment: ${{ component.env }}
                   product: ${{ variables.product }}
-                  test_title: "${{ component.env }}_${{ parameters.cluster }}_${{ parameters.location }}"
+                  test_title: '${{ component.env }}_${{ parameters.cluster }}_${{ parameters.location }}'
                   test_pattern: pipeline.test.ts
