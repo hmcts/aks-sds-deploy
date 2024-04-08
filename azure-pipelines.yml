@@ -78,9 +78,7 @@ parameters:
         dependsOn: 'ptlsbox'
         serviceConnection: 'OPS-APPROVAL-GATE-PTL-ENVS'
       - env: 'prod'
-        dependsOn:
-          - 'sbox'
-          - 'aat'
+        dependsOn: 'aat'
         serviceConnection: 'OPS-APPROVAL-GATE-PROD-ENVS'
 
 variables:
