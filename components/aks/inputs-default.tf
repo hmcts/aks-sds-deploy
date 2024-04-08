@@ -15,7 +15,7 @@ variable "ptl_cluster" {
 }
 
 variable "sku_tier" {
-  default = "Free"
+  default = "Standard"
 }
 
 variable "system_node_pool" {
@@ -64,4 +64,18 @@ variable "kube_audit_admin_logs_enabled" {
 
 variable "monitor_diagnostic_setting_metrics" {
   default = false
+}
+
+variable "node_os_maintenance_window_config" {
+  type = object({
+    frequency   = optional(string, "Weekly")
+    interval    = optional(number, 1)
+    duration    = optional(number, 4)
+    day_of_week = optional(string, "Monday")
+    start_time  = optional(string, "23:00")
+    utc_offset  = optional(string, "+00:00")
+    start_date  = optional(string, null)
+    is_prod     = optional(bool, true)
+  })
+  default = {}
 }
