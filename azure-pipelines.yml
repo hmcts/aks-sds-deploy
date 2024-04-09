@@ -19,12 +19,12 @@ resources:
       type: github
       ref: refs/heads/master
       name: hmcts/cnp-azuredevops-libraries
-      endpoint: "hmcts"
+      endpoint: 'hmcts'
     - repository: sds-flux-config
       type: github
       ref: refs/heads/master
       name: hmcts/sds-flux-config
-      endpoint: "hmcts"
+      endpoint: 'hmcts'
 
 parameters:
   - name: action
@@ -38,7 +38,7 @@ parameters:
   - name: cluster
     displayName: Cluster
     type: string
-    default: "All"
+    default: All
     values:
       - "All"
       - "00"
@@ -54,36 +54,36 @@ parameters:
   - name: environment_components
     type: object
     default:
-      - env: "sbox"
-        serviceConnection: "OPS-APPROVAL-GATE-SBOX-ENVS"
-      - env: "dev"
-        dependsOn: "sbox"
-        serviceConnection: "OPS-APPROVAL-GATE-DEV-ENVS"
-      - env: "demo"
-        dependsOn: "sbox"
-        serviceConnection: "OPS-APPROVAL-GATE-DEMO-ENVS"
-      - env: "ithc"
-        dependsOn: "sbox"
-        serviceConnection: "OPS-APPROVAL-GATE-ITHC-ENVS"
-      - env: "ptlsbox"
-        dependsOn: "sbox"
-        serviceConnection: "OPS-APPROVAL-GATE-PTLSBOX-ENVS"
-      - env: "test"
-        dependsOn: "sbox"
-        serviceConnection: "OPS-APPROVAL-GATE-TEST-ENVS"
-      - env: "stg"
-        dependsOn: "sbox"
-        serviceConnection: "OPS-APPROVAL-GATE-STG-ENVS"
-      - env: "ptl"
-        dependsOn: "ptlsbox"
-        serviceConnection: "OPS-APPROVAL-GATE-PTL-ENVS"
-      - env: "prod"
-        dependsOn: "stg"
-        serviceConnection: "OPS-APPROVAL-GATE-PROD-ENVS"
+      - env: 'sbox'
+        serviceConnection: 'OPS-APPROVAL-GATE-SBOX-ENVS'
+      - env: 'dev'
+        dependsOn: 'sbox'
+        serviceConnection: 'OPS-APPROVAL-GATE-DEV-ENVS'
+      - env: 'demo'
+        dependsOn: 'sbox'
+        serviceConnection: 'OPS-APPROVAL-GATE-DEMO-ENVS'
+      - env: 'ithc'
+        dependsOn: 'sbox'
+        serviceConnection: 'OPS-APPROVAL-GATE-ITHC-ENVS'
+      - env: 'ptlsbox'
+        dependsOn: 'sbox'
+        serviceConnection: 'OPS-APPROVAL-GATE-PTLSBOX-ENVS'
+      - env: 'test'
+        dependsOn: 'sbox'
+        serviceConnection: 'OPS-APPROVAL-GATE-TEST-ENVS'
+      - env: 'stg'
+        dependsOn: 'sbox'
+        serviceConnection: 'OPS-APPROVAL-GATE-STG-ENVS'
+      - env: 'ptl'
+        dependsOn: 'ptlsbox'
+        serviceConnection: 'OPS-APPROVAL-GATE-PTL-ENVS'
+      - env: 'prod'
+        dependsOn: 'stg'
+        serviceConnection: 'OPS-APPROVAL-GATE-PROD-ENVS'
 
 variables:
   - name: timeoutInMinutes
-    value: "60"
+    value: '60'
   - name: agentPool
     value: ubuntu-20.04
   - name: project
@@ -91,7 +91,7 @@ variables:
   - name: tfInitSub
     value: "04d27a32-7a07-48b3-95b8-3c8691e1a263"
   - name: product
-    value: "sds-platform"
+    value: sds-platform
   - name: action
     value: ${{ parameters.action }}
   - template: vars/input-variables.yaml@cnp-azuredevops-libraries
@@ -123,8 +123,6 @@ stages:
               - "Network_${{ component.dependsOn }}"
               - "Managed_Identity_${{ component.dependsOn }}"
               - "Aks_${{ component.dependsOn }}"
-              - "PipelineTests_${{ component.dependsOn }}"
-              - "BootStrapClusters_${{ component.dependsOn }}"
           - ${{ else }}:
               - Precheck
         jobs:
@@ -139,16 +137,14 @@ stages:
                   azureSubscription: ${{ component.serviceConnection }}
                   scriptPath: "scripts/checking-clusters.sh"
 
-      - stage: "Genesis_${{ component.env }}"
+      - stage: Genesis_${{ component.env }}
         displayName: "${{ upper(component.env) }}: Genesis"
         dependsOn:
           - ${{ if ne(component.env, 'sbox') }}:
-              - "CheckingClusters_${{ component.env }}"
-              - "Network_${{ component.dependsOn }}"
-              - "Managed_Identity_${{ component.dependsOn }}"
-              - "Aks_${{ component.dependsOn }}"
-              - "PipelineTests_${{ component.dependsOn }}"
-              - "BootStrapClusters_${{ component.dependsOn }}"
+              - CheckingClusters_${{ component.env }}
+              - Network_${{ component.dependsOn }}
+              - Managed_Identity_${{ component.dependsOn }}
+              - Aks_${{ component.dependsOn }}
           - ${{ else }}:
               - Precheck
         jobs:
@@ -167,16 +163,16 @@ stages:
                   tfVarsFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/00-genesis/${{ component.env }}.tfvars"
                   planCommandOptions: "-var project=$(project) -var subscription_id=$(ARM_SUBSCRIPTION_ID)"
 
-      - stage: "Network_${{ component.env }}"
+      - stage: Network_${{ component.env }}
         displayName: "${{ upper(component.env) }}: Network"
         dependsOn:
           - ${{ if ne(component.env, 'sbox') }}:
-              - "CheckingClusters_${{ component.env }}"
-              - "Network_${{ component.dependsOn }}"
-              - "Managed_Identity_${{ component.dependsOn }}"
-              - "Aks_${{ component.dependsOn }}"
-              - "PipelineTests_${{ component.dependsOn }}"
-              - "BootStrapClusters_${{ component.dependsOn }}"
+              - CheckingClusters_${{ component.env }}
+              - Network_${{ component.dependsOn }}
+              - Managed_Identity_${{ component.dependsOn }}
+              - Aks_${{ component.dependsOn }}
+              - PipelineTests_${{ component.dependsOn }}
+              - BootStrapClusters_${{ component.dependsOn }}
           - ${{ else }}:
               - Precheck
         jobs:
@@ -223,7 +219,7 @@ stages:
       - stage: Managed_Identity_${{ component.env }}
         displayName: "${{ upper(component.env) }}: Managed_Identity"
         dependsOn:
-          - "Network_${{ component.env }}"
+          - Network_${{ component.env }}
         jobs:
           - job: Managed_Identity
             steps:
@@ -243,8 +239,8 @@ stages:
         displayName: "${{ upper(component.env) }}: AKS clusters"
         pool: hmcts-cftptl-agent-pool
         dependsOn:
-          - "CheckingClusters_${{ component.env }}"
-          - "Managed_Identity_${{ component.env }}"
+          - CheckingClusters_${{ component.env }}
+          - Managed_Identity_${{ component.env }}
         condition: |
           or (
             and(
@@ -279,11 +275,22 @@ stages:
       - stage: BootStrapClusters_${{ component.env }}
         displayName: "${{ upper(component.env) }}: BootStrap Clusters"
         dependsOn:
-          - "Aks_${{ component.env }}"
+          - Aks_${{ component.env }}
         condition: |
-          or(
-            and(succeeded(), eq('${{ parameters.action }}', 'apply')),
-            and(succeeded(), eq(variables['isMain'], true), eq(variables['isAutoTriggered'], true))
+          and(
+            eq('${{ parameters.action }}', 'apply'),
+            or(
+              and(
+                eq(variables['Build.Reason'], 'Manual'),
+                in('${{ parameters.cluster }}', '00', '01'),
+                eq(dependencies.CheckingClusters_${{ component.env }}.outputs['CheckingClusters.check_clusters.cluster_deploy'], '${{ parameters.cluster }}')
+              ),
+              and(
+                eq(variables['Build.Reason'], 'Manual'),
+                eq('${{ parameters.cluster }}', 'All')
+              ),
+              and(succeeded(), eq(variables['isMain'], true), eq(variables['isAutoTriggered'], true))
+            )
           )
         variables:
           clusters: ${{ parameters.cluster }}
