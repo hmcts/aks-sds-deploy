@@ -1,44 +1,44 @@
-sbox: &sbox
+sbox:
   env: 'sbox'
   service_connection: 'OPS-APPROVAL-GATE-SBOX-ENVS'
   dependsOn: 'Precheck'
-  
-dev: &dev
+
+dev:
   env: 'dev'
   service_connection: 'OPS-APPROVAL-GATE-DEV-ENVS'
   dependsOn: 'dev'
 
-demo: &demo
+demo:
   env: 'demo'
   service_connection: 'OPS-APPROVAL-GATE-DEMO-ENVS'
   dependsOn: 'sbox'
 
-ithc: &ithc
+ithc:
   env: 'ithc'
   service_connection: 'OPS-APPROVAL-GATE-ITHC-ENVS'
   dependsOn: 'sbox'
 
-ptlsbox: &ptlsbox
+ptlsbox:
   env: 'ptlsbox'
   service_connection: 'OPS-APPROVAL-GATE-PTLSBOX-ENVS'
   dependsOn: 'sbox'
 
-test: &test
+test:
   env: 'test'
   service_connection: 'OPS-APPROVAL-GATE-TEST-ENVS'
   dependsOn: 'sbox'
 
-stg: &stg
+stg:
   env: 'stg'
   service_connection: 'OPS-APPROVAL-GATE-STG-ENVS'
   dependsOn: 'sbox'
 
-ptl: &ptl
+ptl:
   env: 'ptl'
   service_connection: 'OPS-APPROVAL-GATE-PTL-ENVS'
   dependsOn: 'sbox'
 
-prod: &prod
+prod:
   env: 'prod'
   service_connection: 'OPS-APPROVAL-GATE-PROD-ENVS'
   dependsOn: 'stg'
