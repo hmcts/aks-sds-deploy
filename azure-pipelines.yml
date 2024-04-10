@@ -30,7 +30,7 @@ parameters:
   - name: action
     displayName: action
     type: string
-    default: "plan"
+    default: plan
     values:
       - plan
       - apply
@@ -40,9 +40,9 @@ parameters:
     type: string
     default: All
     values:
-      - "All"
-      - "00"
-      - "01"
+      - 'All'
+      - '00'
+      - '01'
 
   - name: location
     displayName: Location
