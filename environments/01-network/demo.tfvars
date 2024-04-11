@@ -25,6 +25,10 @@ additional_subnets = [
     name           = "private-endpoints"
     address_prefix = "10.51.100.0/22"
   },
+  {
+    name           = "azure-loadbalancers"
+    address_prefix = "10.51.98.128/26"
+  },
 ]
 
 additional_routes_application_gateway = [
