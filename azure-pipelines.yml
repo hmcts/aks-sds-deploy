@@ -116,15 +116,21 @@ stages:
               runManualStart: true
 
   - ${{ each component in parameters.environment_components }}:
-      - stage: CheckingClusters_${{ component.env }}
+      - stage: "CheckingClusters_${{ component.env }}"
         displayName: "Checking Clusters for ${{ component.env }}"
         dependsOn:
-          - ${{ if ne(component.env, 'sbox') }}:
-              - "Network_${{ component.dependsOn }}"
-              - "Managed_Identity_${{ component.dependsOn }}"
-              - "Aks_${{ component.dependsOn }}"
-          - ${{ else }}:
-              - Precheck
+        - ${{ if and(ne(component.env, 'sbox'), eq(parameters.action, 'apply')) }}:
+            - Network_${{ component.dependsOn }}
+            - Managed_Identity_${{ component.dependsOn }}
+            - Aks_${{ component.dependsOn }}
+            - BootStrapClusters_${{ component.dependsOn }}
+            - PipelineTests_${{ component.dependsOn }}
+        - ${{ if and(ne(component.env, 'sbox'), ne(parameters.action, 'apply')) }}:
+            - Network_${{ component.dependsOn }}
+            - Managed_Identity_${{ component.dependsOn }}
+            - Aks_${{ component.dependsOn }}
+        - ${{ else }}:
+            - Precheck
         jobs:
           - job: CheckingClusters
             steps:
@@ -139,14 +145,9 @@ stages:
 
       - stage: Genesis_${{ component.env }}
         displayName: "${{ upper(component.env) }}: Genesis"
+        condition: and(ne('${{ parameters.Action }}', 'Destroy'), succeeded())
         dependsOn:
-          - ${{ if ne(component.env, 'sbox') }}:
-              - CheckingClusters_${{ component.env }}
-              - Network_${{ component.dependsOn }}
-              - Managed_Identity_${{ component.dependsOn }}
-              - Aks_${{ component.dependsOn }}
-          - ${{ else }}:
-              - Precheck
+          - CheckingClusters_${{ component.env }}
         jobs:
           - job: Genesis
             steps:
@@ -166,13 +167,7 @@ stages:
       - stage: Network_${{ component.env }}
         displayName: "${{ upper(component.env) }}: Network"
         dependsOn:
-          - ${{ if ne(component.env, 'sbox') }}:
-              - CheckingClusters_${{ component.env }}
-              - Network_${{ component.dependsOn }}
-              - Managed_Identity_${{ component.dependsOn }}
-              - Aks_${{ component.dependsOn }}
-          - ${{ else }}:
-              - Precheck
+          - Genesis_${{ component.env }}
         jobs:
           - job: NetworkRg
             steps:
@@ -237,7 +232,6 @@ stages:
         displayName: "${{ upper(component.env) }}: AKS clusters"
         pool: hmcts-cftptl-agent-pool
         dependsOn:
-          - CheckingClusters_${{ component.env }}
           - Managed_Identity_${{ component.env }}
         condition: |
           or (
@@ -250,7 +244,7 @@ stages:
               eq(variables['Build.Reason'], 'Manual'),
               eq('${{ parameters.cluster }}', 'All')
             ),
-            and(succeeded(), eq(variables['isAutoTriggered'], true)),
+            and(succeeded(), in(variables['Build.Reason'], 'PullRequest', 'Manual')),
             and(succeeded(), eq(variables['isMain'], true), eq(variables['isAutoTriggered'], true))
           )
         jobs:
@@ -274,24 +268,13 @@ stages:
         displayName: "${{ upper(component.env) }}: BootStrap Clusters"
         dependsOn:
           - Aks_${{ component.env }}
-        condition: |
-          and(
-            eq('${{ parameters.action }}', 'apply'),
-            or(
-              and(
-                eq(variables['Build.Reason'], 'Manual'),
-                in('${{ parameters.cluster }}', '00', '01'),
-                eq(dependencies.CheckingClusters_${{ component.env }}.outputs['CheckingClusters.check_clusters.cluster_deploy'], '${{ parameters.cluster }}')
-              ),
-              and(
-                eq(variables['Build.Reason'], 'Manual'),
-                eq('${{ parameters.cluster }}', 'All')
-              ),
-              and(succeeded(), eq(variables['isMain'], true), eq(variables['isAutoTriggered'], true))
-            )
-          )
         variables:
           clusters: ${{ parameters.cluster }}
+        condition: |
+          or(
+            and(succeeded(), eq('${{ parameters.action }}', 'apply')),
+            and(succeeded(), eq(variables['isMain'], true), eq(variables['isAutoTriggered'], true))
+          )
         jobs:
           - job: BootStrap
             steps:
@@ -304,7 +287,7 @@ stages:
       - stage: PipelineTests_${{ component.env }}
         displayName: "${{ upper(component.env) }}: PipelineTests"
         dependsOn:
-          - "BootStrapClusters_${{ component.env }}"
+          - BootStrapClusters_${{ component.env }}
         jobs:
           - job: PipelineTests
             pool:
