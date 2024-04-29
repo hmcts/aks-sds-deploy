@@ -5,7 +5,8 @@ trigger:
     include:
       - master
 
-pool: ubuntu-latest
+pool:
+  vmImage: 'ubuntu-latest'
 
 pr:
   branches:
