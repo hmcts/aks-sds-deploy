@@ -5,6 +5,8 @@ trigger:
     include:
       - master
 
+pool: ubuntu-latest
+
 pr:
   branches:
     include:
