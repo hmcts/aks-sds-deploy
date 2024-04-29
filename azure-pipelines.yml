@@ -85,7 +85,7 @@ variables:
   - name: timeoutInMinutes
     value: '60'
   - name: agentPool
-    value: ubuntu-20.04
+    value: ubuntu-latest
   - name: project
     value: ss
   - name: tfInitSub
@@ -236,12 +236,12 @@ stages:
         condition: |
           or (
             and(
-              eq(variables['Build.Reason'], 'Manual'),
+              in(variables['Build.Reason'], 'Manual', 'PullRequest'),
               in('${{ parameters.cluster }}', '00', '01'),
               eq(dependencies.CheckingClusters_${{ component.env }}.outputs['CheckingClusters.check_clusters.cluster_deploy'], '${{ parameters.cluster }}')
             ),
             and(
-              eq(variables['Build.Reason'], 'Manual'),
+              in(variables['Build.Reason'], 'Manual', 'PullRequest'),
               eq('${{ parameters.cluster }}', 'All')
             ),
             and(succeeded(), in(variables['Build.Reason'], 'PullRequest', 'Manual')),
