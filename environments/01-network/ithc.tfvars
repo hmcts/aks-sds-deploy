@@ -53,7 +53,7 @@ additional_routes = [
     address_prefix         = "192.168.0.0/16"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.72.36"
-  }
+  },
   {
     name                   = "CGW-Proxy"
     address_prefix         = "10.24.1.253/32"
