@@ -49,7 +49,7 @@ additional_routes = [
     address_prefix         = "10.188.100.0/23"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.72.37"
-  }
+  },
   {
     name                   = "Hendon"
     address_prefix         = "10.188.102.0/24"
