@@ -104,5 +104,11 @@ additional_routes = [
     address_prefix         = "10.168.4.0/24"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.72.36"
+  },
+  {
+    name                   = "bais_vnet_stg"
+    address_prefix         = "10.225.251.0/24"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
   }
 ]
