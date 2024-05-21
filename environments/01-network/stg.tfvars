@@ -66,6 +66,18 @@ additional_routes_application_gateway = [
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.8.36"
   },
+  {
+    name                   = "Interim-Hosting-12"
+    address_prefix         = "10.23.12.0/22"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.8.37"
+  },
+  {
+    name                   = "Interim-Hosting-16"
+    address_prefix         = "10.25.16.0/24"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.8.37"
+  }
 ]
 
 additional_routes = [
@@ -105,4 +117,16 @@ additional_routes = [
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.8.37"
   },
+  {
+    name                   = "Interim-Hosting-12"
+    address_prefix         = "10.23.12.0/22"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.8.37"
+  },
+  {
+    name                   = "Interim-Hosting-16"
+    address_prefix         = "10.25.16.0/24"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.8.37"
+  }
 ]

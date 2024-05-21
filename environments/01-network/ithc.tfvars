@@ -60,4 +60,10 @@ additional_routes = [
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.72.37"
   },
+  {
+    name                   = "Interim-Hosting"
+    address_prefix         = "10.25.12.0/22"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.37"
+  }
 ]
