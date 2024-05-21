@@ -71,6 +71,18 @@ additional_routes = [
     address_prefix         = "10.24.1.253/32"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.8.37"
+  },
+  {
+    name                   = "Interim-Hosting-12"
+    address_prefix         = "10.23.12.0/22"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.8.37"
+  },
+  {
+    name                   = "Interim-Hosting-16"
+    address_prefix         = "10.25.16.0/24"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.8.37"
   }
 ]
 
@@ -84,6 +96,18 @@ additional_routes_application_gateway = [
   {
     name                   = "libra-prod-ih"
     address_prefix         = "10.23.13.0/26"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.8.37"
+  },
+  {
+    name                   = "Interim-Hosting-12"
+    address_prefix         = "10.23.12.0/22"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.8.37"
+  },
+  {
+    name                   = "Interim-Hosting-16"
+    address_prefix         = "10.25.16.0/24"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.8.37"
   }
