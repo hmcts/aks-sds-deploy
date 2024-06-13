@@ -28,11 +28,6 @@ variable "linux_node_pool" {
   default     = {}
 }
 
-variable "arm_node_pool" {
-  description = "Map to override the linux node pool config"
-  default     = {}
-}
-
 variable "windows_node_pool" {
   description = "Map to override the windows node pool config"
   default     = {}
