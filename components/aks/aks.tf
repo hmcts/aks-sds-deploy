@@ -29,18 +29,6 @@ locals {
     availability_zones  = var.availability_zones
   }
 
-  arm_node_pool = {
-    name                = "arm"
-    vm_size             = lookup(var.arm_node_pool, "vm_size", "Standard_D4pds_v5")
-    min_count           = lookup(var.arm_node_pool, "min_nodes", 2)
-    max_count           = lookup(var.arm_node_pool, "max_nodes", 10)
-    max_pods            = lookup(var.arm_node_pool, "max_pods", 30)
-    os_type             = "Linux"
-    node_taints         = []
-    enable_auto_scaling = true
-    mode                = "User"
-    availability_zones  = var.availability_zones
-  }
   system_node_pool = {
     name                = "msnode"
     vm_size             = lookup(var.windows_node_pool, "vm_size", "Standard_D4ds_v5")
