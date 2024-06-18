@@ -109,7 +109,7 @@ additional_routes_application_gateway = [
   },
   {
     name                   = "Hendon"
-    address_prefix         = "10.188.102.0/24"
+    address_prefix         = "10.188.108.0/24"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.72.37"
   },
