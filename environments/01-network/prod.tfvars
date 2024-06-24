@@ -24,6 +24,10 @@ additional_subnets = [
   {
     name           = "private-endpoints"
     address_prefix = "10.144.36.0/22"
+  },
+  {
+    name           = "azure-loadbalancers"
+    address_prefix = "10.144.48.0/26"
   }
 ]
 
