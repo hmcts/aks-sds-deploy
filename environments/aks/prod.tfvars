@@ -21,3 +21,9 @@ linux_node_pool = {
 }
 
 sku_tier = "Standard"
+
+node_os_maintenance_window_config = {
+  frequency  = "Daily"
+  start_time = "23:00"
+  is_prod    = true
+}
