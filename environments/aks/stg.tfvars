@@ -14,6 +14,11 @@ availability_zones                     = ["1"]
 
 autoShutdown = true
 
+oms_agent_enabled = true
+
+monitor_diagnostic_setting         = true
+monitor_diagnostic_setting_metrics = true
+
 node_os_maintenance_window_config = {
   frequency  = "Daily"
   start_time = "16:00"
