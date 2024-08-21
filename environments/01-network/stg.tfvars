@@ -145,6 +145,6 @@ additional_routes = [
     name                   = "ss-dev-vnet"
     address_prefix         = "10.145.0.0/18"
     next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "10.11.8.36"
+    next_hop_in_ip_address = "10.11.72.36"
   }
 ]
