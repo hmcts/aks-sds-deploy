@@ -28,7 +28,7 @@ module "vnet_peer_hub_nonprod" {
   for_each = toset([for r in ["ukSouth"] : r if contains(local.hub_to_env_mapping["nonprod"], var.env)])
   peerings = {
     source = {
-      name           = var.env == "ptl" ? "${local.hub["prod"][each.key].peering_name}-nonprod" : local.hub["prod"][each.key].peering_name
+      name           = var.env == "ptl" ? "${local.hub["prod"][each.key].peering_name}-nonprod" : var.env == "stg" ? "${local.hub["prod"][each.key].peering_name}-nonprod" : local.hub["prod"][each.key].peering_name
       vnet           = module.network.network_name
       resource_group = module.network.network_resource_group
     }
