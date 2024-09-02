@@ -13,6 +13,7 @@ pr:
     include:
       - refs/heads/master
 
+
 resources:
   repositories:
     - repository: cnp-azuredevops-libraries
