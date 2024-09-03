@@ -14,6 +14,10 @@ availability_zones                     = ["1"]
 
 autoShutdown = true
 
+linux_node_pool = {
+  max_nodes = 14
+}
+
 oms_agent_enabled = true
 
 monitor_diagnostic_setting         = true
