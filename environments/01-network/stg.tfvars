@@ -106,6 +106,12 @@ additional_routes = [
     next_hop_in_ip_address = "10.11.8.36"
   },
   {
+    name                   = "bau-bais_private_stg"
+    address_prefix         = "10.225.251.128/28"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
+  },
+  {
     name                   = "172_16_0_0"
     address_prefix         = "172.16.0.0/12"
     next_hop_type          = "VirtualAppliance"
