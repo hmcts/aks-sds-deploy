@@ -93,31 +93,31 @@ additional_routes_application_gateway = [
     name                   = "102PF-A"
     address_prefix         = "10.232.38.0/23"
     next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "10.11.72.37"
+    next_hop_in_ip_address = "10.11.72.41"
   },
   {
     name                   = "102PF-B"
     address_prefix         = "10.188.100.0/23"
     next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "10.11.72.37"
+    next_hop_in_ip_address = "10.11.72.41"
   },
   {
     name                   = "102PF-C"
     address_prefix         = "10.188.102.0/24"
     next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "10.11.72.37"
+    next_hop_in_ip_address = "10.11.72.41"
   },
   {
     name                   = "Hendon"
     address_prefix         = "10.188.108.0/24"
     next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "10.11.72.37"
+    next_hop_in_ip_address = "10.11.72.41"
   },
   {
     name                   = "Interim-Hosting"
     address_prefix         = "10.25.12.0/22"
     next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "10.11.72.37"
+    next_hop_in_ip_address = "10.11.72.36"
   },
   {
     name                   = "dynatrace-nonprod-vnet"
