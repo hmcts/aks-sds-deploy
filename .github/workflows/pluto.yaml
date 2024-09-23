@@ -24,7 +24,7 @@ jobs:
           client-id: b430ef1e-4e79-4e92-a152-8e5b5bc195d4 # DTS CFT AKS version checker
           tenant-id: 531ff96d-0ae9-462a-8d2d-bec7c0b42082 # HMCTS.NET
           allow-no-subscriptions: true
-      - uses: tibdex/github-app-token@v1
+      - uses: tibdex/github-app-token@v2
         id: pluto-token
         with:
           app_id: ${{ secrets.DEPENDENCY_UPDATER_APP_ID }}
