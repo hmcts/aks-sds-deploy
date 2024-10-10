@@ -16,3 +16,7 @@ node_os_maintenance_window_config = {
   start_time = "16:00"
   is_prod    = false
 }
+
+linux_node_pool = {
+  max_pods = 75
+}
