@@ -110,5 +110,11 @@ additional_routes = [
     address_prefix         = "10.225.251.0/24"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.72.36"
+  },
+  {
+    name                   = "darts_modernisation_vnet_dev"
+    address_prefix         = "10.101.200.0/24"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
   }
 ]
