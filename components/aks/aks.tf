@@ -1,5 +1,5 @@
 resource "azurerm_resource_group" "kubernetes_resource_group" {
-  for_each = toset([for k, v in var.clusters : k])
+  for_each = toset([for k, v in var.clusters_rg : k])
   location = var.location
 
   name = format("%s-%s-%s-rg",
