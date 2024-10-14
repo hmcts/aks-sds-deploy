@@ -61,6 +61,10 @@ variable "monitor_diagnostic_setting_metrics" {
   default = false
 }
 
+variable "cluster_automatic" {
+  default = false
+}
+
 variable "node_os_maintenance_window_config" {
   type = object({
     frequency   = optional(string, "Weekly")

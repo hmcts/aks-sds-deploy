@@ -157,3 +157,76 @@ resource "azurerm_role_assignment" "dev_to_stg" {
   principal_id         = module.kubernetes[each.key].kubelet_object_id
   scope                = data.azurerm_resource_group.mi_stg_rg[0].id
 }
+
+resource "azapi_resource" "managedCluster" {
+  count     = var.cluster_automatic ? 1 : 0
+  type      = "Microsoft.ContainerService/managedClusters@2024-03-02-preview"
+  parent_id = azurerm_resource_group.kubernetes_resource_group["01"].id
+  name      = "ss-sbox-01-aks"
+  location  = var.location
+
+  identity {
+    type = "SystemAssigned"
+  }
+
+  body = jsonencode({
+    properties = {
+      kubernetesVersion = "1.30.3"
+      dnsPrefix         = "k8s-ss-sbox-aks"
+      agentPoolProfiles = [
+        {
+          name                = "system"
+          count               = 2
+          vmSize              = "Standard_D4ds_v2"
+          osType              = "Linux"
+          mode                = "System"
+          availabilityZones   = ["1"]
+          enableAutoScaling   = true
+          minCount            = 2
+          maxCount            = 4
+          osDiskSizeGb        = 128
+          osDiskType          = "Ephemeral"
+          nodeTaints          = ["CriticalAddonsOnly=true:NoSchedule"]
+          vnetSubnetId        = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
+          tags                = {
+            application = "core"
+            autoShutdown = "true"
+            builtFrom = "hmcts/aks-sds-deploy"
+            businessArea = "Cross-Cutting"
+            criticality = "Low"
+            environment = "sandbox"
+            expiresAfter = "3000-01-01"
+          }
+        },
+        {
+          name                = "linux"
+          count               = 2
+          vmSize              = "Standard_D4ds_v2"
+          osType              = "Linux"
+          mode                = "User"
+          availabilityZones   = ["1"]
+          enableAutoScaling   = true
+          minCount            = 2
+          maxCount            = 4
+          osDiskSizeGb        = 128
+          osDiskType          = "Ephemeral"
+          nodeTaints          = null
+          vnetSubnetId        = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
+          tags                = {
+            application = "core"
+            autoShutdown = "true"
+            builtFrom = "hmcts/aks-sds-deploy"
+            businessArea = "Cross-Cutting"
+            criticality = "Low"
+            environment = "sandbox"
+            expiresAfter = "3000-01-01"
+          }
+        }
+      ]
+    }
+    sku = {
+      name = "Automatic"
+      tier = "Standard"
+    }
+  })
+}
