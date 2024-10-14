@@ -6,7 +6,16 @@ clusters = {
 #   "01" = {
 #     kubernetes_version = "1.30"
 #   }
-#  }
+# }
+
+clusters_rg = {
+  "00" = {
+    kubernetes_version = "1.30"
+  },
+  "01" = {
+    kubernetes_version = "1.30"
+  }
+}
 
 cluster_automatic = true
 
