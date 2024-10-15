@@ -160,7 +160,7 @@ resource "azurerm_role_assignment" "dev_to_stg" {
 
 resource "azapi_resource" "managedCluster" {
   count     = var.cluster_automatic ? 1 : 0
-  type      = "Microsoft.ContainerService/managedClusters@2024-06-02-preview"
+  type      = "Microsoft.ContainerService/managedClusters@2024-03-02-preview"
   parent_id = azurerm_resource_group.kubernetes_resource_group["01"].id
   name      = "ss-sbox-01-aks"
   location  = var.location
@@ -169,7 +169,7 @@ resource "azapi_resource" "managedCluster" {
     type = "SystemAssigned"
   }
 
-  body = {
+  body = ({
     properties = {
       kubernetesVersion = "1.30.3"
       dnsPrefix         = "k8s-ss-sbox-aks"
@@ -228,5 +228,5 @@ resource "azapi_resource" "managedCluster" {
       name = "Automatic"
       tier = "Standard"
     }
-  }
+  })
 }
