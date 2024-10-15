@@ -11,7 +11,8 @@ terraform {
       configuration_aliases = [azurerm.hmcts-control]
     }
     azapi = {
-      source = "azure/azapi"
+      source  = "azure/azapi"
+      version = "1.15.0"
     }
   }
 }
