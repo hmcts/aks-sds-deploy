@@ -167,7 +167,7 @@ resource "azapi_resource" "managedCluster" {
 
   identity {
     type         = "UserAssigned"
-    identity_ids = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/genesis-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/aks-sbox-mi"
+    identity_ids = ["/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/genesis-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/aks-sbox-mi"]
   }
 
   body = ({
