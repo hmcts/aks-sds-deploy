@@ -183,7 +183,7 @@ resource "azapi_resource" "managedCluster" {
           mode              = "System"
           name              = "system"
           nodeTaints        = ["CriticalAddonsOnly=true:NoSchedule"]
-          osDiskSizeGb      = 128
+          osDiskSizeGB      = 128
           osDiskType        = "Ephemeral"
           osType            = "Linux"
           tags = {
@@ -196,7 +196,7 @@ resource "azapi_resource" "managedCluster" {
             expiresAfter = "3000-01-01"
           }
           vmSize       = "Standard_D4ds_v2"
-          vnetSubnetId = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
+          vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
         },
         {
           availabilityZones = ["1"]
@@ -207,7 +207,7 @@ resource "azapi_resource" "managedCluster" {
           mode              = "User"
           name              = "linux"
           nodeTaints        = null
-          osDiskSizeGb      = 128
+          osDiskSizeGB      = 128
           osDiskType        = "Ephemeral"
           osType            = "Linux"
           tags = {
@@ -220,7 +220,7 @@ resource "azapi_resource" "managedCluster" {
             expiresAfter = "3000-01-01"
           }
           vmSize       = "Standard_D4ds_v2"
-          vnetSubnetId = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
+          vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
         }
       ]
     }
