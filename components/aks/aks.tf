@@ -169,7 +169,7 @@ resource "azapi_resource" "managedCluster" {
     type = "SystemAssigned"
   }
 
-  body = jsonencode({
+  body = {
     properties = {
       kubernetesVersion = "1.30.3"
       dnsPrefix         = "k8s-ss-sbox-aks"
@@ -228,5 +228,5 @@ resource "azapi_resource" "managedCluster" {
       name = "Automatic"
       tier = "Standard"
     }
-  })
+  }
 }
