@@ -175,19 +175,17 @@ resource "azapi_resource" "managedCluster" {
       dnsPrefix         = "k8s-ss-sbox-aks"
       agentPoolProfiles = [
         {
-          name              = "system"
-          count             = 2
-          vmSize            = "Standard_D4ds_v2"
-          osType            = "Linux"
-          mode              = "System"
           availabilityZones = ["1"]
+          count             = 2
           enableAutoScaling = true
-          minCount          = 2
           maxCount          = 4
+          minCount          = 2
+          mode              = "System"
+          name              = "system"
+          nodeTaints        = ["CriticalAddonsOnly=true:NoSchedule"]
           osDiskSizeGb      = 128
           osDiskType        = "Ephemeral"
-          nodeTaints        = ["CriticalAddonsOnly=true:NoSchedule"]
-          vnetSubnetId      = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
+          osType            = "Linux"
           tags = {
             application  = "core"
             autoShutdown = "true"
@@ -197,21 +195,21 @@ resource "azapi_resource" "managedCluster" {
             environment  = "sandbox"
             expiresAfter = "3000-01-01"
           }
+          vmSize       = "Standard_D4ds_v2"
+          vnetSubnetId = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
         },
         {
-          name              = "linux"
-          count             = 2
-          vmSize            = "Standard_D4ds_v2"
-          osType            = "Linux"
-          mode              = "User"
           availabilityZones = ["1"]
+          count             = 2
           enableAutoScaling = true
-          minCount          = 2
           maxCount          = 4
+          minCount          = 2
+          mode              = "User"
+          name              = "linux"
+          nodeTaints        = null
           osDiskSizeGb      = 128
           osDiskType        = "Ephemeral"
-          nodeTaints        = null
-          vnetSubnetId      = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
+          osType            = "Linux"
           tags = {
             application  = "core"
             autoShutdown = "true"
@@ -221,6 +219,8 @@ resource "azapi_resource" "managedCluster" {
             environment  = "sandbox"
             expiresAfter = "3000-01-01"
           }
+          vmSize       = "Standard_D4ds_v2"
+          vnetSubnetId = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
         }
       ]
     }
