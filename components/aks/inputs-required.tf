@@ -41,7 +41,3 @@ clusters = {
 }
 EOF
 }
-
-variable "clusters_rg" {
-  type = map(map(string))
-}
