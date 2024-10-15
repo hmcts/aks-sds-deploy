@@ -64,7 +64,7 @@ data "azuread_service_principal" "aks_auto_shutdown" {
 }
 
 module "kubernetes" {
-  for_each    = var.cluster_automatic ? { for k, v in var.clusters : k => v if k == "00" } : var.clusters
+  for_each    = toset(var.env == "sbox" && var.cluster_automatic) ? { for k, v in var.clusters : k => v if k == "00" } : { for k, v in var.clusters : k => v }
   source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=master"
   environment = var.env
   location    = var.location
