@@ -1,5 +1,5 @@
 resource "azurerm_resource_group" "kubernetes_resource_group" {
-  for_each = toset([for k, v in var.clusters_rg : k])
+  for_each = toset([for k, v in var.clusters : k])
   location = var.location
 
   name = format("%s-%s-%s-rg",
@@ -64,7 +64,7 @@ data "azuread_service_principal" "aks_auto_shutdown" {
 }
 
 module "kubernetes" {
-  for_each    = toset([for k, v in var.clusters : k])
+  for_each    = var.cluster_automatic ? { for k, v in var.clusters : k => v if k == "00" } : var.clusters
   source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=master"
   environment = var.env
   location    = var.location
