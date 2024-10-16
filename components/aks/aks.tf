@@ -174,6 +174,33 @@ resource "azapi_resource" "managedCluster" {
     properties = {
       kubernetesVersion = "1.30.3"
       dnsPrefix         = "k8s-ss-sbox-aks"
+      aadProfile = {
+        adminGroupObjectIDs = [
+          "a6ce5b32-e0a5-419e-ba5c-67863c975941",
+          "45bbf62b-788e-45e6-b584-01f62cf2d22a"
+        ]
+        adminUsers      = null
+        clientAppId     = null
+        enableAzureRbac = false
+        managed         = true
+        serverAppId     = null
+        serverAppSecret = null
+        tenantId        = "531ff96d-0ae9-462a-8d2d-bec7c0b42082"
+      }
+      addonProfiles = {
+        azureKeyvaultSecretsProvider = {
+          config = {
+            enableSecretRotation = "true"
+            rotationPollInterval = "5m"
+          }
+          enabled = true
+          identity = {
+            clientId   = "536c68e3-9de6-4d6d-8079-4472a26303d7"
+            objectId   = "a6e4f934-2937-4514-888c-df27abf84370"
+            resourceId = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourcegroups/ss-sbox-01-aks-node-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/azurekeyvaultsecretsprovider-ss-sbox-01-aks"
+          }
+        }
+      }
       agentPoolProfiles = [
         {
           availabilityZones = ["1"]
@@ -196,7 +223,7 @@ resource "azapi_resource" "managedCluster" {
             environment  = "sandbox"
             expiresAfter = "3000-01-01"
           }
-          vmSize       = "Standard_D4ds_v2"
+          vmSize       = "Standard_D4ds_v5"
           vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
         },
         {
@@ -220,7 +247,55 @@ resource "azapi_resource" "managedCluster" {
             environment  = "sandbox"
             expiresAfter = "3000-01-01"
           }
-          vmSize       = "Standard_D4ds_v2"
+          vmSize       = "Standard_D4ds_v5"
+          vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
+        },
+        {
+          availabilityZones = ["1"]
+          count             = 0
+          enableAutoScaling = true
+          maxCount          = 10
+          minCount          = 0
+          mode              = "User"
+          name              = "cronjob"
+          nodeTaints        = ["dedicated=jobs:NoSchedule"]
+          osDiskSizeGB      = 128
+          osDiskType        = "Ephemeral"
+          osType            = "Linux"
+          tags = {
+            application  = "core"
+            autoShutdown = "true"
+            builtFrom    = "hmcts/aks-sds-deploy"
+            businessArea = "Cross-Cutting"
+            criticality  = "Low"
+            environment  = "sandbox"
+            expiresAfter = "3000-01-01"
+          }
+          vmSize       = "Standard_D4ds_v5"
+          vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
+        },
+        {
+          availabilityZones = ["1"]
+          count             = 2
+          enableAutoScaling = true
+          maxCount          = 4
+          minCount          = 2
+          mode              = "User"
+          name              = "msnode"
+          nodeTaints        = ["kubernetes.io/os=windows:NoSchedule"]
+          osDiskSizeGB      = 128
+          osDiskType        = "Ephemeral"
+          osType            = "Windows"
+          tags = {
+            application  = "core"
+            autoShutdown = "true"
+            builtFrom    = "hmcts/aks-sds-deploy"
+            businessArea = "Cross-Cutting"
+            criticality  = "Low"
+            environment  = "sandbox"
+            expiresAfter = "3000-01-01"
+          }
+          vmSize       = "Standard_D4ds_v5"
           vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
         }
       ]
