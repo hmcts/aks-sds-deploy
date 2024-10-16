@@ -298,6 +298,7 @@ resource "azapi_resource" "managedCluster" {
         networkPolicy = "azure"
         dnsServiceIP  = "10.0.0.10"
         serviceCidr   = "10.0.0.0/16"
+        outboundType  = "loadBalancer"
       }
     }
     sku = {
