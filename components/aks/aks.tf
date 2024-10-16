@@ -179,13 +179,12 @@ resource "azapi_resource" "managedCluster" {
           "a6ce5b32-e0a5-419e-ba5c-67863c975941",
           "45bbf62b-788e-45e6-b584-01f62cf2d22a"
         ]
-        adminUsers      = null
-        clientAppId     = null
-        enableAzureRbac = false
+        clientAppID     = null
+        enableAzureRBAC = false
         managed         = true
-        serverAppId     = null
+        serverAppID     = null
         serverAppSecret = null
-        tenantId        = "531ff96d-0ae9-462a-8d2d-bec7c0b42082"
+        tenantID        = "531ff96d-0ae9-462a-8d2d-bec7c0b42082"
       }
       addonProfiles = {
         azureKeyvaultSecretsProvider = {
@@ -194,11 +193,6 @@ resource "azapi_resource" "managedCluster" {
             rotationPollInterval = "5m"
           }
           enabled = true
-          identity = {
-            clientId   = "536c68e3-9de6-4d6d-8079-4472a26303d7"
-            objectId   = "a6e4f934-2937-4514-888c-df27abf84370"
-            resourceId = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourcegroups/ss-sbox-01-aks-node-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/azurekeyvaultsecretsprovider-ss-sbox-01-aks"
-          }
         }
       }
       agentPoolProfiles = [
@@ -299,6 +293,13 @@ resource "azapi_resource" "managedCluster" {
           vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
         }
       ]
+      networkProfile = {
+        networkPlugin    = "azure"
+        networkPolicy    = "azure"
+        dnsServiceIP     = "10.0.0.10"
+        serviceCidr      = "10.0.0.0/16"
+        dockerBridgeCidr = "172.17.0.1/16"
+      }
     }
     sku = {
       name = "Automatic"
