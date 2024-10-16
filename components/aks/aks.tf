@@ -64,7 +64,7 @@ data "azuread_service_principal" "aks_auto_shutdown" {
 }
 
 module "kubernetes" {
-  for_each    = toset([for k, v in var.clusters : k])
+  for_each    = toset((var.env == "sbox" && var.cluster_automatic) ? [for k, v in var.clusters : k if k == "00"] : [for k, v in var.clusters : k])
   source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=master"
   environment = var.env
   location    = var.location
@@ -156,4 +156,153 @@ resource "azurerm_role_assignment" "dev_to_stg" {
   role_definition_name = "Managed Identity Operator"
   principal_id         = module.kubernetes[each.key].kubelet_object_id
   scope                = data.azurerm_resource_group.mi_stg_rg[0].id
+}
+
+resource "azapi_resource" "managedCluster" {
+  count     = var.cluster_automatic ? 1 : 0
+  type      = "Microsoft.ContainerService/managedClusters@2024-03-02-preview"
+  parent_id = azurerm_resource_group.kubernetes_resource_group["01"].id
+  name      = "ss-sbox-01-aks"
+  location  = var.location
+
+  identity {
+    type         = "UserAssigned"
+    identity_ids = ["/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/genesis-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/aks-sbox-mi"]
+  }
+
+  body = ({
+    properties = {
+      kubernetesVersion = "1.30.3"
+      dnsPrefix         = "k8s-ss-sbox-aks"
+      aadProfile = {
+        adminGroupObjectIDs = [
+          "a6ce5b32-e0a5-419e-ba5c-67863c975941",
+          "45bbf62b-788e-45e6-b584-01f62cf2d22a"
+        ]
+        clientAppID     = null
+        enableAzureRBAC = false
+        managed         = true
+        serverAppID     = null
+        serverAppSecret = null
+        tenantID        = "531ff96d-0ae9-462a-8d2d-bec7c0b42082"
+      }
+      addonProfiles = {
+        azureKeyvaultSecretsProvider = {
+          config = {
+            enableSecretRotation = "true"
+            rotationPollInterval = "5m"
+          }
+          enabled = true
+        }
+      }
+      agentPoolProfiles = [
+        {
+          availabilityZones = ["1"]
+          count             = 2
+          enableAutoScaling = true
+          maxCount          = 4
+          minCount          = 2
+          mode              = "System"
+          name              = "system"
+          nodeTaints        = ["CriticalAddonsOnly=true:NoSchedule"]
+          osDiskSizeGB      = 128
+          osDiskType        = "Ephemeral"
+          osType            = "Linux"
+          tags = {
+            application  = "core"
+            autoShutdown = "true"
+            builtFrom    = "hmcts/aks-sds-deploy"
+            businessArea = "Cross-Cutting"
+            criticality  = "Low"
+            environment  = "sandbox"
+            expiresAfter = "3000-01-01"
+          }
+          vmSize       = "Standard_D4ds_v5"
+          vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
+        },
+        {
+          availabilityZones = ["1"]
+          count             = 2
+          enableAutoScaling = true
+          maxCount          = 4
+          minCount          = 2
+          mode              = "User"
+          name              = "linux"
+          nodeTaints        = null
+          osDiskSizeGB      = 128
+          osDiskType        = "Ephemeral"
+          osType            = "Linux"
+          tags = {
+            application  = "core"
+            autoShutdown = "true"
+            builtFrom    = "hmcts/aks-sds-deploy"
+            businessArea = "Cross-Cutting"
+            criticality  = "Low"
+            environment  = "sandbox"
+            expiresAfter = "3000-01-01"
+          }
+          vmSize       = "Standard_D4ds_v5"
+          vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
+        },
+        {
+          availabilityZones = ["1"]
+          count             = 0
+          enableAutoScaling = true
+          maxCount          = 10
+          minCount          = 0
+          mode              = "User"
+          name              = "cronjob"
+          nodeTaints        = ["dedicated=jobs:NoSchedule"]
+          osDiskSizeGB      = 128
+          osDiskType        = "Ephemeral"
+          osType            = "Linux"
+          tags = {
+            application  = "core"
+            autoShutdown = "true"
+            builtFrom    = "hmcts/aks-sds-deploy"
+            businessArea = "Cross-Cutting"
+            criticality  = "Low"
+            environment  = "sandbox"
+            expiresAfter = "3000-01-01"
+          }
+          vmSize       = "Standard_D4ds_v5"
+          vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
+        },
+        {
+          availabilityZones = ["1"]
+          count             = 2
+          enableAutoScaling = true
+          maxCount          = 4
+          minCount          = 2
+          mode              = "User"
+          name              = "msnode"
+          nodeTaints        = ["kubernetes.io/os=windows:NoSchedule"]
+          osDiskSizeGB      = 128
+          osDiskType        = "Ephemeral"
+          osType            = "Windows"
+          tags = {
+            application  = "core"
+            autoShutdown = "true"
+            builtFrom    = "hmcts/aks-sds-deploy"
+            businessArea = "Cross-Cutting"
+            criticality  = "Low"
+            environment  = "sandbox"
+            expiresAfter = "3000-01-01"
+          }
+          vmSize       = "Standard_D4ds_v5"
+          vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
+        }
+      ]
+      networkProfile = {
+        networkPlugin = "azure"
+        networkPolicy = "azure"
+        dnsServiceIP  = "10.0.0.10"
+        serviceCidr   = "10.0.0.0/16"
+      }
+    }
+    sku = {
+      name = "Automatic"
+      tier = "Standard"
+    }
+  })
 }
