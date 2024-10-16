@@ -294,10 +294,10 @@ resource "azapi_resource" "managedCluster" {
         }
       ]
       networkProfile = {
-        networkPlugin    = "azure"
-        networkPolicy    = "azure"
-        dnsServiceIP     = "10.0.0.10"
-        serviceCidr      = "10.0.0.0/16"
+        networkPlugin = "azure"
+        networkPolicy = "azure"
+        dnsServiceIP  = "10.0.0.10"
+        serviceCidr   = "10.0.0.0/16"
       }
     }
     sku = {
