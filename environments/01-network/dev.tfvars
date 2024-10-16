@@ -53,6 +53,12 @@ additional_routes = [
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.72.36"
   },
+  {
+    name                   = "interim-hosting-12"
+    address_prefix         = "10.25.12.0/22"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.37"
+  },
 ]
 
 additional_routes_application_gateway = [
