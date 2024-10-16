@@ -293,6 +293,12 @@ resource "azapi_resource" "managedCluster" {
           vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
         }
       ]
+      networkProfile = {
+        networkPlugin = "azure"
+        dnsServiceIP  = "10.0.0.10"
+        serviceCidr   = "10.0.0.0/16"
+        outboundType  = "loadBalancer"
+      }
     }
     sku = {
       name = "Automatic"
