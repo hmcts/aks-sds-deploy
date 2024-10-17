@@ -158,7 +158,22 @@ resource "azurerm_role_assignment" "dev_to_stg" {
   scope                = data.azurerm_resource_group.mi_stg_rg[0].id
 }
 
+resource "null_resource" "register_automatic_sku_preview" {
+  provisioner "local-exec" {
+    command = <<EOT
+      az feature register --namespace "Microsoft.ContainerService" --name "AutomaticSKUPreview"
+      while [ "$(az feature show --namespace "Microsoft.ContainerService" --name "AutomaticSKUPreview" --query properties.state -o tsv)" != "Registered" ]; do
+        echo "Waiting for AutomaticSKUPreview feature to be registered..."
+        sleep 10
+      done
+      az provider register --namespace "Microsoft.ContainerService"
+    EOT
+  }
+}
+
 resource "azapi_resource" "managedCluster" {
+  depends_on = [null_resource.register_automatic_sku_preview]
+
   count     = var.cluster_automatic ? 1 : 0
   type      = "Microsoft.ContainerService/managedClusters@2024-03-02-preview"
   parent_id = azurerm_resource_group.kubernetes_resource_group["01"].id
