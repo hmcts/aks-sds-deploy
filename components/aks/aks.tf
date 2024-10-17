@@ -158,22 +158,6 @@ resource "azurerm_role_assignment" "dev_to_stg" {
   scope                = data.azurerm_resource_group.mi_stg_rg[0].id
 }
 
-resource "null_resource" "register_automatic_sku_preview" {
-  provisioner "local-exec" {
-    command = <<EOT
-      az extension add --name aks-preview || az extension update --name aks-preview
-      az feature register --namespace Microsoft.ContainerService --name EnableAPIServerVnetIntegrationPreview
-      az feature register --namespace Microsoft.ContainerService --name NRGLockdownPreview
-      az feature register --namespace Microsoft.ContainerService --name SafeguardsPreview
-      az feature register --namespace Microsoft.ContainerService --name NodeAutoProvisioningPreview
-      az feature register --namespace Microsoft.ContainerService --name DisableSSHPreview
-      az feature register --namespace Microsoft.ContainerService --name AutomaticSKUPreview
-      az feature show --namespace Microsoft.ContainerService --name AutomaticSKUPreview
-      az provider register --namespace "Microsoft.ContainerService"
-    EOT
-  }
-}
-
 resource "azapi_resource" "managedCluster" {
   depends_on = [null_resource.register_automatic_sku_preview]
 
