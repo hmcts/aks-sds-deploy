@@ -302,7 +302,7 @@ resource "azapi_resource" "managedCluster" {
         outboundType     = "loadBalancer"
       }
       autoScalerProfile = {
-        balance-similar-node-groups           = false
+        balance-similar-node-groups           = "false"
         daemonset-eviction-for-empty-nodes    = false
         daemonset-eviction-for-occupied-nodes = true
         expander                              = "random"
@@ -320,8 +320,8 @@ resource "azapi_resource" "managedCluster" {
         scale-down-unready-time               = "20m"
         scale-down-utilization-threshold      = "0.5"
         scan-interval                         = "10s"
-        skip-nodes-with-local-storage         = false
-        skip-nodes-with-system-pods           = true
+        skip-nodes-with-local-storage         = "false"
+        skip-nodes-with-system-pods           = "true"
       }
     }
     sku = {
