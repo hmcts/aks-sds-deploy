@@ -294,34 +294,34 @@ resource "azapi_resource" "managedCluster" {
         }
       ]
       networkProfile = {
-        networkPlugin   = "azure"
-        networkDataplan = "azure"
-        dnsServiceIP    = "10.0.0.10"
-        serviceCidr     = "10.0.0.0/16"
-        loadBalancerSku = "Standard"
-        outboundType    = "loadBalancer"
+        networkPlugin    = "azure"
+        networkDataplane = "azure"
+        dnsServiceIP     = "10.0.0.10"
+        serviceCidr      = "10.0.0.0/16"
+        loadBalancerSku  = "Standard"
+        outboundType     = "loadBalancer"
       }
       autoScalerProfile = {
-        balanceSimilarNodeGroups          = false
-        daemonsetEvictionForEmptyNodes    = false
-        daemonsetEvictionForOccupiedNodes = true
-        expander                          = "random"
-        ignoreDaemonsetsUtilization       = false
-        maxEmptyBulkDelete                = 10
-        maxGracefulTerminationSec         = 600
-        maxNodeProvisionTime              = "15m"
-        maxTotalUnreadyPercentage         = 45
-        newPodScaleUpDelay                = "0s"
-        okTotalUnreadyCount               = 3
-        scaleDownDelayAfterAdd            = "10m"
-        scaleDownDelayAfterDelete         = "10s"
-        scaleDownDelayAfterFailure        = "3m"
-        scaleDownUnneededTime             = "10m"
-        scaleDownUnreadyTime              = "20m"
-        scaleDownUtilizationThreshold     = 0.5
-        scanInterval                      = "10s"
-        skipNodesWithLocalStorage         = false
-        skipNodesWithSystemPods           = true
+        balance-similar-node-groups           = false
+        daemonset-eviction-for-empty-nodes    = false
+        daemonset-eviction-for-occupied-nodes = true
+        expander                              = "random"
+        ignore-daemonsets-utilization         = false
+        max-empty-bulk-delete                 = 10
+        max-graceful-termination-sec          = 600
+        max-node-provision-time               = "15m"
+        max-total-unready-percentage          = 45
+        new-pod-scale-up-delay                = "0s"
+        ok-total-unready-count                = 3
+        scale-down-delay-after-add            = "10m"
+        scale-down-delay-after-delete         = "10s"
+        scale-down-delay-after-failure        = "3m"
+        scale-down-unneeded-time              = "10m"
+        scale-down-unready-time               = "20m"
+        scale-down-utilization-threshold      = 0.5
+        scan-interval                         = "10s"
+        skip-nodes-with-local-storage         = false
+        skip-nodes-with-system-pods           = true
       }
     }
     sku = {
