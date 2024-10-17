@@ -195,6 +195,14 @@ resource "azapi_resource" "managedCluster" {
           enabled = true
         }
       }
+      networkProfile = {
+        networkPlugin    = "azure"
+        networkDataplane = "azure"
+        dnsServiceIP     = "10.0.0.10"
+        serviceCidr      = "10.0.0.0/16"
+        loadBalancerSku  = "Standard"
+        outboundType     = "loadBalancer"
+      }
       agentPoolProfiles = [
         {
           availabilityZones = ["1"]
@@ -293,14 +301,6 @@ resource "azapi_resource" "managedCluster" {
           vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
         }
       ]
-      networkProfile = {
-        networkPlugin    = "azure"
-        networkDataplane = "azure"
-        dnsServiceIP     = "10.0.0.10"
-        serviceCidr      = "10.0.0.0/16"
-        loadBalancerSku  = "Standard"
-        outboundType     = "loadBalancer"
-      }
       autoScalerProfile = {
         balance-similar-node-groups           = "false"
         daemonset-eviction-for-empty-nodes    = false
