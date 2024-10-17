@@ -295,10 +295,34 @@ resource "azapi_resource" "managedCluster" {
       ]
       networkProfile = {
         networkPlugin = "azure"
+        networkDataplan = "azure"
         dnsServiceIP  = "10.0.0.10"
         serviceCidr   = "10.0.0.0/16"
+        loadBalancerSku = "Standard"
         outboundType  = "loadBalancer"
       }
+      autoScalerProfile = {
+      balanceSimilarNodeGroups = false
+      daemonsetEvictionForEmptyNodes = false
+      daemonsetEvictionForOccupiedNodes = true
+      expander = "random"
+      ignoreDaemonsetsUtilization = false
+      maxEmptyBulkDelete = 10
+      maxGracefulTerminationSec = 600
+      maxNodeProvisionTime = "15m"
+      maxTotalUnreadyPercentage = 45
+      newPodScaleUpDelay = "0s"
+      okTotalUnreadyCount = 3
+      scaleDownDelayAfterAdd = "10m"
+      scaleDownDelayAfterDelete = "10s"
+      scaleDownDelayAfterFailure = "3m"
+      scaleDownUnneededTime = "10m"
+      scaleDownUnreadyTime = "20m"
+      scaleDownUtilizationThreshold = 0.5
+      scanInterval = "10s"
+      skipNodesWithLocalStorage = false
+      skipNodesWithSystemPods = true
+  }
     }
     sku = {
       name = "Automatic"
