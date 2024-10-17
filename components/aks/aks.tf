@@ -162,12 +162,13 @@ resource "null_resource" "register_automatic_sku_preview" {
   provisioner "local-exec" {
     command = <<EOT
       az extension add --name aks-preview || az extension update --name aks-preview
-      az feature register --namespace "Microsoft.ContainerService" --name "EnableAPIServerVnetIntegrationPreview"
-      az feature register --namespace "Microsoft.ContainerService" --name "NRGLockdownPreview"
-      az feature register --namespace "Microsoft.ContainerService" --name "SafeguardsPreview"
-      az feature register --namespace "Microsoft.ContainerService" --name "NodeAutoProvisioningPreview"
-      az feature register --namespace "Microsoft.ContainerService" --name "DisableSSHPreview"
-      az feature register --namespace "Microsoft.ContainerService" az feature show --namespace Microsoft.ContainerService --name AutomaticSKUPreview
+      az feature register --namespace Microsoft.ContainerService --name EnableAPIServerVnetIntegrationPreview
+      az feature register --namespace Microsoft.ContainerService --name NRGLockdownPreview
+      az feature register --namespace Microsoft.ContainerService --name SafeguardsPreview
+      az feature register --namespace Microsoft.ContainerService --name NodeAutoProvisioningPreview
+      az feature register --namespace Microsoft.ContainerService --name DisableSSHPreview
+      az feature register --namespace Microsoft.ContainerService --name AutomaticSKUPreview
+      az feature show --namespace Microsoft.ContainerService --name AutomaticSKUPreview
       az provider register --namespace "Microsoft.ContainerService"
     EOT
   }
