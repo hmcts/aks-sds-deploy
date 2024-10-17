@@ -159,6 +159,10 @@ resource "azurerm_role_assignment" "dev_to_stg" {
 }
 
 resource "null_resource" "register_automatic_sku_preview" {
+  triggers = {
+    cluster_creation = "${var.cluster_automatic ? 1 : 0}"
+  }
+
   provisioner "local-exec" {
     command = <<EOT
       az extension add --name aks-preview || az extension update --name aks-preview
