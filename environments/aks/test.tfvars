@@ -21,7 +21,7 @@ linux_node_pool = {
 oms_agent_enabled = true
 
 linux_node_pool = {
-  max_nodes = 40
+  max_nodes = 75
 }
 
 node_os_maintenance_window_config = {
