@@ -20,6 +20,10 @@ linux_node_pool = {
 
 oms_agent_enabled = true
 
+linux_node_pool = {
+  max_nodes = 40
+}
+
 node_os_maintenance_window_config = {
   frequency  = "Daily"
   start_time = "16:00"
