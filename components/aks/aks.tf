@@ -172,8 +172,17 @@ resource "null_resource" "register_automatic_sku_preview" {
       az feature register --namespace Microsoft.ContainerService --name NodeAutoProvisioningPreview
       az feature register --namespace Microsoft.ContainerService --name DisableSSHPreview
       az feature register --namespace Microsoft.ContainerService --name AutomaticSKUPreview
-      az feature show --namespace Microsoft.ContainerService --name AutomaticSKUPreview
-      az provider register --namespace "Microsoft.ContainerService"
+
+      # Wait for all features to be registered
+      for feature in EnableAPIServerVnetIntegrationPreview NRGLockdownPreview SafeguardsPreview NodeAutoProvisioningPreview DisableSSHPreview AutomaticSKUPreview; do
+        while [ "$(az feature show --namespace Microsoft.ContainerService --name $feature --query properties.state -o tsv)" != "Registered" ]; do
+          echo "Waiting for $feature feature to be registered..."
+          sleep 10
+        done
+      done
+
+      # Register the provider
+      az provider register --namespace Microsoft.ContainerService
     EOT
   }
 }
