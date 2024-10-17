@@ -275,30 +275,6 @@ resource "azapi_resource" "managedCluster" {
           }
           vmSize       = "Standard_D4ds_v5"
           vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
-        },
-        {
-          availabilityZones = ["1"]
-          count             = 2
-          enableAutoScaling = true
-          maxCount          = 4
-          minCount          = 2
-          mode              = "User"
-          name              = "msnode"
-          nodeTaints        = ["kubernetes.io/os=windows:NoSchedule"]
-          osDiskSizeGB      = 128
-          osDiskType        = "Ephemeral"
-          osType            = "Windows"
-          tags = {
-            application  = "core"
-            autoShutdown = "true"
-            builtFrom    = "hmcts/aks-sds-deploy"
-            businessArea = "Cross-Cutting"
-            criticality  = "Low"
-            environment  = "sandbox"
-            expiresAfter = "3000-01-01"
-          }
-          vmSize       = "Standard_D4ds_v5"
-          vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
         }
       ]
       autoScalerProfile = {
