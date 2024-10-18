@@ -211,7 +211,7 @@ resource "azapi_resource" "managedCluster" {
           "45bbf62b-788e-45e6-b584-01f62cf2d22a"
         ]
         clientAppID     = null
-        enableAzureRBAC = false
+        enableAzureRBAC = true
         managed         = true
         serverAppID     = null
         serverAppSecret = null
