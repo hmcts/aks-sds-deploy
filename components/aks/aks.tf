@@ -162,6 +162,7 @@ resource "null_resource" "register_automatic_sku_preview" {
   triggers = {
     cluster_creation = "${var.cluster_automatic ? 1 : 0}"
   }
+}
 
 resource "azapi_resource" "managedCluster" {
 
