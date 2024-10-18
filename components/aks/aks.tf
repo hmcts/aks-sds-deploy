@@ -229,10 +229,32 @@ resource "azapi_resource" "managedCluster" {
       networkProfile = {
         networkPlugin    = "azure"
         networkDataplane = "azure"
-        dnsServiceIP     = "10.0.0.10"
-        serviceCidr      = "10.0.0.0/16"
-        loadBalancerSku  = "Standard"
-        outboundType     = "loadBalancer"
+        ipFamilies = [
+          "IPv4"
+        ]
+        dnsServiceIP    = "10.0.0.10"
+        serviceCidr     = "10.0.0.0/16"
+        loadBalancerSku = "Standard"
+        outboundType    = "loadBalancer"
+        loadBalancerSku = "Standard"
+        loadBalancerProfile = {
+          allocatedOutboundPorts = null
+          backendPoolType        = "nodeIPConfiguration"
+          effectiveOutboundIPs = [
+            {
+              id            = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-01-aks-node-rg/providers/Microsoft.Network/publicIPAddresses/1926b15c-3b71-4dea-8336-e0441c593a5a"
+              resourceGroup = "ss-sbox-01-aks-node-rg"
+            }
+          ]
+          enableMultipleStandardLoadBalancers = null
+          idleTimeoutInMinutes                = null
+          managedOutboundIPs = {
+            count     = 1
+            countIpv6 = null
+          }
+          outboundIPs        = null
+          outboundIpPrefixes = null
+        }
       }
       agentPoolProfiles = [
         {
@@ -256,6 +278,7 @@ resource "azapi_resource" "managedCluster" {
             environment  = "sandbox"
             expiresAfter = "3000-01-01"
           }
+          type         = "VirtualMachineScaleSets"
           vmSize       = "Standard_D4ds_v5"
           vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
         },
@@ -280,6 +303,7 @@ resource "azapi_resource" "managedCluster" {
             environment  = "sandbox"
             expiresAfter = "3000-01-01"
           }
+          type         = "VirtualMachineScaleSets"
           vmSize       = "Standard_D4ds_v5"
           vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
         },
@@ -304,6 +328,7 @@ resource "azapi_resource" "managedCluster" {
             environment  = "sandbox"
             expiresAfter = "3000-01-01"
           }
+          type         = "VirtualMachineScaleSets"
           vmSize       = "Standard_D4ds_v5"
           vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
         }
