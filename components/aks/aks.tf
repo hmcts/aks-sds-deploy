@@ -163,32 +163,7 @@ resource "null_resource" "register_automatic_sku_preview" {
     cluster_creation = "${var.cluster_automatic ? 1 : 0}"
   }
 
-  provisioner "local-exec" {
-    command = <<EOT
-      az extension add --name aks-preview || az extension update --name aks-preview
-      az feature register --namespace Microsoft.ContainerService --name EnableAPIServerVnetIntegrationPreview
-      az feature register --namespace Microsoft.ContainerService --name NRGLockdownPreview
-      az feature register --namespace Microsoft.ContainerService --name SafeguardsPreview
-      az feature register --namespace Microsoft.ContainerService --name NodeAutoProvisioningPreview
-      az feature register --namespace Microsoft.ContainerService --name DisableSSHPreview
-      az feature register --namespace Microsoft.ContainerService --name AutomaticSKUPreview
-
-      # Wait for all features to be registered
-      for feature in EnableAPIServerVnetIntegrationPreview NRGLockdownPreview SafeguardsPreview NodeAutoProvisioningPreview DisableSSHPreview AutomaticSKUPreview; do
-        while [ "$(az feature show --namespace Microsoft.ContainerService --name $feature --query properties.state -o tsv)" != "Registered" ]; do
-          echo "Waiting for $feature feature to be registered..."
-          sleep 10
-        done
-      done
-
-      # Register the provider
-      az provider register --namespace Microsoft.ContainerService
-    EOT
-  }
-}
-
 resource "azapi_resource" "managedCluster" {
-  depends_on = [null_resource.register_automatic_sku_preview]
 
   count     = var.cluster_automatic ? 1 : 0
   type      = "Microsoft.ContainerService/managedClusters@2024-03-02-preview"
@@ -205,17 +180,56 @@ resource "azapi_resource" "managedCluster" {
     properties = {
       kubernetesVersion = "1.30.3"
       dnsPrefix         = "k8s-ss-sbox-aks"
+      enableRbac        = true
+      location          = "uksouth"
+      identity = {
+        type = "UserAssigned"
+        userAssignedIdentities = {
+          "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/genesis-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/aks-sbox-mi" : {
+            clientId    = "09d99cb4-e1e7-49c2-a8e6-b5b1740e9c3b",
+            principalId = "ba206872-8722-4375-bf4d-a28c39dff414"
+          }
+        }
+      }
+      identityProfile = {
+        kubeletidentity = {
+          clientId   = "3fbb7e58-9568-44b9-a847-34df64335854",
+          objectId   = "fd657beb-8e34-42f2-9cc7-f9016a065849",
+          resourceId = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/genesis-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/aks-kubelet-sbox-mi"
+        }
+      }
+      securityProfile = {
+        workloadIdentity = {
+          enabled = true
+        }
+        imageCleaner = {
+          enabled = false
+        }
+      }
+      storageProfile = {
+        diskCsiDriver = {
+          enabled = true
+          version = "v1"
+        }
+        fileCsiDriver = {
+          enabled = true
+        }
+        snapshotController = {
+          enabled = true
+        }
+      }
       aadProfile = {
         adminGroupObjectIDs = [
           "a6ce5b32-e0a5-419e-ba5c-67863c975941",
           "45bbf62b-788e-45e6-b584-01f62cf2d22a"
         ]
-        clientAppID     = null
-        enableAzureRBAC = true
-        managed         = true
-        serverAppID     = null
-        serverAppSecret = null
-        tenantID        = "531ff96d-0ae9-462a-8d2d-bec7c0b42082"
+        clientAppID          = null
+        enableAzureRBAC      = false
+        managed              = true
+        disableLocalAccounts = false
+        serverAppID          = null
+        serverAppSecret      = null
+        tenantID             = "531ff96d-0ae9-462a-8d2d-bec7c0b42082"
       }
       addonProfiles = {
         azureKeyvaultSecretsProvider = {
@@ -242,27 +256,34 @@ resource "azapi_resource" "managedCluster" {
           backendPoolType        = "nodeIPConfiguration"
           effectiveOutboundIPs = [
             {
-              id            = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-01-aks-node-rg/providers/Microsoft.Network/publicIPAddresses/1926b15c-3b71-4dea-8336-e0441c593a5a"
+              id = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-01-aks-node-rg/providers/Microsoft.Network/publicIPAddresses/1926b15c-3b71-4dea-8336-e0441c593a5a"
             }
           ]
           managedOutboundIPs = {
-            count     = 1
+            count = 1
           }
         }
       }
       agentPoolProfiles = [
         {
-          availabilityZones = ["1"]
-          count             = 2
-          enableAutoScaling = true
-          maxCount          = 4
-          minCount          = 2
-          mode              = "System"
-          name              = "system"
-          nodeTaints        = ["CriticalAddonsOnly=true:NoSchedule"]
-          osDiskSizeGB      = 128
-          osDiskType        = "Ephemeral"
-          osType            = "Linux"
+          availabilityZones      = ["1"]
+          count                  = 2
+          enableAutoScaling      = true
+          enableCustomCaTrust    = false
+          enableEncryptionAtHost = false
+          enableFips             = false
+          enableNodePublicIP     = false
+          enableUltraSsd         = false
+          kubeletDiskType        = "OS"
+          maxCount               = 4
+          maxPods                = 50
+          minCount               = 2
+          mode                   = "System"
+          name                   = "system"
+          nodeTaints             = ["CriticalAddonsOnly=true:NoSchedule"]
+          osDiskSizeGB           = 128
+          osDiskType             = "Ephemeral"
+          osType                 = "Linux"
           tags = {
             application  = "core"
             autoShutdown = "true"
@@ -277,17 +298,25 @@ resource "azapi_resource" "managedCluster" {
           vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
         },
         {
-          availabilityZones = ["1"]
-          count             = 2
-          enableAutoScaling = true
-          maxCount          = 4
-          minCount          = 2
-          mode              = "User"
-          name              = "linux"
-          nodeTaints        = null
-          osDiskSizeGB      = 128
-          osDiskType        = "Ephemeral"
-          osType            = "Linux"
+          availabilityZones      = ["1"]
+          count                  = 2
+          enableAutoScaling      = true
+          enableCustomCaTrust    = false
+          enableEncryptionAtHost = false
+          enableFips             = false
+          enableNodePublicIP     = false
+          enableUltraSsd         = false
+          kubeletDiskType        = "OS"
+          enableAutoScaling      = true
+          maxCount               = 4
+          maxPods                = 40
+          minCount               = 2
+          mode                   = "User"
+          name                   = "linux"
+          nodeTaints             = null
+          osDiskSizeGB           = 128
+          osDiskType             = "Ephemeral"
+          osType                 = "Linux"
           tags = {
             application  = "core"
             autoShutdown = "true"
@@ -302,17 +331,25 @@ resource "azapi_resource" "managedCluster" {
           vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
         },
         {
-          availabilityZones = ["1"]
-          count             = 0
-          enableAutoScaling = true
-          maxCount          = 10
-          minCount          = 0
-          mode              = "User"
-          name              = "cronjob"
-          nodeTaints        = ["dedicated=jobs:NoSchedule"]
-          osDiskSizeGB      = 128
-          osDiskType        = "Ephemeral"
-          osType            = "Linux"
+          availabilityZones      = ["1"]
+          count                  = 0
+          enableAutoScaling      = true
+          enableCustomCaTrust    = false
+          enableEncryptionAtHost = false
+          enableFips             = false
+          enableNodePublicIP     = false
+          enableUltraSsd         = false
+          kubeletDiskType        = "OS"
+          enableAutoScaling      = true
+          maxCount               = 10
+          maxPods                = 30
+          minCount               = 0
+          mode                   = "User"
+          name                   = "cronjob"
+          nodeTaints             = ["dedicated=jobs:NoSchedule"]
+          osDiskSizeGB           = 128
+          osDiskType             = "Ephemeral"
+          osType                 = "Linux"
           tags = {
             application  = "core"
             autoShutdown = "true"
@@ -349,10 +386,26 @@ resource "azapi_resource" "managedCluster" {
         skip-nodes-with-local-storage         = "false"
         skip-nodes-with-system-pods           = "true"
       }
-    }
-    sku = {
-      name = "Automatic"
-      tier = "Standard"
+      autoUpgradeProfile = {
+        nodeOsUpgradeChannel = "NodeImage"
+        upgradeChannel       = "rapid"
+      }
+      azureMonitorProfile = {
+        enabled = false
+      }
+      sku = {
+        name = "Automatic"
+        tier = "Standard"
+      }
+      tags = {
+        application  = "core"
+        autoShutdown = "true"
+        builtFrom    = "hmcts/aks-sds-deploy"
+        businessArea = "Cross-Cutting"
+        criticality  = "Low"
+        environment  = "sandbox"
+        expiresAfter = "3000-01-01"
+      }
     }
   })
 }
