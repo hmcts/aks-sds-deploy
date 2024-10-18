@@ -242,11 +242,11 @@ resource "azapi_resource" "managedCluster" {
           backendPoolType        = "nodeIPConfiguration"
           effectiveOutboundIPs = [
             {
-              id            = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-01-aks-node-rg/providers/Microsoft.Network/publicIPAddresses/1926b15c-3b71-4dea-8336-e0441c593a5a"
+              id = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-01-aks-node-rg/providers/Microsoft.Network/publicIPAddresses/1926b15c-3b71-4dea-8336-e0441c593a5a"
             }
           ]
           managedOutboundIPs = {
-            count     = 1
+            count = 1
           }
         }
       }
