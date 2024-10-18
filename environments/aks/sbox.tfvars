@@ -7,7 +7,7 @@ clusters = {
   }
 }
 
-cluster_automatic = true
+cluster_automatic = false
 
 enable_automatic_channel_upgrade_patch = true
 
