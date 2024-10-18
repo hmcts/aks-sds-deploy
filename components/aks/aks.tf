@@ -181,17 +181,7 @@ resource "azapi_resource" "managedCluster" {
     properties = {
       kubernetesVersion = "1.30.3"
       dnsPrefix         = "k8s-ss-sbox-aks"
-      enableRbac        = true
-      location          = "uksouth"
-      identity = {
-        type = "UserAssigned"
-        userAssignedIdentities = {
-          "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/genesis-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/aks-sbox-mi" : {
-            clientId    = "09d99cb4-e1e7-49c2-a8e6-b5b1740e9c3b",
-            principalId = "ba206872-8722-4375-bf4d-a28c39dff414"
-          }
-        }
-      }
+      enableRBAC        = true
       identityProfile = {
         kubeletidentity = {
           clientId   = "3fbb7e58-9568-44b9-a847-34df64335854",
@@ -208,7 +198,7 @@ resource "azapi_resource" "managedCluster" {
         }
       }
       storageProfile = {
-        diskCsiDriver = {
+        diskCSIDriver = {
           enabled = true
           version = "v1"
         }
@@ -224,13 +214,12 @@ resource "azapi_resource" "managedCluster" {
           "a6ce5b32-e0a5-419e-ba5c-67863c975941",
           "45bbf62b-788e-45e6-b584-01f62cf2d22a"
         ]
-        clientAppID          = null
-        enableAzureRBAC      = false
-        managed              = true
-        disableLocalAccounts = false
-        serverAppID          = null
-        serverAppSecret      = null
-        tenantID             = "531ff96d-0ae9-462a-8d2d-bec7c0b42082"
+        clientAppID     = null
+        enableAzureRBAC = false
+        managed         = true
+        serverAppID     = null
+        serverAppSecret = null
+        tenantID        = "531ff96d-0ae9-462a-8d2d-bec7c0b42082"
       }
       addonProfiles = {
         azureKeyvaultSecretsProvider = {
@@ -270,11 +259,11 @@ resource "azapi_resource" "managedCluster" {
           availabilityZones      = ["1"]
           count                  = 2
           enableAutoScaling      = true
-          enableCustomCaTrust    = false
           enableEncryptionAtHost = false
-          enableFips             = false
+          enableCustomCATrust    = false
+          enableFIPS             = false
           enableNodePublicIP     = false
-          enableUltraSsd         = false
+          enableUltraSSD         = false
           kubeletDiskType        = "OS"
           maxCount               = 4
           maxPods                = 50
@@ -302,11 +291,11 @@ resource "azapi_resource" "managedCluster" {
           availabilityZones      = ["1"]
           count                  = 2
           enableAutoScaling      = true
-          enableCustomCaTrust    = false
           enableEncryptionAtHost = false
-          enableFips             = false
+          enableCustomCATrust    = false
+          enableFIPS             = false
           enableNodePublicIP     = false
-          enableUltraSsd         = false
+          enableUltraSSD         = false
           kubeletDiskType        = "OS"
           enableAutoScaling      = true
           maxCount               = 4
@@ -335,11 +324,11 @@ resource "azapi_resource" "managedCluster" {
           availabilityZones      = ["1"]
           count                  = 0
           enableAutoScaling      = true
-          enableCustomCaTrust    = false
           enableEncryptionAtHost = false
-          enableFips             = false
+          enableCustomCATrust    = false
+          enableFIPS             = false
           enableNodePublicIP     = false
-          enableUltraSsd         = false
+          enableUltraSSD         = false
           kubeletDiskType        = "OS"
           enableAutoScaling      = true
           maxCount               = 10
@@ -388,24 +377,12 @@ resource "azapi_resource" "managedCluster" {
         skip-nodes-with-system-pods           = "true"
       }
       autoUpgradeProfile = {
-        nodeOsUpgradeChannel = "NodeImage"
+        nodeOSUpgradeChannel = "NodeImage"
         upgradeChannel       = "rapid"
-      }
-      azureMonitorProfile = {
-        enabled = false
       }
       sku = {
         name = "Automatic"
         tier = "Standard"
-      }
-      tags = {
-        application  = "core"
-        autoShutdown = "true"
-        builtFrom    = "hmcts/aks-sds-deploy"
-        businessArea = "Cross-Cutting"
-        criticality  = "Low"
-        environment  = "sandbox"
-        expiresAfter = "3000-01-01"
       }
     }
   })
