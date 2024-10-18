@@ -189,6 +189,9 @@ resource "azapi_resource" "managedCluster" {
           resourceId = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/genesis-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/aks-kubelet-sbox-mi"
         }
       }
+      servicePrincipalProfile = {
+        clientId = "msi"
+      }
       securityProfile = {
         workloadIdentity = {
           enabled = true
@@ -202,7 +205,7 @@ resource "azapi_resource" "managedCluster" {
           enabled = true
           version = "v1"
         }
-        fileCsiDriver = {
+        fileCSIDriver = {
           enabled = true
         }
         snapshotController = {
@@ -240,7 +243,6 @@ resource "azapi_resource" "managedCluster" {
         serviceCidr     = "10.0.0.0/16"
         loadBalancerSku = "Standard"
         outboundType    = "loadBalancer"
-        loadBalancerSku = "Standard"
         loadBalancerProfile = {
           allocatedOutboundPorts = null
           backendPoolType        = "nodeIPConfiguration"
@@ -380,10 +382,10 @@ resource "azapi_resource" "managedCluster" {
         nodeOSUpgradeChannel = "NodeImage"
         upgradeChannel       = "rapid"
       }
-      sku = {
-        name = "Automatic"
-        tier = "Standard"
-      }
+    }
+    sku = {
+      name = "Automatic"
+      tier = "Standard"
     }
   })
 }
