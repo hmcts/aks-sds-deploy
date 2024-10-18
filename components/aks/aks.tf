@@ -173,8 +173,9 @@ resource "azapi_resource" "managedCluster" {
   location  = var.location
 
   identity {
-    type         = "UserAssigned"
-    identity_ids = ["/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/genesis-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/aks-sbox-mi"]
+    delegatedResources = null
+    type               = "UserAssigned"
+    identity_ids       = ["/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/genesis-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/aks-sbox-mi"]
   }
 
   body = ({
@@ -197,7 +198,7 @@ resource "azapi_resource" "managedCluster" {
           enabled = true
         }
         imageCleaner = {
-          enabled = false
+          enabled = true
         }
       }
       storageProfile = {
@@ -218,7 +219,7 @@ resource "azapi_resource" "managedCluster" {
           "45bbf62b-788e-45e6-b584-01f62cf2d22a"
         ]
         clientAppID     = null
-        enableAzureRBAC = false
+        enableAzureRBAC = true
         managed         = true
         serverAppID     = null
         serverAppSecret = null
@@ -244,8 +245,7 @@ resource "azapi_resource" "managedCluster" {
         loadBalancerSku = "Standard"
         outboundType    = "loadBalancer"
         loadBalancerProfile = {
-          allocatedOutboundPorts = null
-          backendPoolType        = "nodeIPConfiguration"
+          backendPoolType = "nodeIPConfiguration"
           effectiveOutboundIPs = [
             {
               id = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-01-aks-node-rg/providers/Microsoft.Network/publicIPAddresses/1926b15c-3b71-4dea-8336-e0441c593a5a"
@@ -258,7 +258,9 @@ resource "azapi_resource" "managedCluster" {
       }
       agentPoolProfiles = [
         {
-          availabilityZones      = ["1"]
+          availabilityZones = [
+            "1"
+          ]
           count                  = 2
           enableAutoScaling      = true
           enableEncryptionAtHost = false
@@ -290,7 +292,9 @@ resource "azapi_resource" "managedCluster" {
           vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
         },
         {
-          availabilityZones      = ["1"]
+          availabilityZones = [
+            "1"
+          ]
           count                  = 2
           enableAutoScaling      = true
           enableEncryptionAtHost = false
@@ -323,7 +327,9 @@ resource "azapi_resource" "managedCluster" {
           vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
         },
         {
-          availabilityZones      = ["1"]
+          availabilityZones = [
+            "1"
+          ]
           count                  = 0
           enableAutoScaling      = true
           enableEncryptionAtHost = false
