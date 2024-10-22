@@ -182,13 +182,13 @@ resource "azapi_resource" "managedCluster" {
       kubernetesVersion = "1.30.3"
       dnsPrefix         = "k8s-ss-sbox-aks"
       enableRBAC        = true
-      identityProfile = {
-        kubeletidentity = {
-          clientId   = "3fbb7e58-9568-44b9-a847-34df64335854",
-          objectId   = "fd657beb-8e34-42f2-9cc7-f9016a065849",
-          resourceId = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/genesis-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/aks-kubelet-sbox-mi"
-        }
-      }
+      # identityProfile = {
+      #   kubeletidentity = {
+      #     clientId   = "3fbb7e58-9568-44b9-a847-34df64335854",
+      #     objectId   = "fd657beb-8e34-42f2-9cc7-f9016a065849",
+      #     resourceId = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/genesis-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/aks-kubelet-sbox-mi"
+      #   }
+      # }
       servicePrincipalProfile = {
         clientId = "msi"
       }
