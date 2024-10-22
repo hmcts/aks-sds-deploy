@@ -270,13 +270,13 @@ resource "azapi_resource" "managedCluster" {
           kubeletDiskType        = "OS"
           maxCount               = 4
           maxPods                = 50
-          minCount               = 2
-          mode                   = "System"
-          name                   = "system"
-          nodeTaints             = ["CriticalAddonsOnly=true:NoSchedule"]
-          osDiskSizeGB           = 128
-          osDiskType             = "Ephemeral"
-          osType                 = "Linux"
+          # minCount               = 2
+          mode         = "System"
+          name         = "system"
+          nodeTaints   = ["CriticalAddonsOnly=true:NoSchedule"]
+          osDiskSizeGB = 128
+          osDiskType   = "Ephemeral"
+          osType       = "Linux"
           tags = {
             application  = "core"
             autoShutdown = "true"
@@ -304,13 +304,13 @@ resource "azapi_resource" "managedCluster" {
           kubeletDiskType        = "OS"
           maxCount               = 4
           maxPods                = 40
-          minCount               = 2
-          mode                   = "User"
-          name                   = "linux"
-          nodeTaints             = null
-          osDiskSizeGB           = 128
-          osDiskType             = "Ephemeral"
-          osType                 = "Linux"
+          # minCount               = 2
+          mode         = "User"
+          name         = "linux"
+          nodeTaints   = null
+          osDiskSizeGB = 128
+          osDiskType   = "Ephemeral"
+          osType       = "Linux"
           tags = {
             application  = "core"
             autoShutdown = "true"
@@ -338,13 +338,13 @@ resource "azapi_resource" "managedCluster" {
           kubeletDiskType        = "OS"
           maxCount               = 10
           maxPods                = 30
-          minCount               = 0
-          mode                   = "User"
-          name                   = "cronjob"
-          nodeTaints             = ["dedicated=jobs:NoSchedule"]
-          osDiskSizeGB           = 128
-          osDiskType             = "Ephemeral"
-          osType                 = "Linux"
+          # minCount               = 0
+          mode         = "User"
+          name         = "cronjob"
+          nodeTaints   = ["dedicated=jobs:NoSchedule"]
+          osDiskSizeGB = 128
+          osDiskType   = "Ephemeral"
+          osType       = "Linux"
           tags = {
             application  = "core"
             autoShutdown = "true"
