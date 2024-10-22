@@ -65,7 +65,7 @@ data "azuread_service_principal" "aks_auto_shutdown" {
 
 module "kubernetes" {
   for_each    = toset((var.env == "sbox" && var.cluster_automatic) ? [for k, v in var.clusters : k if k == "00"] : [for k, v in var.clusters : k])
-  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=master"
+  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-19027-updating-azapi-to-v2-beta"
   environment = var.env
   location    = var.location
 
