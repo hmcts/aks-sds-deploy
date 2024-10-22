@@ -261,7 +261,7 @@ resource "azapi_resource" "managedCluster" {
           #   "1"
           # ]
           count                  = 2
-          enableAutoScaling      = true
+          enableAutoScaling      = false
           enableEncryptionAtHost = false
           enableCustomCATrust    = false
           enableFIPS             = false
@@ -295,14 +295,13 @@ resource "azapi_resource" "managedCluster" {
           #   "1"
           # ]
           count                  = 2
-          enableAutoScaling      = true
+          enableAutoScaling      = false
           enableEncryptionAtHost = false
           enableCustomCATrust    = false
           enableFIPS             = false
           enableNodePublicIP     = false
           enableUltraSSD         = false
           kubeletDiskType        = "OS"
-          enableAutoScaling      = true
           maxCount               = 4
           maxPods                = 40
           minCount               = 2
@@ -330,14 +329,13 @@ resource "azapi_resource" "managedCluster" {
           #   "1"
           # ]
           count                  = 0
-          enableAutoScaling      = true
+          enableAutoScaling      = false
           enableEncryptionAtHost = false
           enableCustomCATrust    = false
           enableFIPS             = false
           enableNodePublicIP     = false
           enableUltraSSD         = false
           kubeletDiskType        = "OS"
-          enableAutoScaling      = true
           maxCount               = 10
           maxPods                = 30
           minCount               = 0
@@ -361,28 +359,28 @@ resource "azapi_resource" "managedCluster" {
           # vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
         }
       ]
-      autoScalerProfile = {
-        balance-similar-node-groups           = "false"
-        daemonset-eviction-for-empty-nodes    = false
-        daemonset-eviction-for-occupied-nodes = true
-        expander                              = "random"
-        ignore-daemonsets-utilization         = false
-        max-empty-bulk-delete                 = "10"
-        max-graceful-termination-sec          = "600"
-        max-node-provision-time               = "15m"
-        max-total-unready-percentage          = "45"
-        new-pod-scale-up-delay                = "0s"
-        ok-total-unready-count                = "3"
-        scale-down-delay-after-add            = "10m"
-        scale-down-delay-after-delete         = "10s"
-        scale-down-delay-after-failure        = "3m"
-        scale-down-unneeded-time              = "10m"
-        scale-down-unready-time               = "20m"
-        scale-down-utilization-threshold      = "0.5"
-        scan-interval                         = "10s"
-        skip-nodes-with-local-storage         = "false"
-        skip-nodes-with-system-pods           = "true"
-      }
+      # autoScalerProfile = {
+      #   balance-similar-node-groups           = "false"
+      #   daemonset-eviction-for-empty-nodes    = false
+      #   daemonset-eviction-for-occupied-nodes = true
+      #   expander                              = "random"
+      #   ignore-daemonsets-utilization         = false
+      #   max-empty-bulk-delete                 = "10"
+      #   max-graceful-termination-sec          = "600"
+      #   max-node-provision-time               = "15m"
+      #   max-total-unready-percentage          = "45"
+      #   new-pod-scale-up-delay                = "0s"
+      #   ok-total-unready-count                = "3"
+      #   scale-down-delay-after-add            = "10m"
+      #   scale-down-delay-after-delete         = "10s"
+      #   scale-down-delay-after-failure        = "3m"
+      #   scale-down-unneeded-time              = "10m"
+      #   scale-down-unready-time               = "20m"
+      #   scale-down-utilization-threshold      = "0.5"
+      #   scan-interval                         = "10s"
+      #   skip-nodes-with-local-storage         = "false"
+      #   skip-nodes-with-system-pods           = "true"
+      # }
       autoUpgradeProfile = {
         nodeOSUpgradeChannel = "NodeImage"
         upgradeChannel       = "rapid"
