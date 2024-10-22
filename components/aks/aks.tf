@@ -201,7 +201,7 @@ resource "azapi_resource" "managedCluster" {
     identity_ids = ["/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/genesis-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/aks-sbox-mi"]
   }
 
-  body = ({
+  body = {
     properties = {
       kubernetesVersion = "1.30.3"
       dnsPrefix         = "k8s-ss-sbox-aks"
@@ -354,5 +354,5 @@ resource "azapi_resource" "managedCluster" {
       name = "Automatic"
       tier = "Standard"
     }
-  })
+  }
 }
