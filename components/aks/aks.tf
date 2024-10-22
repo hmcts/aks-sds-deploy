@@ -268,8 +268,8 @@ resource "azapi_resource" "managedCluster" {
           enableNodePublicIP     = false
           enableUltraSSD         = false
           kubeletDiskType        = "OS"
-          maxCount               = 4
-          maxPods                = 50
+          # maxCount               = 4
+          # maxPods                = 50
           # minCount               = 2
           mode         = "System"
           name         = "system"
@@ -302,8 +302,8 @@ resource "azapi_resource" "managedCluster" {
           enableNodePublicIP     = false
           enableUltraSSD         = false
           kubeletDiskType        = "OS"
-          maxCount               = 4
-          maxPods                = 40
+          # maxCount               = 4
+          # maxPods                = 40
           # minCount               = 2
           mode         = "User"
           name         = "linux"
@@ -336,8 +336,8 @@ resource "azapi_resource" "managedCluster" {
           enableNodePublicIP     = false
           enableUltraSSD         = false
           kubeletDiskType        = "OS"
-          maxCount               = 10
-          maxPods                = 30
+          # maxCount               = 10
+          # maxPods                = 30
           # minCount               = 0
           mode         = "User"
           name         = "cronjob"
