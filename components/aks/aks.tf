@@ -169,7 +169,7 @@ resource "azapi_resource" "managedCluster" {
   count     = var.cluster_automatic ? 1 : 0
   type      = "Microsoft.ContainerService/managedClusters@2024-03-02-preview"
   parent_id = azurerm_resource_group.kubernetes_resource_group["01"].id
-  name      = "ss-sbox-01-aks-01"
+  name      = "ss-sbox-01-aks"
   location  = var.location
 
   identity {
