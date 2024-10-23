@@ -174,7 +174,6 @@ resource "azapi_resource" "managedCluster" {
 
   identity {
     type = "SystemAssigned"
-    # identity_ids = ["/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/genesis-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/aks-sbox-mi"]
   }
 
   body = jsonencode({
@@ -182,13 +181,6 @@ resource "azapi_resource" "managedCluster" {
       kubernetesVersion = "1.30.3"
       dnsPrefix         = "k8s-ss-sbox-aks"
       enableRBAC        = true
-      # identityProfile = {
-      #   kubeletidentity = {
-      #     clientId   = "3fbb7e58-9568-44b9-a847-34df64335854",
-      #     objectId   = "fd657beb-8e34-42f2-9cc7-f9016a065849",
-      #     resourceId = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/genesis-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/aks-kubelet-sbox-mi"
-      #   }
-      # }
       servicePrincipalProfile = {
         clientId = "msi"
       }
@@ -233,33 +225,8 @@ resource "azapi_resource" "managedCluster" {
           enabled = true
         }
       }
-      # networkProfile = {
-      #   networkPlugin    = "azure"
-      #   networkDataplane = "cilium"
-      #   ipFamilies = [
-      #     "IPv4"
-      #   ]
-      #   dnsServiceIP    = "10.0.0.10"
-      #   serviceCidr     = "10.0.0.0/16"
-      #   loadBalancerSku = "Standard"
-      #   outboundType    = "loadBalancer"
-      #   loadBalancerProfile = {
-      #     backendPoolType = "nodeIPConfiguration"
-      #     effectiveOutboundIPs = [
-      #       {
-      #         id = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-01-aks-node-rg/providers/Microsoft.Network/publicIPAddresses/1926b15c-3b71-4dea-8336-e0441c593a5a"
-      #       }
-      #     ]
-      #     managedOutboundIPs = {
-      #       count = 1
-      #     }
-      #   }
-      # }
       agentPoolProfiles = [
         {
-          # availabilityZones = [
-          #   "1"
-          # ]
           count                  = 2
           enableAutoScaling      = false
           enableEncryptionAtHost = false
@@ -268,15 +235,12 @@ resource "azapi_resource" "managedCluster" {
           enableNodePublicIP     = false
           enableUltraSSD         = false
           kubeletDiskType        = "OS"
-          # maxCount               = 4
-          # maxPods                = 50
-          # minCount               = 2
-          mode         = "System"
-          name         = "system"
-          nodeTaints   = ["CriticalAddonsOnly=true:NoSchedule"]
-          osDiskSizeGB = 128
-          osDiskType   = "Ephemeral"
-          osType       = "Linux"
+          mode                   = "System"
+          name                   = "system"
+          nodeTaints             = ["CriticalAddonsOnly=true:NoSchedule"]
+          osDiskSizeGB           = 128
+          osDiskType             = "Ephemeral"
+          osType                 = "Linux"
           tags = {
             application  = "core"
             autoShutdown = "true"
@@ -288,12 +252,8 @@ resource "azapi_resource" "managedCluster" {
           }
           type   = "VirtualMachineScaleSets"
           vmSize = "Standard_D4ds_v5"
-          # vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
         },
         {
-          # availabilityZones = [
-          #   "1"
-          # ]
           count                  = 2
           enableAutoScaling      = false
           enableEncryptionAtHost = false
@@ -302,15 +262,12 @@ resource "azapi_resource" "managedCluster" {
           enableNodePublicIP     = false
           enableUltraSSD         = false
           kubeletDiskType        = "OS"
-          # maxCount               = 4
-          # maxPods                = 40
-          # minCount               = 2
-          mode         = "User"
-          name         = "linux"
-          nodeTaints   = null
-          osDiskSizeGB = 128
-          osDiskType   = "Ephemeral"
-          osType       = "Linux"
+          mode                   = "User"
+          name                   = "linux"
+          nodeTaints             = null
+          osDiskSizeGB           = 128
+          osDiskType             = "Ephemeral"
+          osType                 = "Linux"
           tags = {
             application  = "core"
             autoShutdown = "true"
@@ -322,12 +279,8 @@ resource "azapi_resource" "managedCluster" {
           }
           type   = "VirtualMachineScaleSets"
           vmSize = "Standard_D4ds_v5"
-          #   vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
         },
         {
-          # availabilityZones = [
-          #   "1"
-          # ]
           count                  = 0
           enableAutoScaling      = false
           enableEncryptionAtHost = false
@@ -336,15 +289,12 @@ resource "azapi_resource" "managedCluster" {
           enableNodePublicIP     = false
           enableUltraSSD         = false
           kubeletDiskType        = "OS"
-          # maxCount               = 10
-          # maxPods                = 30
-          # minCount               = 0
-          mode         = "User"
-          name         = "cronjob"
-          nodeTaints   = ["dedicated=jobs:NoSchedule"]
-          osDiskSizeGB = 128
-          osDiskType   = "Ephemeral"
-          osType       = "Linux"
+          mode                   = "User"
+          name                   = "cronjob"
+          nodeTaints             = ["dedicated=jobs:NoSchedule"]
+          osDiskSizeGB           = 128
+          osDiskType             = "Ephemeral"
+          osType                 = "Linux"
           tags = {
             application  = "core"
             autoShutdown = "true"
@@ -356,36 +306,12 @@ resource "azapi_resource" "managedCluster" {
           }
           type   = "VirtualMachineScaleSets"
           vmSize = "Standard_D4ds_v5"
-          # vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
         }
       ]
-      # autoScalerProfile = {
-      #   balance-similar-node-groups           = "false"
-      #   daemonset-eviction-for-empty-nodes    = false
-      #   daemonset-eviction-for-occupied-nodes = true
-      #   expander                              = "random"
-      #   ignore-daemonsets-utilization         = false
-      #   max-empty-bulk-delete                 = "10"
-      #   max-graceful-termination-sec          = "600"
-      #   max-node-provision-time               = "15m"
-      #   max-total-unready-percentage          = "45"
-      #   new-pod-scale-up-delay                = "0s"
-      #   ok-total-unready-count                = "3"
-      #   scale-down-delay-after-add            = "10m"
-      #   scale-down-delay-after-delete         = "10s"
-      #   scale-down-delay-after-failure        = "3m"
-      #   scale-down-unneeded-time              = "10m"
-      #   scale-down-unready-time               = "20m"
-      #   scale-down-utilization-threshold      = "0.5"
-      #   scan-interval                         = "10s"
-      #   skip-nodes-with-local-storage         = "false"
-      #   skip-nodes-with-system-pods           = "true"
-      # }
       autoUpgradeProfile = {
         nodeOSUpgradeChannel = "NodeImage"
         upgradeChannel       = "rapid"
       }
-      # disableLocalAccounts = false
     }
     sku = {
       name = "Automatic"
