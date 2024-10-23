@@ -385,6 +385,7 @@ resource "azapi_resource" "managedCluster" {
         nodeOSUpgradeChannel = "NodeImage"
         upgradeChannel       = "rapid"
       }
+      disableLocalAccounts = false
     }
     sku = {
       name = "Automatic"
