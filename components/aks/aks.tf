@@ -65,7 +65,7 @@ data "azuread_service_principal" "aks_auto_shutdown" {
 
 module "kubernetes" {
   for_each    = toset((var.env == "sbox" && var.cluster_automatic) ? [for k, v in var.clusters : k if k == "00"] : [for k, v in var.clusters : k])
-  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=master"
+  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-19027-updating-azapi-to-v2-beta"
   environment = var.env
   location    = var.location
 
@@ -131,7 +131,7 @@ module "kubernetes" {
 }
 
 module "ctags" {
-  source       = "git::https://github.com/hmcts/terraform-module-common-tags.git?ref=DTSPO-19027-updating-azapi-to-v2-beta"
+  source       = "git::https://github.com/hmcts/terraform-module-common-tags.git?ref=master"
   environment  = var.env
   product      = var.product
   builtFrom    = var.builtFrom
