@@ -131,7 +131,7 @@ module "kubernetes" {
 }
 
 module "ctags" {
-  source       = "git::https://github.com/hmcts/terraform-module-common-tags.git?ref=master"
+  source       = "git::https://github.com/hmcts/terraform-module-common-tags.git?ref=DTSPO-19027-updating-azapi-to-v2-beta"
   environment  = var.env
   product      = var.product
   builtFrom    = var.builtFrom
@@ -177,7 +177,7 @@ resource "azapi_resource" "managedCluster" {
     # identity_ids = ["/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/genesis-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/aks-sbox-mi"]
   }
 
-  body = {
+  body = jsonencode({
     properties = {
       kubernetesVersion = "1.30.3"
       dnsPrefix         = "k8s-ss-sbox-aks"
@@ -390,5 +390,5 @@ resource "azapi_resource" "managedCluster" {
       name = "Automatic"
       tier = "Standard"
     }
-  }
+  })
 }
