@@ -228,7 +228,6 @@ resource "azapi_resource" "managedCluster" {
       agentPoolProfiles = [
         {
           count                  = 2
-          enableAutoScaling      = false
           enableEncryptionAtHost = false
           enableCustomCATrust    = false
           enableFIPS             = false
@@ -255,7 +254,6 @@ resource "azapi_resource" "managedCluster" {
         },
         {
           count                  = 2
-          enableAutoScaling      = false
           enableEncryptionAtHost = false
           enableCustomCATrust    = false
           enableFIPS             = false
@@ -282,7 +280,6 @@ resource "azapi_resource" "managedCluster" {
         },
         {
           count                  = 0
-          enableAutoScaling      = false
           enableEncryptionAtHost = false
           enableCustomCATrust    = false
           enableFIPS             = false
