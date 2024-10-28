@@ -162,33 +162,9 @@ resource "null_resource" "register_automatic_sku_preview" {
   triggers = {
     cluster_creation = "${var.cluster_automatic ? 1 : 0}"
   }
-
-  provisioner "local-exec" {
-    command = <<EOT
-      az extension add --name aks-preview || az extension update --name aks-preview
-      az feature register --namespace Microsoft.ContainerService --name EnableAPIServerVnetIntegrationPreview
-      az feature register --namespace Microsoft.ContainerService --name NRGLockdownPreview
-      az feature register --namespace Microsoft.ContainerService --name SafeguardsPreview
-      az feature register --namespace Microsoft.ContainerService --name NodeAutoProvisioningPreview
-      az feature register --namespace Microsoft.ContainerService --name DisableSSHPreview
-      az feature register --namespace Microsoft.ContainerService --name AutomaticSKUPreview
-
-      # Wait for all features to be registered
-      for feature in EnableAPIServerVnetIntegrationPreview NRGLockdownPreview SafeguardsPreview NodeAutoProvisioningPreview DisableSSHPreview AutomaticSKUPreview; do
-        while [ "$(az feature show --namespace Microsoft.ContainerService --name $feature --query properties.state -o tsv)" != "Registered" ]; do
-          echo "Waiting for $feature feature to be registered..."
-          sleep 10
-        done
-      done
-
-      # Register the provider
-      az provider register --namespace Microsoft.ContainerService
-    EOT
-  }
 }
 
 resource "azapi_resource" "managedCluster" {
-  depends_on = [null_resource.register_automatic_sku_preview]
 
   count     = var.cluster_automatic ? 1 : 0
   type      = "Microsoft.ContainerService/managedClusters@2024-03-02-preview"
@@ -197,14 +173,37 @@ resource "azapi_resource" "managedCluster" {
   location  = var.location
 
   identity {
-    type         = "UserAssigned"
-    identity_ids = ["/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/genesis-rg/providers/Microsoft.ManagedIdentity/userAssignedIdentities/aks-sbox-mi"]
+    type = "SystemAssigned"
   }
 
-  body = ({
+  body = jsonencode({
     properties = {
       kubernetesVersion = "1.30.3"
       dnsPrefix         = "k8s-ss-sbox-aks"
+      enableRBAC        = true
+      servicePrincipalProfile = {
+        clientId = "msi"
+      }
+      securityProfile = {
+        workloadIdentity = {
+          enabled = true
+        }
+        imageCleaner = {
+          enabled = true
+        }
+      }
+      storageProfile = {
+        diskCSIDriver = {
+          enabled = true
+          version = "v1"
+        }
+        fileCSIDriver = {
+          enabled = true
+        }
+        snapshotController = {
+          enabled = true
+        }
+      }
       aadProfile = {
         adminGroupObjectIDs = [
           "a6ce5b32-e0a5-419e-ba5c-67863c975941",
@@ -226,43 +225,21 @@ resource "azapi_resource" "managedCluster" {
           enabled = true
         }
       }
-      networkProfile = {
-        networkPlugin    = "azure"
-        networkDataplane = "azure"
-        ipFamilies = [
-          "IPv4"
-        ]
-        dnsServiceIP    = "10.0.0.10"
-        serviceCidr     = "10.0.0.0/16"
-        loadBalancerSku = "Standard"
-        outboundType    = "loadBalancer"
-        loadBalancerSku = "Standard"
-        loadBalancerProfile = {
-          allocatedOutboundPorts = null
-          backendPoolType        = "nodeIPConfiguration"
-          effectiveOutboundIPs = [
-            {
-              id = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-01-aks-node-rg/providers/Microsoft.Network/publicIPAddresses/1926b15c-3b71-4dea-8336-e0441c593a5a"
-            }
-          ]
-          managedOutboundIPs = {
-            count = 1
-          }
-        }
-      }
       agentPoolProfiles = [
         {
-          availabilityZones = ["1"]
-          count             = 2
-          enableAutoScaling = true
-          maxCount          = 4
-          minCount          = 2
-          mode              = "System"
-          name              = "system"
-          nodeTaints        = ["CriticalAddonsOnly=true:NoSchedule"]
-          osDiskSizeGB      = 128
-          osDiskType        = "Ephemeral"
-          osType            = "Linux"
+          count                  = 2
+          enableEncryptionAtHost = false
+          enableCustomCATrust    = false
+          enableFIPS             = false
+          enableNodePublicIP     = false
+          enableUltraSSD         = false
+          kubeletDiskType        = "OS"
+          mode                   = "System"
+          name                   = "system"
+          nodeTaints             = ["CriticalAddonsOnly=true:NoSchedule"]
+          osDiskSizeGB           = 128
+          osDiskType             = "Ephemeral"
+          osType                 = "Linux"
           tags = {
             application  = "core"
             autoShutdown = "true"
@@ -272,22 +249,23 @@ resource "azapi_resource" "managedCluster" {
             environment  = "sandbox"
             expiresAfter = "3000-01-01"
           }
-          type         = "VirtualMachineScaleSets"
-          vmSize       = "Standard_D4ds_v5"
-          vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
+          type   = "VirtualMachineScaleSets"
+          vmSize = "Standard_D4ds_v5"
         },
         {
-          availabilityZones = ["1"]
-          count             = 2
-          enableAutoScaling = true
-          maxCount          = 4
-          minCount          = 2
-          mode              = "User"
-          name              = "linux"
-          nodeTaints        = null
-          osDiskSizeGB      = 128
-          osDiskType        = "Ephemeral"
-          osType            = "Linux"
+          count                  = 2
+          enableEncryptionAtHost = false
+          enableCustomCATrust    = false
+          enableFIPS             = false
+          enableNodePublicIP     = false
+          enableUltraSSD         = false
+          kubeletDiskType        = "OS"
+          mode                   = "User"
+          name                   = "linux"
+          nodeTaints             = null
+          osDiskSizeGB           = 128
+          osDiskType             = "Ephemeral"
+          osType                 = "Linux"
           tags = {
             application  = "core"
             autoShutdown = "true"
@@ -297,22 +275,23 @@ resource "azapi_resource" "managedCluster" {
             environment  = "sandbox"
             expiresAfter = "3000-01-01"
           }
-          type         = "VirtualMachineScaleSets"
-          vmSize       = "Standard_D4ds_v5"
-          vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
+          type   = "VirtualMachineScaleSets"
+          vmSize = "Standard_D4ds_v5"
         },
         {
-          availabilityZones = ["1"]
-          count             = 0
-          enableAutoScaling = true
-          maxCount          = 10
-          minCount          = 0
-          mode              = "User"
-          name              = "cronjob"
-          nodeTaints        = ["dedicated=jobs:NoSchedule"]
-          osDiskSizeGB      = 128
-          osDiskType        = "Ephemeral"
-          osType            = "Linux"
+          count                  = 0
+          enableEncryptionAtHost = false
+          enableCustomCATrust    = false
+          enableFIPS             = false
+          enableNodePublicIP     = false
+          enableUltraSSD         = false
+          kubeletDiskType        = "OS"
+          mode                   = "User"
+          name                   = "cronjob"
+          nodeTaints             = ["dedicated=jobs:NoSchedule"]
+          osDiskSizeGB           = 128
+          osDiskType             = "Ephemeral"
+          osType                 = "Linux"
           tags = {
             application  = "core"
             autoShutdown = "true"
@@ -322,32 +301,13 @@ resource "azapi_resource" "managedCluster" {
             environment  = "sandbox"
             expiresAfter = "3000-01-01"
           }
-          type         = "VirtualMachineScaleSets"
-          vmSize       = "Standard_D4ds_v5"
-          vnetSubnetID = "/subscriptions/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/resourceGroups/ss-sbox-network-rg/providers/Microsoft.Network/virtualNetworks/ss-sbox-vnet/subnets/aks-01"
+          type   = "VirtualMachineScaleSets"
+          vmSize = "Standard_D4ds_v5"
         }
       ]
-      autoScalerProfile = {
-        balance-similar-node-groups           = "false"
-        daemonset-eviction-for-empty-nodes    = false
-        daemonset-eviction-for-occupied-nodes = true
-        expander                              = "random"
-        ignore-daemonsets-utilization         = false
-        max-empty-bulk-delete                 = "10"
-        max-graceful-termination-sec          = "600"
-        max-node-provision-time               = "15m"
-        max-total-unready-percentage          = "45"
-        new-pod-scale-up-delay                = "0s"
-        ok-total-unready-count                = "3"
-        scale-down-delay-after-add            = "10m"
-        scale-down-delay-after-delete         = "10s"
-        scale-down-delay-after-failure        = "3m"
-        scale-down-unneeded-time              = "10m"
-        scale-down-unready-time               = "20m"
-        scale-down-utilization-threshold      = "0.5"
-        scan-interval                         = "10s"
-        skip-nodes-with-local-storage         = "false"
-        skip-nodes-with-system-pods           = "true"
+      autoUpgradeProfile = {
+        nodeOSUpgradeChannel = "NodeImage"
+        upgradeChannel       = "rapid"
       }
     }
     sku = {
