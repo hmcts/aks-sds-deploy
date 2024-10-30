@@ -189,8 +189,8 @@ resource "azapi_resource" "managedCluster" {
           enabled = true
         }
         imageCleaner = {
-          enabled        = true
-          interval_hours = 24
+          enabled       = true
+          intervalHours = 168
         }
       }
 
