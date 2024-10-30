@@ -15,7 +15,7 @@ availability_zones                     = ["1"]
 autoShutdown = true
 
 linux_node_pool = {
-  max_nodes = 16
+  max_nodes = 30
 }
 
 oms_agent_enabled = true
