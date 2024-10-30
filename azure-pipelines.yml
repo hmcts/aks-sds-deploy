@@ -111,7 +111,6 @@ stages:
               serviceConnection: "DCD-CFT-Sandbox"
               overrideAction: ${{ parameters.action }}
               projectName: ${{ variables.project }}
-              cluster: ${{ parameters.cluster }}
               environment: "sbox"
               runManualStart: true
 
