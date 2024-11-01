@@ -164,6 +164,25 @@ resource "null_resource" "register_automatic_sku_preview" {
   }
 }
 
+
+resource "azapi_resource" "service_operator_credential" {
+  schema_validation_enabled = false
+  name                      = "ss-sbox-01-aks"
+  parent_id                 = module.kubernetes.aks_user_assigned_identity_id
+  type                      = "Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials@2022-01-31-preview"
+  location                  = var.location
+  body = jsonencode({
+    properties = {
+      issuer    = azurerm_kubernetes_cluster.kubernetes_cluster.oidc_issuer_url
+      subject   = "system:serviceaccount:azureserviceoperator-system:azureserviceoperator-default"
+      audiences = ["api://AzureADTokenExchange"]
+    }
+  })
+  lifecycle {
+    ignore_changes = [location]
+  }
+}
+
 resource "azapi_resource" "managedCluster" {
 
   count     = var.cluster_automatic ? 1 : 0
