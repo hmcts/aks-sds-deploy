@@ -174,7 +174,7 @@ resource "azapi_resource" "service_operator_credential" {
   location                  = var.location
   body = jsonencode({
     properties = {
-      issuer    = jsondecode(azapi_resource.managedCluster.body).properties.oidcIssuerProfile.issuer
+      issuer    = jsondecode(azapi_resource.managedCluster[count.index].body).properties.oidcIssuerProfile.issuer
       subject   = "system:serviceaccount:azureserviceoperator-system:azureserviceoperator-default"
       audiences = ["api://AzureADTokenExchange"]
     }
