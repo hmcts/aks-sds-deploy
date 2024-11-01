@@ -202,7 +202,7 @@ resource "azapi_resource" "managedCluster" {
       dnsPrefix         = "k8s-ss-sbox-aks"
       enableRBAC        = true
       oidcIssuerProfile = {
-        issuer = "https://uksouth.oic.prod-aks.azure.com/531ff96d-0ae9-462a-8d2d-bec7c0b42082/3ddeb201-a606-40e0-a3f1-a1fe3c7944c9/"
+        issuerURL = "https://uksouth.oic.prod-aks.azure.com/531ff96d-0ae9-462a-8d2d-bec7c0b42082/3ddeb201-a606-40e0-a3f1-a1fe3c7944c9/"
       }
       servicePrincipalProfile = {
         clientId = "msi"
