@@ -164,18 +164,26 @@ resource "null_resource" "register_automatic_sku_preview" {
   }
 }
 
+data "azurerm_resource_group" "genesis_rg" {
+  name = "genesis-rg"
+}
+
+data "azurerm_user_assigned_identity" "aks" {
+  name                = "aks-${sbox}-mi"
+  resource_group_name = data.azurerm_resource_group.genesis_rg.name
+}
 
 resource "azapi_resource" "service_operator_credential" {
 
   count                     = var.cluster_automatic ? 1 : 0
   schema_validation_enabled = false
   name                      = "ss-sbox-01-aks"
-  parent_id                 = module.kubernetes.aks_user_assigned_identity_id
+  parent_id                 = data.azurerm_user_assigned_identity.aks.id
   type                      = "Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials@2022-01-31-preview"
   location                  = var.location
   body = jsonencode({
     properties = {
-      issuer    = module.kubernetes.oidc_issuer_url
+      issuer    = jsondecode(azapi_resource.managedCluster.body).properties.oidcIssuerProfile.issuer
       subject   = "system:serviceaccount:azureserviceoperator-system:azureserviceoperator-default"
       audiences = ["api://AzureADTokenExchange"]
     }
@@ -202,6 +210,9 @@ resource "azapi_resource" "managedCluster" {
       kubernetesVersion = "1.30.3"
       dnsPrefix         = "k8s-ss-sbox-aks"
       enableRBAC        = true
+      oidcIssuerProfile = {
+        issuer = "https://uksouth.oic.prod-aks.azure.com/531ff96d-0ae9-462a-8d2d-bec7c0b42082/3ddeb201-a606-40e0-a3f1-a1fe3c7944c9/"
+      }
       servicePrincipalProfile = {
         clientId = "msi"
       }
