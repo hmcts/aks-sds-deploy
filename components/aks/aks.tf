@@ -189,9 +189,11 @@ resource "azapi_resource" "managedCluster" {
           enabled = true
         }
         imageCleaner = {
-          enabled = true
+          enabled       = true
+          intervalHours = 168
         }
       }
+
       storageProfile = {
         diskCSIDriver = {
           enabled = true
