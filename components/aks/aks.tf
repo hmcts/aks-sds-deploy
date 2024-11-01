@@ -166,6 +166,8 @@ resource "null_resource" "register_automatic_sku_preview" {
 
 
 resource "azapi_resource" "service_operator_credential" {
+
+  count                     = var.cluster_automatic ? 1 : 0
   schema_validation_enabled = false
   name                      = "ss-sbox-01-aks"
   parent_id                 = module.kubernetes.aks_user_assigned_identity_id
@@ -173,7 +175,7 @@ resource "azapi_resource" "service_operator_credential" {
   location                  = var.location
   body = jsonencode({
     properties = {
-      issuer    = azurerm_kubernetes_cluster.kubernetes_cluster.oidc_issuer_url
+      issuer    = module.kubernetes.oidc_issuer_url
       subject   = "system:serviceaccount:azureserviceoperator-system:azureserviceoperator-default"
       audiences = ["api://AzureADTokenExchange"]
     }
