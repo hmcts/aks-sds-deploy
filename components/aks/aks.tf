@@ -164,15 +164,6 @@ resource "null_resource" "register_automatic_sku_preview" {
   }
 }
 
-data "azurerm_resource_group" "genesis_rg" {
-  name = "genesis-rg"
-}
-
-data "azurerm_user_assigned_identity" "aks" {
-  name                = "aks-${sbox}-mi"
-  resource_group_name = data.azurerm_resource_group.genesis_rg.name
-}
-
 resource "azapi_resource" "service_operator_credential" {
 
   count                     = var.cluster_automatic ? 1 : 0
