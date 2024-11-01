@@ -164,26 +164,6 @@ resource "null_resource" "register_automatic_sku_preview" {
   }
 }
 
-resource "azapi_resource" "service_operator_credential" {
-
-  count                     = var.cluster_automatic ? 1 : 0
-  schema_validation_enabled = false
-  name                      = "ss-sbox-01-aks"
-  parent_id                 = data.azurerm_user_assigned_identity.aks.id
-  type                      = "Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials@2022-01-31-preview"
-  location                  = var.location
-  body = jsonencode({
-    properties = {
-      issuer    = jsondecode(azapi_resource.managedCluster[count.index].body).properties.oidcIssuerProfile.issuer
-      subject   = "system:serviceaccount:azureserviceoperator-system:azureserviceoperator-default"
-      audiences = ["api://AzureADTokenExchange"]
-    }
-  })
-  lifecycle {
-    ignore_changes = [location]
-  }
-}
-
 resource "azapi_resource" "managedCluster" {
 
   count     = var.cluster_automatic ? 1 : 0
@@ -201,9 +181,6 @@ resource "azapi_resource" "managedCluster" {
       kubernetesVersion = "1.30.3"
       dnsPrefix         = "k8s-ss-sbox-aks"
       enableRBAC        = true
-      oidcIssuerProfile = {
-        issuerURL = "https://uksouth.oic.prod-aks.azure.com/531ff96d-0ae9-462a-8d2d-bec7c0b42082/3ddeb201-a606-40e0-a3f1-a1fe3c7944c9/"
-      }
       servicePrincipalProfile = {
         clientId = "msi"
       }
@@ -302,7 +279,7 @@ resource "azapi_resource" "managedCluster" {
           vmSize = "Standard_D4ds_v5"
         },
         {
-          count                  = 0
+          count                  = 2
           enableEncryptionAtHost = false
           enableCustomCATrust    = false
           enableFIPS             = false
@@ -338,4 +315,24 @@ resource "azapi_resource" "managedCluster" {
       tier = "Standard"
     }
   })
+}
+
+resource "azapi_resource" "service_operator_credential" {
+
+  count                     = var.cluster_automatic ? 1 : 0
+  schema_validation_enabled = false
+  name                      = "ss-sbox-01-aks"
+  parent_id                 = data.azurerm_user_assigned_identity.aks.id
+  type                      = "Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials@2022-01-31-preview"
+  location                  = var.location
+  body = jsonencode({
+    properties = {
+      issuer    = "https://uksouth.oic.prod-aks.azure.com/531ff96d-0ae9-462a-8d2d-bec7c0b42082/3ddeb201-a606-40e0-a3f1-a1fe3c7944c9/"
+      subject   = "system:serviceaccount:azureserviceoperator-system:azureserviceoperator-default"
+      audiences = ["api://AzureADTokenExchange"]
+    }
+  })
+  lifecycle {
+    ignore_changes = [location]
+  }
 }
