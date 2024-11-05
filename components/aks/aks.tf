@@ -329,7 +329,8 @@ resource "azapi_resource" "service_operator_credential" {
   location                  = var.location
   body = jsonencode({
     properties = {
-      issuer    = "https://uksouth.oic.prod-aks.azure.com/531ff96d-0ae9-462a-8d2d-bec7c0b42082/3ddeb201-a606-40e0-a3f1-a1fe3c7944c9/"
+      issuer = "https://uksouth.oic.prod-aks.azure.com/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/8c44a4cc-f514-43fc-bc82-da3bdd3dfacc"
+
       subject   = "system:serviceaccount:azureserviceoperator-system:azureserviceoperator-default"
       audiences = ["api://AzureADTokenExchange"]
     }
