@@ -17,26 +17,26 @@ locals {
     var.project,
     var.service_shortname
   )
-  pinned_aks_routes_exists   = "${path.cwd}../../environments/01-network/${var.env}-pinned-aks-routes.yaml"
-  pinned_appgw_routes_exists = "${path.cwd}../../environments/01-network/${var.env}-pinned-appgw-routes.yaml"
-  pinned_aks_routes_yaml     = fileexists(local.pinned_aks_routes_exists) ? yamldecode(file(local.pinned_aks_routes_exists)) : {}
-  pinned_appgw_routes_yaml   = fileexists(local.pinned_appgw_routes_exists) ? yamldecode(file(local.pinned_appgw_routes_exists)) : {}
-  pinned_aks_routes = flatten([
-    for key, value in local.pinned_aks_routes_yaml : {
+  pinned_aks_routes_path   = "${path.cwd}/../../environments/01-network/${var.env}-pinned-aks-routes.yaml"
+  pinned_appgw_routes_path = "${path.cwd}/../../environments/01-network/${var.env}-pinned-appgw-routes.yaml"
+  pinned_aks_routes_yaml   = fileexists(local.pinned_aks_routes_path) ? yamldecode(file(local.pinned_aks_routes_path)) : null
+  pinned_appgw_routes_yaml = fileexists(local.pinned_appgw_routes_path) ? yamldecode(file(local.pinned_appgw_routes_path)) : null
+  pinned_aks_routes = local.pinned_aks_routes_yaml != null ? flatten([
+    for key, value in local.pinned_aks_routes_yaml.aks_routes : {
       name                   = key
       address_prefix         = value.address_prefix
       next_hop_type          = "VirtualAppliance"
-      next_hop_in_ip_address = value.next_hop_address
+      next_hop_in_ip_address = local.pinned_appgw_routes_yaml.next_hop_address
     }
-  ])
-  pinned_appgw_routes = flatten([
-    for key, value in local.pinned_appgw_routes_yaml : {
+  ]) : []
+  pinned_appgw_routes = local.pinned_appgw_routes_yaml != null ? flatten([
+    for key, value in local.pinned_appgw_routes_yaml.appgw_routes : {
       name                   = key
       address_prefix         = value.address_prefix
       next_hop_type          = "VirtualAppliance"
-      next_hop_in_ip_address = value.next_hop_address
+      next_hop_in_ip_address = local.pinned_appgw_routes_yaml.next_hop_address
     }
-  ])
+  ]) : []
 }
 
 
