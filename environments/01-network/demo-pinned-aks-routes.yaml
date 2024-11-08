@@ -1,0 +1,16 @@
+# This file contains the additional routes for the application gateway that need to be pinned to a specific Palo.
+# Change this IP to 10.11.72.38 to "failover" to the other Palo.
+next_hop_address: 10.11.72.37
+appgw_routes:
+  - CGW-Proxy:
+    address_prefix: 10.24.1.253/32
+  - 102PF-A:
+    address_prefix: 10.232.38.0/23
+  - 102PF-B:
+    address_prefix: 10.188.100.0/23
+  - 102PF-C:
+    address_prefix: 10.188.102.0/24
+  - Hendon:
+    address_prefix: 10.188.108.0/24
+  - Interim-Hosting:
+    address_prefix: 10.25.12.0/22
