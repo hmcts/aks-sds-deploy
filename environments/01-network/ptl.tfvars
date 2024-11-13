@@ -100,6 +100,12 @@ additional_routes = [
     next_hop_in_ip_address = "10.11.72.36"
   },
   {
+    name                   = "mi_vnet_dev"
+    address_prefix         = "10.168.1.0/24"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
+  },
+  {
     name                   = "mi_vnet_ithc"
     address_prefix         = "10.168.4.0/24"
     next_hop_type          = "VirtualAppliance"
