@@ -59,18 +59,9 @@ steps:
   inputs:
     azureSubscription: ${{ parameters.serviceConnection }}
     addSpnToEnvironment: true
+    workingDirectory: bootstrap
     scriptType: bash
     failOnStandardError: 'false'
-    scriptPath: aks-sds-deploy/bootstrap/bootstrap.sh
+    scriptPath: bootstrap.sh
     arguments: $(project) aks $(env) $(controlKeyVault) ${{ parameters.serviceConnection }} "$(clusters)" deploy 
   
-- task: AzureCLI@2
-  displayName: 'Setup Authentication'
-  inputs:
-      azureSubscription: ${{ parameters.serviceConnection }}
-      addSpnToEnvironment: true
-      scriptLocation: inlineScript
-      scriptType: bash
-      failOnStandardError: 'true'
-      inlineScript: |   
-        ./aks-sds-deploy/bootstrap/bootstrap.sh $(project) aks $(env) $(controlKeyVault) ${{ parameters.serviceConnection }} "$(clusters)" deploy 
