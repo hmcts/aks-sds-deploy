@@ -54,8 +54,6 @@ steps:
     filePath: aks-sds-deploy/scripts/update-issuer-url.sh
   condition: ne('${{ parameters.cluster }}', 'All')
 
-- checkout: self
-- checkout: sds-flux-config
 - task: AzureCLI@2
   displayName: 'Bootstrap'
   inputs:
