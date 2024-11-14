@@ -54,14 +54,15 @@ steps:
     filePath: aks-sds-deploy/scripts/update-issuer-url.sh
   condition: ne('${{ parameters.cluster }}', 'All')
 
+- checkout: self
+- checkout: sds-flux-config
 - task: AzureCLI@2
   displayName: 'Bootstrap'
   inputs:
     azureSubscription: ${{ parameters.serviceConnection }}
     addSpnToEnvironment: true
-    workingDirectory: bootstrap
     scriptType: bash
     failOnStandardError: 'false'
-    scriptPath: bootstrap.sh
+    scriptPath: aks-sds-deploy/bootstrap/bootstrap.sh
     arguments: $(project) aks $(env) $(controlKeyVault) ${{ parameters.serviceConnection }} "$(clusters)" deploy 
   
