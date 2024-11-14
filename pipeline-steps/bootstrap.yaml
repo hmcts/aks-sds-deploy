@@ -59,7 +59,7 @@ steps:
   inputs:
     azureSubscription: ${{ parameters.serviceConnection }}
     addSpnToEnvironment: true
-    scriptType: shell
+    scriptType: bash
     failOnStandardError: 'false'
     scriptPath: aks-sds-deploy/bootstrap/bootstrap.sh
     arguments: $(project) aks $(env) $(controlKeyVault) ${{ parameters.serviceConnection }} "$(clusters)" deploy 
