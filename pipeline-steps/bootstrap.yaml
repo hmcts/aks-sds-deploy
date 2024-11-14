@@ -61,5 +61,6 @@ steps:
     addSpnToEnvironment: true
     scriptType: bash
     failOnStandardError: 'false'
-    scriptPath: aks-sds-deploy/bootstrap/bootstrap.sh
+    scriptPath: bootstrap/bootstrap.sh
     arguments: $(project) aks $(env) $(controlKeyVault) ${{ parameters.serviceConnection }} "$(clusters)" deploy 
+  
