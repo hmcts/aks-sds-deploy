@@ -57,7 +57,7 @@ steps:
 - task: AzureCLI@2
   displayName: 'Bootstrap'
   inputs:
-    workingDirectory: aks-sds-deploy/bootstrap
+    workingDirectory: bootstrap
     azureSubscription: ${{ parameters.serviceConnection }}
     addSpnToEnvironment: true
     scriptType: bash
