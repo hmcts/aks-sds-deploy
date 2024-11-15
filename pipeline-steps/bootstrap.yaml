@@ -54,7 +54,7 @@ steps:
     filePath: aks-sds-deploy/scripts/update-issuer-url.sh
   condition: ne('${{ parameters.cluster }}', 'All')
 
-- task: AzureCLI@1
+- task: AzureCLI@2
   displayName: 'Bootstrap'
   inputs:
     azureSubscription: ${{ parameters.serviceConnection }}
