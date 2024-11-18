@@ -72,5 +72,5 @@ provider "azurerm" {
   alias                      = "dts-ss-stg"
   skip_provider_registration = "true"
   features {}
-  subscription_id = is_prod ? "Value1" : "74dacd4f-a248-45bb-a2f0-af700dc4cf68"
+  subscription_id = is_prod ? "" : "74dacd4f-a248-45bb-a2f0-af700dc4cf68"
 }
