@@ -13,12 +13,13 @@ steps:
     serviceConnection: ${{ parameters.serviceConnection }}
     environment: ${{ parameters.environment }}
 
-- task: AzureCLI@1
+- task: AzureCLI@2
   displayName: 'Setup Authentication'
   inputs:
       azureSubscription: ${{ parameters.serviceConnection }}
       addSpnToEnvironment: true
       scriptLocation: inlineScript
+      scriptType: bash
       failOnStandardError: 'true'
       inlineScript: |   
         echo "##vso[task.setvariable variable=AZURE_MI_ID]$(az identity show --resource-group genesis-rg --name aks-${{ parameters.environment }}-mi --query="clientId" -o tsv)"
@@ -52,12 +53,13 @@ steps:
     filePath: aks-sds-deploy/scripts/update-issuer-url.sh
   condition: ne('${{ parameters.cluster }}', 'All')
 
-- task: AzureCLI@1
+- task: AzureCLI@2
   displayName: 'Bootstrap'
   inputs:
     azureSubscription: ${{ parameters.serviceConnection }}
     addSpnToEnvironment: true
-    scriptType: shell
+    scriptType: bash
+    workingDirectory: aks-sds-deploy/bootstrap
     failOnStandardError: 'false'
     scriptPath: aks-sds-deploy/bootstrap/bootstrap.sh
     arguments: $(project) aks $(env) $(controlKeyVault) ${{ parameters.serviceConnection }} "$(clusters)" deploy 
