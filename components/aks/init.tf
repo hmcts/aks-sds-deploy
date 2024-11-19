@@ -24,7 +24,7 @@ provider "azurerm" {
 
 locals {
   acr = {
-    sds_prod = {
+    ss = {
       subscription = "5ca62022-6aa2-4cee-aaa7-e7536c8d566c"
     }
     global = {
@@ -69,7 +69,7 @@ provider "azurerm" {
 
 #Prod provider is currently having issue with access but provider needs initialised for upgrade so logic is being added to try circumvent it
 provider "azurerm" {
-  subscription_id            = local.is_prod ? local.acr["sds_prod"].subscription : "74dacd4f-a248-45bb-a2f0-af700dc4cf68"
+  subscription_id            = local.is_prod ? local.acr["ss"].subscription : "74dacd4f-a248-45bb-a2f0-af700dc4cf68"
   skip_provider_registration = "true"
   features {}
   alias = "dts-ss-stg"
