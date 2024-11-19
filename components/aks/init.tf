@@ -72,5 +72,5 @@ provider "azurerm" {
   subscription_id            = local.is_prod ? local.acr["sds_prod"].subscription : "74dacd4f-a248-45bb-a2f0-af700dc4cf68"
   skip_provider_registration = "true"
   features {}
-  alias                      = "dts-ss-stg"
+  alias = "dts-ss-stg"
 }
