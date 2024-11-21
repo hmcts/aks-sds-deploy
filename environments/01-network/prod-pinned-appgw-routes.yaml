@@ -286,8 +286,6 @@ appgw_routes:
     address_prefix: 10.4.2.119
   - DARTS-MTS-MTS0561-2012:
     address_prefix: 10.6.13.188
-  - DARTS-MTS-MTS1452-2012:
-    address_prefix: 10.1.98.166
   - DARTS-MTS-MTS1406-2012:
     address_prefix: 10.4.10.169
   - DARTS-MTS-MTS0177-2012:
