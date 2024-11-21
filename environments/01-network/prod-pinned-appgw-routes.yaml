@@ -61,7 +61,7 @@ appgw_routes:
   - DARTS-Sites-FITS_0158-Coventry:
     address_prefix: 10.2.30.0/24
   - DARTS-Sites-FITS_0719-Croydon:
-    address_prefix: 10.1.97.0
+    address_prefix: 10.1.97.0/32
   - DARTS-Sites-FITS_0163-Derby:
     address_prefix: 10.2.56.0/24
   - DARTS-Sites-FITS_1270-Doncaster:
@@ -267,246 +267,246 @@ appgw_routes:
   - DARTS-Sites-ACTC_Telford:
     address_prefix: 10.110.209.172/32
   - DARTS-MTS-EUCW2770MTS001:
-    address_prefix: 10.236.81.29
+    address_prefix: 10.236.81.29/32
   - DARTS-MTS-EUCW0456MTS001:
-    address_prefix: 10.1.3.245
+    address_prefix: 10.1.3.245/32
   - DARTS-MTS-EUCW3383MTS001:
-    address_prefix: 10.233.128.156
+    address_prefix: 10.233.128.156/32
   - DARTS-MTS-MTS0006-2012:
-    address_prefix: 10.233.65.173
+    address_prefix: 10.233.65.173/32
   - DARTS-MTS-MTS3385:
-    address_prefix: 10.1.39.99
+    address_prefix: 10.1.39.99/32
   - DARTS-MTS-MTS0776-2012:
-    address_prefix: 10.8.19.222
+    address_prefix: 10.8.19.222/32
   - DARTS-MTS-EUCW1613MTS001:
-    address_prefix: 10.2.3.181
+    address_prefix: 10.2.3.181/32
   - DARTS-MTS-MTS0176-2012:
-    address_prefix: 10.5.35.14
+    address_prefix: 10.5.35.14/32
   - DARTS-MTS-MTS0789-2012:
-    address_prefix: 10.4.2.119
+    address_prefix: 10.4.2.119/32
   - DARTS-MTS-MTS0561-2012:
-    address_prefix: 10.6.13.188
+    address_prefix: 10.6.13.188/32
   - DARTS-MTS-MTS1406-2012:
-    address_prefix: 10.4.10.169
+    address_prefix: 10.4.10.169/32
   - DARTS-MTS-MTS0177-2012:
-    address_prefix: 10.5.36.168
+    address_prefix: 10.5.36.168/32
   - DARTS-MTS-EUCW4260MTS001:
-    address_prefix: 10.18.140.114
+    address_prefix: 10.18.140.114/32
   - DARTS-MTS-MTS1759-2012:
-    address_prefix: 10.1.16.66
+    address_prefix: 10.1.16.66/32
   - DARTS-MTS-MTS1579-2012:
-    address_prefix: 10.1.101.209
+    address_prefix: 10.1.101.209/32
   - DARTS-MTS-MTS1626-2012:
-    address_prefix: 10.3.10.101
+    address_prefix: 10.3.10.101/32
   - DARTS-MTS-MTS0174-2012:
-    address_prefix: 10.5.37.183
+    address_prefix: 10.5.37.183/32
   - DARTS-MTS-MTS0542-2012:
-    address_prefix: 10.1.18.153
+    address_prefix: 10.1.18.153/32
   - DARTS-MTS-MTS0687-2012:
-    address_prefix: 10.142.8.73
+    address_prefix: 10.142.8.73/32
   - DARTS-MTS-MTS1278-2012:
-    address_prefix: 10.1.21.156
+    address_prefix: 10.1.21.156/32
   - DARTS-MTS-MTS0784-2012:
-    address_prefix: 10.3.15.159
+    address_prefix: 10.3.15.159/32
   - DARTS-MTS-EUCW0091MTS001:
-    address_prefix: 10.232.196.6
+    address_prefix: 10.232.196.6/32
   - DARTS-MTS-EUCW1484MTS001:
-    address_prefix: 10.233.96.149
+    address_prefix: 10.233.96.149/32
   - DARTS-MTS-MTS0158-2012:
-    address_prefix: 10.2.30.117
+    address_prefix: 10.2.30.117/32
   - DARTS-MTS-MTS0719-2012:
-    address_prefix: 10.1.97.215
+    address_prefix: 10.1.97.215/32
   - DARTS-MTS-MTS0163-2012:
-    address_prefix: 10.2.56.195
+    address_prefix: 10.2.56.195/32
   - DARTS-MTS-EUCW1270MTS001:
-    address_prefix: 10.6.9.69
+    address_prefix: 10.6.9.69/32
   - DARTS-MTS-MTS1269-2012:
-    address_prefix: 10.6.11.71
+    address_prefix: 10.6.11.71/32
   - DARTS-MTS-MTS1628-2012:
-    address_prefix: 10.4.33.46
+    address_prefix: 10.4.33.46/32
   - DARTS-MTS-MTS0762-2012:
-    address_prefix: 10.12.17.128
+    address_prefix: 10.12.17.128/32
   - DARTS-MTS-MTS0790-2012:
-    address_prefix: 10.8.23.69
+    address_prefix: 10.8.23.69/32
   - DARTS-MTS-MTS0564-2012:
-    address_prefix: 10.2.57.71
+    address_prefix: 10.2.57.71/32
   - DARTS-MTS-MTS1247-2012:
-    address_prefix: 10.1.33.87
+    address_prefix: 10.1.33.87/32
   - DARTS-MTS-MTS0730-2012:
-    address_prefix: 10.1.34.148
+    address_prefix: 10.1.34.148/32
   - DARTS-MTS-EUCW0720MTS001:
-    address_prefix: 10.12.2.200
+    address_prefix: 10.12.2.200/32
   - DARTS-MTS-EUCW0550MTS001:
-    address_prefix: 10.232.36.6
+    address_prefix: 10.232.36.6/32
   - DARTS-MTS-MTS0715-2012:
-    address_prefix: 10.1.36.198
+    address_prefix: 10.1.36.198/32
   - DARTS-MTS-EUCW0143MTS001:
-    address_prefix: 10.235.8.195
+    address_prefix: 10.235.8.195/32
   - DARTS-MTS-EUCW1276MTS001:
-    address_prefix: 10.1.102.141
+    address_prefix: 10.1.102.141/32
   - DARTS-MTS-MTS1706-2012:
-    address_prefix: 10.2.15.174
+    address_prefix: 10.2.15.174/32
   - DARTS-MTS-MTS1279-2012:
-    address_prefix: 10.1.46.232
+    address_prefix: 10.1.46.232/32
   - DARTS-MTS-MTS0722-2012:
-    address_prefix: 10.1.48.215
+    address_prefix: 10.1.48.215/32
   - DARTS-MTS-MTS0725-2012:
-    address_prefix: 10.1.49.237
+    address_prefix: 10.1.49.237/32
   - DARTS-MTS-MTS1516-2012-2:
-    address_prefix: 10.2.64.203
+    address_prefix: 10.2.64.203/32
   - DARTS-MTS-MTS1637-2012:
-    address_prefix: 10.6.35.178
+    address_prefix: 10.6.35.178/32
   - DARTS-MTS-MTS1513-2012:
-    address_prefix: 10.1.52.73
+    address_prefix: 10.1.52.73/32
   - DARTS-MTS-MTS0565-2012:
-    address_prefix: 10.6.38.63
+    address_prefix: 10.6.38.63/32
   - DARTS-MTS-MTS0159-2012:
-    address_prefix: 10.2.21.169
+    address_prefix: 10.2.21.169/32
   - DARTS-MTS-EUCW3706MTS001:
-    address_prefix: 10.232.210.149
+    address_prefix: 10.232.210.149/32
   - DARTS-MTS-EUCW2422MTS001:
-    address_prefix: 10.236.122.10
+    address_prefix: 10.236.122.10/32
   - DARTS-MTS-MTS1452-2012:
-    address_prefix: 10.1.98.166
+    address_prefix: 10.1.98.166/32
   - DARTS-MTS-EUCW2435MTS001:
-    address_prefix: 10.2.66.102
+    address_prefix: 10.2.66.102/32
   - DARTS-MTS-EUCW0130MTS001:
-    address_prefix: 10.235.96.149
+    address_prefix: 10.235.96.149/32
   - DARTS-MTS-MTS2564-2012:
-    address_prefix: 10.5.38.204
+    address_prefix: 10.5.38.204/32
   - DARTS-MTS-MTS1298-2012:
-    address_prefix: 10.1.62.217
+    address_prefix: 10.1.62.217/32
   - DARTS-MTS-MTS0733-2012:
-    address_prefix: 10.1.99.139
+    address_prefix: 10.1.99.139/32
   - DARTS-MTS-MTS0244-2012:
-    address_prefix: 10.5.18.148
+    address_prefix: 10.5.18.148/32
   - DARTS-MTS-MTS0245-2012:
-    address_prefix: 10.5.16.210
+    address_prefix: 10.5.16.210/32
   - DARTS-MTS-EUCW1559MTS001:
-    address_prefix: 10.235.84.240
+    address_prefix: 10.235.84.240/32
   - DARTS-MTS-MTS1249-2012:
-    address_prefix: 10.3.3.141
+    address_prefix: 10.3.3.141/32
   - DARTS-MTS-MTS0571-2012:
-    address_prefix: 10.3.24.163
+    address_prefix: 10.3.24.163/32
   - DARTS-MTS-EUCW1624MTS001:
-    address_prefix: 10.18.100.219
+    address_prefix: 10.18.100.219/32
   - DARTS-MTS-MTS0108-2012:
-    address_prefix: 10.6.39.239
+    address_prefix: 10.6.39.239/32
   - DARTS-MTS-MTS0256-2012:
-    address_prefix: 10.4.34.177
+    address_prefix: 10.4.34.177/32
   - DARTS-MTS-MTS1460-2012:
-    address_prefix: 10.3.28.201
+    address_prefix: 10.3.28.201/32
   - DARTS-MTS-MTS1429-2012:
-    address_prefix: 10.2.58.58
+    address_prefix: 10.2.58.58/32
   - DARTS-MTS-EUCW0049MTS001:
-    address_prefix: 10.235.148.150
+    address_prefix: 10.235.148.150/32
   - DARTS-MTS-MTS0083-2012:
-    address_prefix: 10.1.100.69
+    address_prefix: 10.1.100.69/32
   - DARTS-MTS-MTS2664-2012:
-    address_prefix: 10.2.59.128
+    address_prefix: 10.2.59.128/32
   - DARTS-MTS-MTS1444-2012:
-    address_prefix: 10.2.60.150
+    address_prefix: 10.2.60.150/32
   - DARTS-MTS-MTS0086-2012:
-    address_prefix: 10.232.161.160
+    address_prefix: 10.232.161.160/32
   - DARTS-MTS-MTS1569-2012:
-    address_prefix: 10.2.36.150
+    address_prefix: 10.2.36.150/32
   - DARTS-MTS-MTS0787-2012:
-    address_prefix: 10.4.35.75
+    address_prefix: 10.4.35.75/32
   - DARTS-MTS-MTS0260-2012:
-    address_prefix: 10.4.36.226
+    address_prefix: 10.4.36.226/32
   - DARTS-MTS-MTS1433-2012:
-    address_prefix: 10.18.2.69
+    address_prefix: 10.18.2.69/32
   - DARTS-MTS-MTS0123-2012:
-    address_prefix: 10.5.39.178
+    address_prefix: 10.5.39.178/32
   - DARTS-MTS-MTS0117-2012:
-    address_prefix: 10.8.17.74
+    address_prefix: 10.8.17.74/32
   - DARTS-MTS-MTS0586-2012:
-    address_prefix: 10.18.150.250
+    address_prefix: 10.18.150.250/32
   - DARTS-MTS-MTS0585-2012:
-    address_prefix: 10.1.72.211
+    address_prefix: 10.1.72.211/32
   - DARTS-MTS-EUCW0147MTS001:
-    address_prefix: 10.235.12.100
+    address_prefix: 10.235.12.100/32
   - DARTS-MTS-EUCW1472MTS002:
-    address_prefix: 10.136.64.97
+    address_prefix: 10.136.64.97/32
   - DARTS-MTS-EUCW1472MTS003:
-    address_prefix: 10.136.64.61
+    address_prefix: 10.136.64.61/32
   - DARTS-MTS-EUCW1472MTS004:
-    address_prefix: 10.136.64.48
+    address_prefix: 10.136.64.48/32
   - DARTS-MTS-EUCW1472MTS001:
-    address_prefix: 10.136.64.88
+    address_prefix: 10.136.64.88/32
   - DARTS-MTS-EUCW1418MTS001:
-    address_prefix: 10.4.37.96
+    address_prefix: 10.4.37.96/32
   - DARTS-MTS-MTS1604-2012:
-    address_prefix: 10.6.40.204
+    address_prefix: 10.6.40.204/32
   - DARTS-MTS-EUCW1430MTS001:
-    address_prefix: 10.2.41.33
+    address_prefix: 10.2.41.33/32
   - DARTS-MTS-MTS0547-2012:
-    address_prefix: 10.1.80.201
+    address_prefix: 10.1.80.201/32
   - DARTS-MTS-MTS2097-2012:
-    address_prefix: 10.4.38.115
+    address_prefix: 10.4.38.115/32
   - DARTS-MTS-MTS1299-2012:
-    address_prefix: 10.1.103.194
+    address_prefix: 10.1.103.194/32
   - DARTS-MTS-MTS0740-2012:
-    address_prefix: 10.1.95.224
+    address_prefix: 10.1.95.224/32
   - DARTS-MTS-MTS2273-2012:
-    address_prefix: 10.1.77.209
+    address_prefix: 10.1.77.209/32
   - DARTS-MTS-EUCW1614MTS001:
-    address_prefix: 10.233.217.140
+    address_prefix: 10.233.217.140/32
   - DARTS-MTS-MTS0140-2012:
-    address_prefix: 10.2.61.129
+    address_prefix: 10.2.61.129/32
   - DARTS-MTS-MTS0139-2012:
-    address_prefix: 10.2.62.14
+    address_prefix: 10.2.62.14/32
   - DARTS-MTS-MTS1248-2012:
-    address_prefix: 10.3.35.215
+    address_prefix: 10.3.35.215/32
   - DARTS-MTS-MTS0040-2012:
-    address_prefix: 10.4.39.161
+    address_prefix: 10.4.39.161/32
   - DARTS-MTS-MTS1746-2012:
-    address_prefix: 10.4.40.112
+    address_prefix: 10.4.40.112/32
   - DARTS-MTS-EUCW0763MTS001:
-    address_prefix: 172.20.44.24
+    address_prefix: 172.20.44.24/32
   - DARTS-MTS-MTS1556-2012:
-    address_prefix: 10.6.41.42
+    address_prefix: 10.6.41.42/32
   - DARTS-MTS-EUCW0112MTS001:
-    address_prefix: 10.232.228.10
+    address_prefix: 10.232.228.10/32
   - DARTS-MTS-MTS0023-2012:
-    address_prefix: 10.4.41.168
+    address_prefix: 10.4.41.168/32
   - DARTS-MTS-MTS0087-2012:
-    address_prefix: 10.3.39.122
+    address_prefix: 10.3.39.122/32
   - DARTS-MTS-EUCW3965MTS001:
-    address_prefix: 10.2.65.194
+    address_prefix: 10.2.65.194/32
   - DARTS-MTS-MTS0253-2012:
-    address_prefix: 10.4.43.88
+    address_prefix: 10.4.43.88/32
   - DARTS-MTS-MTS1457-2012:
-    address_prefix: 10.232.80.232
+    address_prefix: 10.232.80.232/32
   - DARTS-MTS-MTS0166-2012:
-    address_prefix: 10.2.63.169
+    address_prefix: 10.2.63.169/32
   - DARTS-MTS-MTS0096-2012:
-    address_prefix: 10.1.91.184
+    address_prefix: 10.1.91.184/32
   - DARTS-MTS-MTS0745-2012:
-    address_prefix: 10.1.93.159
+    address_prefix: 10.1.93.159/32
   - DARTS-MTS-MTS1516-2012:
-    address_prefix: 10.2.64.203
+    address_prefix: 10.2.64.203/32
   - DARTS-MTS-MTS0708-2012:
-    address_prefix: 10.6.37.79
+    address_prefix: 10.6.37.79/32
   - DARTS-MTS-MTS0751-2012:
-    address_prefix: 10.18.36.188
+    address_prefix: 10.18.36.188/32
   - DARTS-MTS-EUCW0236MTS001:
-    address_prefix: 10.234.215.141
+    address_prefix: 10.234.215.141/32
   - DARTS-MTS-MTSM008:
-    address_prefix: 10.110.209.37
+    address_prefix: 10.110.209.37/32
   - DARTS-MTS-MTSM002:
-    address_prefix: 10.7.27.23
+    address_prefix: 10.7.27.23/32
   - DARTS-MTS-EUCWM015MTS001:
-    address_prefix: 10.110.209.197
+    address_prefix: 10.110.209.197/32
   - DARTS-MTS-EUCWM016MTS001:
-    address_prefix: 10.110.209.229
+    address_prefix: 10.110.209.229/32
   - DARTS-MTS-EUCWM017MTS001:
-    address_prefix: 10.110.210.6
+    address_prefix: 10.110.210.6/32
   - DARTS-MTS-EUCWM018MTS001:
-    address_prefix: 10.110.210.37
+    address_prefix: 10.110.210.37/32
   - DARTS-MTS-EUCWM019MTS001:
-    address_prefix: 10.110.210.69
+    address_prefix: 10.110.210.69/32
   - DARTS-MTS-EUCWM012MTS001:
-    address_prefix: 10.110.208.166
+    address_prefix: 10.110.208.166/32
   - DARTS-MTS-EUCWM014MTS001:
-    address_prefix: 10.110.209.165
+    address_prefix: 10.110.209.165/32
