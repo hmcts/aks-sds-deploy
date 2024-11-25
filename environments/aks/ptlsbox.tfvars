@@ -1,6 +1,6 @@
 clusters = {
   "00" = {
-    kubernetes_version = "1.30"
+    kubernetes_version = "1.31"
   }
 }
 enable_automatic_channel_upgrade_patch = true
