@@ -4,7 +4,7 @@ module "network" {
   resource_group_name = local.network_resource_group_name
 
   route_next_hop_in_ip_address = local.hub[var.hub].ukSouth.next_hop_ip
-  additional_routes            = var.additional_routes
+  additional_routes            = concat(var.additional_routes, local.pinned_aks_routes)
   environment                  = var.env
 
   network_address_space = var.network_address_space
@@ -16,7 +16,7 @@ module "network" {
   aks_00_subnet_cidr_blocks              = var.aks_00_subnet_cidr_blocks #UK South
   aks_01_subnet_cidr_blocks              = var.aks_01_subnet_cidr_blocks # Currently both clusters in UK South
   application_gateway_subnet_cidr_blocks = var.application_gateway_subnet_cidr_blocks
-  additional_routes_application_gateway  = var.additional_routes_application_gateway
+  additional_routes_application_gateway  = concat(var.additional_routes_application_gateway, local.pinned_appgw_routes)
   iaas_subnet_cidr_blocks                = var.iaas_subnet_cidr_blocks
   additional_subnets                     = var.additional_subnets
   postgresql_subnet_cidr_blocks          = var.postgresql_subnet_cidr_blocks

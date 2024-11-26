@@ -31,44 +31,7 @@ additional_subnets = [
   },
 ]
 
-additional_routes = [
-  {
-    name                   = "CGW-Proxy"
-    address_prefix         = "10.24.1.253/32"
-    next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "10.11.72.37"
-  },
-  {
-    name                   = "102PF-A"
-    address_prefix         = "10.232.38.0/23"
-    next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "10.11.72.37"
-  },
-  {
-    name                   = "102PF-B"
-    address_prefix         = "10.188.100.0/23"
-    next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "10.11.72.37"
-  },
-  {
-    name                   = "102PF-C"
-    address_prefix         = "10.188.102.0/24"
-    next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "10.11.72.37"
-  },
-  {
-    name                   = "Hendon"
-    address_prefix         = "10.188.108.0/24"
-    next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "10.11.72.37"
-  },
-  {
-    name                   = "Interim-Hosting"
-    address_prefix         = "10.25.12.0/22"
-    next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "10.11.72.37"
-  }
-]
+additional_routes = []
 
 additional_routes_application_gateway = [
   {
@@ -90,44 +53,8 @@ additional_routes_application_gateway = [
     next_hop_in_ip_address = "10.11.72.36"
   },
   {
-    name                   = "102PF-A"
-    address_prefix         = "10.232.38.0/23"
-    next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "10.11.72.37"
-  },
-  {
-    name                   = "102PF-B"
-    address_prefix         = "10.188.100.0/23"
-    next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "10.11.72.37"
-  },
-  {
-    name                   = "102PF-C"
-    address_prefix         = "10.188.102.0/24"
-    next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "10.11.72.37"
-  },
-  {
-    name                   = "Hendon"
-    address_prefix         = "10.188.108.0/24"
-    next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "10.11.72.37"
-  },
-  {
-    name                   = "Interim-Hosting"
-    address_prefix         = "10.25.12.0/22"
-    next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "10.11.72.37"
-  },
-  {
     name                   = "dynatrace-nonprod-vnet"
     address_prefix         = "10.10.80.0/24"
-    next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "10.11.72.36"
-  },
-  {
-    name                   = "jbox-nonprod"
-    address_prefix         = "10.25.250.0/24"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.72.36"
   }
