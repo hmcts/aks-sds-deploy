@@ -10,5 +10,4 @@ echo  "Get aks credentials "
 az aks get-credentials \
     --resource-group "${PROJECT}"-"${ENVIRONMENT}"-"${CLUSTER_NAME}"-rg \
     --name "${PROJECT}"-"${ENVIRONMENT}"-"${CLUSTER_NAME}"-"${SERVICE}" \
-    --admin \
     --overwrite-existing

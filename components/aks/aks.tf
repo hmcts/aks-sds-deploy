@@ -281,7 +281,7 @@ resource "azapi_resource" "managedCluster" {
           vmSize = "Standard_D4ds_v5"
         },
         {
-          count                  = 0
+          count                  = 2
           enableEncryptionAtHost = false
           enableCustomCATrust    = false
           enableFIPS             = false
@@ -317,4 +317,25 @@ resource "azapi_resource" "managedCluster" {
       tier = "Standard"
     }
   })
+}
+
+resource "azapi_resource" "service_operator_credential" {
+
+  count                     = var.cluster_automatic ? 1 : 0
+  schema_validation_enabled = false
+  name                      = "ss-sbox-01-aks"
+  parent_id                 = data.azurerm_user_assigned_identity.aks.id
+  type                      = "Microsoft.ManagedIdentity/userAssignedIdentities/federatedIdentityCredentials@2022-01-31-preview"
+  location                  = var.location
+  body = jsonencode({
+    properties = {
+      issuer = "https://uksouth.oic.prod-aks.azure.com/a8140a9e-f1b0-481f-a4de-09e2ee23f7ab/8c44a4cc-f514-43fc-bc82-da3bdd3dfacc"
+
+      subject   = "system:serviceaccount:azureserviceoperator-system:azureserviceoperator-default"
+      audiences = ["api://AzureADTokenExchange"]
+    }
+  })
+  lifecycle {
+    ignore_changes = [location]
+  }
 }

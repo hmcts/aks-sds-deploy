@@ -277,6 +277,22 @@ stages:
         jobs:
           - job: BootStrap
             steps:
+              - script: |
+                  # get kubelogin
+                  if ! kubelogin --version  &> /dev/null
+                  then
+                      wget -q https://github.com/Azure/kubelogin/releases/download/v0.0.9/kubelogin-linux-amd64.zip
+                      unzip kubelogin-linux-amd64.zip &> /dev/null
+                      sudo mv bin/linux_amd64/kubelogin /usr/bin
+                      kubelogin convert-kubeconfig -l azurecli
+                  fi
+                displayName: 'Install kubelogin'
+                condition: eq('${{ component.env }}', 'sbox')
+              - template: pipeline-steps/bootstrap.yaml
+                parameters:
+                  environment: ${{ component.env }}
+                  cluster: ${{ parameters.cluster }}
+                  serviceConnection: ${{ component.serviceConnection }}
               - template: pipeline-steps/bootstrap.yaml
                 parameters:
                   environment: ${{ component.env }}
