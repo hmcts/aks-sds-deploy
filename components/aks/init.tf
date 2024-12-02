@@ -7,7 +7,7 @@ terraform {
   required_providers {
     azurerm = {
       source                = "hashicorp/azurerm"
-      version               = "3.78.0"
+      version               = "4.9.0"
       configuration_aliases = [azurerm.hmcts-control]
     }
     azapi = {
@@ -36,6 +36,7 @@ locals {
   }
   is_sbox = var.env == "sbox" ? true : false
   is_dev  = var.env == "dev" ? true : false
+  is_prod = var.env == "prod" ? true : false
 }
 
 provider "azurerm" {
@@ -66,10 +67,10 @@ provider "azurerm" {
   subscription_id = "04d27a32-7a07-48b3-95b8-3c8691e1a263"
 }
 
-
+#Prod provider is currently having issue with access but provider needs initialised for upgrade so logic is being added to try circumvent it
 provider "azurerm" {
-  alias                      = "dts-ss-stg"
+  subscription_id            = local.is_prod ? local.acr["ss"].subscription : "74dacd4f-a248-45bb-a2f0-af700dc4cf68"
   skip_provider_registration = "true"
   features {}
-  subscription_id = "74dacd4f-a248-45bb-a2f0-af700dc4cf68"
+  alias = "dts-ss-stg"
 }
