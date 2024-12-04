@@ -40,7 +40,7 @@ module "kubernetes" {
     azurerm.global_acr    = azurerm.global_acr
   }
 
-  resource_group_name = azurerm_resource_group.kubernetes_resource_group[each.value].name
+  resource_group_name = azurerm_resource_group.kubernetes_resource_group[each.key].name
 
   network_name                = local.network_name
   network_shortname           = local.network_shortname
@@ -73,8 +73,7 @@ module "kubernetes" {
 
   enable_user_system_nodepool_split = true
 
-
-  availability_zones = each.value.availability_zones
+  availability_zones  = each.value.availability_zones
 
   aks_version_checker_principal_id = data.azuread_service_principal.version_checker.object_id
 
@@ -99,7 +98,6 @@ module "kubernetes" {
       node_taints         = []
       enable_auto_scaling = true
       mode                = "User"
-      availability_zones  = each.value.availability_zones
     },
     {
       name                = "msnode"
@@ -111,7 +109,6 @@ module "kubernetes" {
       node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
       enable_auto_scaling = true
       mode                = "User"
-      availability_zones  = each.value.availability_zones
     },
     {
       name                = "cronjob"
