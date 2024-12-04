@@ -73,7 +73,7 @@ module "kubernetes" {
 
   enable_user_system_nodepool_split = true
 
-  availability_zones  = each.value.availability_zones
+  availability_zones = each.value.availability_zones
 
   aks_version_checker_principal_id = data.azuread_service_principal.version_checker.object_id
 
