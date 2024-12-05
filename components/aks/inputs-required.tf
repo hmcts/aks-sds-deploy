@@ -87,6 +87,13 @@ variable "clusters" {
     kubernetes_cluster_ssh_key             = string
     enable_automatic_channel_upgrade_patch = optional(bool, false)
 
+    linux_node_pool = optional(object({
+      vm_size   = string
+      min_nodes = number
+      max_nodes = number
+      max_pods  = optional(number, 40)
+    }), null)
+
     windows_node_pool = optional(object({
       vm_size   = string
       min_nodes = number
