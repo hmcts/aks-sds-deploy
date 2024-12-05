@@ -114,4 +114,3 @@ variable "clusters" {
 variable "csi_driver_enabled" {
   default = true
 }
-
