@@ -60,5 +60,5 @@ system_node_pool = {
   max_nodes = 4
 }
 
-autoShutdown      = true
-cluster_automatic = true
+  autoShutdown      = true
+  cluster_automatic = true
