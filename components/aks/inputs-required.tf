@@ -52,18 +52,14 @@ variable "clusters" {
         kubernetes_cluster_version = "1.30"
         kubernetes_cluster_ssh_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCe..."
         enable_user_system_nodepool_split = true
-        project_acr_enabled = true
         enable_automatic_channel_upgrade_patch = true
 
         system_node_pool = {
-          vm_size   = "Standard_D4ds_v5"
-          min_nodes = 2
           max_nodes = 4
         }
 
         linux_node_pool = {
           vm_size   = "Standard_D4ds_v5"
-          min_nodes = 4
           max_nodes = 10
         }
 
@@ -87,19 +83,15 @@ variable "clusters" {
     kubernetes_cluster_ssh_key             = string
     enable_automatic_channel_upgrade_patch = optional(bool, false)
 
-    linux_node_pool = optional(object({
-      vm_size   = string
+    system_node_pool = object({
       min_nodes = number
       max_nodes = number
-      max_pods  = optional(number, 40)
-    }), null)
+    })
 
-    windows_node_pool = optional(object({
-      vm_size   = string
-      min_nodes = number
+    linux_node_pool = object({
+      max_pods  = number
       max_nodes = number
-      max_pods  = optional(number, 30)
-    }), null)
+    })
 
     node_os_maintenance_window_config = object({
       frequency  = string

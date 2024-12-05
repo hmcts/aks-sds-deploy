@@ -61,9 +61,9 @@ module "kubernetes" {
 
   kubernetes_cluster_ssh_key = each.value.kubernetes_cluster_ssh_key
 
-  kubernetes_cluster_agent_min_count = lookup(var.system_node_pool, "min_nodes", 2)
-  kubernetes_cluster_agent_max_count = lookup(var.system_node_pool, "max_nodes", 4)
-  kubernetes_cluster_agent_vm_size   = lookup(var.system_node_pool, "vm_size", "Standard_D4ds_v5")
+  kubernetes_cluster_agent_min_count = lookup(each.value.system_node_pool, "min_nodes", 2)
+  kubernetes_cluster_agent_max_count = lookup(each.value.system_node_pool, "max_nodes", 4)
+  kubernetes_cluster_agent_vm_size   = lookup(each.value.system_node_pool, "vm_size", "Standard_D4ds_v5")
 
   kubernetes_cluster_version            = each.value.kubernetes_cluster_version
   kubernetes_cluster_agent_os_disk_size = "128"
@@ -101,10 +101,10 @@ module "kubernetes" {
     },
     {
       name                = "msnode"
-      vm_size             = lookup(each.value.windows_node_pool, "vm_size", "Standard_D4ds_v5")
-      min_count           = lookup(each.value.windows_node_pool, "min_nodes", 2)
-      max_count           = lookup(each.value.windows_node_pool, "max_nodes", 4)
-      max_pods            = lookup(each.value.windows_node_pool, "max_pods", 30)
+      vm_size             = lookup(var.windows_node_pool, "vm_size", "Standard_D4ds_v5")
+      min_count           = lookup(var.windows_node_pool, "min_nodes", 2)
+      max_count           = lookup(var.windows_node_pool, "max_nodes", 4)
+      max_pods            = lookup(var.windows_node_pool, "max_pods", 30)
       os_type             = "Windows"
       node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
       enable_auto_scaling = true

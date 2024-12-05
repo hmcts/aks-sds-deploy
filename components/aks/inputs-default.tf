@@ -18,8 +18,8 @@ variable "sku_tier" {
   default = "Standard"
 }
 
-variable "system_node_pool" {
-  description = "Map to override the system node pool config"
+variable "windows_node_pool" {
+  description = "Map to override the windows node pool config"
   default     = {}
 }
 
