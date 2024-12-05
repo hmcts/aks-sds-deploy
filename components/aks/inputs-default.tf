@@ -68,9 +68,3 @@ variable "node_os_maintenance_window_config" {
   })
   default = {}
 }
-
-# FILE: inputs-default.tf
-
-locals {
-  selected_clusters = var.env == "sbox" && var.cluster_automatic ? { "00" = var.clusters["00"] } : var.clusters
-}

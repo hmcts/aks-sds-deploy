@@ -24,7 +24,7 @@ data "azuread_service_principal" "aks_auto_shutdown" {
 }
 
 module "kubernetes" {
-  for_each    = local.selected_clusters
+  for_each = var.clusters
   source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=4.x"
   environment = var.env
   location    = var.location
