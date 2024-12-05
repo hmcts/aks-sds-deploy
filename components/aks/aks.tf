@@ -24,14 +24,14 @@ data "azuread_service_principal" "aks_auto_shutdown" {
 }
 
 module "kubernetes" {
-  for_each    = var.clusters
+  for_each    = toset((var.env == "sbox" && var.cluster_automatic) ? [for k, v in var.clusters : k if k == "00"] : [for k, v in var.clusters : k])
   source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=4.x"
   environment = var.env
   location    = var.location
 
   kubelet_uami_enabled = true
   oms_agent_enabled    = var.oms_agent_enabled
-  csi_driver_enabled   = try(each.value.csi_driver_enabled, true)
+  csi_driver_enabled   = var.csi_driver_enabled
 
   providers = {
     azurerm               = azurerm

@@ -37,5 +37,5 @@ clusters = {
 
   }
 }
-autoShutdown      = true
-oms_agent_enabled = true
+    autoShutdown      = true
+    oms_agent_enabled = true

@@ -110,3 +110,8 @@ variable "clusters" {
     availability_zones = list(string)
   }))
 }
+
+variable "csi_driver_enabled" {
+  default = true
+}
+
