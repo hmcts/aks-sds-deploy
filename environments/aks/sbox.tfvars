@@ -6,6 +6,7 @@ clusters = {
     enable_automatic_channel_upgrade_patch = true
 
     system_node_pool = {
+      min_nodes = 2
       max_nodes = 4
     }
 

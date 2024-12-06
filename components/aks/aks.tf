@@ -61,9 +61,9 @@ module "kubernetes" {
 
   kubernetes_cluster_ssh_key = each.value.kubernetes_cluster_ssh_key
 
-  kubernetes_cluster_agent_min_count = each.value.system_node_pool.min_nodes
-  kubernetes_cluster_agent_max_count = each.value.system_node_pool.max_nodes
-  kubernetes_cluster_agent_vm_size   = each.value.system_node_pool.vm_size
+  kubernetes_cluster_agent_min_count = lookup(each.value.system_node_pool, "min_nodes", 2)
+  kubernetes_cluster_agent_max_count = lookup(each.value.system_node_pool, "max_nodes", 3)
+  kubernetes_cluster_agent_vm_size   = lookup(each.value.system_node_pool, "vm_size", "Standard_DS3_v2")
 
   kubernetes_cluster_version            = each.value.kubernetes_cluster_version
   kubernetes_cluster_agent_os_disk_size = "128"
@@ -90,10 +90,10 @@ module "kubernetes" {
   additional_node_pools = contains(["ptlsbox", "ptl"], var.env) ? [] : [
     {
       name                = "linux"
-      vm_size             = each.value.linux_node_pool.vm_size
-      min_count           = each.value.linux_node_pool.min_nodes
-      max_count           = each.value.linux_node_pool.max_nodes
-      max_pods            = each.value.linux_node_pool.max_pods
+      vm_size             = lookup(each.value.linux_node_pool, "vm_size", "Standard_DS3_v2")
+      min_count           = lookup(each.value.linux_node_pool, "min_nodes", 2)
+      max_count           = lookup(each.value.linux_node_pool, "max_nodes", 4)
+      max_pods            = lookup(each.value.linux_node_pool, "max_pods", 30)
       os_type             = "Linux"
       node_taints         = []
       enable_auto_scaling = true
