@@ -49,7 +49,7 @@ clusters = {
 }
 
 autoShutdown = true
-# cluster_automatic = true
+cluster_automatic = true
 
 windows_node_pool = {
   max_nodes = 4

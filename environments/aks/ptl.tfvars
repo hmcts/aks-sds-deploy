@@ -12,6 +12,8 @@ clusters = {
       max_nodes = 10
       max_pods  = 30
     }
+      
+    availability_zones = ["1"]
 
     node_os_maintenance_window_config = {
       frequency  = "Daily"
