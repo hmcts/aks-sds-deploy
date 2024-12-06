@@ -24,7 +24,7 @@ data "azuread_service_principal" "aks_auto_shutdown" {
 }
 
 module "kubernetes" {
-  for_each    = var.clusters
+  for_each = var.env == "sbox" && var.cluster_automatic ? { for k, v in var.clusters : k => v if k == "00" } : var.clusters
   source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=4.x"
   environment = var.env
   location    = var.location
@@ -87,7 +87,7 @@ module "kubernetes" {
 
   node_os_maintenance_window_config = each.value.node_os_maintenance_window_config
 
-  additional_node_pools = contains(["ptlsbox", "ptl"], var.env) ? tuple([]) : [
+  additional_node_pools = contains(["ptlsbox", "ptl"], var.env) ? tolist([]) : [
     {
       name                = "linux"
       vm_size             = each.value.linux_node_pool.vm_size

@@ -36,6 +36,7 @@ clusters = {
 
     linux_node_pool = {
       max_nodes = 75
+      max_pods  = 30
     }
 
     node_os_maintenance_window_config = {
