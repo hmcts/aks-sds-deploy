@@ -12,7 +12,7 @@ clusters = {
 
     linux_node_pool = {
       max_nodes = 4
-      max_pods  = 30
+      max_pods  = 40
     }
 
     availability_zones = ["1"]
@@ -36,7 +36,7 @@ clusters = {
 
     linux_node_pool = {
       max_nodes = 4
-      max_pods  = 30
+      max_pods  = 40
     }
 
     availability_zones = ["1"]
@@ -53,5 +53,6 @@ autoShutdown      = true
 cluster_automatic = true
 
 windows_node_pool = {
+  min_nodes = 2
   max_nodes = 4
 }
