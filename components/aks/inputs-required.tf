@@ -79,18 +79,18 @@ variable "clusters" {
     kubernetes_cluster_ssh_key             = string
     enable_automatic_channel_upgrade_patch = optional(bool, false)
     system_node_pool = object({
-      vm_size   = optional(string, "Standard_D4ds_v5")  
-      min_nodes = optional(number, 2)  # Optional with default
+      vm_size   = optional(string, "Standard_D4ds_v5")
+      min_nodes = optional(number, 2) # Optional with default
       max_nodes = optional(number, 4)
     })
 
     linux_node_pool = object({
-      vm_size   = optional(string, "Standard_D4ds_v5")  
-      min_nodes = optional(number, 2)  # Optional with default
-      max_nodes = number              
-      max_pods  = number              
+      vm_size   = optional(string, "Standard_D4ds_v5")
+      min_nodes = optional(number, 2) # Optional with default
+      max_nodes = number
+      max_pods  = number
     })
-    
+
     node_os_maintenance_window_config = object({
       frequency  = string
       start_time = string
