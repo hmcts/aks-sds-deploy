@@ -24,7 +24,7 @@ data "azuread_service_principal" "aks_auto_shutdown" {
 }
 
 module "kubernetes" {
-  for_each    = var.env == "sbox" && var.cluster_automatic ? { for k, v in var.clusters : k => v if k == "00" } : var.clusters
+  for_each = var.env == "sbox" && var.cluster_automatic ? { for k, v in var.clusters : k => v if k == "00" } : var.clusters
   source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=4.x"
   environment = var.env
   location    = var.location
@@ -73,6 +73,9 @@ module "kubernetes" {
 
   enable_user_system_nodepool_split = true
 
+  additional_node_pools = contains(["ptlsbox", "ptl"], var.env) ? [] : [
+  local.linux_node_pool, local.msnode_pool, local.cronjob_pool]
+
   availability_zones = each.value.availability_zones
 
   aks_version_checker_principal_id = data.azuread_service_principal.version_checker.object_id
@@ -86,43 +89,46 @@ module "kubernetes" {
   enable_node_os_channel_upgrade_nodeimage = true
 
   node_os_maintenance_window_config = each.value.node_os_maintenance_window_config
-
-  additional_node_pools = contains(["ptlsbox", "ptl"], var.env) ? tolist([]) : [
-    {
-      name                = "linux"
-      vm_size             = each.value.linux_node_pool.vm_size
-      min_count           = each.value.linux_node_pool.min_nodes
-      max_count           = each.value.linux_node_pool.max_nodes
-      max_pods            = each.value.linux_node_pool.max_pods
-      os_type             = "Linux"
-      node_taints         = []
-      enable_auto_scaling = true
-      mode                = "User"
-    },
-    {
-      name                = "msnode"
-      vm_size             = lookup(var.windows_node_pool, "vm_size", "Standard_D4ds_v5")
-      min_count           = lookup(var.windows_node_pool, "min_nodes", 2)
-      max_count           = lookup(var.windows_node_pool, "max_nodes", 4)
-      max_pods            = lookup(var.windows_node_pool, "max_pods", 30)
-      os_type             = "Windows"
-      node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
-      enable_auto_scaling = true
-      mode                = "User"
-    },
-    {
-      name                = "cronjob"
-      vm_size             = "Standard_D4ds_v5"
-      min_count           = 0
-      max_count           = 10
-      max_pods            = 30
-      os_type             = "Linux"
-      node_taints         = ["dedicated=jobs:NoSchedule"]
-      enable_auto_scaling = true
-      mode                = "User"
-    },
-  ]
 }
+
+locals {
+  linux_node_pool = {
+    name                = "linux"
+    vm_size             = each.value.linux_node_pool.vm_size
+    min_count           = each.value.linux_node_pool.min_nodes
+    max_count           = each.value.linux_node_pool.max_nodes
+    max_pods            = each.value.linux_node_pool.max_pods
+    os_type             = "Linux"
+    node_taints         = []
+    enable_auto_scaling = true
+    mode                = "User"
+  }
+
+  msnode_pool = {
+    name                = "msnode"
+    vm_size             = lookup(var.windows_node_pool, "vm_size", "Standard_D4ds_v5")
+    min_count           = lookup(var.windows_node_pool, "min_nodes", 2)
+    max_count           = lookup(var.windows_node_pool, "max_nodes", 4)
+    max_pods            = lookup(var.windows_node_pool, "max_pods", 30)
+    os_type             = "Windows"
+    node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
+    enable_auto_scaling = true
+    mode                = "User"
+  }
+
+  cronjob_pool = {
+    name                = "cronjob"
+    vm_size             = "Standard_D4ds_v5"
+    min_count           = 0
+    max_count           = 10
+    max_pods            = 30
+    os_type             = "Linux"
+    node_taints         = ["dedicated=jobs:NoSchedule"]
+    enable_auto_scaling = true
+    mode                = "User"
+  }
+}
+
 module "ctags" {
   source       = "git::https://github.com/hmcts/terraform-module-common-tags.git?ref=master"
   environment  = var.env
