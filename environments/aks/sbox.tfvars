@@ -48,7 +48,7 @@ clusters = {
   }
 }
 
-autoShutdown = true
+autoShutdown      = true
 cluster_automatic = true
 
 windows_node_pool = {
