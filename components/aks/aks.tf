@@ -90,9 +90,9 @@ module "kubernetes" {
   additional_node_pools = contains(["ptlsbox", "ptl"], var.env) ? [] : [
     {
       name                = "linux"
-      vm_size             = lookup(each.value.linux_node_pool, "vm_size", "Standard_DS3_v2")
+      vm_size             = lookup(each.value.linux_node_pool, "vm_size", "Standard_D4ds_v5")
       min_count           = lookup(each.value.linux_node_pool, "min_nodes", 2)
-      max_count           = lookup(each.value.linux_node_pool, "max_nodes", 4)
+      max_count           = lookup(each.value.linux_node_pool, "max_nodes", 10)
       max_pods            = lookup(each.value.linux_node_pool, "max_pods", 30)
       os_type             = "Linux"
       node_taints         = []
