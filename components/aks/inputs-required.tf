@@ -18,7 +18,6 @@ variable "clusters" {
       "00" = {
         kubernetes_cluster_version = "1.22.6"
         kubernetes_cluster_ssh_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCe..."
-        project_acr_enabled = true
         enable_automatic_channel_upgrade_patch = true
 
         system_node_pool = {
@@ -51,20 +50,17 @@ variable "clusters" {
       "01" = {
         kubernetes_cluster_version = "1.30"
         kubernetes_cluster_ssh_key = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCe..."
-        enable_user_system_nodepool_split = true
         enable_automatic_channel_upgrade_patch = true
 
         system_node_pool = {
+          min_nodes = 2
           max_nodes = 4
         }
 
         linux_node_pool = {
           vm_size   = "Standard_D4ds_v5"
           max_nodes = 10
-        }
-
-        spot_node_pool = {
-          min_nodes = 1
+          max_nodes = 10
         }
 
         availability_zones = ["1"]
@@ -82,17 +78,19 @@ variable "clusters" {
     kubernetes_cluster_version             = string
     kubernetes_cluster_ssh_key             = string
     enable_automatic_channel_upgrade_patch = optional(bool, false)
-
     system_node_pool = object({
-      min_nodes = number
-      max_nodes = number
+      vm_size   = optional(string, "Standard_D4ds_v5")  
+      min_nodes = optional(number, 2)  # Optional with default
+      max_nodes = optional(number, 4)
     })
 
-    linux_node_pool = optional(object({
-      max_pods  = optional(number, 30)
-      max_nodes = optional(number, 10)
-    }), null)
-
+    linux_node_pool = object({
+      vm_size   = optional(string, "Standard_D4ds_v5")  
+      min_nodes = optional(number, 2)  # Optional with default
+      max_nodes = number              
+      max_pods  = number              
+    })
+    
     node_os_maintenance_window_config = object({
       frequency  = string
       start_time = string
