@@ -88,10 +88,10 @@ variable "clusters" {
       max_nodes = number
     })
 
-    linux_node_pool = object({
-      max_pods  = number
-      max_nodes = number
-    })
+    linux_node_pool = optional(object({
+      max_pods  = optional(number, 30)
+      max_nodes = optional(number, 10)
+    }), null)
 
     node_os_maintenance_window_config = object({
       frequency  = string
