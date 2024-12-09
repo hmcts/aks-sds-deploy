@@ -87,57 +87,43 @@ module "kubernetes" {
 
   node_os_maintenance_window_config = each.value.node_os_maintenance_window_config
 
-  additional_node_pools = contains(["ptlsbox", "ptl"], var.env) ? tolist([{
-      name                = "linux"
-      vm_size             = lookup(each.value.linux_node_pool, "vm_size", "Standard_D4ds_v5")
-      min_count           = lookup(each.value.linux_node_pool, "min_nodes", 2)
-      max_count           = lookup(each.value.linux_node_pool, "max_nodes", 10)
-      max_pods            = lookup(each.value.linux_node_pool, "max_pods", 30)
-      os_type             = "Linux"
-      node_taints         = []
-      enable_auto_scaling = true
-      mode                = "User"
-    }, {
-      name                = "cronjob"
-      vm_size             = "Standard_D4ds_v5"
-      min_count           = 0
-      max_count           = 10
-      max_pods            = 30
-      os_type             = "Linux"
-      node_taints         = ["dedicated=jobs:NoSchedule"]
-      enable_auto_scaling = true
-      mode                = "User"
-    }]) : tolist([{
-      name                = "linux"
-      vm_size             = lookup(each.value.linux_node_pool, "vm_size", "Standard_D4ds_v5")
-      min_count           = lookup(each.value.linux_node_pool, "min_nodes", 2)
-      max_count           = lookup(each.value.linux_node_pool, "max_nodes", 10)
-      max_pods            = lookup(each.value.linux_node_pool, "max_pods", 30)
-      os_type             = "Linux"
-      node_taints         = []
-      enable_auto_scaling = true
-      mode                = "User"
-    }, {
-      name                = "system"
-      vm_size             = lookup(each.value.system_node_pool, "vm_size", "Standard_D4ds_v5")
-      min_count           = lookup(each.value.system_node_pool, "min_nodes", 2)
-      max_count           = lookup(each.value.system_node_pool, "max_nodes", 4)
-      max_pods            = lookup(each.value.system_node_pool, "max_pods", 30)
-      os_type             = "Linux"
-      node_taints         = []
-      enable_auto_scaling = true
-      mode                = "System"
-    }, {
-      name                = "cronjob"
-      vm_size             = "Standard_D4ds_v5"
-      min_count           = 0
-      max_count           = 10
-      max_pods            = 30
-      os_type             = "Linux"
-      node_taints         = ["dedicated=jobs:NoSchedule"]
-      enable_auto_scaling = true
-      mode                = "User"
-    }])
+  additional_node_pools = contains(["ptlsbox", "ptl"], var.env) ? tolist([local.linux_node_pool, local.cron_job_node_pool]) : tolist([local.linux_node_pool, local.system_node_pool, local.cron_job_node_pool])
+}
+
+locals {
+  linux_node_pool = {
+    name                = "linux"
+    vm_size             = lookup(each.value.linux_node_pool, "vm_size", "Standard_D4ds_v5")
+    min_count           = lookup(each.value.linux_node_pool, "min_nodes", 2)
+    max_count           = lookup(each.value.linux_node_pool, "max_nodes", 10)
+    max_pods            = lookup(each.value.linux_node_pool, "max_pods", 30)
+    os_type             = "Linux"
+    node_taints         = []
+    enable_auto_scaling = true
+    mode                = "User"
+  }
+  system_node_pool = {
+    name                = "msnode"
+    vm_size             = lookup(var.windows_node_pool, "vm_size", "Standard_D4ds_v5")
+    min_count           = lookup(var.windows_node_pool, "min_nodes", 2)
+    max_count           = lookup(var.windows_node_pool, "max_nodes", 4)
+    max_pods            = lookup(var.windows_node_pool, "max_pods", 30)
+    os_type             = "Windows"
+    node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
+    enable_auto_scaling = true
+    mode                = "User"
+  }
+  cron_job_node_pool = {
+    name                = "cronjob"
+    vm_size             = "Standard_D4ds_v5"
+    min_count           = 0
+    max_count           = 10
+    max_pods            = 30
+    os_type             = "Linux"
+    node_taints         = ["dedicated=jobs:NoSchedule"]
+    enable_auto_scaling = true
+    mode                = "User"
+  }
 }
 
 module "ctags" {
