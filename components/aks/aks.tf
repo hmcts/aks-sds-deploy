@@ -87,8 +87,7 @@ module "kubernetes" {
 
   node_os_maintenance_window_config = each.value.node_os_maintenance_window_config
 
-  additional_node_pools = contains([], var.env) ? tuple([]) : [
-    {
+  additional_node_pools = contains(["ptlsbox", "ptl"], var.env) ? tolist([{
       name                = "linux"
       vm_size             = lookup(each.value.linux_node_pool, "vm_size", "Standard_D4ds_v5")
       min_count           = lookup(each.value.linux_node_pool, "min_nodes", 2)
@@ -98,19 +97,7 @@ module "kubernetes" {
       node_taints         = []
       enable_auto_scaling = true
       mode                = "User"
-    },
-    {
-      name                = "msnode"
-      vm_size             = lookup(var.windows_node_pool, "vm_size", "Standard_D4ds_v5")
-      min_count           = lookup(var.windows_node_pool, "min_nodes", 2)
-      max_count           = lookup(var.windows_node_pool, "max_nodes", 4)
-      max_pods            = lookup(var.windows_node_pool, "max_pods", 30)
-      os_type             = "Windows"
-      node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
-      enable_auto_scaling = true
-      mode                = "User"
-    },
-    {
+    }, {
       name                = "cronjob"
       vm_size             = "Standard_D4ds_v5"
       min_count           = 0
@@ -120,8 +107,37 @@ module "kubernetes" {
       node_taints         = ["dedicated=jobs:NoSchedule"]
       enable_auto_scaling = true
       mode                = "User"
-    }
-  ]
+    }]) : tolist([{
+      name                = "linux"
+      vm_size             = lookup(each.value.linux_node_pool, "vm_size", "Standard_D4ds_v5")
+      min_count           = lookup(each.value.linux_node_pool, "min_nodes", 2)
+      max_count           = lookup(each.value.linux_node_pool, "max_nodes", 10)
+      max_pods            = lookup(each.value.linux_node_pool, "max_pods", 30)
+      os_type             = "Linux"
+      node_taints         = []
+      enable_auto_scaling = true
+      mode                = "User"
+    }, {
+      name                = "system"
+      vm_size             = lookup(each.value.system_node_pool, "vm_size", "Standard_D4ds_v5")
+      min_count           = lookup(each.value.system_node_pool, "min_nodes", 2)
+      max_count           = lookup(each.value.system_node_pool, "max_nodes", 4)
+      max_pods            = lookup(each.value.system_node_pool, "max_pods", 30)
+      os_type             = "Linux"
+      node_taints         = []
+      enable_auto_scaling = true
+      mode                = "System"
+    }, {
+      name                = "cronjob"
+      vm_size             = "Standard_D4ds_v5"
+      min_count           = 0
+      max_count           = 10
+      max_pods            = 30
+      os_type             = "Linux"
+      node_taints         = ["dedicated=jobs:NoSchedule"]
+      enable_auto_scaling = true
+      mode                = "User"
+    }])
 }
 
 module "ctags" {
