@@ -15,14 +15,6 @@ module "loganalytics" {
   environment = var.env
 }
 
-data "azuread_service_principal" "version_checker" {
-  display_name = "DTS SDS AKS version checker"
-}
-
-data "azuread_service_principal" "aks_auto_shutdown" {
-  display_name = "DTS AKS Auto-Shutdown"
-}
-
 module "kubernetes" {
   for_each    = var.env == "sbox" && var.cluster_automatic ? { for k, v in var.clusters : k => v if k == "00" } : var.clusters
   source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=4.x"
@@ -73,6 +65,8 @@ module "kubernetes" {
 
   enable_user_system_nodepool_split = true
 
+  # additional_node_pools = contains(["ptlsbox", "ptl"], var.env) ? tolist([local.common_linux_node_pool, local.cron_job_node_pool]) : tolist([local.common_linux_node_pool, local.system_node_pool, local.cron_job_node_pool])
+
   availability_zones = each.value.availability_zones
 
   aks_version_checker_principal_id = data.azuread_service_principal.version_checker.object_id
@@ -87,41 +81,57 @@ module "kubernetes" {
 
   node_os_maintenance_window_config = each.value.node_os_maintenance_window_config
 
-  additional_node_pools = contains([], var.env) ? tuple([]) : [
-    {
-      name                = "linux"
-      vm_size             = lookup(each.value.linux_node_pool, "vm_size", "Standard_D4ds_v5")
-      min_count           = lookup(each.value.linux_node_pool, "min_nodes", 2)
-      max_count           = lookup(each.value.linux_node_pool, "max_nodes", 10)
-      max_pods            = lookup(each.value.linux_node_pool, "max_pods", 30)
-      os_type             = "Linux"
-      node_taints         = []
-      enable_auto_scaling = true
-      mode                = "User"
-    },
-    {
-      name                = "msnode"
-      vm_size             = lookup(var.windows_node_pool, "vm_size", "Standard_D4ds_v5")
-      min_count           = lookup(var.windows_node_pool, "min_nodes", 2)
-      max_count           = lookup(var.windows_node_pool, "max_nodes", 4)
-      max_pods            = lookup(var.windows_node_pool, "max_pods", 30)
-      os_type             = "Windows"
-      node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
-      enable_auto_scaling = true
-      mode                = "User"
-    },
-    {
-      name                = "cronjob"
-      vm_size             = "Standard_D4ds_v5"
-      min_count           = 0
-      max_count           = 10
-      max_pods            = 30
-      os_type             = "Linux"
-      node_taints         = ["dedicated=jobs:NoSchedule"]
-      enable_auto_scaling = true
-      mode                = "User"
-    }
-  ]
+  additional_node_pools = contains(["ptlsbox", "ptl"], var.env) ? tolist([{
+    name                = "linux"
+    vm_size             = lookup(each.value.linux_node_pool, "vm_size", "Standard_D4ds_v5")
+    min_count           = lookup(each.value.linux_node_pool, "min_nodes", 2)
+    max_count           = lookup(each.value.linux_node_pool, "max_nodes", 10)
+    max_pods            = lookup(each.value.linux_node_pool, "max_pods", 30)
+    os_type             = "Linux"
+    node_taints         = []
+    enable_auto_scaling = true
+    mode                = "User"
+    }, {
+    name                = "cronjob"
+    vm_size             = "Standard_D4ds_v5"
+    min_count           = 0
+    max_count           = 10
+    max_pods            = 30
+    os_type             = "Linux"
+    node_taints         = ["dedicated=jobs:NoSchedule"]
+    enable_auto_scaling = true
+    mode                = "User"
+    }]) : tolist([{
+    name                = "linux"
+    vm_size             = lookup(each.value.linux_node_pool, "vm_size", "Standard_D4ds_v5")
+    min_count           = lookup(each.value.linux_node_pool, "min_nodes", 2)
+    max_count           = lookup(each.value.linux_node_pool, "max_nodes", 10)
+    max_pods            = lookup(each.value.linux_node_pool, "max_pods", 30)
+    os_type             = "Linux"
+    node_taints         = []
+    enable_auto_scaling = true
+    mode                = "User"
+    }, {
+    name                = "msnode"
+    vm_size             = lookup(var.windows_node_pool, "vm_size", "Standard_D4ds_v5")
+    min_count           = lookup(var.windows_node_pool, "min_nodes", 2)
+    max_count           = lookup(var.windows_node_pool, "max_nodes", 4)
+    max_pods            = lookup(var.windows_node_pool, "max_pods", 30)
+    os_type             = "Windows"
+    node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
+    enable_auto_scaling = true
+    mode                = "User"
+    }, {
+    name                = "cronjob"
+    vm_size             = "Standard_D4ds_v5"
+    min_count           = 0
+    max_count           = 10
+    max_pods            = 30
+    os_type             = "Linux"
+    node_taints         = ["dedicated=jobs:NoSchedule"]
+    enable_auto_scaling = true
+    mode                = "User"
+  }])
 }
 
 module "ctags" {
