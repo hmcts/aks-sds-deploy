@@ -87,7 +87,7 @@ module "kubernetes" {
 
   node_os_maintenance_window_config = each.value.node_os_maintenance_window_config
 
-  additional_node_pools = contains(["ptlsbox", "ptl"], var.env) ? [] : [
+  additional_node_pools = contains([], var.env) ? tuple([]) : [
     {
       name                = "linux"
       vm_size             = lookup(each.value.linux_node_pool, "vm_size", "Standard_D4ds_v5")
