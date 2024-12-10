@@ -6,7 +6,7 @@ clusters = {
 
     system_node_pool = {
       min_nodes = 2
-      max_nodes = 10
+      max_nodes = 4
     }
 
     linux_node_pool = {

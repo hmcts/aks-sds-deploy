@@ -31,7 +31,7 @@ clusters = {
     }
 
     linux_node_pool = {
-      max_nodes = 30
+      max_nodes = 14
       max_pods  = 30
     }
 
