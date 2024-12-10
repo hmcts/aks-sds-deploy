@@ -182,7 +182,7 @@ resource "null_resource" "register_automatic_sku_preview" {
 }
 
 resource "azapi_resource" "managedCluster" {
-  count = var.cluster_automatic && var.env == "sbox" ? 1 : 0
+  count     = var.cluster_automatic && var.env == "sbox" ? 1 : 0
   type      = "Microsoft.ContainerService/managedClusters@2024-03-02-preview"
   parent_id = azurerm_resource_group.kubernetes_resource_group["01"].id
   name      = "ss-sbox-01-aks"
