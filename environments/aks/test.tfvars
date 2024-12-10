@@ -6,7 +6,7 @@ clusters = {
     availability_zones                     = ["1"]
 
     system_node_pool = {
-      min_nodes = 1
+      min_nodes = 2
       max_nodes = 4
     }
 
@@ -30,7 +30,7 @@ clusters = {
     availability_zones                     = ["1"]
 
     system_node_pool = {
-      min_nodes = 1
+      min_nodes = 2
       max_nodes = 4
     }
 
