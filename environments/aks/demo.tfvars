@@ -11,7 +11,7 @@ clusters = {
 
     linux_node_pool = {
       max_pods  = 30
-      max_nodes = 10
+      max_nodes = 30
     }
 
     availability_zones = ["1"]
@@ -35,7 +35,7 @@ clusters = {
 
     linux_node_pool = {
       max_pods  = 30
-      max_nodes = 10
+      max_nodes = 30
     }
 
     availability_zones = ["1"]
