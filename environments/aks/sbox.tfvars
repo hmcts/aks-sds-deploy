@@ -26,7 +26,7 @@ clusters = {
 }
 
 autoShutdown      = true
-cluster_automatic = true
+cluster_automatic = false
 
 windows_node_pool = {
   min_nodes = 2
