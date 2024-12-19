@@ -174,3 +174,9 @@ resource "azurerm_role_assignment" "dev_to_stg" {
   principal_id         = module.kubernetes[each.key].kubelet_object_id
   scope                = data.azurerm_resource_group.mi_stg_rg[0].id
 }
+
+resource "null_resource" "register_automatic_sku_preview" {
+  triggers = {
+    cluster_creation = "${var.cluster_automatic ? 1 : 0}"
+  }
+}
