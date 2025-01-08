@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 
-az_keyvault_name="${4}"
+az_keyvault_name="${controlKeyVault}"
 AGENT_BUILDDIRECTORY=/tmp
 
 

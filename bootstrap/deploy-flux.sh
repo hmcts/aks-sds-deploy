@@ -2,8 +2,8 @@
 set -e
 
 ############################################################
-ENVIRONMENT="${3}"
-CLUSTER_NAME="${6}"
+ENVIRONMENT="${ENV}"
+CLUSTER_NAME="${CLUSTER}"
 AGENT_BUILDDIRECTORY=/tmp
 KUSTOMIZE_VERSION=4.5.7
 ############################################################
@@ -39,8 +39,8 @@ commonLabels:
 resources:
   - https://raw.githubusercontent.com/Azure/aad-pod-identity/v1.8.4/deploy/infra/deployment-rbac.yaml
 patches:
-  - https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/admin/aad-pod-identity/nmi-patch.yaml
-  - https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/admin/aad-pod-identity/mic-patch.yaml
+  - https://raw.githubusercontent.com/hmcts/admin-flux-config/refs/heads/aks-cluster/apps/admin/aad-pod-identity/nmi-patch.yaml
+  - https://raw.githubusercontent.com/hmcts/admin-flux-config/refs/heads/aks-cluster/apps/admin/aad-pod-identity/mic-patch.yaml
 EOF
 ) > "${TMP_DIR}/admin/kustomization.yaml"
 
@@ -53,8 +53,8 @@ EOF
         kubectl -n flux-system wait --for condition=established --timeout=60s "customresourcedefinition.apiextensions.k8s.io/$crd"
     done
     
-    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/admin/aad-pod-identity/mic-exception.yaml
-    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/kube-system/aad-pod-identity/mic-exception.yaml
+    kubectl apply -f https://raw.githubusercontent.com/hmcts/admin-flux-config/refs/heads/aks-cluster/apps/admin/aad-pod-identity/mic-exception.yaml
+    kubectl apply -f https://raw.githubusercontent.com/hmcts/admin-flux-config/refs/heads/aks-cluster/apps/kube-system/aad-pod-identity/mic-exception.yaml
 
 }
 
@@ -94,7 +94,7 @@ function flux_v2_ssh_git_key {
 }
 
 function flux_v2_installation {
-    FLUX_CONFIG_URL=https://raw.githubusercontent.com/hmcts/sds-flux-config/master
+    FLUX_CONFIG_URL=https://raw.githubusercontent.com/hmcts/admin-flux-config/aks-cluster
 
 # -----------------------------------------------------------
 # Deploy components and CRDs
@@ -104,12 +104,12 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: flux-system
 resources:
-- ${FLUX_CONFIG_URL}/apps/flux-system/base/gotk-components.yaml
+- ${FLUX_CONFIG_URL}/clusters/base/flux-system/gotk-components.yaml
 - git-credentials.yaml
 - aks-sops-aadpodidentity.yaml
 
 patchesStrategicMerge:
-- ${FLUX_CONFIG_URL}/apps/flux-system/base/patches/kustomize-controller-patch.yaml
+- ${FLUX_CONFIG_URL}/clusters/base/flux-system/patches/kustomize-controller-patch.yaml
 EOF
     ) > "${TMP_DIR}/gotk/kustomization.yaml"
 # -----------------------------------------------------------
@@ -128,11 +128,11 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: flux-system
 resources:
-- ${FLUX_CONFIG_URL}/apps/flux-system/base/kustomize.yaml
-- ${FLUX_CONFIG_URL}/apps/flux-system/base/flux-config-gitrepo.yaml
+- ${FLUX_CONFIG_URL}/clusters/base/flux-system/kustomize.yaml
+- ${FLUX_CONFIG_URL}/clusters/base/flux-system/gitrepo.yaml
 
 patchesStrategicMerge:
-- ${FLUX_CONFIG_URL}/apps/flux-system/${ENVIRONMENT}/${CLUSTER_NAME}/kustomize.yaml
+- ${FLUX_CONFIG_URL}/clusters/sds/${ENVIRONMENT}/${CLUSTER_NAME}/kustomize.yaml
 EOF
     ) > "${TMP_DIR}/flux-config/kustomization.yaml"
 # -----------------------------------------------------------
@@ -161,9 +161,9 @@ cat <<EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - https://github.com/hmcts/sds-flux-config/apps/azureserviceoperator-system/cert-manager/
-  - https://github.com/hmcts/sds-flux-config/apps/azureserviceoperator-system/aso/
-  - https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/azureserviceoperator-system/${ENVIRONMENT}/base/aso-controller-settings.yaml
+  - https://github.com/hmcts/admin-flux-config//apps/azureserviceoperator-system/cert-manager/?ref=aks-cluster
+  - https://github.com/hmcts/admin-flux-config//apps/azureserviceoperator-system/aso/?ref=aks-cluster
+  - https://raw.githubusercontent.com/hmcts/admin-flux-config/refs/heads/aks-cluster/apps/azureserviceoperator-system/${ENVIRONMENT}/base/aso-controller-settings.yaml
 EOF
 ) > "${TMP_DIR}/kustomization.yaml"
 # -----------------------------------------------------------
