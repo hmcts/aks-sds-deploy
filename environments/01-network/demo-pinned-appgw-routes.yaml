@@ -1,6 +1,6 @@
 # This file contains the additional routes for the application gateway that need to be pinned to a specific Palo.
 # Change this IP to 10.11.72.38 to "failover" to the other Palo.
-next_hop_address: 10.11.72.37
+next_hop_address: 10.11.72.38
 appgw_routes:
   - 102PF-A:
     address_prefix: 10.232.38.0/23
