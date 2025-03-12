@@ -166,7 +166,7 @@ resource "azurerm_role_assignment" "service_operator_workload_identity" {
 
 # Gives dev access to genesis resource group for WI
 resource "azurerm_role_assignment" "genesis_rg_contributor" {
-  count                = var.env == "dev" ? 1 : 0
+  count                = var.env == "dev" || var.env == "demo" ? 1 : 0
   principal_id         = azurerm_user_assigned_identity.sops-mi.principal_id
   role_definition_name = "Contributor"
   scope                = data.azurerm_resource_group.genesis_rg.id
