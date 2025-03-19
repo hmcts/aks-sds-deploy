@@ -145,6 +145,7 @@ module "kubernetes" {
       mode                = "User"
     }
   ])
+    aks_mi_resource_group_name = data.azurerm_resource_group.genesis_rg.name
 }
 
 module "ctags" {
