@@ -42,12 +42,12 @@ cat <<EOF
     namespace: admin
     kind: Kustomization
     commonLabels:
-    k8s-app: aad-pod-id
+      k8s-app: aad-pod-id
     resources:
-    - https://raw.githubusercontent.com/Azure/aad-pod-identity/v1.8.4/deploy/infra/deployment-rbac.yaml
+      - https://raw.githubusercontent.com/Azure/aad-pod-identity/v1.8.4/deploy/infra/deployment-rbac.yaml
     patches:
-    - https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/admin/aad-pod-identity/nmi-patch.yaml
-    - https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/admin/aad-pod-identity/mic-patch.yaml
+      - https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/admin/aad-pod-identity/nmi-patch.yaml
+      - https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/admin/aad-pod-identity/mic-patch.yaml
 EOF
 ) > "${TMP_DIR}/admin/kustomization.yaml"
 
@@ -165,14 +165,14 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: flux-system
 resources:
-- ${FLUX_CONFIG_URL}/apps/flux-system/base/gotk-components.yaml
-- git-credentials.yaml 
-- workload-identity-federated-credential.yaml
-- workload-identity-ua-identity.yaml
-- workload-identity-rg.yaml
+  - ${FLUX_CONFIG_URL}/apps/flux-system/base/gotk-components.yaml
+  - git-credentials.yaml 
+  - workload-identity-federated-credential.yaml
+  - workload-identity-ua-identity.yaml
+  - workload-identity-rg.yaml
 patches:
-- path: ${FLUX_CONFIG_URL}/apps/flux-system/base/patches/workload-identity-deployment.yaml
-- path: ${FLUX_CONFIG_URL}/apps/flux-system/serviceaccount/${ENVIRONMENT}.yaml
+  - path: ${FLUX_CONFIG_URL}/apps/flux-system/base/patches/workload-identity-deployment.yaml
+  - path: ${FLUX_CONFIG_URL}/apps/flux-system/serviceaccount/${ENVIRONMENT}.yaml
 EOF
  ) > "${TMP_DIR}/gotk/kustomization.yaml"
 
@@ -191,11 +191,11 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 namespace: flux-system
 resources:
-- ${FLUX_CONFIG_URL}/apps/flux-system/base/kustomize.yaml
-- ${FLUX_CONFIG_URL}/apps/flux-system/base/flux-config-gitrepo.yaml
+  - ${FLUX_CONFIG_URL}/apps/flux-system/base/kustomize.yaml
+  - ${FLUX_CONFIG_URL}/apps/flux-system/base/flux-config-gitrepo.yaml
 
 patches:
-- path: ${FLUX_CONFIG_URL}/apps/flux-system/${ENVIRONMENT}/${CLUSTER_NAME}/kustomize.yaml
+  - path: ${FLUX_CONFIG_URL}/apps/flux-system/${ENVIRONMENT}/${CLUSTER_NAME}/kustomize.yaml
 EOF
 ) > "${TMP_DIR}/flux-config/kustomization.yaml"
 
