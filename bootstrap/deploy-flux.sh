@@ -73,7 +73,7 @@ cat <<EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - https://github.com/hmcts/sds-flux-config/tree/master/apps/azureserviceoperator-system/cert-manager/
+  - https://github.com/hmcts/sds-flux-config/tree/dtspo-24310-cert-manager/apps/azureserviceoperator-system/cert-manager
   - https://github.com/hmcts/sds-flux-config/tree/master/apps/azureserviceoperator-system/aso/
   - https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/azureserviceoperator-system/${ENVIRONMENT}/base/aso-controller-settings.yaml
 EOF
