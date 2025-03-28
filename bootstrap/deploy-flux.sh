@@ -73,13 +73,13 @@ cat <<EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
-  - https://github.com/hmcts/sds-flux-config/apps/azureserviceoperator-system/cert-manager/
-  - https://github.com/hmcts/sds-flux-config/apps/azureserviceoperator-system/aso/
+  - https://github.com/hmcts/sds-flux-config/tree/master/apps/azureserviceoperator-system/cert-manager/
+  - https://github.com/hmcts/sds-flux-config/tree/master/apps/azureserviceoperator-system/aso/
   - https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/azureserviceoperator-system/${ENVIRONMENT}/base/aso-controller-settings.yaml
 EOF
 ) > "${TMP_DIR}/aso/kustomization.yaml"
 
-./kustomize build ${TMP_DIR} > "${TMP_DIR}/aso/result.yaml"
+./kustomize build ${TMP_DIR}/aso > "${TMP_DIR}/aso/result.yaml"
 
 # Apply - retries so that CRDs apply first and then manifests
 echo "Deploying ASO - Applying manifest (may repeat 3 times)"
