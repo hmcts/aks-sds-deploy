@@ -214,12 +214,11 @@ install_kustomize
 # Legacy - for aadPodIdentity (some namespaces still using aadPodIdentity)
 install_aadpodidentity
 
-# Flux installation using workload identity
-install_aso
-
 # Install flux components
 flux_ssh_git_key
 flux_installation
+
+install_aso
 
 # Cleanup
 rm -rf "${TMP_DIR}"
