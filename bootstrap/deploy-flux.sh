@@ -26,6 +26,17 @@ function install_kustomize {
 }
 
 
+# Helper function to download files from a GitHub directory
+function download_files {
+  local url=$1
+  local destination=$2
+  curl -s "$url" | \
+  grep -o '"download_url": "[^"]*' | \
+  sed 's/"download_url": "//' | \
+  xargs -n 1 -I {} curl -o "${destination}/$(basename {})" {}
+}
+
+
 # Install legacy aadpodidentity components
 function install_aadpodidentity {
     echo "Creating admin namespace"
@@ -67,24 +78,35 @@ EOF
 }
 
 
-# Installs aso as prerequiste for WI federated credential for flux-system
+# Installs aso as prerequisite for WI federated credential for flux-system
 function install_aso {
+  # Download files in cert-manager directory
+  echo "Deploying ASO - Downloading cert-manager"
+  download_files "https://api.github.com/repos/hmcts/sds-flux-config/contents/apps/azureserviceoperator-system/cert-manager" "${TMP_DIR}/cert-manager"
 
-echo "Deploying ASO - Applying cert-manager (may repeat 3 times)"
-for i in {1..3}; do
-  (kubectl apply -k "https://github.com/hmcts/sds-flux-config/tree/master/apps/azureserviceoperator-system/cert-manager" && break) || sleep 15;
-done
+  # Download files in aso directory
+  echo "Deploying ASO - Downloading aso"
+  download_files "https://api.github.com/repos/hmcts/sds-flux-config/contents/apps/azureserviceoperator-system/aso" "${TMP_DIR}/aso"
 
-echo "Deploying ASO - Applying aso (may repeat 3 times)"
-for i in {1..3}; do
-  (kubectl apply -k "https://github.com/hmcts/sds-flux-config/tree/master/apps/azureserviceoperator-system/aso" && break) || sleep 15;
-done
+  # Download aso-controller-settings.yaml
+  echo "Deploying ASO - Downloading aso-controller-settings"
+  curl -sL "https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/azureserviceoperator-system/${ENVIRONMENT}/base/aso-controller-settings.yaml" -o "${TMP_DIR}/aso-controller-settings.yaml"
 
-echo "Deploying ASO - Applying aso-controller-settings (may repeat 3 times)"
-for i in {1..3}; do
-  (kubectl apply -f "https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/azureserviceoperator-system/${ENVIRONMENT}/base/aso-controller-settings.yaml" && break) || sleep 15;
-done
+  # Build and apply cert-manager
+  echo "Deploying ASO - Applying cert-manager (may repeat 3 times)"
+  ./kustomize build "${TMP_DIR}/cert-manager" > "${TMP_DIR}/cert-manager-result.yaml"
+  for i in {1..3}; do
+    (kubectl apply -f "${TMP_DIR}/cert-manager-result.yaml" && break) || sleep 15;
+  done
 
+  # Build and apply aso
+  echo "Deploying ASO - Applying aso"
+  ./kustomize build "${TMP_DIR}/aso" > "${TMP_DIR}/aso-result.yaml"
+  kubectl apply -f "${TMP_DIR}/aso-result.yaml";
+
+  # Apply aso-controller-settings
+  echo "Deploying ASO - Applying aso-controller-settings"
+  kubectl apply -f "${TMP_DIR}/aso-controller-settings.yaml";
 }
 
 
@@ -213,11 +235,11 @@ install_kustomize
 # Legacy - for aadPodIdentity (some namespaces still using aadPodIdentity)
 install_aadpodidentity
 
+install_aso
+
 # Install flux components
 flux_ssh_git_key
 flux_installation
-
-install_aso
 
 # Cleanup
 rm -rf "${TMP_DIR}"
