@@ -228,7 +228,7 @@ EOF
 # Main
 ############################################################
 
-mkdir -p "${TMP_DIR}"/{gotk,flux-config,aso,admin}
+mkdir -p "${TMP_DIR}"/{gotk,flux-config,aso,admin,cert-manager}
 
 install_kustomize
 
