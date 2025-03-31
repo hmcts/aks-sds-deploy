@@ -40,6 +40,34 @@ function download_files {
 }
 
 
+# Function to wait for a CRD to be created and established
+function wait_for_crd {
+  local crd_name=$1
+  local timeout=180  # Default timeout is 180 seconds
+  local interval=10 # Default polling interval is 10 seconds
+
+  echo "Waiting for CRD ${crd_name} to be created and established..."
+  for ((i=0; i<${timeout}; i+=${interval})); do
+    if kubectl get crd "${crd_name}" > /dev/null 2>&1; then
+      echo "CRD ${crd_name} found. Waiting for it to be established..."
+      kubectl wait --for condition=established --timeout=60s "customresourcedefinition.apiextensions.k8s.io/${crd_name}"
+      if [ $? -eq 0 ]; then
+        echo "CRD ${crd_name} is established."
+        return 0
+      else
+        echo "CRD ${crd_name} is not yet established. Retrying..."
+      fi
+    else
+      echo "CRD ${crd_name} not found. Retrying in ${interval} seconds..."
+    fi
+    sleep "${interval}"
+  done
+
+  echo "Error: CRD ${crd_name} was not created or established within ${timeout} seconds."
+  return 1
+}
+
+
 # Install legacy aadpodidentity components
 function install_aadpodidentity {
     echo "Creating admin namespace"
@@ -111,9 +139,18 @@ function install_aso {
   echo "Deploying ASO - Applying aso-controller-settings"
   kubectl apply -f "${TMP_DIR}/aso-controller-settings.yaml";
 
-  kubectl -n flux-system wait --for condition=established --timeout=60s customresourcedefinition.apiextensions.k8s.io/federatedidentitycredentials.managedidentity.azure.com
-  kubectl -n flux-system wait --for condition=established --timeout=60s customresourcedefinition.apiextensions.k8s.io/userassignedidentities.managedidentity.azure.com
-  kubectl -n flux-system wait --for condition=established --timeout=60s customresourcedefinition.apiextensions.k8s.io/resourcegroups.resources.azure.com
+  # Wait for CRDs to be in an established state
+  # Wait for the FederatedIdentityCredential CRD
+  echo "Waiting for FederatedIdentityCredential CRD to be established..."
+  wait_for_crd "federatedidentitycredentials.managedidentity.azure.com"
+
+  # Wait for the UserAssignedIdentity CRD
+  echo "Waiting for UserAssignedIdentity CRD to be established..."
+  wait_for_crd "userassignedidentities.managedidentity.azure.com"
+
+  # Wait for the ResourceGroups CRD
+  echo "Waiting for ResourceGroups CRD to be established..."
+  wait_for_crd "resourcegroups.resources.azure.com"
 }
 
 
@@ -209,8 +246,13 @@ echo "Deploying Flux - Applying Kustomization manifest"
 ./kustomize build "${TMP_DIR}/gotk" |  kubectl apply -f -
 
 # Wait for CRDs to be in an established state
-kubectl -n flux-system wait --for condition=established --timeout=60s customresourcedefinition.apiextensions.k8s.io/gitrepositories.source.toolkit.fluxcd.io
-kubectl -n flux-system wait --for condition=established --timeout=60s customresourcedefinition.apiextensions.k8s.io/kustomizations.kustomize.toolkit.fluxcd.io
+# Wait for the GitRepositories CRD
+echo "Waiting for GitRepositories CRD to be established..."
+wait_for_crd "gitrepositories.source.toolkit.fluxcd.io"
+
+# Wait for the Kustomizations CRD
+echo "Waiting for Kustomizations CRD to be established..."
+wait_for_crd "kustomizations.kustomize.toolkit.fluxcd.io"
 
 # Apply kustomization and gitrepository declarations
 (
