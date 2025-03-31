@@ -110,6 +110,10 @@ function install_aso {
   # Apply aso-controller-settings
   echo "Deploying ASO - Applying aso-controller-settings"
   kubectl apply -f "${TMP_DIR}/aso-controller-settings.yaml";
+
+  kubectl -n flux-system wait --for condition=established --timeout=60s customresourcedefinition.apiextensions.k8s.io/federatedidentitycredentials.managedidentity.azure.com
+  kubectl -n flux-system wait --for condition=established --timeout=60s customresourcedefinition.apiextensions.k8s.io/userassignedidentities.managedidentity.azure.com
+  kubectl -n flux-system wait --for condition=established --timeout=60s customresourcedefinition.apiextensions.k8s.io/resourcegroups.resources.azure.com
 }
 
 
