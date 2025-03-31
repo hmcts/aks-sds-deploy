@@ -33,7 +33,10 @@ function download_files {
   curl -s "$url" | \
   grep -o '"download_url": "[^"]*' | \
   sed 's/"download_url": "//' | \
-  xargs -n 1 -I {} curl -o "${destination}/$(basename {})" {}
+  while read -r file_url; do
+    file_name=$(basename "$file_url")
+    curl -s "$file_url" -o "${destination}/${file_name}"
+  done
 }
 
 
