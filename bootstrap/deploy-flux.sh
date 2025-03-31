@@ -69,25 +69,22 @@ EOF
 
 # Installs aso as prerequiste for WI federated credential for flux-system
 function install_aso {
-echo "Deploying ASO - Generating manifest"
-(
-cat <<EOF
-apiVersion: kustomize.config.k8s.io/v1beta1
-kind: Kustomization
-resources:
-  - https://github.com/hmcts/sds-flux-config/tree/dtspo-24310-cert-manager/apps/azureserviceoperator-system/cert-manager
-  - https://github.com/hmcts/sds-flux-config/tree/master/apps/azureserviceoperator-system/aso/
-  - https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/azureserviceoperator-system/${ENVIRONMENT}/base/aso-controller-settings.yaml
-EOF
-) > "${TMP_DIR}/aso/kustomization.yaml"
 
-./kustomize build ${TMP_DIR}/aso > "${TMP_DIR}/aso/result.yaml"
-
-# Apply - retries so that CRDs apply first and then manifests
-echo "Deploying ASO - Applying manifest (may repeat 3 times)"
+echo "Deploying ASO - Applying cert-manager (may repeat 3 times)"
 for i in {1..3}; do
-  (kubectl apply -f ${TMP_DIR}/aso/result.yaml && break) || sleep 15;
+  (kubectl apply -k "https://github.com/hmcts/sds-flux-config/tree/master/apps/azureserviceoperator-system/cert-manager" && break) || sleep 15;
 done
+
+echo "Deploying ASO - Applying aso (may repeat 3 times)"
+for i in {1..3}; do
+  (kubectl apply -k "https://github.com/hmcts/sds-flux-config/tree/master/apps/azureserviceoperator-system/aso" && break) || sleep 15;
+done
+
+echo "Deploying ASO - Applying aso-controller-settings (may repeat 3 times)"
+for i in {1..3}; do
+  (kubectl apply -f "https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/azureserviceoperator-system/${ENVIRONMENT}/base/aso-controller-settings.yaml" && break) || sleep 15;
+done
+
 }
 
 
