@@ -73,9 +73,7 @@ function install_aso {
   # Build and apply cert-manager
   echo "Deploying ASO - Applying cert-manager (may repeat 3 times)"
   ./kustomize build "${TMP_DIR}/cert-manager" > "${TMP_DIR}/cert-manager-result.yaml"
-  for i in {1..3}; do
-    (kubectl apply -f "${TMP_DIR}/cert-manager-result.yaml" && break) || sleep 15;
-  done
+  kubectl apply -f "${TMP_DIR}/cert-manager-result.yaml"
 
   # Wait for cert-manager to be ready
   echo "Waiting for cert-manager to be ready..." 
