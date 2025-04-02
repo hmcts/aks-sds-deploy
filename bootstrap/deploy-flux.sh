@@ -1,8 +1,10 @@
-#!/usr/bin/env bash
 set -e
 
-ENVIRONMENT="${3}"
-CLUSTER_NAME="${6}"
+source "$(dirname "$0")/deploy-flux-util-functions.sh"
+kubectx ss-sbox-01-aks
+
+ENVIRONMENT="sbox"
+CLUSTER_NAME="01"
 AGENT_BUILDDIRECTORY=/tmp
 KUSTOMIZE_VERSION=5.6.0
 TMP_DIR=/tmp/flux/${ENVIRONMENT}/${CLUSTER_NAME}
@@ -12,61 +14,6 @@ ISSUER_URL=$(az aks show -n ss-${ENVIRONMENT}-${CLUSTER_NAME}-aks -g ss-${ENVIRO
 ############################################################
 # Functions
 ############################################################
-
-# Installs kustomize if not already installed
-function install_kustomize {
-    if [ -f ./kustomize ]; then
-        echo "Kustomize installed"
-    else
-        #Install kustomize
-        curl -s "https://raw.githubusercontent.com/kubernetes-sigs/kustomize/master/hack/install_kustomize.sh" | bash -s ${KUSTOMIZE_VERSION}
-    fi 
-
-    echo "Kustomize version: $(./kustomize version)"
-}
-
-
-# Helper function to download files from a GitHub directory
-function download_files {
-  local url=$1
-  local destination=$2
-  curl -s "$url" | \
-  grep -o '"download_url": "[^"]*' | \
-  sed 's/"download_url": "//' | \
-  while read -r file_url; do
-    file_name=$(basename "$file_url")
-    curl -s "$file_url" -o "${destination}/${file_name}"
-  done
-}
-
-
-# Function to wait for a CRD to be created and established
-function wait_for_crd {
-  local crd_name=$1
-  local timeout=180  # Default timeout is 180 seconds
-  local interval=10 # Default polling interval is 10 seconds
-
-  echo "Waiting for CRD ${crd_name} to be created and established..."
-  for ((i=0; i<${timeout}; i+=${interval})); do
-    if kubectl get crd "${crd_name}" > /dev/null 2>&1; then
-      echo "CRD ${crd_name} found. Waiting for it to be established..."
-      kubectl wait --for condition=established --timeout=60s "customresourcedefinition.apiextensions.k8s.io/${crd_name}"
-      if [ $? -eq 0 ]; then
-        echo "CRD ${crd_name} is established."
-        return 0
-      else
-        echo "CRD ${crd_name} is not yet established. Retrying..."
-      fi
-    else
-      echo "CRD ${crd_name} not found. Retrying in ${interval} seconds..."
-    fi
-    sleep "${interval}"
-  done
-
-  echo "Error: CRD ${crd_name} was not created or established within ${timeout} seconds."
-  return 1
-}
-
 
 # Install legacy aadpodidentity components
 function install_aadpodidentity {
@@ -130,13 +77,20 @@ function install_aso {
     (kubectl apply -f "${TMP_DIR}/cert-manager-result.yaml" && break) || sleep 15;
   done
 
-  # Build and apply aso
-  echo "Deploying ASO - Applying aso"
+  # Wait for cert-manager to be ready
+  echo "Waiting for cert-manager to be ready..." 
+  cert_manager_pod="$(kubectl get pod -n cert-manager --no-headers=true | awk '/cert-manager-webhook/{print $1}')"
+  wait_for_k8s_resource "pod" "$cert_manager_pod" "cert-manager" "Ready"
+  wait_for_k8s_resource "svc" "cert-manager-webhook" "cert-manager" ""
+  wait_for_k8s_resource "mutatingwebhookconfiguration" "cert-manager-webhook" "" ""
+
+  # Build and apply ASO
+  echo "Deploying Azure Service Operator - Applying ASO"
   ./kustomize build "${TMP_DIR}/aso" > "${TMP_DIR}/aso-result.yaml"
   kubectl apply -f "${TMP_DIR}/aso-result.yaml";
-
+  
   # Apply aso-controller-settings
-  echo "Deploying ASO - Applying aso-controller-settings"
+  echo "Deploying Azure Service Operator - Applying aso-controller-settings"
   kubectl apply -f "${TMP_DIR}/aso-controller-settings.yaml";
 
   # Wait for CRDs to be in an established state
@@ -151,6 +105,13 @@ function install_aso {
   # Wait for the ResourceGroups CRD
   echo "Waiting for ResourceGroups CRD to be established..."
   wait_for_crd "resourcegroups.resources.azure.com"
+
+  # Wait for ASO to be ready
+  echo "Waiting for Azure Service Operator to be ready..." 
+  aso_pod="$(kubectl get pod -n azureserviceoperator-system --no-headers=true | awk '/azureserviceoperator-controller-manager/{print $1}')"
+  wait_for_k8s_resource "pod" "$aso_pod" "azureserviceoperator-system" "Ready" 150
+  wait_for_k8s_resource "svc" "azureserviceoperator-webhook-service" "azureserviceoperator-system" ""
+  wait_for_k8s_resource "mutatingwebhookconfiguration" "azureserviceoperator-mutating-webhook-configuration" "" ""
 }
 
 
@@ -167,60 +128,14 @@ function flux_ssh_git_key {
 
 
 # Installs flux components using workload identity
-function flux_installation {
+function install_flux {
 # Generating WI ResourceGroup manifest
-echo "Deploying Flux - Generating WI ResourceGroup manifest"
-(
-cat <<EOF
-apiVersion: resources.azure.com/v1api20200601
-kind: ResourceGroup
-metadata:
-  name: genesis-rg
-  namespace: flux-system
-  annotations:
-    serviceoperator.azure.com/reconcile-policy: detach-on-delete
-spec:
-  location: uksouth
-  azureName: genesis-rg
-EOF
-) > "${TMP_DIR}/gotk/workload-identity-rg.yaml"
-
-# Generating WI UserAssignedIdentity manifest
-echo "Deploying Flux - Generating WI UserAssignedIdentity manifest"
-(
-cat <<EOF
-apiVersion: managedidentity.azure.com/v1api20181130
-kind: UserAssignedIdentity
-metadata:
-  name: aks-${ENVIRONMENT}-mi
-  namespace: flux-system
-  annotations:
-    serviceoperator.azure.com/reconcile-policy: skip
-spec:
-  location: uksouth
-  owner:
-    name: genesis-rg
-EOF
-) > "${TMP_DIR}/gotk/workload-identity-ua-identity.yaml"
-
-# Generating WI FederatedIdentityCredential manifest
-echo "Deploying Flux - Generating WI FederatedIdentityCredential manifest"
-(
-cat <<EOF
-apiVersion: managedidentity.azure.com/v1api20220131preview
-kind: FederatedIdentityCredential
-metadata:
-  name: aks-${ENVIRONMENT}-${CLUSTER_NAME}-fic
-  namespace: flux-system
-spec:
-  owner:
-    name: aks-${ENVIRONMENT}-mi
-  audiences:
-    - api://AzureADTokenExchange
-  issuer: ${ISSUER_URL}
-  subject: system:serviceaccount:flux-system:kustomize-controller
-EOF
-) > "${TMP_DIR}/gotk/workload-identity-federated-credential.yaml"
+echo "Deploying Flux - Generating WI manifests"
+download_files "https://api.github.com/repos/hmcts/sds-flux-config/contents/apps/flux-system/workload-identity" \
+"${TMP_DIR}/gotk" \
+"s|\${WI_CLUSTER}|$ENVIRONMENT-$CLUSTER_NAME|g" \
+"s|\${ENVIRONMENT}|$ENVIRONMENT|g" \
+"s|\${ISSUER_URL}|$ISSUER_URL|g"
 
 # Generating Kustomization manifest
 echo "Deploying Flux - Generating Kustomization manifest"
@@ -280,15 +195,12 @@ EOF
 mkdir -p "${TMP_DIR}"/{gotk,flux-config,aso,admin,cert-manager}
 
 install_kustomize
-
 # Legacy - for aadPodIdentity (some namespaces still using aadPodIdentity)
 install_aadpodidentity
-
 install_aso
-
 # Install flux components
 flux_ssh_git_key
-flux_installation
+install_flux
 
 # Cleanup
 rm -rf "${TMP_DIR}"
