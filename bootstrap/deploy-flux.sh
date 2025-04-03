@@ -1,10 +1,10 @@
+#!/usr/bin/env bash
 set -e
 
 source "$(dirname "$0")/deploy-flux-util-functions.sh"
-kubectx ss-sbox-01-aks
 
-ENVIRONMENT="sbox"
-CLUSTER_NAME="01"
+ENVIRONMENT="${3}"
+CLUSTER_NAME="${6}"
 AGENT_BUILDDIRECTORY=/tmp
 KUSTOMIZE_VERSION=5.6.0
 TMP_DIR=/tmp/flux/${ENVIRONMENT}/${CLUSTER_NAME}

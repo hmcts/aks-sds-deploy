@@ -1,4 +1,4 @@
-# shebannnngggggg
+#!/usr/bin/env bash
 set -e
 
 # Installs kustomize if not already installed
