@@ -13,6 +13,11 @@ function install_kustomize {
     echo "Kustomize version: $(./kustomize version)"
 }
 
+filter_kubectl_warnings() {
+    sed '/Warning: resource .* is missing the kubectl.kubernetes.io\/last-applied-configuration annotation/d'
+}
+
+
 # Helper function to download files from a GitHub directory
 function download_files {
   local url=$1

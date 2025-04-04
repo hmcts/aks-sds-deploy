@@ -44,15 +44,15 @@ EOF
 
 # Apply
     echo "Deploying aadPodIdentity - Applying manifest" 
-    ./kustomize build "${TMP_DIR}/admin" |  kubectl apply -f -
+    ./kustomize build "${TMP_DIR}/admin" |  kubectl apply -f - 2>&1 | filter_kubectl_warnings
     
     CRDS="azureassignedidentities.aadpodidentity.k8s.io azureidentitybindings.aadpodidentity.k8s.io azureidentities.aadpodidentity.k8s.io azurepodidentityexceptions.aadpodidentity.k8s.io"
     for crd in $(echo "${CRDS}"); do
         kubectl -n flux-system wait --for condition=established --timeout=60s "customresourcedefinition.apiextensions.k8s.io/$crd"
     done
     
-    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/admin/aad-pod-identity/mic-exception.yaml
-    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/kube-system/aad-pod-identity/mic-exception.yaml
+    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/admin/aad-pod-identity/mic-exception.yaml 2>&1 | filter_kubectl_warnings
+    kubectl apply -f https://raw.githubusercontent.com/hmcts/sds-flux-config/master/apps/kube-system/aad-pod-identity/mic-exception.yaml 2>&1 | filter_kubectl_warnings
 }
 
 
@@ -73,7 +73,7 @@ function install_aso {
   # Build and apply cert-manager
   echo "Deploying ASO - Applying cert-manager (may repeat 3 times)"
   ./kustomize build "${TMP_DIR}/cert-manager" > "${TMP_DIR}/cert-manager-result.yaml"
-  kubectl apply -f "${TMP_DIR}/cert-manager-result.yaml"
+  kubectl apply -f "${TMP_DIR}/cert-manager-result.yaml" 2>&1 | filter_kubectl_warnings
 
   # Wait for cert-manager to be ready
   echo "Waiting for cert-manager to be ready..." 
@@ -85,11 +85,11 @@ function install_aso {
   # Build and apply ASO
   echo "Deploying Azure Service Operator - Applying ASO"
   ./kustomize build "${TMP_DIR}/aso" > "${TMP_DIR}/aso-result.yaml"
-  kubectl apply -f "${TMP_DIR}/aso-result.yaml";
+  kubectl apply -f "${TMP_DIR}/aso-result.yaml" 2>&1 | filter_kubectl_warnings
   
   # Apply aso-controller-settings
   echo "Deploying Azure Service Operator - Applying aso-controller-settings"
-  kubectl apply -f "${TMP_DIR}/aso-controller-settings.yaml";
+  kubectl apply -f "${TMP_DIR}/aso-controller-settings.yaml" 2>&1 | filter_kubectl_warnings
 
   # Wait for CRDs to be in an established state
   # Wait for the FederatedIdentityCredential CRD
@@ -156,7 +156,7 @@ EOF
 
 # Apply
 echo "Deploying Flux - Applying Kustomization manifest"
-./kustomize build "${TMP_DIR}/gotk" |  kubectl apply -f -
+./kustomize build "${TMP_DIR}/gotk" |  kubectl apply -f - 2>&1 | filter_kubectl_warnings
 
 # Wait for CRDs to be in an established state
 # Wait for the GitRepositories CRD
@@ -182,7 +182,7 @@ patches:
 EOF
 ) > "${TMP_DIR}/flux-config/kustomization.yaml"
 
-./kustomize build "${TMP_DIR}/flux-config" |  kubectl apply -f -
+./kustomize build "${TMP_DIR}/flux-config" |  kubectl apply -f - 2>&1 | filter_kubectl_warnings
 }
 
 
