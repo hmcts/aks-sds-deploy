@@ -77,9 +77,9 @@ parameters:
       - env: 'ptl'
         dependsOn: 'ptlsbox'
         serviceConnection: 'OPS-APPROVAL-GATE-PTL-ENVS'
-      #- env: 'prod'
-       # dependsOn: 'stg'
-       # serviceConnection: 'OPS-APPROVAL-GATE-PROD-ENVS'
+      - env: 'prod'
+        dependsOn: 'stg'
+        serviceConnection: 'OPS-APPROVAL-GATE-PROD-ENVS'
 
 variables:
   - name: timeoutInMinutes
