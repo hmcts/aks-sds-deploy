@@ -48,4 +48,3 @@ clusters = {
   }
 }
 autoShutdown      = true
-oms_agent_enabled = true
