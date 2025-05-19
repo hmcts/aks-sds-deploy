@@ -1,9 +1,9 @@
 clusters = {
   "00" = {
-    kubernetes_version = "1.31"
+    kubernetes_version = "1.32"
   },
   "01" = {
-    kubernetes_version = "1.31"
+    kubernetes_version = "1.32"
   }
 }
 
