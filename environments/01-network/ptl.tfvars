@@ -122,5 +122,17 @@ additional_routes = [
     address_prefix         = "10.101.200.0/24"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.72.36"
+  },
+  {
+    name                   = "heritage_nle_int_vnet_addrspace_01"
+    address_prefix         = "10.25.240.0/21"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
+  },
+  {
+    name                   = "heritage_nle_int_vnet_addrspace_02"
+    address_prefix         = "10.225.240.0/21"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
   }
 ]
