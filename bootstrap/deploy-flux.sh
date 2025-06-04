@@ -115,7 +115,7 @@ function install_aso {
 
 function flux_github_app_secret {
     echo " Kubectl Create GitHub App Secret"
-    kubectl create secret generic guthub-app-credentials \
+    kubectl create secret generic github-app-credentials \
     --from-file=githubAppID=$AGENT_BUILDDIRECTORY/flux-github-app-id \
     --from-file=githubAppInstallationID=$AGENT_BUILDDIRECTORY/flux-github-app-installation-id \
     --from-file=githubAppPrivateKey=$AGENT_BUILDDIRECTORY/flux-github-app-private-key \
