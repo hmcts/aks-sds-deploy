@@ -46,7 +46,7 @@ for cluster in ${cluster_numbers}; do
   echo "################################"
   echo -e "Starting Deployment on ${project}-${env}-${cluster}-aks\n"
   ./get-aks-credentials.sh "$@" || error_exit "ERROR: Unable to get AKS credentials"
-  ./create-sshkeys.sh "$@" || error_exit "ERROR: SSHKey Create Issues"
+  ./create-github-app-secret.sh "$@" || error_exit "ERROR: Unable to create GitHub App secret"
   ./apply-default-rbac.sh "$@" || error_exit "ERROR: Unable to set k8s RBAC"
   ./deploy-flux.sh "$@" || error_exit "ERROR: Unable to deploy Fluxcd"
   echo "Cleanup"
