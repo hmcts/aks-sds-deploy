@@ -121,6 +121,10 @@ function flux_github_app_secret {
     --from-file=githubAppPrivateKey=$AGENT_BUILDDIRECTORY/flux-github-app-private-key \
     --namespace flux-system \
     --dry-run=client -o yaml > "${TMP_DIR}/gotk/github-app-credentials.yaml"
+    # Clean up these secret files - they are not needed anymore and to avoid conflicts on subsequent runs on the same agent
+    rm -f $AGENT_BUILDDIRECTORY/flux-github-app-id
+    rm -f $AGENT_BUILDDIRECTORY/flux-github-app-installation-id
+    rm -f $AGENT_BUILDDIRECTORY/flux-github-app-private-key
 }
 
 
