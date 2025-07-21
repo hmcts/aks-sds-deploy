@@ -14,3 +14,5 @@ aks_routes:
     address_prefix: 10.188.108.0/24
   - Interim-Hosting:
     address_prefix: 10.25.12.0/22
+  - XHIBIT-DISPLAY-HENDON:
+    address_prefix: 10.188.108.54/32
