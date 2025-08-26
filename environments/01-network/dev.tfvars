@@ -42,11 +42,23 @@ hub = "nonprod"
 
 additional_routes = [
   {
+    name                   = "CGW-Proxy"
+    address_prefix         = "10.24.1.253/32"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
+  },
+  {
     name                   = "pre-vnet01-stg"
     address_prefix         = "10.101.0.0/24"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.72.36"
-  }
+  },
+  {
+    name                   = "interim-hosting-12"
+    address_prefix         = "10.25.12.0/22"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
+  },
 ]
 
 additional_routes_application_gateway = [
@@ -98,4 +110,10 @@ additional_routes_application_gateway = [
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.72.36"
   },
+  {
+    name                   = "jbox-nonprod"
+    address_prefix         = "10.25.250.0/24"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
+  }
 ]
