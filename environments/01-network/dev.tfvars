@@ -45,7 +45,7 @@ additional_routes = [
     name                   = "CGW-Proxy"
     address_prefix         = "10.24.1.253/32"
     next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "10.11.72.37"
+    next_hop_in_ip_address = "10.11.72.36"
   },
   {
     name                   = "pre-vnet01-stg"
@@ -57,7 +57,7 @@ additional_routes = [
     name                   = "interim-hosting-12"
     address_prefix         = "10.25.12.0/22"
     next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "10.11.72.37"
+    next_hop_in_ip_address = "10.11.72.36"
   },
 ]
 
