@@ -87,8 +87,6 @@ module "kubernetes" {
 
   node_os_maintenance_window_config = each.value.node_os_maintenance_window_config
 
-  azure_policy_enabled = true
-
   additional_node_pools = contains(["ptlsbox", "ptl"], var.env) ? tolist([
     {
       name                = "linux"
