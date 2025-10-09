@@ -34,7 +34,7 @@ steps:
         Write-Host "##vso[task.setvariable variable=tfVersion]$tfVersion"
       displayName: Set terraform version env variable
 
-    - task: TerraformCLI@0
+    - task: TerraformCLI@2
       displayName: Terraform output
       inputs:
         command: output
