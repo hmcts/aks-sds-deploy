@@ -92,9 +92,10 @@ module "vnet_peer_vpn" {
 }
 
 # No real nice way to have this provider dynamic besides multiple module calls
+# For ptl agents to talk to sbox storage accounts
 module "vnet_peer_dlrm_ingest_sbox" {
   source = "github.com/hmcts/terraform-module-vnet-peering"
-  count  = var.env == "sbox" ? 1 : 0
+  count  = var.env == "ptl" ? 1 : 0
 
   peerings = {
     source = {
