@@ -37,9 +37,6 @@ locals {
       next_hop_in_ip_address = local.pinned_appgw_routes_yaml.next_hop_address
     }
   ]) : []
-  dlrm_provider_map = {
-    sbox = azurerm.dlrm-ingest-sbox
-  }
 }
 
 

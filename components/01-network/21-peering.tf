@@ -91,26 +91,26 @@ module "vnet_peer_vpn" {
   }
 }
 
-module "vnet_peer_dlrm_ingest" {
+# No real nice way to have this provider dynamic besides multiple module calls
+module "vnet_peer_dlrm_ingest_sbox" {
   source = "github.com/hmcts/terraform-module-vnet-peering"
+  count = var.env == "sbox" ? 1 : 0
 
-  for_each = var.ingest_peering_config
   peerings = {
     source = {
-      name           = "ingest-${each.key}"
+      name           = "ingest-${var.env}"
       vnet           = module.network.network_name
       resource_group = module.network.network_resource_group
     }
     target = {
-      name           = format("%s%s-to-ingest00-%s", var.project, var.env, each.key)
-      vnet           = each.value.vnet_name
-      resource_group = each.value.resource_group
+      name           = format("%s%s-to-ingest00-%s", var.project, var.env, var.env)
+      vnet           = lookup(var.ingest_peering_config, var.env).vnet_name
+      resource_group = lookup(var.ingest_peering_config, var.env).resource_group
     }
   }
 
   providers = {
     azurerm.initiator = azurerm
-    # No real nice way to have this provider dynamic besides multiple module calls, define which provider is needed below
-    azurerm.target = var.env == "sbox" ? azurerm.dlrm-ingest-sbox : azurerm
+    azurerm.target    = azurerm.dlrm-ingest-sbox
   }
 }
