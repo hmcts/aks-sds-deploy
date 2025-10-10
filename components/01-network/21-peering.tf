@@ -111,6 +111,6 @@ module "vnet_peer_dlrm_ingest" {
   providers = {
     azurerm.initiator = azurerm
     # No real nice way to have this provider dynamic besides multiple module calls, define which provider is needed below
-    azurerm.target    = var.env == "sbox"  ? azurerm.dlrm-ingest-sbox : azurerm
+    azurerm.target = var.env == "sbox" ? azurerm.dlrm-ingest-sbox : azurerm
   }
 }
