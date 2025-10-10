@@ -39,9 +39,9 @@ variable "additional_routes_application_gateway" {
 variable "ingest_peering_config" {
   description = "Configuration for ingest peering connections"
   type = map(object({
-    vnet_name         = string
-    resource_group    = string
-    provider_alias   = string
+    vnet_name      = string
+    resource_group = string
+    provider_alias = string
   }))
   default = {}
 }
