@@ -41,7 +41,6 @@ variable "ingest_peering_config" {
   type = map(object({
     vnet_name      = string
     resource_group = string
-    provider_alias = string
   }))
   default = {}
 }

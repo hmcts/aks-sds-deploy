@@ -110,6 +110,6 @@ module "vnet_peer_dlrm_ingest" {
 
   providers = {
     azurerm.initiator = azurerm
-    azurerm.target    = each.value.provider_alias
+    azurerm.target    = local.dlrm_provider_map[each.key]
   }
 }
