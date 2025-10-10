@@ -110,6 +110,7 @@ module "vnet_peer_dlrm_ingest" {
 
   providers = {
     azurerm.initiator = azurerm
-    azurerm.target    = local.dlrm_provider_map[each.key]
+    # No real nice way to have this provider dynamic besides multiple module calls, define which provider is needed below
+    azurerm.target    = var.env == "sbox"  ? azurerm.dlrm-ingest-sbox : azurerm
   }
 }
