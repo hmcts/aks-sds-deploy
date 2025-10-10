@@ -38,7 +38,7 @@ locals {
     }
   ]) : []
   dlrm_provider_map = {
-    sbox        = azurerm.dlrm-ingest-sbox
+    sbox = azurerm.dlrm-ingest-sbox
   }
 }
 
