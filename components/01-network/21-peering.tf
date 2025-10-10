@@ -90,3 +90,26 @@ module "vnet_peer_vpn" {
     azurerm.target    = azurerm.vpn
   }
 }
+
+module "vnet_peer_dlrm_ingest" {
+  source = "github.com/hmcts/terraform-module-vnet-peering"
+
+  for_each = var.ingest_peering_config
+  peerings = {
+    source = {
+      name           = "ingest-${each.key}"
+      vnet           = module.network.network_name
+      resource_group = module.network.network_resource_group
+    }
+    target = {
+      name           = format("%s%s-to-ingest00-%s", var.project, var.env, each.key)
+      vnet           = each.value.vnet_name
+      resource_group = each.value.resource_group
+    }
+  }
+
+  providers = {
+    azurerm.initiator = azurerm
+    azurerm.target    = each.value.provider_alias
+  }
+}

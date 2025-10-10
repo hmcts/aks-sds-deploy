@@ -35,6 +35,16 @@ variable "postgresql_subnet_expanded_cidr_blocks" {}
 variable "additional_routes_application_gateway" {
   default = []
 }
+
+variable "ingest_peering_config" {
+  description = "Configuration for ingest peering connections"
+  type = map(object({
+    vnet_name         = string
+    resource_group    = string
+    provider_alias   = string
+  }))
+  default = {}
+}
 # Remote State
 # variable "hmcts_access_vault" {}
 # variable "remote_state_storage_account_name" {}

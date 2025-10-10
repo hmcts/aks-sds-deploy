@@ -136,3 +136,11 @@ additional_routes = [
     next_hop_in_ip_address = "10.11.72.36"
   }
 ]
+
+ingest_peering_config = {
+  sbox = {
+    vnet_name         = "ingest00-vnet-sbox"
+    resource_group    = "ingest00-network-rg"
+    provider_alias    = "dlrm-ingest-sbox"
+  }
+}
