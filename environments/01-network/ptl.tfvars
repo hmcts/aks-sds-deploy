@@ -139,8 +139,8 @@ additional_routes = [
 
 ingest_peering_config = {
   sbox = {
-    vnet_name         = "ingest00-vnet-sbox"
-    resource_group    = "ingest00-network-rg"
-    provider_alias    = "dlrm-ingest-sbox"
+    vnet_name      = "ingest00-vnet-sbox"
+    resource_group = "ingest00-network-rg"
+    provider_alias = "dlrm-ingest-sbox"
   }
 }
