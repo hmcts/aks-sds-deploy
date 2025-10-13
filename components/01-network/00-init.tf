@@ -76,10 +76,3 @@ provider "azurerm" {
   features {}
   alias = "vpn"
 }
-
-provider "azurerm" {
-  subscription_id            = "df72bb30-d6fb-47bd-82ee-5eb87473ddb3"
-  skip_provider_registration = "true"
-  features {}
-  alias = "dlrm-ingest-sbox"
-}
