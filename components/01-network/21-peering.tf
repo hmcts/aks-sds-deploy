@@ -105,8 +105,8 @@ module "vnet_peer_dlrm_ingest_sbox" {
     }
     target = {
       name           = format("%s%s-to-ingest00-%s", var.project, var.env, var.env)
-      vnet           = lookup(var.ingest_peering_config, var.env).vnet_name
-      resource_group = lookup(var.ingest_peering_config, var.env).resource_group
+      vnet           = lookup(var.ingest_peering_config, "sbox").vnet_name
+      resource_group = lookup(var.ingest_peering_config, "sbox").resource_group
     }
   }
 
