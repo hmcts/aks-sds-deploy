@@ -90,28 +90,3 @@ module "vnet_peer_vpn" {
     azurerm.target    = azurerm.vpn
   }
 }
-
-# No real nice way to have this provider dynamic besides multiple module calls
-# For ptl agents to talk to sbox storage accounts
-module "vnet_peer_dlrm_ingest_sbox" {
-  source = "github.com/hmcts/terraform-module-vnet-peering"
-  count  = var.env == "ptl" ? 1 : 0
-
-  peerings = {
-    source = {
-      name           = "ingest-${var.env}"
-      vnet           = module.network.network_name
-      resource_group = module.network.network_resource_group
-    }
-    target = {
-      name           = format("%s%s-to-ingest00-%s", var.project, var.env, var.env)
-      vnet           = lookup(var.ingest_peering_config, "sbox").vnet_name
-      resource_group = lookup(var.ingest_peering_config, "sbox").resource_group
-    }
-  }
-
-  providers = {
-    azurerm.initiator = azurerm
-    azurerm.target    = azurerm.dlrm-ingest-sbox
-  }
-}
