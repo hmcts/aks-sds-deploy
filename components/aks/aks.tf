@@ -87,7 +87,7 @@ module "kubernetes" {
 
   node_os_maintenance_window_config = each.value.node_os_maintenance_window_config
 
-  additional_node_pools = contains(["ptlsbox", "ptl"], var.env) ? tolist([
+  additional_node_pools = contains(["ptlsbox", "ptl", "sbox"], var.env) ? tolist([
     {
       name                = "linux"
       vm_size             = lookup(each.value.linux_node_pool, "vm_size", "Standard_D4ds_v5")
@@ -122,19 +122,17 @@ module "kubernetes" {
       enable_auto_scaling = true
       mode                = "User"
     },
-    # Removed Windows node pool to allow upgrade to Kubernetes 1.33
-    # Windows Server 2019 is deprecated in Kubernetes 1.33+
-    # {
-    #   name                = "msnode"
-    #   vm_size             = lookup(var.windows_node_pool, "vm_size", "Standard_D4ds_v5")
-    #   min_count           = lookup(var.windows_node_pool, "min_nodes", 2)
-    #   max_count           = lookup(var.windows_node_pool, "max_nodes", 4)
-    #   max_pods            = lookup(var.windows_node_pool, "max_pods", 30)
-    #   os_type             = "Windows"
-    #   node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
-    #   enable_auto_scaling = true
-    #   mode                = "User"
-    # },
+    {
+      name                = "msnode"
+      vm_size             = lookup(var.windows_node_pool, "vm_size", "Standard_D4ds_v5")
+      min_count           = lookup(var.windows_node_pool, "min_nodes", 2)
+      max_count           = lookup(var.windows_node_pool, "max_nodes", 4)
+      max_pods            = lookup(var.windows_node_pool, "max_pods", 30)
+      os_type             = "Windows"
+      node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
+      enable_auto_scaling = true
+      mode                = "User"
+    },
     {
       name                = "cronjob"
       vm_size             = "Standard_D4ds_v5"
