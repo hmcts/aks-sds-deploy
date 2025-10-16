@@ -52,7 +52,7 @@ clusters = {
 autoShutdown      = true
 cluster_automatic = false
 
-windows_node_pool = {
-  min_nodes = 2
-  max_nodes = 4
-}
+# windows_node_pool = {
+#   min_nodes = 2
+#   max_nodes = 4
+# }
