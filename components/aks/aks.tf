@@ -25,7 +25,7 @@ data "azuread_service_principal" "aks_auto_shutdown" {
 
 module "kubernetes" {
   for_each    = var.env == "sbox" && var.cluster_automatic ? { for k, v in var.clusters : k => v if k == "00" } : var.clusters
-  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=4.x"
+  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-27915-update-windows-nodepool-sku"
   environment = var.env
   location    = var.location
 
@@ -129,6 +129,7 @@ module "kubernetes" {
       max_count           = lookup(var.windows_node_pool, "max_nodes", 4)
       max_pods            = lookup(var.windows_node_pool, "max_pods", 30)
       os_type             = "Windows"
+      os_sku              = lookup(var.windows_node_pool, "os_sku", null)
       node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
       enable_auto_scaling = true
       mode                = "User"

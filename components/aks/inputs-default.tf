@@ -68,3 +68,7 @@ variable "node_os_maintenance_window_config" {
   })
   default = {}
 }
+
+variable "os_sku" {
+  default = null
+}
