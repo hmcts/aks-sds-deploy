@@ -36,6 +36,8 @@ variable "clusters" {
           vm_size   = "Standard_D4ds_v5"
           min_nodes = 2
           max_nodes = 4
+          max_pods  = 30
+          os_sku    = "Windows2022"
         }
 
         availability_zones = ["1"]
@@ -59,9 +61,11 @@ variable "clusters" {
 
         linux_node_pool = {
           vm_size   = "Standard_D4ds_v5"
-          max_nodes = 10
+          min_nodes = 2
           max_nodes = 10
         }
+
+        # No windows_node_pool for this cluster
 
         availability_zones = ["1"]
         autoShutdown       = true
@@ -87,6 +91,14 @@ variable "clusters" {
       max_nodes = number
       max_pods  = number
     })
+
+    windows_node_pool = optional(object({
+      vm_size   = optional(string)
+      min_nodes = optional(number)
+      max_nodes = optional(number)
+      max_pods  = optional(number)
+      os_sku    = optional(string)
+    }))
 
     node_os_maintenance_window_config = object({
       frequency  = string
