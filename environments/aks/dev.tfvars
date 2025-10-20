@@ -14,6 +14,13 @@ clusters = {
       max_nodes = 20
     }
 
+    windows_node_pool = {
+      vm_size   = "Standard_D4ds_v5"
+      min_nodes = 2
+      max_nodes = 4
+      max_pods  = 50
+    }
+
     availability_zones = ["1"]
 
     node_os_maintenance_window_config = {
@@ -22,10 +29,6 @@ clusters = {
       is_prod    = false
     }
   }
-}
-
-windows_node_pool = {
-  max_pods = 50
 }
 
 autoShutdown = true
