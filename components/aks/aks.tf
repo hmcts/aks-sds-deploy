@@ -95,6 +95,7 @@ module "kubernetes" {
       max_count           = lookup(each.value.linux_node_pool, "max_nodes", 10)
       max_pods            = lookup(each.value.linux_node_pool, "max_pods", 30)
       os_type             = "Linux"
+      os_sku              = null
       node_taints         = []
       enable_auto_scaling = true
       mode                = "User"
@@ -106,6 +107,7 @@ module "kubernetes" {
       max_count           = 10
       max_pods            = 30
       os_type             = "Linux"
+      os_sku              = null
       node_taints         = ["dedicated=jobs:NoSchedule"]
       enable_auto_scaling = true
       mode                = "User"
@@ -118,6 +120,7 @@ module "kubernetes" {
       max_count           = lookup(each.value.linux_node_pool, "max_nodes", 10)
       max_pods            = lookup(each.value.linux_node_pool, "max_pods", 30)
       os_type             = "Linux"
+      os_sku              = null
       node_taints         = []
       enable_auto_scaling = true
       mode                = "User"
@@ -129,6 +132,7 @@ module "kubernetes" {
       max_count           = lookup(var.windows_node_pool, "max_nodes", 4)
       max_pods            = lookup(var.windows_node_pool, "max_pods", 30)
       os_type             = "Windows"
+      os_sku              = null
       node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
       enable_auto_scaling = true
       mode                = "User"
@@ -140,6 +144,7 @@ module "kubernetes" {
       max_count           = 10
       max_pods            = 30
       os_type             = "Linux"
+      os_sku              = null
       node_taints         = ["dedicated=jobs:NoSchedule"]
       enable_auto_scaling = true
       mode                = "User"
