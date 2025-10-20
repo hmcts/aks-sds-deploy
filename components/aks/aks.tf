@@ -132,7 +132,7 @@ module "kubernetes" {
       max_count           = lookup(var.windows_node_pool, "max_nodes", 4)
       max_pods            = lookup(var.windows_node_pool, "max_pods", 30)
       os_type             = "Windows"
-      os_sku              = null
+      os_sku              = lookup(var.windows_node_pool, "os_sku", "Windows2019")
       node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
       enable_auto_scaling = true
       mode                = "User"

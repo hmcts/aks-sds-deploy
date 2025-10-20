@@ -49,3 +49,7 @@ clusters = {
 }
 
 autoShutdown = true
+
+windows_node_pool = {
+  os_sku = "Windows2022"
+}
