@@ -88,6 +88,14 @@ variable "clusters" {
       max_pods  = number
     })
 
+    windows_node_pool = optional(object({
+      vm_size   = optional(string, null)
+      min_nodes = optional(number, null)
+      max_nodes = optional(number, null)
+      max_pods  = optional(number, null)
+      os_sku    = optional(string, null)
+    }), {})
+
     node_os_maintenance_window_config = object({
       frequency  = string
       start_time = string
