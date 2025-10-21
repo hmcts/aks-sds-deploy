@@ -65,6 +65,8 @@ variable "clusters" {
           max_nodes = 10
         }
 
+        # No windows_node_pool for this cluster
+
         availability_zones = ["1"]
         autoShutdown       = true
 
@@ -91,11 +93,11 @@ variable "clusters" {
     })
 
     windows_node_pool = optional(object({
-      vm_size   = optional(string)
-      min_nodes = optional(number)
-      max_nodes = optional(number)
-      max_pods  = optional(number)
-      os_sku    = optional(string)
+      vm_size   = optional(string, "Standard_D4ds_v5")
+      min_nodes = optional(number, 2)
+      max_nodes = optional(number, 4)
+      max_pods  = optional(number, 30)
+      os_sku    = optional(string, "Windows2019")
     }))
 
     node_os_maintenance_window_config = object({
