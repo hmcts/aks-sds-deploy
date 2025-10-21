@@ -26,7 +26,7 @@ clusters = {
     },
   }
   "01" = {
-    kubernetes_cluster_version             = "1.32"
+    kubernetes_cluster_version             = "1.33"
     enable_automatic_channel_upgrade_patch = true
     kubernetes_cluster_agent_min_count     = "1"
     kubernetes_cluster_agent_max_count     = "4"
@@ -41,6 +41,10 @@ clusters = {
     linux_node_pool = {
       max_nodes = 75
       max_pods  = 30
+    }
+
+    windows_node_pool = {
+      os_sku = "Windows2022"
     }
 
     node_os_maintenance_window_config = {
