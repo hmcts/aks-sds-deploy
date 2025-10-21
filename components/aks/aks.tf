@@ -25,7 +25,7 @@ data "azuread_service_principal" "aks_auto_shutdown" {
 
 module "kubernetes" {
   for_each    = var.env == "sbox" && var.cluster_automatic ? { for k, v in var.clusters : k => v if k == "00" } : var.clusters
-  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-27915-update-windows-nodepool-sku"
+  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=4.x"
   environment = var.env
   location    = var.location
 
