@@ -127,12 +127,12 @@ module "kubernetes" {
     },
     {
       name                = "msnode"
-      vm_size             = each.value.windows_node_pool.vm_size
-      min_count           = each.value.windows_node_pool.min_nodes
-      max_count           = each.value.windows_node_pool.max_nodes
-      max_pods            = each.value.windows_node_pool.max_pods
+      vm_size             = lookup(each.value.windows_node_pool, "vm_size", "Standard_D4ds_v5")
+      min_count           = lookup(each.value.windows_node_pool, "min_nodes", 2)
+      max_count           = lookup(each.value.windows_node_pool, "max_nodes", 4)
+      max_pods            = lookup(each.value.windows_node_pool, "max_pods", 30)
       os_type             = "Windows"
-      os_sku              = each.value.windows_node_pool.os_sku
+      os_sku              = lookup(each.value.windows_node_pool, "os_sku", "Windows2019")
       node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
       enable_auto_scaling = true
       mode                = "User"
