@@ -25,7 +25,7 @@ data "azuread_service_principal" "aks_auto_shutdown" {
 
 module "kubernetes" {
   for_each    = var.env == "sbox" && var.cluster_automatic ? { for k, v in var.clusters : k => v if k == "00" } : var.clusters
-  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=4.x"
+  source      = "git::https://github.com/hmcts/aks-module-kubernetes.git?ref=DTSPO-27915-update-windows-nodepool-sku"
   environment = var.env
   location    = var.location
 
@@ -95,6 +95,7 @@ module "kubernetes" {
       max_count           = lookup(each.value.linux_node_pool, "max_nodes", 10)
       max_pods            = lookup(each.value.linux_node_pool, "max_pods", 30)
       os_type             = "Linux"
+      os_sku              = null
       node_taints         = []
       enable_auto_scaling = true
       mode                = "User"
@@ -106,6 +107,7 @@ module "kubernetes" {
       max_count           = 10
       max_pods            = 30
       os_type             = "Linux"
+      os_sku              = null
       node_taints         = ["dedicated=jobs:NoSchedule"]
       enable_auto_scaling = true
       mode                = "User"
@@ -118,17 +120,19 @@ module "kubernetes" {
       max_count           = lookup(each.value.linux_node_pool, "max_nodes", 10)
       max_pods            = lookup(each.value.linux_node_pool, "max_pods", 30)
       os_type             = "Linux"
+      os_sku              = null
       node_taints         = []
       enable_auto_scaling = true
       mode                = "User"
     },
     {
       name                = "msnode"
-      vm_size             = lookup(var.windows_node_pool, "vm_size", "Standard_D4ds_v5")
-      min_count           = lookup(var.windows_node_pool, "min_nodes", 2)
-      max_count           = lookup(var.windows_node_pool, "max_nodes", 4)
-      max_pods            = lookup(var.windows_node_pool, "max_pods", 30)
+      vm_size             = each.value.windows_node_pool.vm_size
+      min_count           = each.value.windows_node_pool.min_nodes
+      max_count           = each.value.windows_node_pool.max_nodes
+      max_pods            = each.value.windows_node_pool.max_pods
       os_type             = "Windows"
+      os_sku              = each.value.windows_node_pool.os_sku
       node_taints         = ["kubernetes.io/os=windows:NoSchedule"]
       enable_auto_scaling = true
       mode                = "User"
@@ -140,6 +144,7 @@ module "kubernetes" {
       max_count           = 10
       max_pods            = 30
       os_type             = "Linux"
+      os_sku              = null
       node_taints         = ["dedicated=jobs:NoSchedule"]
       enable_auto_scaling = true
       mode                = "User"

@@ -18,11 +18,6 @@ variable "sku_tier" {
   default = "Standard"
 }
 
-variable "windows_node_pool" {
-  description = "Map to override the windows node pool config"
-  default     = {}
-}
-
 variable "enable_automatic_channel_upgrade_patch" {
   default = false
 }

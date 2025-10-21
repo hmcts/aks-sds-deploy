@@ -29,3 +29,4 @@ data "azurerm_user_assigned_identity" "aks" {
   name                = "aks-${var.env}-mi"
   resource_group_name = data.azurerm_resource_group.genesis_rg.name
 }
+
