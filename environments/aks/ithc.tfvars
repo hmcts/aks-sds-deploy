@@ -15,11 +15,11 @@ clusters = {
     }
 
     windows_node_pool = {
-      vm_size   = "Standard_D4ds_v5"
-      min_nodes = 2
-      max_nodes = 4
-      max_pods  = 30
-      os_sku    = "Windows2022"
+      # vm_size   = "Standard_D4ds_v5"
+      # min_nodes = 2
+      # max_nodes = 4
+      # max_pods  = 30
+      os_sku = "Windows2022"
     }
 
     availability_zones = ["1"]

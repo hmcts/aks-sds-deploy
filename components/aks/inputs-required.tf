@@ -98,7 +98,13 @@ variable "clusters" {
       max_nodes = optional(number, 4)
       max_pods  = optional(number, 30)
       os_sku    = optional(string, "Windows2019")
-    }))
+      }), {
+      vm_size   = "Standard_D4ds_v5"
+      min_nodes = 2
+      max_nodes = 4
+      max_pods  = 30
+      os_sku    = "Windows2019"
+    })
 
     node_os_maintenance_window_config = object({
       frequency  = string
