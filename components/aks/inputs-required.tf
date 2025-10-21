@@ -65,8 +65,6 @@ variable "clusters" {
           max_nodes = 10
         }
 
-        # No windows_node_pool for this cluster
-
         availability_zones = ["1"]
         autoShutdown       = true
 
