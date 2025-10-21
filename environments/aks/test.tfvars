@@ -15,6 +15,10 @@ clusters = {
       max_pods  = 30
     }
 
+    windows_node_pool = {
+      os_sku = "Windows2022"
+    }
+
     node_os_maintenance_window_config = {
       frequency  = "Daily"
       start_time = "16:00"
