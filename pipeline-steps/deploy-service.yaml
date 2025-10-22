@@ -12,6 +12,7 @@ parameters:
   serviceConnection: ''
   action: ''
   setClusterNumbersEnvVar: false
+  publishPlanResults: false
 
 steps:
 
@@ -24,6 +25,7 @@ steps:
       serviceConnection: ${{ parameters.serviceConnection }}
       terraformInitSubscription: ${{ parameters.tfInitSub }}
       product: ${{ parameters.product }}
+      publishPlanResults: ${{ parameters.publishPlanResults }}
       location: ${{ parameters.location }}
       tfVarsFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/${{ parameters.stack }}/${{ parameters.environment }}.tfvars"
       planCommandOptions: "-var project=${{ parameters.project }} -var control_vault=$(controlKeyVault) ${{ parameters.targetCommand }} "
