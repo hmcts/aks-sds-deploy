@@ -100,6 +100,8 @@ variables:
       value: 'apply'
     ${{ else }}:
       value: ${{ parameters.action }}
+  - name: publishPlanResults
+    value: false
 
 name: "AKS-SDS-Deploy - $(finalAction)"
 
@@ -166,6 +168,7 @@ stages:
                   serviceConnection: ${{ component.serviceConnection }}
                   terraformInitSubscription: ${{ variables.tfInitSub }}
                   product: $(product)
+                  publishPlanResults: ${{ variables.publishPlanResults }}
                   location: ${{ parameters.location }}
                   tfVarsFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/00-genesis/${{ component.env }}.tfvars"
                   planCommandOptions: "-var project=$(project) -var subscription_id=$(ARM_SUBSCRIPTION_ID)"
@@ -186,6 +189,7 @@ stages:
                   project: $(project)
                   tfInitSub: ${{ variables.tfInitSub }}
                   product: $(product)
+                  publishPlanResults: ${{ variables.publishPlanResults }}
                   action: ${{ parameters.action }}
 
           - job: DeployInfrastructure
@@ -208,6 +212,7 @@ stages:
                   serviceConnection: "OPS-APPROVAL-GATE-MGMT-ENVS"
                   terraformInitSubscription: ${{ variables.tfInitSub }}
                   product: $(product)
+                  publishPlanResults: ${{ variables.publishPlanResults }}
                   location: ${{ parameters.location }}
                   tfVarsFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/01-network/${{ component.env }}.tfvars"
                   planCommandOptions: "-var project=$(project) -var control_vault=$(KEY_VAULT) -var subscription_id=$(SUBSCRIPTION_ID)"
@@ -230,6 +235,7 @@ stages:
                   serviceConnection: ${{ component.serviceConnection }}
                   terraformInitSubscription: ${{ variables.tfInitSub }}
                   product: $(product)
+                  publishPlanResults: ${{ variables.publishPlanResults }}
                   location: ${{ parameters.location }}
                   tfVarsFile: NULL
                   planCommandOptions: "-var project=$(project) -var control_vault=$(controlKeyVault) -var subscription_id=$(ARM_SUBSCRIPTION_ID) "
@@ -266,6 +272,7 @@ stages:
                   project: $(project)
                   tfInitSub: ${{ variables.tfInitSub }}
                   product: $(product)
+                  publishPlanResults: ${{ variables.publishPlanResults }}
                   action: ${{ parameters.action }}
                   ${{ if ne(parameters['cluster'], 'All') }}:
                     targetCommand: '-target azurerm_resource_group.kubernetes_resource_group["\"${{parameters.cluster}}\""] -target module.kubernetes["\"${{parameters.cluster}}\""] -target azurerm_role_assignment.dev_to_stg["\"${{parameters.cluster}}\""] -target data.azurerm_resource_group.mi_stg_rg[0]'
@@ -313,3 +320,16 @@ stages:
                   product: ${{ variables.product }}
                   test_title: "${{ component.env }}_${{ parameters.cluster }}_${{ parameters.location }}"
                   test_pattern: pipeline.test.ts
+
+  - stage: Analyse_plans
+    displayName: "Analyse terraform plan"
+    condition: and(eq('${{ parameters.action }}', 'Plan'), succeededOrFailed())
+    dependsOn:
+      - ${{ each component in parameters.environment_components }}:
+        - Aks_${{ component.env }}
+    jobs:
+      - job: AnalysePlans
+        steps:
+          - template: steps/terraform-plan-analyse.yaml@cnp-azuredevops-libraries
+            parameters:
+              serviceConnection: DTS-CFTPTL-INTSVC
