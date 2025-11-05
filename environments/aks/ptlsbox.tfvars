@@ -14,6 +14,13 @@ clusters = {
       max_pods  = 30
     }
 
+    windows_node_pool = {
+      max_nodes = 10
+      min_nodes = 0
+      os_sku   = "Windows2022"
+    }
+
+
     availability_zones = ["1"]
 
     node_os_maintenance_window_config = {
