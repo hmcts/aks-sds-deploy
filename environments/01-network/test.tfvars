@@ -101,6 +101,12 @@ additional_routes_application_gateway = [
     address_prefix         = "10.25.250.0/24"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.72.36"
+  },
+  {
+    name                   = "ss-ptl-vnet"
+    address_prefix         = "10.147.64.0/18"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
   }
 ]
 
