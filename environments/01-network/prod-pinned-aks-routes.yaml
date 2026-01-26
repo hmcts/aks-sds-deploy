@@ -268,3 +268,5 @@ aks_routes:
     address_prefix: 10.110.208.173/32
   - DARTS-Sites-ACTC_Telford:
     address_prefix: 10.110.209.172/32
+  - DARTS-Sites-FITS_1573-Nottingham-JC:
+    address_prefix: 10.235.80.0/22
