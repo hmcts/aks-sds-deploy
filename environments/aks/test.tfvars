@@ -57,8 +57,8 @@ clusters = {
 }
 autoShutdown = true
 
-oms_agent_enabled                  = false
+oms_agent_enabled                  = true
 monitor_diagnostic_setting         = true
-monitor_diagnostic_setting_metrics = false
+monitor_diagnostic_setting_metrics = true
 kube_audit_admin_logs_enabled      = true
 
