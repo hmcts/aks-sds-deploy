@@ -61,3 +61,4 @@ oms_agent_enabled                  = true
 monitor_diagnostic_setting         = true
 monitor_diagnostic_setting_metrics = false
 kube_audit_admin_logs_enabled      = true
+
