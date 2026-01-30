@@ -44,12 +44,12 @@ steps:
   inputs:
     azureSubscription:  "DTS-CFTPTL-INTSVC"
     keyVaultName:   "cftptl-intsvc"
-    secretsFilter: 'aks-cft-deploy-bootstrap-issuer-url-token'
+    secretsFilter: 'aks-sds-deploy-bootstrap-issuer-url-token'
 
 - task: Bash@3
   displayName: 'Update flux-config'
   inputs:
-    arguments: ${{ parameters.environment }} ${{ parameters.cluster }} $(AKS_ISSUER_URL) sds-flux-config $(aks-cft-deploy-bootstrap-issuer-url-token)
+    arguments: ${{ parameters.environment }} ${{ parameters.cluster }} $(AKS_ISSUER_URL) sds-flux-config $(aks-sds-deploy-bootstrap-issuer-url-token)
     filePath: aks-sds-deploy/scripts/update-issuer-url.sh
   condition: ne('${{ parameters.cluster }}', 'All')
 
