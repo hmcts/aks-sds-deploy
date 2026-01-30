@@ -57,12 +57,5 @@ clusters = {
 }
 autoShutdown = true
 
-<<<<<<< HEAD
 oms_agent_enabled = true
-=======
-oms_agent_enabled                  = true
-monitor_diagnostic_setting         = true
-monitor_diagnostic_setting_metrics = true
-kube_audit_admin_logs_enabled      = true
 
->>>>>>> origin/DTSPO-29783-ENABLE-MONITORING
