@@ -1,9 +1,6 @@
 
 
-trigger:
-  branches:
-    include:
-      - master
+trigger: none
 
 pool:
   vmImage: 'ubuntu-latest'
@@ -248,11 +245,13 @@ stages:
         condition: |
           or (
             and(
+              succeeded(),
               in(variables['Build.Reason'], 'Manual', 'PullRequest'),
               in('${{ parameters.cluster }}', '00', '01'),
               eq(dependencies.CheckingClusters_${{ component.env }}.outputs['CheckingClusters.check_clusters.cluster_deploy'], '${{ parameters.cluster }}')
             ),
             and(
+              succeeded(),
               in(variables['Build.Reason'], 'Manual', 'PullRequest'),
               eq('${{ parameters.cluster }}', 'All')
             ),
