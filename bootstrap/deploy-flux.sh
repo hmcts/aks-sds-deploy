@@ -10,6 +10,7 @@ KUSTOMIZE_VERSION=5.6.0
 TMP_DIR=/tmp/flux/${ENVIRONMENT}/${CLUSTER_NAME}
 FLUX_CONFIG_URL=https://raw.githubusercontent.com/hmcts/sds-flux-config/master
 ISSUER_URL=$(az aks show -n ss-${ENVIRONMENT}-${CLUSTER_NAME}-aks -g ss-${ENVIRONMENT}-${CLUSTER_NAME}-rg --query "oidcIssuerProfile.issuerUrl" -otsv)
+CLUSTER_ENV="${ENVIRONMENT}"
 
 ############################################################
 # Functions
