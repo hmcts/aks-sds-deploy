@@ -10,6 +10,7 @@ KUSTOMIZE_VERSION=5.6.0
 TMP_DIR=/tmp/flux/${ENVIRONMENT}/${CLUSTER_NAME}
 FLUX_CONFIG_URL=https://raw.githubusercontent.com/hmcts/sds-flux-config/master
 ISSUER_URL=$(az aks show -n ss-${ENVIRONMENT}-${CLUSTER_NAME}-aks -g ss-${ENVIRONMENT}-${CLUSTER_NAME}-rg --query "oidcIssuerProfile.issuerUrl" -otsv)
+CLUSTER_ENV="${ENVIRONMENT}"
 
 ############################################################
 # Functions
@@ -106,12 +107,16 @@ function install_aso {
 
   # Wait for ASO to be ready
   echo "Waiting for Azure Service Operator to be ready..." 
-  aso_pod="$(kubectl get pod -n azureserviceoperator-system --no-headers=true | awk '/azureserviceoperator-controller-manager/{print $1}')"
-  wait_for_k8s_resource "pod" "$aso_pod" "azureserviceoperator-system" "Ready" 150
+  aso_pods="$(kubectl get pod -n azureserviceoperator-system --no-headers=true | awk '/azureserviceoperator-controller-manager/{print $1}')"
+  for pod in $aso_pods; do
+  echo "$pod"
+  done
+  for pod in $aso_pods; do
+  wait_for_k8s_resource "pod" "$pod" "azureserviceoperator-system" "Ready" 150
+  done
   wait_for_k8s_resource "svc" "azureserviceoperator-webhook-service" "azureserviceoperator-system" ""
   wait_for_k8s_resource "mutatingwebhookconfiguration" "azureserviceoperator-mutating-webhook-configuration" "" ""
 }
-
 
 function flux_github_app_secret {
     echo " Kubectl Create GitHub App Secret"
