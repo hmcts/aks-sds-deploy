@@ -145,6 +145,17 @@ download_files "https://api.github.com/repos/hmcts/sds-flux-config/contents/apps
 
 # Generating Kustomization manifest
 echo "Deploying Flux - Generating Kustomization manifest"
+
+# Check if aso-controller-settings-patch.yaml exists for this environment
+ASO_PATCH_URL="${FLUX_CONFIG_URL}/apps/flux-system/${CLUSTER_ENV}/base/aso-controller-settings-patch.yaml"
+if curl --output /dev/null --silent --head --fail "$ASO_PATCH_URL"; then
+    ASO_PATCH_RESOURCE="- ${ASO_PATCH_URL}"
+    echo "ASO controller settings patch found for environment ${CLUSTER_ENV}"
+else
+    ASO_PATCH_RESOURCE=""
+    echo "ASO controller settings patch not found for environment ${CLUSTER_ENV}, skipping"
+fi
+
 (
 cat <<EOF
 apiVersion: kustomize.config.k8s.io/v1beta1
@@ -156,7 +167,7 @@ resources:
   - workload-identity-federated-credential.yaml
   - workload-identity-ua-identity.yaml
   - workload-identity-rg.yaml
-  - ${FLUX_CONFIG_URL}/apps/flux-system/${CLUSTER_ENV}/base/aso-controller-settings-patch.yaml
+  ${ASO_PATCH_RESOURCE}
 patches:
   - path: ${FLUX_CONFIG_URL}/apps/flux-system/base/patches/workload-identity-deployment.yaml
   - path: ${FLUX_CONFIG_URL}/apps/flux-system/serviceaccount/${ENVIRONMENT}.yaml
