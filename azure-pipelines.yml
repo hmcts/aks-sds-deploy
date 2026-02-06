@@ -56,27 +56,27 @@ parameters:
       - env: 'dev'
         dependsOn: 'sbox'
         serviceConnection: 'OPS-APPROVAL-GATE-DEV-ENVS'
-      - env: 'demo'
-        dependsOn: 'sbox'
-        serviceConnection: 'OPS-APPROVAL-GATE-DEMO-ENVS'
-      - env: 'ithc'
-        dependsOn: 'sbox'
-        serviceConnection: 'OPS-APPROVAL-GATE-ITHC-ENVS'
-      - env: 'ptlsbox'
-        dependsOn: 'sbox'
-        serviceConnection: 'OPS-APPROVAL-GATE-PTLSBOX-ENVS'
-      - env: 'test'
-        dependsOn: 'sbox'
-        serviceConnection: 'OPS-APPROVAL-GATE-TEST-ENVS'
-      - env: 'stg'
-        dependsOn: 'sbox'
-        serviceConnection: 'OPS-APPROVAL-GATE-STG-ENVS'
-      - env: 'ptl'
-        dependsOn: 'ptlsbox'
-        serviceConnection: 'OPS-APPROVAL-GATE-PTL-ENVS'
-      - env: 'prod'
-        dependsOn: 'stg'
-        serviceConnection: 'OPS-APPROVAL-GATE-PROD-ENVS'
+      # - env: 'demo'
+      #   dependsOn: 'sbox'
+      #   serviceConnection: 'OPS-APPROVAL-GATE-DEMO-ENVS'
+      # - env: 'ithc'
+      #   dependsOn: 'sbox'
+      #   serviceConnection: 'OPS-APPROVAL-GATE-ITHC-ENVS'
+      # - env: 'ptlsbox'
+      #   dependsOn: 'sbox'
+      #   serviceConnection: 'OPS-APPROVAL-GATE-PTLSBOX-ENVS'
+      # - env: 'test'
+      #   dependsOn: 'sbox'
+      #   serviceConnection: 'OPS-APPROVAL-GATE-TEST-ENVS'
+      # - env: 'stg'
+      #   dependsOn: 'sbox'
+      #   serviceConnection: 'OPS-APPROVAL-GATE-STG-ENVS'
+      # - env: 'ptl'
+      #   dependsOn: 'ptlsbox'
+      #   serviceConnection: 'OPS-APPROVAL-GATE-PTL-ENVS'
+      # - env: 'prod'
+      #   dependsOn: 'stg'
+      #   serviceConnection: 'OPS-APPROVAL-GATE-PROD-ENVS'
 
 variables:
   - name: timeoutInMinutes
@@ -123,19 +123,6 @@ stages:
   - ${{ each component in parameters.environment_components }}:
       - stage: "CheckingClusters_${{ component.env }}"
         displayName: "Checking Clusters for ${{ component.env }}"
-        dependsOn:
-          - ? ${{ if and(ne(component.env, 'sbox'), eq(parameters.action, 'apply')) }}
-            : - Network_${{ component.dependsOn }}
-              - Managed_Identity_${{ component.dependsOn }}
-              - Aks_${{ component.dependsOn }}
-              - BootStrapClusters_${{ component.dependsOn }}
-              - PipelineTests_${{ component.dependsOn }}
-          - ? ${{ if and(ne(component.env, 'sbox'), ne(parameters.action, 'apply')) }}
-            : - Network_${{ component.dependsOn }}
-              - Managed_Identity_${{ component.dependsOn }}
-              - Aks_${{ component.dependsOn }}
-          - ${{ else }}:
-              - Precheck
         jobs:
           - job: CheckingClusters
             steps:
@@ -148,100 +135,100 @@ stages:
                   azureSubscription: ${{ component.serviceConnection }}
                   scriptPath: "scripts/checking-clusters.sh"
 
-      - stage: Genesis_${{ component.env }}
-        displayName: "${{ upper(component.env) }}: Genesis"
-        condition: and(ne('${{ parameters.Action }}', 'Destroy'), succeeded())
-        dependsOn:
-          - CheckingClusters_${{ component.env }}
-        jobs:
-          - job: Genesis
-            steps:
-              - template: steps/set-build-repo-suffix-env-var.yaml@cnp-azuredevops-libraries
-              - template: steps/terraform.yaml@cnp-azuredevops-libraries
-                parameters:
-                  overrideAction: ${{ parameters.action }}
-                  environment: ${{ component.env }}
-                  component: "00-genesis"
-                  serviceConnection: ${{ component.serviceConnection }}
-                  terraformInitSubscription: ${{ variables.tfInitSub }}
-                  product: $(product)
-                  publishPlanResults: ${{ variables.publishPlanResults }}
-                  location: ${{ parameters.location }}
-                  tfVarsFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/00-genesis/${{ component.env }}.tfvars"
-                  planCommandOptions: "-var project=$(project) -var subscription_id=$(ARM_SUBSCRIPTION_ID)"
+      # - stage: Genesis_${{ component.env }}
+      #   displayName: "${{ upper(component.env) }}: Genesis"
+      #   condition: and(ne('${{ parameters.Action }}', 'Destroy'), succeeded())
+      #   dependsOn:
+      #     - CheckingClusters_${{ component.env }}
+      #   jobs:
+      #     - job: Genesis
+      #       steps:
+      #         - template: steps/set-build-repo-suffix-env-var.yaml@cnp-azuredevops-libraries
+      #         - template: steps/terraform.yaml@cnp-azuredevops-libraries
+      #           parameters:
+      #             overrideAction: ${{ parameters.action }}
+      #             environment: ${{ component.env }}
+      #             component: "00-genesis"
+      #             serviceConnection: ${{ component.serviceConnection }}
+      #             terraformInitSubscription: ${{ variables.tfInitSub }}
+      #             product: $(product)
+      #             publishPlanResults: ${{ variables.publishPlanResults }}
+      #             location: ${{ parameters.location }}
+      #             tfVarsFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/00-genesis/${{ component.env }}.tfvars"
+      #             planCommandOptions: "-var project=$(project) -var subscription_id=$(ARM_SUBSCRIPTION_ID)"
 
-      - stage: Network_${{ component.env }}
-        displayName: "${{ upper(component.env) }}: Network"
-        dependsOn:
-          - Genesis_${{ component.env }}
-        jobs:
-          - job: NetworkRg
-            steps:
-              - template: pipeline-steps/deploy-service.yaml
-                parameters:
-                  environment: ${{ component.env }}
-                  location: ${{ parameters.location }}
-                  serviceConnection: ${{ component.serviceConnection }}
-                  stack: "07-network-rg"
-                  project: $(project)
-                  tfInitSub: ${{ variables.tfInitSub }}
-                  product: $(product)
-                  publishPlanResults: ${{ variables.publishPlanResults }}
-                  action: ${{ parameters.action }}
+      # - stage: Network_${{ component.env }}
+      #   displayName: "${{ upper(component.env) }}: Network"
+      #   dependsOn:
+      #     - Genesis_${{ component.env }}
+      #   jobs:
+      #     - job: NetworkRg
+      #       steps:
+      #         - template: pipeline-steps/deploy-service.yaml
+      #           parameters:
+      #             environment: ${{ component.env }}
+      #             location: ${{ parameters.location }}
+      #             serviceConnection: ${{ component.serviceConnection }}
+      #             stack: "07-network-rg"
+      #             project: $(project)
+      #             tfInitSub: ${{ variables.tfInitSub }}
+      #             product: $(product)
+      #             publishPlanResults: ${{ variables.publishPlanResults }}
+      #             action: ${{ parameters.action }}
 
-          - job: DeployInfrastructure
-            dependsOn: NetworkRg
-            steps:
-              - template: steps/set-build-repo-suffix-env-var.yaml@cnp-azuredevops-libraries
-              - template: steps/keyvault-read.yaml@cnp-azuredevops-libraries
-                parameters:
-                  serviceConnection: ${{ component.serviceConnection }}
-                  environment: ${{ component.env }}
-                  subscriptionIdVariableName: "SUBSCRIPTION_ID"
-                  storageAccountVariableName: "STORAGE_ACCOUNT"
-                  keyVaultVariableName: "KEY_VAULT"
+      #     - job: DeployInfrastructure
+      #       dependsOn: NetworkRg
+      #       steps:
+      #         - template: steps/set-build-repo-suffix-env-var.yaml@cnp-azuredevops-libraries
+      #         - template: steps/keyvault-read.yaml@cnp-azuredevops-libraries
+      #           parameters:
+      #             serviceConnection: ${{ component.serviceConnection }}
+      #             environment: ${{ component.env }}
+      #             subscriptionIdVariableName: "SUBSCRIPTION_ID"
+      #             storageAccountVariableName: "STORAGE_ACCOUNT"
+      #             keyVaultVariableName: "KEY_VAULT"
 
-              - template: steps/terraform.yaml@cnp-azuredevops-libraries
-                parameters:
-                  overrideAction: ${{ parameters.action }}
-                  environment: ${{ component.env  }}
-                  component: "01-network"
-                  serviceConnection: "OPS-APPROVAL-GATE-MGMT-ENVS"
-                  terraformInitSubscription: ${{ variables.tfInitSub }}
-                  product: $(product)
-                  publishPlanResults: ${{ variables.publishPlanResults }}
-                  location: ${{ parameters.location }}
-                  tfVarsFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/01-network/${{ component.env }}.tfvars"
-                  planCommandOptions: "-var project=$(project) -var control_vault=$(KEY_VAULT) -var subscription_id=$(SUBSCRIPTION_ID)"
-                  initCommandOptions: >
-                    -var subscription_id=$(SUBSCRIPTION_ID)
-                    -backend-config storage_account_name=$(STORAGE_ACCOUNT)
+      #         - template: steps/terraform.yaml@cnp-azuredevops-libraries
+      #           parameters:
+      #             overrideAction: ${{ parameters.action }}
+      #             environment: ${{ component.env  }}
+      #             component: "01-network"
+      #             serviceConnection: "OPS-APPROVAL-GATE-MGMT-ENVS"
+      #             terraformInitSubscription: ${{ variables.tfInitSub }}
+      #             product: $(product)
+      #             publishPlanResults: ${{ variables.publishPlanResults }}
+      #             location: ${{ parameters.location }}
+      #             tfVarsFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/01-network/${{ component.env }}.tfvars"
+      #             planCommandOptions: "-var project=$(project) -var control_vault=$(KEY_VAULT) -var subscription_id=$(SUBSCRIPTION_ID)"
+      #             initCommandOptions: >
+      #               -var subscription_id=$(SUBSCRIPTION_ID)
+      #               -backend-config storage_account_name=$(STORAGE_ACCOUNT)
 
-      - stage: Managed_Identity_${{ component.env }}
-        displayName: "${{ upper(component.env) }}: Managed_Identity"
-        dependsOn:
-          - Network_${{ component.env }}
-        jobs:
-          - job: Managed_Identity
-            steps:
-              - template: steps/terraform.yaml@cnp-azuredevops-libraries
-                parameters:
-                  overrideAction: ${{ parameters.action }}
-                  environment: ${{ component.env }}
-                  component: "05-mis"
-                  serviceConnection: ${{ component.serviceConnection }}
-                  terraformInitSubscription: ${{ variables.tfInitSub }}
-                  product: $(product)
-                  publishPlanResults: ${{ variables.publishPlanResults }}
-                  location: ${{ parameters.location }}
-                  tfVarsFile: NULL
-                  planCommandOptions: "-var project=$(project) -var control_vault=$(controlKeyVault) -var subscription_id=$(ARM_SUBSCRIPTION_ID) "
+      # - stage: Managed_Identity_${{ component.env }}
+      #   displayName: "${{ upper(component.env) }}: Managed_Identity"
+      #   dependsOn:
+      #     - Network_${{ component.env }}
+      #   jobs:
+      #     - job: Managed_Identity
+      #       steps:
+      #         - template: steps/terraform.yaml@cnp-azuredevops-libraries
+      #           parameters:
+      #             overrideAction: ${{ parameters.action }}
+      #             environment: ${{ component.env }}
+      #             component: "05-mis"
+      #             serviceConnection: ${{ component.serviceConnection }}
+      #             terraformInitSubscription: ${{ variables.tfInitSub }}
+      #             product: $(product)
+      #             publishPlanResults: ${{ variables.publishPlanResults }}
+      #             location: ${{ parameters.location }}
+      #             tfVarsFile: NULL
+      #             planCommandOptions: "-var project=$(project) -var control_vault=$(controlKeyVault) -var subscription_id=$(ARM_SUBSCRIPTION_ID) "
 
       - stage: Aks_${{ component.env }}
         displayName: "${{ upper(component.env) }}: AKS clusters"
         pool: hmcts-cftptl-agent-pool
-        dependsOn:
-          - Managed_Identity_${{ component.env }}
+        # dependsOn:
+        #   - Managed_Identity_${{ component.env }}
         condition: |
           or (
             and(
@@ -276,59 +263,59 @@ stages:
                   ${{ if ne(parameters['cluster'], 'All') }}:
                     targetCommand: '-target azurerm_resource_group.kubernetes_resource_group["\"${{parameters.cluster}}\""] -target module.kubernetes["\"${{parameters.cluster}}\""] -target azurerm_role_assignment.dev_to_stg["\"${{parameters.cluster}}\""] -target data.azurerm_resource_group.mi_stg_rg[0]'
 
-      - stage: BootStrapClusters_${{ component.env }}
-        displayName: "${{ upper(component.env) }}: BootStrap Clusters"
-        dependsOn:
-          - Aks_${{ component.env }}
-        variables:
-          clusters: ${{ parameters.cluster }}
-        condition: |
-          or(
-            and(succeeded(), eq('${{ parameters.action }}', 'apply')),
-            and(succeeded(), eq(variables['isMain'], true), eq(variables['isAutoTriggered'], true))
-          )
-        jobs:
-          - job: BootStrap
-            steps:
-              - template: pipeline-steps/bootstrap.yaml
-                parameters:
-                  environment: ${{ component.env }}
-                  cluster: ${{ parameters.cluster }}
-                  serviceConnection: ${{ component.serviceConnection }}
+  #     - stage: BootStrapClusters_${{ component.env }}
+  #       displayName: "${{ upper(component.env) }}: BootStrap Clusters"
+  #       dependsOn:
+  #         - Aks_${{ component.env }}
+  #       variables:
+  #         clusters: ${{ parameters.cluster }}
+  #       condition: |
+  #         or(
+  #           and(succeeded(), eq('${{ parameters.action }}', 'apply')),
+  #           and(succeeded(), eq(variables['isMain'], true), eq(variables['isAutoTriggered'], true))
+  #         )
+  #       jobs:
+  #         - job: BootStrap
+  #           steps:
+  #             - template: pipeline-steps/bootstrap.yaml
+  #               parameters:
+  #                 environment: ${{ component.env }}
+  #                 cluster: ${{ parameters.cluster }}
+  #                 serviceConnection: ${{ component.serviceConnection }}
 
-      - stage: PipelineTests_${{ component.env }}
-        displayName: "${{ upper(component.env) }}: PipelineTests"
-        dependsOn:
-          - BootStrapClusters_${{ component.env }}
-        jobs:
-          - job: PipelineTests
-            pool:
-              vmImage: ${{ variables.agentPool }}
-            timeoutInMinutes: ${{ variables.timeoutInMinutes }}
-            condition: |
-              or(
-                and(succeeded(), eq('${{ parameters.action }}', 'apply')),
-                and(succeeded(), eq(variables['isMain'], true), eq(variables['isAutoTriggered'], true))
-              )
-            steps:
-              - template: steps/pipeline-tests-jest.yaml@cnp-azuredevops-libraries
-                parameters:
-                  workingDirectory: $(Pipeline.Workspace)/s/aks-sds-deploy/scripts
-                  junit_output_dir: $(Pipeline.Workspace)/s/aks-sds-deploy/environments/junit
-                  environment: ${{ component.env }}
-                  product: ${{ variables.product }}
-                  test_title: "${{ component.env }}_${{ parameters.cluster }}_${{ parameters.location }}"
-                  test_pattern: pipeline.test.ts
+  #     - stage: PipelineTests_${{ component.env }}
+  #       displayName: "${{ upper(component.env) }}: PipelineTests"
+  #       dependsOn:
+  #         - BootStrapClusters_${{ component.env }}
+  #       jobs:
+  #         - job: PipelineTests
+  #           pool:
+  #             vmImage: ${{ variables.agentPool }}
+  #           timeoutInMinutes: ${{ variables.timeoutInMinutes }}
+  #           condition: |
+  #             or(
+  #               and(succeeded(), eq('${{ parameters.action }}', 'apply')),
+  #               and(succeeded(), eq(variables['isMain'], true), eq(variables['isAutoTriggered'], true))
+  #             )
+  #           steps:
+  #             - template: steps/pipeline-tests-jest.yaml@cnp-azuredevops-libraries
+  #               parameters:
+  #                 workingDirectory: $(Pipeline.Workspace)/s/aks-sds-deploy/scripts
+  #                 junit_output_dir: $(Pipeline.Workspace)/s/aks-sds-deploy/environments/junit
+  #                 environment: ${{ component.env }}
+  #                 product: ${{ variables.product }}
+  #                 test_title: "${{ component.env }}_${{ parameters.cluster }}_${{ parameters.location }}"
+  #                 test_pattern: pipeline.test.ts
 
-  - stage: Analyse_plans
-    displayName: "Analyse terraform plan"
-    condition: and(eq('${{ parameters.action }}', 'Plan'), succeededOrFailed())
-    dependsOn:
-      - ${{ each component in parameters.environment_components }}:
-        - Aks_${{ component.env }}
-    jobs:
-      - job: AnalysePlans
-        steps:
-          - template: steps/terraform-plan-analyse.yaml@cnp-azuredevops-libraries
-            parameters:
-              serviceConnection: DTS-CFTPTL-INTSVC
+  # - stage: Analyse_plans
+  #   displayName: "Analyse terraform plan"
+  #   condition: and(eq('${{ parameters.action }}', 'Plan'), succeededOrFailed())
+  #   dependsOn:
+  #     - ${{ each component in parameters.environment_components }}:
+  #       - Aks_${{ component.env }}
+  #   jobs:
+  #     - job: AnalysePlans
+  #       steps:
+  #         - template: steps/terraform-plan-analyse.yaml@cnp-azuredevops-libraries
+  #           parameters:
+  #             serviceConnection: DTS-CFTPTL-INTSVC
