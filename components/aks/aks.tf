@@ -172,7 +172,7 @@ data "azurerm_resource_group" "mi_stg_rg" {
 }
 
 resource "azurerm_role_assignment" "dev_to_stg" {
-  for_each = local.is_dev ? toset([for k, v in var.clusters : k]) : toset([])
+  count = local.is_dev ? 1 : 0
 
   provider             = azurerm.dts-ss-stg
   role_definition_name = "Managed Identity Operator"
