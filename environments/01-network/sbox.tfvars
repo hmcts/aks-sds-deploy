@@ -22,14 +22,14 @@ additional_subnets = [
     address_prefix = "10.140.34.0/25"
   },
   {
-    name           = "private-endpoints"
-    address_prefix = "10.140.36.0/22"
+    name              = "private-endpoints"
+    address_prefix    = "10.140.36.0/22"
     service_endpoints = ["Microsoft.Storage"]
     delegations = {
-      appService   = {
-          service_name = "Microsoft.Web/serverFarms"
-          actions      = ["Microsoft.Network/virtualNetworks/subnets/action"]
-        }
+      appService = {
+        service_name = "Microsoft.Web/serverFarms"
+        actions      = ["Microsoft.Network/virtualNetworks/subnets/action"]
+      }
     }
   },
 ]

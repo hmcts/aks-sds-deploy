@@ -17,7 +17,7 @@ clusters = {
     windows_node_pool = {
       max_nodes = 10
       min_nodes = 0
-      os_sku   = "Windows2022"
+      os_sku    = "Windows2022"
     }
 
 
