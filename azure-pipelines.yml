@@ -320,15 +320,15 @@ stages:
                   test_title: "${{ component.env }}_${{ parameters.cluster }}_${{ parameters.location }}"
                   test_pattern: pipeline.test.ts
 
-  - stage: Analyse_plans
-    displayName: "Analyse terraform plan"
-    condition: and(eq('${{ parameters.action }}', 'Plan'), succeededOrFailed())
-    dependsOn:
-      - ${{ each component in parameters.environment_components }}:
-        - Aks_${{ component.env }}
-    jobs:
-      - job: AnalysePlans
-        steps:
-          - template: steps/terraform-plan-analyse.yaml@cnp-azuredevops-libraries
-            parameters:
-              serviceConnection: DTS-CFTPTL-INTSVC
+  # - stage: Analyse_plans
+  #   displayName: "Analyse terraform plan"
+  #   condition: and(eq('${{ parameters.action }}', 'Plan'), succeededOrFailed())
+  #   dependsOn:
+  #     - ${{ each component in parameters.environment_components }}:
+  #       - Aks_${{ component.env }}
+  #   jobs:
+  #     - job: AnalysePlans
+  #       steps:
+  #         - template: steps/terraform-plan-analyse.yaml@cnp-azuredevops-libraries
+  #           parameters:
+  #             serviceConnection: DTS-CFTPTL-INTSVC
