@@ -239,7 +239,6 @@ stages:
 
       - stage: Aks_${{ component.env }}
         displayName: "${{ upper(component.env) }}: AKS clusters"
-        pool: hmcts-cftptl-agent-pool
         dependsOn:
           - Managed_Identity_${{ component.env }}
         condition: |
