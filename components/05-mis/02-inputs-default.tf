@@ -33,6 +33,10 @@ locals {
   }
   log_analytics_subscription_id = local.log_analytics_workspace[[for x in keys(local.log_analytics_env_mapping) : x if contains(local.log_analytics_env_mapping[x], var.env)][0]].subscription_id
   resolved_name                 = local.log_analytics_workspace[[for x in keys(local.log_analytics_env_mapping) : x if contains(local.log_analytics_env_mapping[x], var.env)][0]].name
+
+  private_dns_vnet_link_principal_ids_by_env = {
+    ptlsbox = "b8f08f77-4ce2-43d5-a23b-c7ca735eca02"
+  }
 }
 
 module "ctags" {
