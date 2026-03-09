@@ -14,3 +14,11 @@ resource "azurerm_role_assignment" "network_access" {
   role_definition_name = "Network Contributor"
   scope                = data.azurerm_virtual_network.network.id
 }
+
+resource "azurerm_role_assignment" "private_dns_vnet_join_access" {
+  count = contains(keys(local.private_dns_vnet_link_principal_ids_by_env), var.env) ? 1 : 0
+
+  principal_id         = local.private_dns_vnet_link_principal_ids_by_env[var.env]
+  role_definition_name = "Network Contributor"
+  scope                = data.azurerm_virtual_network.network.id
+}

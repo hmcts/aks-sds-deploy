@@ -207,15 +207,14 @@ stages:
                   environment: ${{ component.env  }}
                   component: "01-network"
                   serviceConnection: "OPS-APPROVAL-GATE-MGMT-ENVS"
+                  backendResourceGroupName: "azure-control-${{ component.env }}-rg"
+                  backendStorageAccountName: "$(STORAGE_ACCOUNT)"
                   terraformInitSubscription: ${{ variables.tfInitSub }}
                   product: $(product)
                   publishPlanResults: ${{ variables.publishPlanResults }}
                   location: ${{ parameters.location }}
                   tfVarsFile: "$(System.DefaultWorkingDirectory)/$(buildRepoSuffix)/environments/01-network/${{ component.env }}.tfvars"
                   planCommandOptions: "-var project=$(project) -var control_vault=$(KEY_VAULT) -var subscription_id=$(SUBSCRIPTION_ID)"
-                  initCommandOptions: >
-                    -var subscription_id=$(SUBSCRIPTION_ID)
-                    -backend-config storage_account_name=$(STORAGE_ACCOUNT)
 
       - stage: Managed_Identity_${{ component.env }}
         displayName: "${{ upper(component.env) }}: Managed_Identity"
