@@ -44,7 +44,7 @@ module "genesis" {
   tags                    = module.ctags.common_tags
   developers_group        = local.developers_group
   business_area           = lower(module.ctags.common_tags["businessArea"])
-  jenkins_provider_sub_id = local.mi_cft[var.env].subscription_id
+  jenkins_provider_sub_id = local.mi_sds[var.env].subscription_id
   jenkins_mi_name         = "jenkins-${var.env}-mi"
   jenkins_mi_rg_name      = "managed-identities-${var.env}-rg"
 }
