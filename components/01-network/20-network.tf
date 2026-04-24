@@ -1,5 +1,5 @@
 module "network" {
-  source = "git::https://github.com/hmcts/aks-module-network.git?ref=4.x"
+  source = "git::https://github.com/hmcts/aks-module-network.git?ref=feat/azurerm-4.x"
 
   resource_group_name = local.network_resource_group_name
 
