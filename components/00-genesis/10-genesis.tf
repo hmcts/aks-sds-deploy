@@ -39,7 +39,7 @@ locals {
 }
 
 module "genesis" {
-  source                  = "git::https://github.com/hmcts/aks-module-genesis.git?ref=master"
+  source                  = "git::https://github.com/hmcts/aks-module-genesis.git?ref=dtspo-30482-grant-per-env-jenkins-mi-on-kv"
   environment             = var.env
   tags                    = module.ctags.common_tags
   developers_group        = local.developers_group
