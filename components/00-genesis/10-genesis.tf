@@ -10,7 +10,7 @@ locals {
     }
     # DTS-SHAREDSERVICES-STG
     stg = {
-      subscription_id = "74dacd4f-a248-45bb-a2f0-af700dc4cf689"
+      subscription_id = "74dacd4f-a248-45bb-a2f0-af700dc4cf68"
     }
     # DTS-SHAREDSERVICES-ITHC
     ithc = {
