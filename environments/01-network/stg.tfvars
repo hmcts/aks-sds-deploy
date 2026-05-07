@@ -89,7 +89,13 @@ additional_routes_application_gateway = [
     address_prefix         = "10.24.250.0/24"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.8.36"
-  }
+  },
+  {
+    name                   = "hub-github-network-prod-vnet"
+    address_prefix         = "10.10.232.0/24"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.8.36" # https://portal.azure.com/#@HMCTS.NET/resource/subscriptions/0978315c-75fe-4ada-9d11-1eb5e0e0b214/resourceGroups/hmcts-hub-prod-int/providers/Microsoft.Network/loadBalancers/hmcts-hub-prod-int-palo-lb/frontendIpPool
+  },
 ]
 
 additional_routes = [
