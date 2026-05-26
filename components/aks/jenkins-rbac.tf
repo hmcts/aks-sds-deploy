@@ -61,9 +61,20 @@ data "azurerm_user_assigned_identity" "jenkins_environment_mi" {
   resource_group_name = local.jenkins_environment_mis[var.env].resource_group_name
 }
 
+data "azurerm_virtual_network" "jenkins_environment_mi_network" {
+  name                = local.network_name
+  resource_group_name = local.network_resource_group_name
+}
+
 resource "azurerm_role_assignment" "jenkins_environment_mi_aks_admin" {
   for_each             = module.kubernetes
   principal_id         = data.azurerm_user_assigned_identity.jenkins_environment_mi.principal_id
   role_definition_name = "Azure Kubernetes Service Cluster Admin Role"
   scope                = "${azurerm_resource_group.kubernetes_resource_group[each.key].id}/providers/Microsoft.ContainerService/managedClusters/${var.project}-${var.env}-${each.key}-${var.service_shortname}"
+}
+
+resource "azurerm_role_assignment" "jenkins_environment_mi_network_contributor" {
+  principal_id         = data.azurerm_user_assigned_identity.jenkins_environment_mi.principal_id
+  role_definition_name = "Network Contributor"
+  scope                = data.azurerm_virtual_network.jenkins_environment_mi_network.id
 }
