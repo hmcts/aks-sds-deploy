@@ -122,9 +122,9 @@ additional_routes_application_gateway = [
   },
   {
     name                   = "ss-demo-vnet"
-    address_prefix         = "10.143.0.0/18"
+    address_prefix         = "10.51.64.0/18"
     next_hop_type          = "VirtualAppliance"
-    next_hop_in_ip_address = "10.51.64.0/18"
+    next_hop_in_ip_address = "10.11.72.36"
   }
 ]
 
