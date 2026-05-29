@@ -281,11 +281,7 @@ stages:
         displayName: "${{ upper(component.env) }}: Update OIDC Issuer URL"
         dependsOn:
           - Aks_${{ component.env }}
-        condition: |
-          or(
-            and(succeeded(), eq('${{ parameters.action }}', 'apply')),
-            and(succeeded(), eq(variables['isMain'], true))
-          )
+        condition: and(succeeded(), eq(variables['finalAction'], 'apply'))
         jobs:
           - job: UpdateOidcIssuerUrl
             steps:
@@ -307,11 +303,7 @@ stages:
           - UpdateOidcIssuerUrl_${{ component.env }}
         variables:
           clusters: ${{ parameters.cluster }}
-        condition: |
-          or(
-            and(succeeded(), eq('${{ parameters.action }}', 'apply')),
-            and(succeeded(), eq(variables['isMain'], true))
-          )
+        condition: and(succeeded(), eq(variables['finalAction'], 'apply'))
         jobs:
           - job: BootStrap
             steps:
@@ -330,11 +322,7 @@ stages:
             pool:
               vmImage: ${{ variables.agentPool }}
             timeoutInMinutes: ${{ variables.timeoutInMinutes }}
-            condition: |
-              or(
-                and(succeeded(), eq('${{ parameters.action }}', 'apply')),
-                and(succeeded(), eq(variables['isMain'], true))
-              )
+            condition: and(succeeded(), eq(variables['finalAction'], 'apply'))
             steps:
               - template: steps/pipeline-tests-jest.yaml@cnp-azuredevops-libraries
                 parameters:
