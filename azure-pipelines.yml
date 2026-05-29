@@ -303,7 +303,6 @@ stages:
               - template: pipeline-steps/bootstrap.yaml
                 parameters:
                   environment: ${{ component.env }}
-                  cluster: ${{ parameters.cluster }}
                   serviceConnection: ${{ component.serviceConnection }}
 
       - stage: PipelineTests_${{ component.env }}
