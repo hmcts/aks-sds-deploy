@@ -277,11 +277,13 @@ stages:
                   ${{ if ne(parameters['cluster'], 'All') }}:
                     targetCommand: '-target azurerm_resource_group.kubernetes_resource_group["\"${{parameters.cluster}}\""] -target module.kubernetes["\"${{parameters.cluster}}\""] -target azurerm_role_assignment.dev_to_stg["\"${{parameters.cluster}}\""] -target data.azurerm_resource_group.mi_stg_rg[0]'
 
-      - stage: UpdateOidcIssuerUrl_${{ component.env }}
-        displayName: "${{ upper(component.env) }}: Update OIDC Issuer URL"
+      - stage: BootStrapClusters_${{ component.env }}
+        displayName: "${{ upper(component.env) }}: BootStrap Clusters"
         dependsOn:
           - Aks_${{ component.env }}
         condition: and(succeeded(), eq(variables['finalAction'], 'apply'))
+        variables:
+          clusters: ${{ parameters.cluster }}
         jobs:
           - job: UpdateOidcIssuerUrl
             steps:
@@ -296,15 +298,6 @@ stages:
                   fluxConfigEnvironment: ${{ component.env }}
                   fluxConfigRepo: sds-flux-config
                   gitTokenSecret: aks-sds-deploy-bootstrap-issuer-url-token
-
-      - stage: BootStrapClusters_${{ component.env }}
-        displayName: "${{ upper(component.env) }}: BootStrap Clusters"
-        dependsOn:
-          - UpdateOidcIssuerUrl_${{ component.env }}
-        variables:
-          clusters: ${{ parameters.cluster }}
-        condition: and(succeeded(), eq(variables['finalAction'], 'apply'))
-        jobs:
           - job: BootStrap
             steps:
               - template: pipeline-steps/bootstrap.yaml
@@ -317,12 +310,12 @@ stages:
         displayName: "${{ upper(component.env) }}: PipelineTests"
         dependsOn:
           - BootStrapClusters_${{ component.env }}
+        condition: and(succeeded(), eq(variables['finalAction'], 'apply'))
         jobs:
           - job: PipelineTests
             pool:
               vmImage: ${{ variables.agentPool }}
             timeoutInMinutes: ${{ variables.timeoutInMinutes }}
-            condition: and(succeeded(), eq(variables['finalAction'], 'apply'))
             steps:
               - template: steps/pipeline-tests-jest.yaml@cnp-azuredevops-libraries
                 parameters:
