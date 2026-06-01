@@ -289,6 +289,7 @@ stages:
             steps:
               - checkout: self
               - checkout: sds-flux-config
+              - checkout: cnp-azuredevops-libraries
               - template: steps/update-oidc-issuer-url.yaml@cnp-azuredevops-libraries
                 parameters:
                   serviceConnection: ${{ component.serviceConnection }}
@@ -300,6 +301,8 @@ stages:
                   gitTokenSecret: aks-sds-deploy-bootstrap-issuer-url-token
           - job: BootStrap
             steps:
+              - checkout: self
+              - checkout: cnp-azuredevops-libraries
               - template: pipeline-steps/bootstrap.yaml
                 parameters:
                   environment: ${{ component.env }}
