@@ -171,14 +171,14 @@ data "azurerm_resource_group" "mi_stg_rg" {
 
 }
 
-resource "azurerm_role_assignment" "dev_to_stg" {
-  for_each = local.is_dev ? toset([for k, v in var.clusters : k]) : toset([])
+# resource "azurerm_role_assignment" "dev_to_stg" {
+#   for_each = local.is_dev ? toset([for k, v in var.clusters : k]) : toset([])
 
-  provider             = azurerm.dts-ss-stg
-  role_definition_name = "Managed Identity Operator"
-  principal_id         = module.kubernetes[each.key].kubelet_object_id
-  scope                = data.azurerm_resource_group.mi_stg_rg[0].id
-}
+#   provider             = azurerm.dts-ss-stg
+#   role_definition_name = "Managed Identity Operator"
+#   principal_id         = module.kubernetes[each.key].kubelet_object_id
+#   scope                = data.azurerm_resource_group.mi_stg_rg[0].id
+# }
 
 resource "null_resource" "register_automatic_sku_preview" {
   triggers = {
