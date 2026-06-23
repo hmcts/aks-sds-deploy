@@ -9,7 +9,9 @@ locals {
 
   is_sbox = var.env == "sbox" ? true : false
 
-  common_tags = module.ctags.common_tags
+  common_tags = merge(module.ctags.common_tags, {
+    managedBy = var.managedBy
+  })
 
   log_analytics_env_mapping = {
     sandbox = ["sbox", "ptlsbox"]

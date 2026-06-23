@@ -7,6 +7,12 @@ variable "builtFrom" {}
 
 variable "product" {}
 
+variable "managedBy" {
+  description = "Team responsible for managing these resources"
+  type        = string
+  default     = "DTS Platform Operations"
+}
+
 # # Remote State
 variable "control_vault" {}
 

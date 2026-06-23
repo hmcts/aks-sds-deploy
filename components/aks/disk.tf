@@ -2,7 +2,7 @@
 resource "azurerm_resource_group" "disks_resource_group" {
   location = var.location
   name     = "disks-${var.env}-rg"
-  tags     = module.ctags.common_tags
+  tags     = local.common_tags
 }
 
 resource "azurerm_role_assignment" "disk" {
