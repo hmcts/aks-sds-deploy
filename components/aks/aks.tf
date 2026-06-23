@@ -7,7 +7,7 @@ resource "azurerm_resource_group" "kubernetes_resource_group" {
     var.env,
     each.key
   )
-  tags = module.ctags.common_tags
+  tags = local.common_tags
 }
 
 module "loganalytics" {
@@ -68,7 +68,7 @@ module "kubernetes" {
   kubernetes_cluster_version            = each.value.kubernetes_cluster_version
   kubernetes_cluster_agent_os_disk_size = "128"
 
-  tags     = module.ctags.common_tags
+  tags     = local.common_tags
   sku_tier = var.sku_tier
 
   enable_user_system_nodepool_split = true
@@ -162,6 +162,11 @@ module "ctags" {
   startupMode  = var.startupMode
 }
 
+locals {
+  common_tags = merge(module.ctags.common_tags, {
+    managedBy = var.managedBy
+  })
+}
 
 data "azurerm_resource_group" "mi_stg_rg" {
   count = local.is_dev ? 1 : 0
