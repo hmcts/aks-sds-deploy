@@ -22,7 +22,7 @@ module "network" {
   postgresql_subnet_cidr_blocks          = var.postgresql_subnet_cidr_blocks
   postgresql_subnet_expanded_cidr_blocks = var.postgresql_subnet_expanded_cidr_blocks
 
-  tags = module.ctags.common_tags
+  tags = local.common_tags
 }
 
 module "ctags" {
@@ -31,4 +31,10 @@ module "ctags" {
   product      = var.product
   builtFrom    = var.builtFrom
   expiresAfter = var.expiresAfter
+}
+
+locals {
+  common_tags = merge(module.ctags.common_tags, {
+    managedBy = var.managedBy
+  })
 }

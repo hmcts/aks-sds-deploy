@@ -5,7 +5,7 @@ resource "azurerm_resource_group" "network_resource_group" {
     var.project,
     var.env
   )
-  tags = module.ctags.common_tags
+  tags = local.common_tags
 }
 
 module "ctags" {
@@ -14,4 +14,10 @@ module "ctags" {
   product      = var.product
   builtFrom    = var.builtFrom
   expiresAfter = var.expiresAfter
+}
+
+locals {
+  common_tags = merge(module.ctags.common_tags, {
+    managedBy = var.managedBy
+  })
 }
