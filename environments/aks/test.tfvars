@@ -26,7 +26,7 @@ clusters = {
     },
   }
   "01" = {
-    kubernetes_cluster_version             = "1.34"
+    kubernetes_cluster_version             = "1.35"
     enable_automatic_channel_upgrade_patch = true
     kubernetes_cluster_agent_min_count     = "1"
     kubernetes_cluster_agent_max_count     = "4"
