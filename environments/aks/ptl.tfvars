@@ -1,6 +1,6 @@
 clusters = {
   "00" = {
-    kubernetes_version = "1.35"
+    kubernetes_version = "1.36"
   }
 }
 kubernetes_cluster_agent_min_count = "1"
