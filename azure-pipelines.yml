@@ -4,14 +4,27 @@ trigger:
   branches:
     include:
       - master
-
-pool:
-  vmImage: 'ubuntu-latest'
+  paths:
+    include:
+      - azure-pipelines.yml
+      - pipeline-steps/**
+      - bootstrap/**
+      - components/**
+      - environments/**
+      - scripts/**
 
 pr:
   branches:
     include:
-      - refs/heads/master
+      - master
+  paths:
+    include:
+      - azure-pipelines.yml
+      - pipeline-steps/**
+      - bootstrap/**
+      - components/**
+      - environments/**
+      - scripts/**
 
 resources:
   repositories:
@@ -51,6 +64,14 @@ parameters:
     values:
       - "UK South"
 
+  - name: agentPoolType
+    displayName: Agent Type
+    type: string
+    default: hosted
+    values:
+      - hosted
+      - self-hosted
+
   - name: environment_components
     type: object
     default:
@@ -84,8 +105,10 @@ parameters:
 variables:
   - name: timeoutInMinutes
     value: '60'
-  - name: agentPool
+  - name: hostedVmImage
     value: ubuntu-latest
+  - name: selfHostedAgentPool
+    value: hmcts-cftptl-agent-pool
   - name: project
     value: ss
   - name: tfInitSub
@@ -110,7 +133,10 @@ stages:
     jobs:
       - job: PreChecks
         pool:
-          vmImage: ${{ variables.agentPool }}
+          ${{ if eq(parameters.agentPoolType, 'hosted') }}:
+            vmImage: ${{ variables.hostedVmImage }}
+          ${{ else }}:
+            name: ${{ variables.selfHostedAgentPool }}
           timeoutInMinutes: ${{ variables.timeoutInMinutes }}
         steps:
           - template: steps/terraform-precheck.yaml@cnp-azuredevops-libraries
@@ -316,7 +342,10 @@ stages:
         jobs:
           - job: PipelineTests
             pool:
-              vmImage: ${{ variables.agentPool }}
+              ${{ if eq(parameters.agentPoolType, 'hosted') }}:
+                vmImage: ${{ variables.hostedVmImage }}
+              ${{ else }}:
+                name: ${{ variables.selfHostedAgentPool }}
             timeoutInMinutes: ${{ variables.timeoutInMinutes }}
             steps:
               - template: steps/pipeline-tests-jest.yaml@cnp-azuredevops-libraries
