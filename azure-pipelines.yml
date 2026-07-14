@@ -26,6 +26,12 @@ pr:
       - environments/**
       - scripts/**
 
+pool:
+  ${{ if eq(parameters.agentPoolType, 'hosted') }}:
+    vmImage: ${{ variables.hostedVmImage }}
+  ${{ else }}:
+    name: ${{ variables.selfHostedAgentPool }}
+
 resources:
   repositories:
     - repository: cnp-azuredevops-libraries
@@ -132,12 +138,12 @@ stages:
   - stage: Precheck
     jobs:
       - job: PreChecks
+        timeoutInMinutes: ${{ variables.timeoutInMinutes }}
         pool:
           ${{ if eq(parameters.agentPoolType, 'hosted') }}:
             vmImage: ${{ variables.hostedVmImage }}
           ${{ else }}:
             name: ${{ variables.selfHostedAgentPool }}
-          timeoutInMinutes: ${{ variables.timeoutInMinutes }}
         steps:
           - template: steps/terraform-precheck.yaml@cnp-azuredevops-libraries
             parameters:
