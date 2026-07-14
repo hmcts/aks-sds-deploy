@@ -26,12 +26,6 @@ pr:
       - environments/**
       - scripts/**
 
-pool:
-  ${{ if eq(parameters.agentPoolType, 'hosted') }}:
-    vmImage: ${{ variables.hostedVmImage }}
-  ${{ else }}:
-    name: ${{ variables.selfHostedAgentPool }}
-
 resources:
   repositories:
     - repository: cnp-azuredevops-libraries
@@ -136,14 +130,14 @@ name: "AKS-SDS-Deploy - $(finalAction)"
 
 stages:
   - stage: Precheck
+    pool:
+      ${{ if eq(parameters.agentPoolType, 'hosted') }}:
+        vmImage: ${{ variables.hostedVmImage }}
+      ${{ else }}:
+        name: ${{ variables.selfHostedAgentPool }}
     jobs:
       - job: PreChecks
         timeoutInMinutes: ${{ variables.timeoutInMinutes }}
-        pool:
-          ${{ if eq(parameters.agentPoolType, 'hosted') }}:
-            vmImage: ${{ variables.hostedVmImage }}
-          ${{ else }}:
-            name: ${{ variables.selfHostedAgentPool }}
         steps:
           - template: steps/terraform-precheck.yaml@cnp-azuredevops-libraries
             parameters:
@@ -158,6 +152,11 @@ stages:
   - ${{ each component in parameters.environment_components }}:
       - stage: "CheckingClusters_${{ component.env }}"
         displayName: "Checking Clusters for ${{ component.env }}"
+        pool:
+          ${{ if eq(parameters.agentPoolType, 'hosted') }}:
+            vmImage: ${{ variables.hostedVmImage }}
+          ${{ else }}:
+            name: ${{ variables.selfHostedAgentPool }}
         dependsOn:
           - ? ${{ if and(ne(component.env, 'sbox'), eq(parameters.action, 'apply')) }}
             : - Network_${{ component.dependsOn }}
@@ -185,6 +184,11 @@ stages:
 
       - stage: Genesis_${{ component.env }}
         displayName: "${{ upper(component.env) }}: Genesis"
+        pool:
+          ${{ if eq(parameters.agentPoolType, 'hosted') }}:
+            vmImage: ${{ variables.hostedVmImage }}
+          ${{ else }}:
+            name: ${{ variables.selfHostedAgentPool }}
         condition: and(ne('${{ parameters.Action }}', 'Destroy'), succeeded())
         dependsOn:
           - CheckingClusters_${{ component.env }}
@@ -207,6 +211,11 @@ stages:
 
       - stage: Network_${{ component.env }}
         displayName: "${{ upper(component.env) }}: Network"
+        pool:
+          ${{ if eq(parameters.agentPoolType, 'hosted') }}:
+            vmImage: ${{ variables.hostedVmImage }}
+          ${{ else }}:
+            name: ${{ variables.selfHostedAgentPool }}
         dependsOn:
           - Genesis_${{ component.env }}
         jobs:
@@ -253,6 +262,11 @@ stages:
 
       - stage: Managed_Identity_${{ component.env }}
         displayName: "${{ upper(component.env) }}: Managed_Identity"
+        pool:
+          ${{ if eq(parameters.agentPoolType, 'hosted') }}:
+            vmImage: ${{ variables.hostedVmImage }}
+          ${{ else }}:
+            name: ${{ variables.selfHostedAgentPool }}
         dependsOn:
           - Network_${{ component.env }}
         jobs:
@@ -273,6 +287,11 @@ stages:
 
       - stage: Aks_${{ component.env }}
         displayName: "${{ upper(component.env) }}: AKS clusters"
+        pool:
+          ${{ if eq(parameters.agentPoolType, 'hosted') }}:
+            vmImage: ${{ variables.hostedVmImage }}
+          ${{ else }}:
+            name: ${{ variables.selfHostedAgentPool }}
         dependsOn:
           - Managed_Identity_${{ component.env }}
         condition: |
@@ -311,6 +330,11 @@ stages:
 
       - stage: BootStrapClusters_${{ component.env }}
         displayName: "${{ upper(component.env) }}: BootStrap Clusters"
+        pool:
+          ${{ if eq(parameters.agentPoolType, 'hosted') }}:
+            vmImage: ${{ variables.hostedVmImage }}
+          ${{ else }}:
+            name: ${{ variables.selfHostedAgentPool }}
         dependsOn:
           - Aks_${{ component.env }}
         condition: and(succeeded(), eq(variables['finalAction'], 'apply'))
@@ -342,16 +366,16 @@ stages:
 
       - stage: PipelineTests_${{ component.env }}
         displayName: "${{ upper(component.env) }}: PipelineTests"
+        pool:
+          ${{ if eq(parameters.agentPoolType, 'hosted') }}:
+            vmImage: ${{ variables.hostedVmImage }}
+          ${{ else }}:
+            name: ${{ variables.selfHostedAgentPool }}
         dependsOn:
           - BootStrapClusters_${{ component.env }}
         condition: and(succeeded(), eq(variables['finalAction'], 'apply'))
         jobs:
           - job: PipelineTests
-            pool:
-              ${{ if eq(parameters.agentPoolType, 'hosted') }}:
-                vmImage: ${{ variables.hostedVmImage }}
-              ${{ else }}:
-                name: ${{ variables.selfHostedAgentPool }}
             timeoutInMinutes: ${{ variables.timeoutInMinutes }}
             steps:
               - template: steps/pipeline-tests-jest.yaml@cnp-azuredevops-libraries
@@ -365,6 +389,11 @@ stages:
 
   - stage: Analyse_plans
     displayName: "Analyse terraform plan"
+    pool:
+      ${{ if eq(parameters.agentPoolType, 'hosted') }}:
+        vmImage: ${{ variables.hostedVmImage }}
+      ${{ else }}:
+        name: ${{ variables.selfHostedAgentPool }}
     condition: and(eq('${{ parameters.action }}', 'Plan'), succeededOrFailed())
     dependsOn:
       - ${{ each component in parameters.environment_components }}:
