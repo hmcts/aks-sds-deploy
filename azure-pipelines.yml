@@ -139,6 +139,16 @@ stages:
       - job: PreChecks
         timeoutInMinutes: ${{ variables.timeoutInMinutes }}
         steps:
+          - checkout: self
+
+          - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+              - checkout: cnp-azuredevops-libraries
+              - task: ShellScript@2
+                name: detect_pr_envs
+                displayName: Detect PR target environments
+                inputs:
+                  scriptPath: '$(Build.SourcesDirectory)/cnp-azuredevops-libraries/scripts/detect-pr-envs.sh'
+
           - template: steps/terraform-precheck.yaml@cnp-azuredevops-libraries
             parameters:
               keyvaultName: "infra-vault-nonprod"
@@ -157,6 +167,7 @@ stages:
             vmImage: ${{ variables.hostedVmImage }}
           ${{ else }}:
             name: ${{ variables.selfHostedAgentPool }}
+        condition: and(succeeded(), or(ne(variables['Build.Reason'], 'PullRequest'), eq(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prRunAllEnvs'], 'true'), contains(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prTargetEnvs'], ',${{ component.env }},')))
         dependsOn:
           - ? ${{ if and(ne(component.env, 'sbox'), eq(parameters.action, 'apply')) }}
             : - Network_${{ component.dependsOn }}
@@ -189,7 +200,7 @@ stages:
             vmImage: ${{ variables.hostedVmImage }}
           ${{ else }}:
             name: ${{ variables.selfHostedAgentPool }}
-        condition: and(ne('${{ parameters.Action }}', 'Destroy'), succeeded())
+        condition: and(ne('${{ parameters.action }}', 'Destroy'), succeeded(), or(ne(variables['Build.Reason'], 'PullRequest'), eq(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prRunAllEnvs'], 'true'), contains(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prTargetEnvs'], ',${{ component.env }},')))
         dependsOn:
           - CheckingClusters_${{ component.env }}
         jobs:
@@ -216,6 +227,7 @@ stages:
             vmImage: ${{ variables.hostedVmImage }}
           ${{ else }}:
             name: ${{ variables.selfHostedAgentPool }}
+        condition: and(succeeded(), or(ne(variables['Build.Reason'], 'PullRequest'), eq(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prRunAllEnvs'], 'true'), contains(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prTargetEnvs'], ',${{ component.env }},')))
         dependsOn:
           - Genesis_${{ component.env }}
         jobs:
@@ -267,6 +279,7 @@ stages:
             vmImage: ${{ variables.hostedVmImage }}
           ${{ else }}:
             name: ${{ variables.selfHostedAgentPool }}
+        condition: and(succeeded(), or(ne(variables['Build.Reason'], 'PullRequest'), eq(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prRunAllEnvs'], 'true'), contains(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prTargetEnvs'], ',${{ component.env }},')))
         dependsOn:
           - Network_${{ component.env }}
         jobs:
@@ -295,20 +308,23 @@ stages:
         dependsOn:
           - Managed_Identity_${{ component.env }}
         condition: |
-          or (
-            and(
-              succeeded(),
-              in(variables['Build.Reason'], 'Manual', 'PullRequest'),
-              in('${{ parameters.cluster }}', '00', '01'),
-              eq(dependencies.CheckingClusters_${{ component.env }}.outputs['CheckingClusters.check_clusters.cluster_deploy'], '${{ parameters.cluster }}')
-            ),
-            and(
-              succeeded(),
-              in(variables['Build.Reason'], 'Manual', 'PullRequest'),
-              eq('${{ parameters.cluster }}', 'All')
-            ),
-            and(succeeded(), in(variables['Build.Reason'], 'PullRequest', 'Manual')),
-            and(succeeded(), eq(variables['isMain'], true), eq(variables['isAutoTriggered'], true))
+          and(
+            or(ne(variables['Build.Reason'], 'PullRequest'), eq(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prRunAllEnvs'], 'true'), contains(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prTargetEnvs'], ',${{ component.env }},')),
+            or (
+              and(
+                succeeded(),
+                in(variables['Build.Reason'], 'Manual', 'PullRequest'),
+                in('${{ parameters.cluster }}', '00', '01'),
+                eq(dependencies.CheckingClusters_${{ component.env }}.outputs['CheckingClusters.check_clusters.cluster_deploy'], '${{ parameters.cluster }}')
+              ),
+              and(
+                succeeded(),
+                in(variables['Build.Reason'], 'Manual', 'PullRequest'),
+                eq('${{ parameters.cluster }}', 'All')
+              ),
+              and(succeeded(), in(variables['Build.Reason'], 'PullRequest', 'Manual')),
+              and(succeeded(), eq(variables['isMain'], true), eq(variables['isAutoTriggered'], true))
+            )
           )
         jobs:
           - job: DeployInfrastructure
