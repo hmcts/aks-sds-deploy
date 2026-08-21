@@ -140,6 +140,8 @@ stages:
         timeoutInMinutes: ${{ variables.timeoutInMinutes }}
         steps:
           - checkout: self
+            persistCredentials: true
+            fetchDepth: 0
 
           - ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
               - checkout: cnp-azuredevops-libraries
