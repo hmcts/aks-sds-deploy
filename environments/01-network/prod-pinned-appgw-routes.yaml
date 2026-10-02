@@ -512,3 +512,5 @@ appgw_routes:
     address_prefix: 10.110.209.165/32
   - DARTS-MTS-EUCW1573MTS001:
     address_prefix: 10.235.80.155/32
+  - DARTS-MTS-EUCW0144MTS001-TELFORD:
+    address_prefix: 10.214.106.3/32
