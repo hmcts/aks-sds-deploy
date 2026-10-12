@@ -516,3 +516,5 @@ appgw_routes:
     address_prefix: 10.214.106.3/32
   - 102PF-MTS:
     address_prefix: 172.17.152.126/32
+  - FITS-0286-ModelOffice:
+    address_prefix: 10.94.71.0/24
