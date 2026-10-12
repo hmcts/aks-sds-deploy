@@ -272,3 +272,5 @@ aks_routes:
     address_prefix: 10.235.80.0/22
   - DARTS-MTS-EUCW0144MTS001-TELFORD:
     address_prefix: 10.214.106.3/32
+  - 102PF-MTS:
+    address_prefix: 172.17.152.126/32
