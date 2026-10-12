@@ -29,6 +29,10 @@ fi
 
 echo "Params: $*"
 
+# Translate addSpnToEnvironment's vars into the names kubelogin's spn login mode expects
+export AAD_SERVICE_PRINCIPAL_CLIENT_ID="${servicePrincipalId}"
+export AAD_SERVICE_PRINCIPAL_CLIENT_SECRET="${servicePrincipalKey}"
+
 project=${1}
 env=${3}
 
