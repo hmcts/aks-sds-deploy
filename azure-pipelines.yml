@@ -159,7 +159,6 @@ stages:
               overrideAction: ${{ parameters.action }}
               projectName: ${{ variables.project }}
               environment: "sbox"
-              runManualStart: true
 
   - ${{ each component in parameters.environment_components }}:
       - stage: "CheckingClusters_${{ component.env }}"
