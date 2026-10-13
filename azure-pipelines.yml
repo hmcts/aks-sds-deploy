@@ -76,7 +76,7 @@ parameters:
     type: object
     default:
       - env: 'sbox'
-        serviceConnection: 'OPS-APPROVAL-GATE-SBOX-ENVS'
+        serviceConnection: 'DTS-SHAREDSERVICES-SBOX'
       - env: 'dev'
         dependsOn: 'sbox'
         serviceConnection: 'OPS-APPROVAL-GATE-DEV-ENVS'
