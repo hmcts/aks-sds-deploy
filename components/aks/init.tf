@@ -67,9 +67,11 @@ provider "azurerm" {
   subscription_id = "04d27a32-7a07-48b3-95b8-3c8691e1a263"
 }
 
-#Prod provider is currently having issue with access but provider needs initialised for upgrade so logic is being added to try circumvent it
+# Only "dev" actually uses this provider (mi_stg_rg/dev_to_stg in aks.tf); every other
+# environment's identity has no access to the stg subscription, so point it at the
+# environment's own subscription to avoid a 403 during provider initialisation.
 provider "azurerm" {
-  subscription_id            = local.is_prod ? local.acr["ss"].subscription : "74dacd4f-a248-45bb-a2f0-af700dc4cf68"
+  subscription_id            = local.is_dev ? "74dacd4f-a248-45bb-a2f0-af700dc4cf68" : data.azurerm_subscription.current.subscription_id
   skip_provider_registration = "true"
   features {}
   alias = "dts-ss-stg"
