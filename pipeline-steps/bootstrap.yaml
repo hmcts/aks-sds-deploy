@@ -35,6 +35,12 @@ steps:
             sed -i 's|MI_CLIENTID|$(AZURE_MI_ID)|g' 'aks-sops-role.yaml'
             cat aks-sops-role.yaml
 
+- script: |
+    wget -q https://github.com/Azure/kubelogin/releases/download/v0.2.19/kubelogin-linux-amd64.zip
+    unzip kubelogin-linux-amd64.zip
+    sudo mv bin/linux_amd64/kubelogin /usr/bin
+  displayName: 'Install kubelogin'
+
 - task: AzureCLI@2
   displayName: 'Bootstrap'
   inputs:
