@@ -271,7 +271,9 @@ aks_routes:
   - DARTS-Sites-FITS_1573-Nottingham-JC:
     address_prefix: 10.235.80.0/22
   - DARTS-MTS-EUCW0144MTS001-TELFORD:
-    address_prefix: 10.214.106.3/32
+    address_prefix: 10.235.0.123/32
+  - FITS-0144-Telford-Mags:
+    address_prefix: 10.235.0.0/23
   - 102PF-MTS:
     address_prefix: 172.17.152.126/32
   - FITS-0286-ModelOffice:
