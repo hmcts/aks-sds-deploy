@@ -11,7 +11,7 @@ clusters = {
 
     linux_node_pool = {
       max_pods  = 75
-      max_nodes = 10
+      max_nodes = 12
     }
 
     windows_node_pool = {
