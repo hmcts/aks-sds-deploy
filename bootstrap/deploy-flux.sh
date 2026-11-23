@@ -78,8 +78,8 @@ function install_aso {
 
   # Wait for cert-manager to be ready
   echo "Waiting for cert-manager to be ready..." 
-  cert_manager_pod="$(kubectl get pod -n cert-manager --no-headers=true | awk '/cert-manager-webhook/{print $1}')"
-  wait_for_k8s_resource "pod" "$cert_manager_pod" "cert-manager" "Ready"
+  wait_for_k8s_resource "pod" "cert-manager-webhook" "cert-manager" "Ready" 120 \
+    "app.kubernetes.io/component=webhook,app.kubernetes.io/instance=cert-manager"
   wait_for_k8s_resource "svc" "cert-manager-webhook" "cert-manager" ""
   wait_for_k8s_resource "mutatingwebhookconfiguration" "cert-manager-webhook" "" ""
 
