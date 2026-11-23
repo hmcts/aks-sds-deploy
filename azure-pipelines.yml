@@ -71,11 +71,6 @@ parameters:
     values:
       - hosted
       - self-hosted
-  
-  - name: sboxOnlyTest
-    displayName: Run only SBOX environment stages (test)
-    type: boolean
-    default: false
 
   - name: environment_components
     type: object
@@ -173,7 +168,7 @@ stages:
             vmImage: ${{ variables.hostedVmImage }}
           ${{ else }}:
             name: ${{ variables.selfHostedAgentPool }}
-        condition: and(or(not(${{ parameters.sboxOnlyTest }}), eq('${{ component.env }}', 'sbox')), succeeded(), or(ne(variables['Build.Reason'], 'PullRequest'), eq(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prRunAllEnvs'], 'true'), contains(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prTargetEnvs'], ',${{ component.env }},')))
+        condition: and(succeeded(), or(ne(variables['Build.Reason'], 'PullRequest'), eq(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prRunAllEnvs'], 'true'), contains(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prTargetEnvs'], ',${{ component.env }},')))
         dependsOn:
           - ? ${{ if and(ne(component.env, 'sbox'), eq(parameters.action, 'apply')) }}
             : - Network_${{ component.dependsOn }}
@@ -206,7 +201,7 @@ stages:
             vmImage: ${{ variables.hostedVmImage }}
           ${{ else }}:
             name: ${{ variables.selfHostedAgentPool }}
-        condition: and(or(not(${{ parameters.sboxOnlyTest }}), eq('${{ component.env }}', 'sbox')), ne('${{ parameters.action }}', 'Destroy'), succeeded(), or(ne(variables['Build.Reason'], 'PullRequest'), eq(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prRunAllEnvs'], 'true'), contains(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prTargetEnvs'], ',${{ component.env }},')))
+        condition: and(ne('${{ parameters.action }}', 'Destroy'), succeeded(), or(ne(variables['Build.Reason'], 'PullRequest'), eq(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prRunAllEnvs'], 'true'), contains(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prTargetEnvs'], ',${{ component.env }},')))
         dependsOn:
           - CheckingClusters_${{ component.env }}
         jobs:
@@ -233,7 +228,7 @@ stages:
             vmImage: ${{ variables.hostedVmImage }}
           ${{ else }}:
             name: ${{ variables.selfHostedAgentPool }}
-        condition: and(or(not(${{ parameters.sboxOnlyTest }}), eq('${{ component.env }}', 'sbox')), succeeded(), or(ne(variables['Build.Reason'], 'PullRequest'), eq(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prRunAllEnvs'], 'true'), contains(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prTargetEnvs'], ',${{ component.env }},')))
+        condition: and(succeeded(), or(ne(variables['Build.Reason'], 'PullRequest'), eq(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prRunAllEnvs'], 'true'), contains(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prTargetEnvs'], ',${{ component.env }},')))
         dependsOn:
           - Genesis_${{ component.env }}
         jobs:
@@ -285,7 +280,7 @@ stages:
             vmImage: ${{ variables.hostedVmImage }}
           ${{ else }}:
             name: ${{ variables.selfHostedAgentPool }}
-        condition: and(or(not(${{ parameters.sboxOnlyTest }}), eq('${{ component.env }}', 'sbox')), succeeded(), or(ne(variables['Build.Reason'], 'PullRequest'), eq(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prRunAllEnvs'], 'true'), contains(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prTargetEnvs'], ',${{ component.env }},')))
+        condition: and(succeeded(), or(ne(variables['Build.Reason'], 'PullRequest'), eq(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prRunAllEnvs'], 'true'), contains(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prTargetEnvs'], ',${{ component.env }},')))
         dependsOn:
           - Network_${{ component.env }}
         jobs:
@@ -315,7 +310,7 @@ stages:
           - Managed_Identity_${{ component.env }}
         condition: |
           and(
-            or(not(${{ parameters.sboxOnlyTest }}), eq('${{ component.env }}', 'sbox')),
+            or(ne(variables['Build.Reason'], 'PullRequest'), eq(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prRunAllEnvs'], 'true'), contains(dependencies.Precheck.outputs['PreChecks.detect_pr_envs.prTargetEnvs'], ',${{ component.env }},')),
             or (
               and(
                 succeeded(),
@@ -365,7 +360,7 @@ stages:
             name: ${{ variables.selfHostedAgentPool }}
         dependsOn:
           - Aks_${{ component.env }}
-        condition: and(or(not(${{ parameters.sboxOnlyTest }}), eq('${{ component.env }}', 'sbox')), succeeded(), eq(variables['finalAction'], 'apply'))
+        condition: and(succeeded(), eq(variables['finalAction'], 'apply'))
         variables:
           clusters: ${{ parameters.cluster }}
         jobs:
@@ -401,7 +396,7 @@ stages:
             name: ${{ variables.selfHostedAgentPool }}
         dependsOn:
           - BootStrapClusters_${{ component.env }}
-        condition: and(or(not(${{ parameters.sboxOnlyTest }}), eq('${{ component.env }}', 'sbox')), succeeded(), eq(variables['finalAction'], 'apply'))
+        condition: and(succeeded(), eq(variables['finalAction'], 'apply'))
         jobs:
           - job: PipelineTests
             timeoutInMinutes: ${{ variables.timeoutInMinutes }}
@@ -422,7 +417,7 @@ stages:
         vmImage: ${{ variables.hostedVmImage }}
       ${{ else }}:
         name: ${{ variables.selfHostedAgentPool }}
-    condition: and(not(${{ parameters.sboxOnlyTest }}), eq('${{ parameters.action }}', 'Plan'), succeededOrFailed())
+    condition: and(eq('${{ parameters.action }}', 'Plan'), succeededOrFailed())
     dependsOn:
       - ${{ each component in parameters.environment_components }}:
         - Aks_${{ component.env }}
