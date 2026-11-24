@@ -214,6 +214,7 @@ stages:
                   environment: ${{ component.env }}
                   component: "00-genesis"
                   serviceConnection: ${{ component.serviceConnection }}
+                  fallbackGenerateIdToken: true
                   terraformInitSubscription: ${{ variables.tfInitSub }}
                   product: $(product)
                   publishPlanResults: ${{ variables.publishPlanResults }}
