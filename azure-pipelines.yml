@@ -240,6 +240,7 @@ stages:
                   environment: ${{ component.env }}
                   location: ${{ parameters.location }}
                   serviceConnection: ${{ component.serviceConnection }}
+                  fallbackGenerateIdToken: true
                   stack: "07-network-rg"
                   project: $(project)
                   tfInitSub: ${{ variables.tfInitSub }}
@@ -265,6 +266,7 @@ stages:
                   environment: ${{ component.env  }}
                   component: "01-network"
                   serviceConnection: "DTS-MGMT-WIF"
+                  fallbackGenerateIdToken: true
                   backendResourceGroupName: "azure-control-${{ component.env }}-rg"
                   backendStorageAccountName: "$(STORAGE_ACCOUNT)"
                   terraformInitSubscription: ${{ variables.tfInitSub }}
@@ -293,6 +295,7 @@ stages:
                   environment: ${{ component.env }}
                   component: "05-mis"
                   serviceConnection: ${{ component.serviceConnection }}
+                  fallbackGenerateIdToken: true
                   terraformInitSubscription: ${{ variables.tfInitSub }}
                   product: $(product)
                   publishPlanResults: ${{ variables.publishPlanResults }}
