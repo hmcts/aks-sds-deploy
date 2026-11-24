@@ -43,6 +43,8 @@ steps:
 
 - task: AzureCLI@2
   displayName: 'Bootstrap'
+  env:
+    SYSTEM_ACCESSTOKEN: $(System.AccessToken)
   inputs:
     azureSubscription: ${{ parameters.serviceConnection }}
     addSpnToEnvironment: true

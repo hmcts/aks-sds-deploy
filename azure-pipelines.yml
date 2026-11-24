@@ -76,31 +76,31 @@ parameters:
     type: object
     default:
       - env: 'sbox'
-        serviceConnection: 'DTS-SHAREDSERVICES-SBOX'
+        serviceConnection: 'DTS-SHAREDSERVICES-SBOX-WIF'
       - env: 'dev'
         dependsOn: 'sbox'
-        serviceConnection: 'DTS-SHAREDSERVICES-DEV'
+        serviceConnection: 'DTS-SHAREDSERVICES-DEV-WIF'
       - env: 'demo'
         dependsOn: 'sbox'
-        serviceConnection: 'DTS-SHAREDSERVICES-DEMO'
+        serviceConnection: 'DTS-SHAREDSERVICES-DEMO-WIF'
       - env: 'ithc'
         dependsOn: 'sbox'
-        serviceConnection: 'DTS-SHAREDSERVICES-ITHC'
+        serviceConnection: 'DTS-SHAREDSERVICES-ITHC-WIF'
       - env: 'ptlsbox'
         dependsOn: 'sbox'
-        serviceConnection: 'DTS-SHAREDSERVICESPTL-SBOX'
+        serviceConnection: 'DTS-SHAREDSERVICESPTL-SBOX-WIF'
       - env: 'test'
         dependsOn: 'sbox'
-        serviceConnection: 'DTS-SHAREDSERVICES-TEST'
+        serviceConnection: 'DTS-SHAREDSERVICES-TEST-WIF'
       - env: 'stg'
         dependsOn: 'sbox'
-        serviceConnection: 'DTS-SHAREDSERVICES-STG'
+        serviceConnection: 'DTS-SHAREDSERVICES-STG-WIF'
       - env: 'ptl'
         dependsOn: 'ptlsbox'
-        serviceConnection: 'DTS-SHAREDSERVICESPTL'
+        serviceConnection: 'DTS-SHAREDSERVICESPTL-WIF'
       - env: 'prod'
         dependsOn: 'stg'
-        serviceConnection: 'DTS-SHAREDSERVICES-PROD'
+        serviceConnection: 'DTS-SHAREDSERVICES-PROD-WIF'
 
 variables:
   - name: timeoutInMinutes
@@ -155,7 +155,7 @@ stages:
             parameters:
               keyvaultName: "infra-vault-nonprod"
               keyvaultSecret: "azure-devops-sp-token"
-              serviceConnection: "DCD-CFT-Sandbox"
+              serviceConnection: "DCD-CFT-Sandbox-WIF"
               overrideAction: ${{ parameters.action }}
               projectName: ${{ variables.project }}
               environment: "sbox"
@@ -263,7 +263,7 @@ stages:
                   overrideAction: ${{ parameters.action }}
                   environment: ${{ component.env  }}
                   component: "01-network"
-                  serviceConnection: "OPS-APPROVAL-GATE-MGMT-ENVS"
+                  serviceConnection: "DTS-MGMT-WIF"
                   backendResourceGroupName: "azure-control-${{ component.env }}-rg"
                   backendStorageAccountName: "$(STORAGE_ACCOUNT)"
                   terraformInitSubscription: ${{ variables.tfInitSub }}
@@ -336,6 +336,7 @@ stages:
                   environment: ${{ component.env }}
                   location: ${{ parameters.location }}
                   serviceConnection: ${{ component.serviceConnection }}
+                  fallbackGenerateIdToken: true
                   stack: "aks"
                   project: $(project)
                   tfInitSub: ${{ variables.tfInitSub }}
@@ -426,4 +427,4 @@ stages:
         steps:
           - template: steps/terraform-plan-analyse.yaml@cnp-azuredevops-libraries
             parameters:
-              serviceConnection: DTS-CFTPTL-INTSVC
+              serviceConnection: DTS-CFTPTL-INTSVC-WIF
