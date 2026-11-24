@@ -68,11 +68,12 @@ function wait_for_crd {
 
 # Wait for a Kubernetes resource to be ready
 wait_for_k8s_resource() {
-    local resource_type="$1"   # e.g., pod, svc, deployment, etc.
-    local resource_name="$2"   # Name of the resource
-    local namespace="$3"       # Namespace of the resource
-    local condition="$4"       # Condition to wait for (optional)
-    local timeout="${5:-120}"  # Timeout in seconds (default: 120)
+    local resource_type="$1"      # e.g., pod, svc, deployment, etc.
+    local resource_name="$2"      # Name of the resource
+    local namespace="$3"          # Namespace of the resource
+    local condition="$4"          # Condition to wait for (optional)
+    local timeout="${5:-120}"     # Timeout in seconds (default: 120)
+    local label_selector="${6:-}" # Optional: wait on all Running pods matching this label selector
     local sleep_interval=5
     local elapsed=0
 
@@ -81,7 +82,16 @@ wait_for_k8s_resource() {
     while true; do
         case $resource_type in
             pod|deployment|statefulset|daemonset)
-                if kubectl wait --for=condition=$condition $resource_type/$resource_name -n $namespace --timeout=5s 2>/dev/null; then
+                if [[ "$resource_type" == "pod" && -n "$label_selector" ]]; then
+                    if kubectl wait --for="condition=$condition" pod \
+                        -l "$label_selector" \
+                        --field-selector=status.phase=Running \
+                        -n "$namespace" --timeout=5s 2>/dev/null; then
+                        echo "Pods matching '$label_selector' are ready."
+                        return 0
+                    fi
+                elif kubectl wait --for="condition=$condition" "$resource_type/$resource_name" \
+                    -n "$namespace" --timeout=5s 2>/dev/null; then
                     echo "$resource_type/$resource_name is ready."
                     return 0
                 fi

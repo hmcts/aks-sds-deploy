@@ -78,8 +78,8 @@ function install_aso {
 
   # Wait for cert-manager to be ready
   echo "Waiting for cert-manager to be ready..." 
-  cert_manager_pod="$(kubectl get pod -n cert-manager --no-headers=true | awk '/cert-manager-webhook/{print $1}')"
-  wait_for_k8s_resource "pod" "$cert_manager_pod" "cert-manager" "Ready"
+  wait_for_k8s_resource "pod" "cert-manager-webhook" "cert-manager" "Ready" 120 \
+    "app.kubernetes.io/component=webhook,app.kubernetes.io/instance=cert-manager"
   wait_for_k8s_resource "svc" "cert-manager-webhook" "cert-manager" ""
   wait_for_k8s_resource "mutatingwebhookconfiguration" "cert-manager-webhook" "" ""
 
@@ -115,7 +115,7 @@ function install_aso {
   wait_for_k8s_resource "pod" "$pod" "azureserviceoperator-system" "Ready" 150
   done
   wait_for_k8s_resource "svc" "azureserviceoperator-webhook-service" "azureserviceoperator-system" ""
-  wait_for_k8s_resource "mutatingwebhookconfiguration" "azureserviceoperator-mutating-webhook-configuration" "" ""
+  wait_for_k8s_resource "mutatingwebhookconfiguration" "azureserviceoperator-managedidentity-mwh" "" ""
 }
 
 function flux_github_app_secret {
