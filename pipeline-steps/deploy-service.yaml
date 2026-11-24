@@ -10,6 +10,7 @@ parameters:
   builtFrom: ''
   product: ''
   serviceConnection: ''
+  fallbackGenerateIdToken: false
   action: ''
   setClusterNumbersEnvVar: false
   publishPlanResults: false
@@ -23,6 +24,7 @@ steps:
       environment: ${{ parameters.environment }}
       component: ${{ parameters.stack }}
       serviceConnection: ${{ parameters.serviceConnection }}
+      fallbackGenerateIdToken: ${{ parameters.fallbackGenerateIdToken }}
       terraformInitSubscription: ${{ parameters.tfInitSub }}
       product: ${{ parameters.product }}
       publishPlanResults: ${{ parameters.publishPlanResults }}
