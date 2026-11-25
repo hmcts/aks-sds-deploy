@@ -210,11 +210,17 @@ EOF
 # Main
 ############################################################
 
-mkdir -p "${TMP_DIR}"/{gotk,flux-config,aso,admin,cert-manager}
+if [ "${ENVIRONMENT}" == "sbox" ]; then
+  mkdir -p "${TMP_DIR}"/{gotk,flux-config,aso,cert-manager}
+else
+  mkdir -p "${TMP_DIR}"/{gotk,flux-config,aso,admin,cert-manager}
+fi
 
 install_kustomize
-# Legacy - for aadPodIdentity (some namespaces still using aadPodIdentity)
-install_aadpodidentity
+if [ "${ENVIRONMENT}" != "sbox" ]; then
+  # Legacy - for aadPodIdentity (some namespaces still using aadPodIdentity)
+  install_aadpodidentity
+fi
 install_aso
 # Install flux components
 flux_github_app_secret
