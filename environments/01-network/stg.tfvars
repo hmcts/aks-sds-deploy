@@ -96,6 +96,18 @@ additional_routes_application_gateway = [
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.8.36" # https://portal.azure.com/#@HMCTS.NET/resource/subscriptions/0978315c-75fe-4ada-9d11-1eb5e0e0b214/resourceGroups/hmcts-hub-prod-int/providers/Microsoft.Network/loadBalancers/hmcts-hub-prod-int-palo-lb/frontendIpPool
   },
+  {
+    name                   = "cft-aat-aks00"
+    address_prefix         = "10.10.128.0/20"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.8.36"
+  },
+  {
+    name                   = "cft-aat-aks01"
+    address_prefix         = "10.10.144.0/20"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.8.36"
+  },
 ]
 
 additional_routes = [

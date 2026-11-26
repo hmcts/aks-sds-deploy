@@ -125,6 +125,18 @@ additional_routes_application_gateway = [
     address_prefix         = "10.51.64.0/18"
     next_hop_type          = "VirtualAppliance"
     next_hop_in_ip_address = "10.11.72.36"
+  },
+  {
+    name                   = "cft-perftest-aks00"
+    address_prefix         = "10.48.64.0/20"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
+  },
+  {
+    name                   = "cft-perftest-aks01"
+    address_prefix         = "10.48.80.0/20"
+    next_hop_type          = "VirtualAppliance"
+    next_hop_in_ip_address = "10.11.72.36"
   }
 ]
 
