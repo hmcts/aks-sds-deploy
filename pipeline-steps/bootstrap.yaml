@@ -13,27 +13,28 @@ steps:
     serviceConnection: ${{ parameters.serviceConnection }}
     environment: ${{ parameters.environment }}
 
-- task: AzureCLI@2
-  displayName: 'Setup Authentication'
-  inputs:
-      azureSubscription: ${{ parameters.serviceConnection }}
-      addSpnToEnvironment: true
-      scriptLocation: inlineScript
-      scriptType: bash
-      failOnStandardError: 'true'
-      inlineScript: |   
-        echo "##vso[task.setvariable variable=AZURE_MI_ID]$(az identity show --resource-group genesis-rg --name aks-${{ parameters.environment }}-mi --query="clientId" -o tsv)"
+- ${{ if ne(parameters.environment, 'sbox') }}:
+  - task: AzureCLI@2
+    displayName: 'Setup Authentication'
+    inputs:
+        azureSubscription: ${{ parameters.serviceConnection }}
+        addSpnToEnvironment: true
+        scriptLocation: inlineScript
+        scriptType: bash
+        failOnStandardError: 'true'
+        inlineScript: |
+          echo "##vso[task.setvariable variable=AZURE_MI_ID]$(az identity show --resource-group genesis-rg --name aks-${{ parameters.environment }}-mi --query="clientId" -o tsv)"
 
-- task: Bash@3
-  displayName: 'Bootstrap Replacement'
-  inputs:
-      targetType: 'inline'
-      workingDirectory: 'aks-sds-deploy/kubernetes/charts/aad-pod-identities'
-      script: |
-            sed -i 's|AZURE_SUBSCRIPTION|$(ARM_SUBSCRIPTION_ID)|g' 'aks-sops-role.yaml'
-            sed -i 's|AZURE_ENVIRONMENT|$(env)|g' 'aks-sops-role.yaml'
-            sed -i 's|MI_CLIENTID|$(AZURE_MI_ID)|g' 'aks-sops-role.yaml'
-            cat aks-sops-role.yaml
+  - task: Bash@3
+    displayName: 'Bootstrap Replacement'
+    inputs:
+        targetType: 'inline'
+        workingDirectory: 'aks-sds-deploy/kubernetes/charts/aad-pod-identities'
+        script: |
+              sed -i 's|AZURE_SUBSCRIPTION|$(ARM_SUBSCRIPTION_ID)|g' 'aks-sops-role.yaml'
+              sed -i 's|AZURE_ENVIRONMENT|$(env)|g' 'aks-sops-role.yaml'
+              sed -i 's|MI_CLIENTID|$(AZURE_MI_ID)|g' 'aks-sops-role.yaml'
+              cat aks-sops-role.yaml
 
 - script: |
     wget -q https://github.com/Azure/kubelogin/releases/download/v0.2.19/kubelogin-linux-amd64.zip
