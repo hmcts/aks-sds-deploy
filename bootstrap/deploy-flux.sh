@@ -141,6 +141,7 @@ download_files "https://api.github.com/repos/hmcts/sds-flux-config/contents/apps
 "${TMP_DIR}/gotk" \
 "s|\${WI_CLUSTER}|$ENVIRONMENT-$CLUSTER_NAME|g" \
 "s|\${ENVIRONMENT}|$ENVIRONMENT|g" \
+"s|\${CLUSTER}|$CLUSTER_NAME|g" \
 "s|\${ISSUER_URL}|$ISSUER_URL|g"
 
 # Generating Kustomization manifest
